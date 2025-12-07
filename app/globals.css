@@ -1,0 +1,406 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   SOLITARIO BRAND CSS CUSTOM PROPERTIES
+   ======================================== */
+:root {
+  /* Primary Colors */
+  --color-classic-green: #146552;
+  --color-bronze-gold: #ac884b;
+  --color-soft-bronze: #c39275;
+  --color-ivory-pearl: #f8eee7;
+  
+  /* Secondary Colors */
+  --color-teal: #107571;
+  --color-teal-dark: #0d5f5c;
+  --color-teal-light: #1a9994;
+  
+  /* Brand Neutrals */
+  --color-brand-50: #faf8f6;
+  --color-brand-100: #f5f0eb;
+  --color-brand-200: #e8dfd6;
+  --color-brand-300: #d4c4b5;
+  --color-brand-400: #b8a08a;
+  --color-brand-500: #8c7560;
+  --color-brand-600: #6b5a4a;
+  --color-brand-700: #4a3f35;
+  --color-brand-800: #2d2620;
+  --color-brand-900: #1a1714;
+  
+  /* Semantic Colors */
+  --color-success: #146552;
+  --color-error: #a84432;
+  --color-warning: #ac884b;
+  --color-info: #107571;
+  
+  /* Shadows */
+  --shadow-brand-sm: 0 2px 8px rgba(20, 101, 82, 0.06);
+  --shadow-brand: 0 4px 16px rgba(20, 101, 82, 0.08);
+  --shadow-brand-lg: 0 8px 32px rgba(20, 101, 82, 0.12);
+  --shadow-gold-glow: 0 0 24px rgba(172, 136, 75, 0.2);
+}
+
+@layer base {
+  html {
+    scroll-behavior: auto; /* Lenis will handle smooth scrolling */
+    overflow-x: hidden;
+  }
+  
+  body {
+    font-family: var(--font-montserrat), sans-serif;
+    @apply bg-ivory-pearl text-brand-800;
+    font-feature-settings: "kern" 1, "liga" 1;
+    letter-spacing: -0.01em;
+    overflow-x: hidden; /* Prevent horizontal scroll */
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  /* Luxury Headlines - Aguila */
+  h1 {
+    font-family: var(--font-aguila), serif;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 0.95;
+  }
+
+  h2 {
+    font-family: var(--font-aguila), serif;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.1;
+  }
+
+  h3 {
+    font-family: var(--font-didot), serif;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.2;
+  }
+
+  h4, h5, h6 {
+    font-family: var(--font-aguila), serif;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* All paragraphs and body text use Montserrat by default */
+  p, span, li, td, th, label, input, textarea, select {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+
+  /* Divs inherit from body (Montserrat) unless overridden */
+  div {
+    font-family: var(--font-montserrat), sans-serif;
+  }
+}
+
+@layer components {
+  /* Luxury Buttons */
+  .btn-primary {
+    font-family: var(--font-gotham);
+    @apply uppercase tracking-[0.2em] text-xs px-10 py-4;
+    @apply bg-bronze-gold hover:bg-soft-bronze text-white;
+    @apply border border-bronze-gold/30;
+    @apply shadow-luxury hover:shadow-luxury-lg;
+    @apply transition-all duration-500;
+    letter-spacing: 0.25em;
+    font-weight: 500;
+  }
+
+  .btn-secondary {
+    font-family: var(--font-gotham);
+    @apply uppercase tracking-[0.2em] text-xs px-10 py-4;
+    @apply bg-classic-green hover:bg-opacity-90 text-ivory-pearl;
+    @apply shadow-luxury hover:shadow-luxury-lg;
+    @apply transition-all duration-500;
+    letter-spacing: 0.25em;
+    font-weight: 500;
+  }
+
+  .btn-outline {
+    font-family: var(--font-gotham);
+    @apply uppercase tracking-[0.2em] text-xs px-10 py-4;
+    @apply bg-transparent border-2 border-bronze-gold text-bronze-gold;
+    @apply hover:bg-bronze-gold hover:text-white;
+    @apply transition-all duration-500;
+    letter-spacing: 0.25em;
+    font-weight: 500;
+  }
+
+  .section-container {
+    @apply max-w-[1600px] mx-auto px-6 md:px-12 lg:px-16;
+  }
+
+  .section-padding {
+    @apply py-24 md:py-32 lg:py-40;
+  }
+
+  /* Enhanced Typography Scale */
+  .heading-xl {
+    font-family: var(--font-aguila), serif;
+    @apply text-5xl md:text-7xl lg:text-8xl xl:text-9xl;
+    font-weight: 400;
+    letter-spacing: -0.03em;
+    line-height: 0.9;
+  }
+
+  .heading-lg {
+    font-family: var(--font-aguila), serif;
+    @apply text-4xl md:text-5xl lg:text-6xl xl:text-7xl;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .heading-md {
+    font-family: var(--font-didot), serif;
+    @apply text-3xl md:text-4xl lg:text-5xl;
+    font-weight: 400;
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+
+  .heading-sm {
+    font-family: var(--font-aguila), serif;
+    @apply text-2xl md:text-3xl lg:text-4xl;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  /* UI Text - Gotham */
+  .text-ui {
+    font-family: var(--font-gotham);
+    @apply uppercase tracking-[0.2em];
+    letter-spacing: 0.25em;
+    font-weight: 500;
+  }
+
+  /* Body Text */
+  .text-body-large {
+    font-family: var(--font-montserrat), sans-serif;
+    @apply text-lg md:text-xl leading-relaxed;
+    letter-spacing: 0.01em;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .font-aguila {
+    font-family: var(--font-aguila), serif !important;
+  }
+
+  /* Luxury Shadows */
+  .shadow-luxury {
+    box-shadow: 
+      0 20px 60px rgba(0, 0, 0, 0.08),
+      0 8px 24px rgba(0, 0, 0, 0.04),
+      0 2px 8px rgba(0, 0, 0, 0.02);
+  }
+
+  .shadow-luxury-lg {
+    box-shadow: 
+      0 40px 120px rgba(0, 0, 0, 0.12),
+      0 16px 48px rgba(0, 0, 0, 0.08),
+      0 4px 16px rgba(0, 0, 0, 0.04);
+  }
+
+  .shadow-glow {
+    box-shadow: 
+      0 0 40px rgba(172, 136, 75, 0.15),
+      0 0 80px rgba(172, 136, 75, 0.08);
+  }
+
+  /* Glassmorphism effect */
+  .glass {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .glass-dark {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(20px) saturate(180%);
+    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* Elegant Borders */
+  .border-luxury {
+    border: 1px solid rgba(172, 136, 75, 0.2);
+  }
+
+  .border-luxury-thick {
+    border: 2px solid rgba(172, 136, 75, 0.3);
+  }
+
+  .divider-luxury {
+    @apply border-t border-bronze-gold/20;
+    height: 1px;
+  }
+
+  .divider-vertical {
+    @apply border-l border-bronze-gold/20;
+    width: 1px;
+  }
+
+  /* Hover Effects */
+  .hover-lift {
+    @apply transition-all duration-500;
+  }
+  
+  .hover-lift:hover {
+    transform: translateY(-8px);
+    @apply shadow-luxury-lg;
+  }
+
+  .hover-glow:hover {
+    @apply shadow-glow;
+  }
+
+  /* Elegant Underline */
+  .underline-luxury {
+    position: relative;
+  }
+
+  .underline-luxury::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ac884b, transparent);
+    transition: width 0.5s ease;
+  }
+
+  .underline-luxury:hover::after {
+    width: 100%;
+  }
+
+.aurora-container {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+.aurora-container canvas {
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none;
+  display: block;
+}
+
+/* Embla Carousel Smooth Scrolling */
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+  will-change: transform;
+}
+
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+  position: relative;
+}
+
+/* Seamless Infinite Scroll Animation */
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+  display: flex;
+  will-change: transform;
+  width: max-content;
+}
+
+.animate-scroll:hover {
+  animation-play-state: paused;
+}
+
+/* Brand Motif Pattern */
+.brand-pattern {
+  background-image: url('/patterns/brand-motif.svg');
+  background-repeat: repeat;
+  background-size: 120px 120px;
+}
+
+.brand-pattern-overlay {
+  position: relative;
+}
+
+.brand-pattern-overlay::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url('/patterns/brand-motif.svg');
+  background-repeat: repeat;
+  background-size: 120px 120px;
+  opacity: 0.1;
+  pointer-events: none;
+}
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8eee7;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #ac884b;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #146552;
+}
+
+/* Shimmer animation for image loading */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 1.5s ease-in-out infinite;
+  background: linear-gradient(90deg, #f5f0eb 0%, #faf8f6 50%, #f5f0eb 100%);
+  background-size: 200% 100%;
+}
+
+/* Hide scrollbar for horizontal scroll on mobile */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Touch manipulation for better mobile UX */
+.touch-manipulation {
+  touch-action: manipulation;
+}

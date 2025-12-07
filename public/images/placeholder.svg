@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">
+  <rect width="800" height="600" fill="#f8eee7"/>
+  <text x="400" y="300" font-family="Arial, sans-serif" font-size="24" fill="#ac884b" text-anchor="middle" dominant-baseline="middle">
+    Solitario Jewellery
+  </text>
+  <circle cx="400" cy="250" r="40" fill="none" stroke="#146552" stroke-width="3"/>
+  <circle cx="400" cy="250" r="20" fill="#ac884b"/>
+</svg>
+
+

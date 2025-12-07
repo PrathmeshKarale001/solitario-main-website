@@ -1,0 +1,118 @@
+.menu-wrap {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  gap: 5%;
+}
+
+.menu__item {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+  box-shadow: 0 2px 20px rgba(172, 136, 75, 0.15);
+  background: linear-gradient(135deg, #146552 0%, #0b3a2f 100%);
+  border-radius: 8px;
+}
+
+.menu__item-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  position: relative;
+  cursor: pointer;
+  text-transform: uppercase;
+  text-decoration: none;
+  white-space: nowrap;
+  font-weight: 600;
+  color: #f8eee7;
+  font-size: 3.5vh;
+  font-family: var(--font-aguila), serif;
+  letter-spacing: -0.02em;
+  transition: color 0.3s ease;
+}
+
+.menu__item-link:hover {
+  color: #ac884b;
+}
+
+.menu__item-link:focus:not(:focus-visible) {
+  color: #fff;
+}
+
+.marquee {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  background: #f8eee7;
+  transform: translate3d(0, 101%, 0);
+  transition: transform 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+.marquee__inner-wrap {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  overflow: hidden;
+  transform: translateX(0);
+}
+
+.marquee__inner {
+  display: flex;
+  align-items: center;
+  position: relative;
+  height: 100%;
+  width: max-content;
+  will-change: transform;
+  animation: marquee 20s linear infinite;
+}
+
+.marquee span {
+  color: #0b3a2f;
+  white-space: nowrap;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 3.5vh;
+  line-height: 1.2;
+  padding: 1vh 1vw 0;
+  font-family: var(--font-didot), serif;
+  letter-spacing: -0.01em;
+}
+
+.marquee__img {
+  width: 200px;
+  height: 7vh;
+  margin: 2em 2vw;
+  padding: 1em 0;
+  border-radius: 20px;
+  background-size: cover;
+  background-position: 50% 50%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.menu__item-link:hover + .marquee {
+  transform: translate3d(0, 0%, 0);
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
