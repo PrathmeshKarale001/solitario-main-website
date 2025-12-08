@@ -90,7 +90,7 @@ export default function FranchisePage() {
               }}
             >
               <BlurText
-                text="Franchise With Us"
+                text="Franchise   With   Us"
                 className="font-aguila"
                 animateBy="characters"
                 direction="top"

@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2 } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
@@ -117,6 +117,19 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     setMousePosition({ x, y });
   };
 
+  // Navigation handlers
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedImage((prev) => (prev + 1) % productImages.length);
+    handleResetZoom();
+  };
+
+  const handlePrevImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    setSelectedImage((prev) => (prev - 1 + productImages.length) % productImages.length);
+    handleResetZoom();
+  };
+
   // Keyboard shortcuts for lightbox
   useEffect(() => {
     if (!isLightboxOpen) return;
@@ -124,6 +137,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         closeLightbox();
+      } else if (e.key === 'ArrowRight') {
+        handleNextImage();
+      } else if (e.key === 'ArrowLeft') {
+        handlePrevImage();
       } else if (e.key === '+' || e.key === '=') {
         e.preventDefault();
         handleZoomIn();
@@ -138,7 +155,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isLightboxOpen]);
+  }, [isLightboxOpen, productImages.length]);
 
   // Real stock availability from Shopify
   const inStock = product.inStock ?? true;
@@ -614,62 +631,85 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </Container>
       </Section>
 
-      {/* Lightbox Modal */}
+      {/* Lightbox Modal - Redesigned */}
       <AnimatePresence>
         {isLightboxOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-classic-green/95 backdrop-blur-md flex items-center justify-center"
+            transition={{ duration: 0.3 }}
+            className="fixed inset-0 z-[100] bg-white/98 backdrop-blur-xl flex items-center justify-center"
             onClick={(e) => {
               if (e.target === e.currentTarget) {
                 closeLightbox();
               }
             }}
           >
-            {/* Close Button */}
-            <button
-              onClick={closeLightbox}
-              className="absolute top-4 right-4 w-12 h-12 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white transition-all duration-300 z-30"
-              aria-label="Close lightbox"
-            >
-              <X className="w-6 h-6" />
-            </button>
+            {/* Top Bar - Controls */}
+            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50 pointer-events-none">
+               <div className="pointer-events-auto bg-white/80 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-brand-100 flex items-center gap-4">
+                 <span className="text-brand-500 font-gotham text-sm tracking-widest">
+                   {selectedImage + 1} / {productImages.length}
+                 </span>
+               </div>
+               
+               <div className="pointer-events-auto flex items-center gap-3">
+                 <div className="bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-brand-100 flex items-center gap-1">
+                    <button
+                      onClick={handleZoomIn}
+                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
+                      title="Zoom In"
+                    >
+                      <ZoomIn className="w-5 h-5" />
+                    </button>
+                    <button
+                      onClick={handleZoomOut}
+                      disabled={zoomLevel <= 1}
+                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                      title="Zoom Out"
+                    >
+                      <ZoomOut className="w-5 h-5" />
+                    </button>
+                    <div className="w-px h-6 bg-brand-200 mx-1" />
+                    <button
+                      onClick={handleResetZoom}
+                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
+                      title="Reset View"
+                    >
+                      <Maximize2 className="w-5 h-5" />
+                    </button>
+                 </div>
 
-            {/* Zoom Controls */}
-            <div className="absolute top-4 left-4 flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-lg p-2 z-30">
-              <button
-                onClick={handleZoomIn}
-                className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded flex items-center justify-center text-white transition-all duration-300"
-                aria-label="Zoom in"
-              >
-                <ZoomIn className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleZoomOut}
-                disabled={zoomLevel <= 1}
-                className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded flex items-center justify-center text-white transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
-                aria-label="Zoom out"
-              >
-                <ZoomOut className="w-5 h-5" />
-              </button>
-              <button
-                onClick={handleResetZoom}
-                className="w-10 h-10 bg-white/20 hover:bg-white/30 rounded flex items-center justify-center text-white transition-all duration-300"
-                aria-label="Reset zoom"
-              >
-                <Maximize2 className="w-5 h-5" />
-              </button>
-              <span className="text-white text-sm font-gotham px-2">
-                {Math.round(zoomLevel * 100)}%
-              </span>
+                 <button
+                   onClick={closeLightbox}
+                   className="w-12 h-12 bg-white/80 backdrop-blur-md hover:bg-brand-50 rounded-full flex items-center justify-center text-brand-800 transition-all duration-300 border border-brand-100 shadow-sm"
+                   title="Close"
+                 >
+                   <X className="w-6 h-6" />
+                 </button>
+               </div>
             </div>
 
-            {/* Image Container */}
+            {/* Navigation Arrows */}
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
+            >
+              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+
+            <button
+              onClick={handleNextImage}
+              className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
+            >
+              <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+
+            {/* Main Image Container */}
             <div
               ref={lightboxRef}
-              className="relative w-full h-full flex items-center justify-center overflow-hidden cursor-move"
+              className="relative w-full h-full flex items-center justify-center overflow-hidden"
               onMouseMove={handleLightboxMouseMove}
               onMouseDown={handleLightboxMouseDown}
               onMouseUp={handleLightboxMouseUp}
@@ -677,58 +717,55 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               style={{ cursor: zoomLevel > 1 ? (isDragging ? 'grabbing' : 'grab') : 'default' }}
             >
               <motion.div
-                initial={{ scale: 0.9, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.9, opacity: 0 }}
-                className="relative max-w-[90vw] max-h-[90vh]"
+                key={selectedImage}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+                className="relative max-w-[85vw] max-h-[85vh]"
                 style={{
                   transform: `translate(${lightboxPosition.x}px, ${lightboxPosition.y}px) scale(${zoomLevel})`,
-                  transition: isDragging ? 'none' : 'transform 0.3s ease-out',
+                  transition: isDragging ? 'none' : 'transform 0.3s cubic-bezier(0.2, 0, 0.2, 1)',
                 }}
               >
                 <Image
                   src={productImages[selectedImage]}
                   alt={product.name}
-                  width={1200}
-                  height={1200}
-                  className="object-contain w-auto h-auto max-w-[90vw] max-h-[90vh]"
+                  width={1600}
+                  height={1600}
+                  className="object-contain w-auto h-auto max-w-[85vw] max-h-[85vh] drop-shadow-2xl"
                   priority
+                  draggable={false}
                 />
               </motion.div>
             </div>
 
-            {/* Thumbnail Navigation in Lightbox */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex gap-3 z-30">
-              {productImages.map((img, index) => (
-                <button
-                  key={index}
-                  onClick={() => {
-                    setSelectedImage(index);
-                    setZoomLevel(1);
-                    setLightboxPosition({ x: 0, y: 0 });
-                  }}
-                  className={`relative w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-300 ${
-                    selectedImage === index
-                      ? 'border-bronze-gold shadow-luxury scale-110'
-                      : 'border-white/30 hover:border-white/60'
-                  }`}
-                >
-                  <Image
-                    src={img}
-                    alt={`${product.name} view ${index + 1}`}
-                    fill
-                    className="object-contain p-1 bg-white/10"
-                  />
-                </button>
-              ))}
-            </div>
-
-            {/* Instructions */}
-            {zoomLevel > 1 && (
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 bg-white/10 backdrop-blur-sm text-white px-4 py-2 rounded-full text-xs font-gotham z-30">
-                Drag to pan • Press ESC to close
+            {/* Bottom Strip - Thumbnails */}
+            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 max-w-[90vw]">
+              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-2 shadow-lg border border-brand-100 flex gap-2 overflow-x-auto no-scrollbar">
+                {productImages.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setSelectedImage(index);
+                      handleResetZoom();
+                    }}
+                    className={`relative w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${
+                      selectedImage === index
+                        ? 'ring-2 ring-bronze-gold ring-offset-2 opacity-100 scale-105'
+                        : 'opacity-60 hover:opacity-100 hover:scale-105'
+                    }`}
+                  >
+                    <Image
+                      src={img}
+                      alt={`${product.name} view ${index + 1}`}
+                      fill
+                      className="object-cover bg-white"
+                    />
+                  </button>
+                ))}
               </div>
-            )}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

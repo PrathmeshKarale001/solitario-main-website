@@ -11,4 +11,5 @@ export { default as Stores } from './Stores';
 export { default as HeadOffice } from './HeadOffice';
 export { default as ShopByCategory } from './ShopByCategory';
 export { default as ShopByCategoryOriginal } from './ShopByCategoryOriginal';
+export { default as LifestyleShowcase } from './LifestyleShowcase';
 

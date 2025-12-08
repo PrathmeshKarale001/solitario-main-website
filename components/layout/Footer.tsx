@@ -132,6 +132,11 @@ export default function Footer() {
                   Contact
                 </Link>
               </li>
+              <li>
+                <Link href="/blog" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Blog
+                </Link>
+              </li>
             </ul>
           </div>
 
@@ -189,6 +194,21 @@ export default function Footer() {
               <li>
                 <Link href="/contact" className="text-ivory-pearl/80 hover:text-bronze-gold transition-colors text-sm">
                   Contact Us
+                </Link>
+              </li>
+              <li>
+                <Link href="/certifications" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Certifications
+                </Link>
+              </li>
+              {/* <li>
+                <Link href="/sustainability" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Sustainability
+                </Link>
+              </li> */}
+              <li>
+                <Link href="/franchise" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Franchise
                 </Link>
               </li>
             </ul>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -8,29 +8,52 @@ import { ArrowRight, Sparkles } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
 import { Section, Container } from '@/components/ui';
 import { formatPrice } from '@/lib/utils';
-import { PRODUCTS, Product } from '@/lib/data';
+import { Product } from '@/lib/data';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
 
 export default function ProductCategories() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
-  const filteredProducts: Product[] =
-    activeCategory === 'all'
-      ? categories
-          .map((cat) =>
-            PRODUCTS.find(
-              (product) => product.category.toLowerCase() === cat.slug.toLowerCase()
-            )
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await fetch('/api/products');
+        const data = await res.json();
+        setAllProducts(data.products || []);
+      } catch (error) {
+        console.error('Failed to load products:', error);
+        setAllProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchProducts();
+  }, []);
+
+  const filteredProducts: Product[] = (() => {
+    if (activeCategory === 'all') {
+      return categories
+        .map((cat) =>
+          allProducts.find(
+            (product) => product.category?.toLowerCase() === cat.slug.toLowerCase()
           )
-          .filter(Boolean)
-          .slice(0, 4) as Product[]
-      : PRODUCTS.filter(
-          (product) => product.category.toLowerCase() === activeCategory.toLowerCase()
-        ).slice(0, 4);
+        )
+        .filter(Boolean)
+        .slice(0, 4) as Product[];
+    }
+    return allProducts
+      .filter(
+        (product) => product.category?.toLowerCase() === activeCategory.toLowerCase()
+      )
+      .slice(0, 4);
+  })();
 
   return (
-    <Section variant="light" padding="md" className="bg-gradient-to-b from-ivory-pearl via-white to-ivory-pearl/50 relative overflow-hidden py-8 sm:py-12 md:py-16">
-      <Container className="relative z-10 px-3 sm:px-4">
+    <Section variant="light" padding="md">
+      <Container>
         {/* Compact Header for Mobile */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -10,11 +10,17 @@ import BlurText from '@/components/ui/BlurText';
 // Lazy load Particles component to improve initial load
 const Particles = lazy(() => import('@/components/ui/Particles').then(mod => ({ default: mod.default })));
 
-// Hero images - Optimized for performance
-const HERO_IMAGES = [
-  '/images/background/optimized/bg (2).jpg',  // 144KB
-  '/images/background/optimized/bg (3).jpg',  // 177KB
-  '/images/background/optimized/bg (6).jpg',  // 100KB
+type HeroMedia = { type: 'image' | 'video'; src: string };
+
+// Hero media: start with flagship video, then continue images
+const HERO_MEDIA: HeroMedia[] = [
+  {
+    type: 'video',
+    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds.mp4',
+  },
+  { type: 'image', src: '/images/background/optimized/bg (2).jpg' },  // 144KB
+  { type: 'image', src: '/images/background/optimized/bg (3).jpg' },  // 177KB
+  { type: 'image', src: '/images/background/optimized/bg (6).jpg' },  // 100KB
 ];
 
 // Featured jewellery images - Reduced to 2 for better performance
@@ -24,8 +30,10 @@ const JEWELLERY_IMAGES = [
 ];
 
   export default function Hero() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentMediaIndex, setCurrentMediaIndex] = useState(0);
   const [currentJewelleryIndex, setCurrentJewelleryIndex] = useState(0);
+  const [hasVideoFinished, setHasVideoFinished] = useState(false);
+  const mediaIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const sectionRef = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
@@ -40,15 +48,7 @@ const JEWELLERY_IMAGES = [
   const jewelleryRotate = useTransform(scrollYProgress, [0, 1], [0, 5]);
 
   useEffect(() => {
-    let imageInterval: NodeJS.Timeout | null = null;
     let jewelleryInterval: NodeJS.Timeout | null = null;
-
-    // Delay image carousel to improve initial LCP
-    const imageTimeout = setTimeout(() => {
-      imageInterval = setInterval(() => {
-        setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-      }, 6000); // Change image every 6 seconds (slower = less CPU)
-    }, 3000); // Start carousel after 3 seconds
 
     // Delay jewellery carousel to improve initial render
     const jewelleryTimeout = setTimeout(() => {
@@ -58,12 +58,47 @@ const JEWELLERY_IMAGES = [
     }, 2500); // Start jewellery carousel after 2.5 seconds
 
     return () => {
-      clearTimeout(imageTimeout);
       clearTimeout(jewelleryTimeout);
-      if (imageInterval) clearInterval(imageInterval);
+      if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
       if (jewelleryInterval) clearInterval(jewelleryInterval);
     };
   }, []);
+
+  // Force play video on mount with a delay to allow transition to complete
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    if (currentMediaIndex === 0 && videoRef.current) {
+      // Delay playback by 1 second to sync with entrance animation
+      const playTimeout = setTimeout(() => {
+        videoRef.current?.play().catch(console.error);
+      }, 1000);
+
+      return () => clearTimeout(playTimeout);
+    }
+  }, [currentMediaIndex]);
+
+  // Start cycling images only after the intro video finishes
+  useEffect(() => {
+    if (!hasVideoFinished) return;
+    mediaIntervalRef.current = setInterval(() => {
+      setCurrentMediaIndex((prev) => {
+        const next = prev + 1;
+        // Loop only through images (indexes 1..end), skipping the video index 0
+        return next >= HERO_MEDIA.length ? 1 : next;
+      });
+    }, 8000);
+
+    return () => {
+      if (mediaIntervalRef.current) clearInterval(mediaIntervalRef.current);
+    };
+  }, [hasVideoFinished]);
+
+  const handleVideoEnded = () => {
+    setHasVideoFinished(true);
+    // Move to the first image as soon as the video ends
+    setCurrentMediaIndex(1);
+  };
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex flex-col overflow-hidden bg-gradient-to-b from-black via-gray-900 to-black">
@@ -72,14 +107,14 @@ const JEWELLERY_IMAGES = [
         <Particles count={15} />
       </Suspense> */}
 
-      {/* Background Images with Cross-fade and Parallax */}
+      {/* Background Media (video first, then images) with Cross-fade and Parallax */}
       <motion.div
         className="absolute inset-0 z-0"
         style={{ y: backgroundY }}
       >
         <AnimatePresence mode="wait">
-          {HERO_IMAGES.map((image, index) => (
-            index === currentImageIndex && (
+          {HERO_MEDIA.map((media, index) => (
+            index === currentMediaIndex && (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, scale: 1.1 }}
@@ -89,16 +124,30 @@ const JEWELLERY_IMAGES = [
                 className="absolute inset-0"
               >
                 <div className="absolute inset-0 bg-gradient-to-b from-classic-green/60 via-teal/50 to-classic-green/80" />
-                <Image
-                  src={image}
-                  alt={`Hero image ${index + 1}`}
-                  fill
-                  className="object-cover object-center"
-                  priority={index === 0}
-                  quality={index === 0 ? 85 : 75}
-                  sizes="100vw"
-                  loading={index === 0 ? 'eager' : 'lazy'}
-                />
+                {media.type === 'video' ? (
+                  <video
+                    ref={videoRef}
+                    key={media.src}
+                    src={media.src}
+                    muted
+                    playsInline
+                    onEnded={handleVideoEnded}
+                    onError={handleVideoEnded}
+                    className="absolute inset-0 w-full h-full object-cover object-center"
+                    preload="auto"
+                  />
+                ) : (
+                  <Image
+                    src={media.src}
+                    alt={`Hero image ${index + 1}`}
+                    fill
+                    className="object-cover object-center"
+                    priority={index === 0}
+                    quality={index === 0 ? 85 : 75}
+                    sizes="100vw"
+                    loading={index === 0 ? 'eager' : 'lazy'}
+                  />
+                )}
               </motion.div>
             )
           ))}
@@ -106,11 +155,15 @@ const JEWELLERY_IMAGES = [
       </motion.div>
 
       {/* Hero Content - Main Text Overlay with Parallax */}
-      <motion.div
-        className="relative z-10 flex-1 flex items-center justify-center px-4 pt-24 md:pt-32 pb-8"
-        style={{ y: textY }}
-      >
-        <div className="max-w-7xl mx-auto text-center">
+      {hasVideoFinished && (
+        <motion.div
+          className="relative z-10 flex-1 flex items-center justify-center px-4 pt-24 md:pt-32 pb-8"
+          style={{ y: textY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+        >
+          <div className="max-w-7xl mx-auto text-center">
           <h1
             className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-aguila text-white leading-[1.1] tracking-tight px-4 relative z-10"
             style={{ 
@@ -316,14 +369,19 @@ const JEWELLERY_IMAGES = [
             </Link>
           </motion.div>
         </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Content Panels Below Hero - Compact & Wide with Parallax */}
-      <motion.div
-        className="relative z-10 px-3 sm:px-4 pb-4 sm:pb-6"
-        style={{ y: panelsY }}
-      >
-        <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
+      {hasVideoFinished && (
+        <motion.div
+          className="relative z-10 px-3 sm:px-4 pb-4 sm:pb-6"
+          style={{ y: panelsY }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1, delay: 0.5 }}
+        >
+          <div className="max-w-[1200px] mx-auto grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4 lg:gap-5">
           {/* Left Panel - Latest Collections */}
           <motion.div
             initial={{ opacity: 0, y: 50 }}
@@ -429,6 +487,7 @@ const JEWELLERY_IMAGES = [
           </motion.div>
         </div>
       </motion.div>
+      )}
     </section>
   );
 }

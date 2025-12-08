@@ -3,6 +3,7 @@ import {
   Hero,
   ProductCategories,
   ShopByCategoryOriginal,
+  LifestyleShowcase,
   PromoBanner1,
 } from '@/components/home';
 import { Promise } from '@/components/about';
@@ -51,6 +52,9 @@ export default function Home() {
       <div id="explore-section">
         <ProductCategories />
       </div>
+
+      {/* 3a. LIFESTYLE SHOWCASE - Shop by Occasion */}
+      <LifestyleShowcase />
       
       {/* 4. PROMO BANNER - Drive urgency/offers */}
       <PromoBanner1 />

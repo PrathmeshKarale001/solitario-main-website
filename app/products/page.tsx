@@ -9,14 +9,23 @@ import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
-import SplitText from '@/components/ui/SplitText';
 
 const PRODUCTS_PER_PAGE = 12;
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  
+  // Video sources for the hero carousel
+  const heroVideos = [
+    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds.mp4',
+    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
+    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (6).mp4',
+  ];
   const productsRef = useRef<HTMLDivElement>(null);
   
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
@@ -53,13 +62,25 @@ function ProductsPageContent() {
     }
   }, [categoryParam]);
 
+  // Handle video ended event to cycle to next video
+  const handleVideoEnded = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentVideoIndex((prev) => (prev + 1) % heroVideos.length);
+      setIsTransitioning(false);
+    }, 300);
+  };
+
+  // Play current video when index changes
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.play().catch(() => {
+    const currentVideo = videoRefs.current[currentVideoIndex];
+    if (currentVideo) {
+      currentVideo.currentTime = 0;
+      currentVideo.play().catch(() => {
         // Autoplay was prevented, handle silently
       });
     }
-  }, []);
+  }, [currentVideoIndex]);
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
@@ -156,72 +177,84 @@ function ProductsPageContent() {
 
   return (
     <div>
-      {/* Hero Section with Video Background */}
-      <section className="relative min-h-[85vh] md:min-h-screen flex items-center justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20 pt-14 sm:pt-16 lg:pt-20">
-        {/* Video Background */}
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover"
-          style={{ objectPosition: 'center -40%' }}
-        >
-          <source src="/images/general/SabrinaKissingFrameWebsite.mp4" type="video/mp4" />
-        </video>
-        
-        {/* Overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-black/20 to-black/50" />
-        
-        {/* Split Text Overlay */}
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-4 md:px-8 lg:px-12">
-          <div className="flex items-center justify-between w-full">
-            {/* Left Text - "Discover" */}
-            <motion.div
-              initial={{ opacity: 0, x: -35 }}
-              animate={{ opacity: 1, x: 20 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="flex-1 text-left pr-4 md:pr-6"
-              style={{ justifyContent: "flex-start", alignItems: "flex-start", display: "flex" }}
+      {/* Immersive Hero Section with Cycling Video Background */}
+      <section className="relative min-h-[100vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
+        {/* Video Background with Crossfade */}
+        <div className="absolute inset-0">
+          {heroVideos.map((video, index) => (
+            <video
+              key={video}
+              ref={(el) => { videoRefs.current[index] = el; }}
+              muted
+              playsInline
+              onEnded={handleVideoEnded}
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
+                index === currentVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
+              } ${isTransitioning ? 'opacity-0' : ''}`}
             >
-              <h1 
-                className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-aguila text-white leading-[1.1] tracking-tight ml-0 md:ml-[-1rem] lg:ml-[-2rem] xl:ml-[-2rem]"
-                style={{ 
-                  fontFamily: 'var(--font-aguila), serif',
-                  textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
-                }}
-              >
-                <SplitText delay={0.2} duration={0.6} className="font-aguila">
-                  Discover
-                </SplitText>
-              </h1>
-            </motion.div>
- 
-            {/* Center Space - Reserved for model */}
-            <div className="flex-shrink-0 w-0 md:w-16 lg:w-32 xl:w-40" />
-            
-            {/* Right Text - "The Sparkle" in one line */}
-            <motion.div
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 80 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex-1 text-right pl-4 md:pl-8 flex items-center justify-end"
-            >
-              <h1 
-                className="text-4xl md:text-6xl lg:text-7xl xl:text-8xl font-aguila text-white leading-[1.1] tracking-tight whitespace-nowrap"
-                style={{ 
-                  fontFamily: 'var(--font-aguila), serif',
-                  textShadow: '0 4px 20px rgba(0, 0, 0, 0.5)'
-                }}
-              >
-                <SplitText delay={0.6} duration={0.6} className="font-aguila">
-                   The   Sparkle
-                </SplitText>
-              </h1>
-            </motion.div>
-          </div>
+              <source src={video} type="video/mp4" />
+            </video>
+          ))}
         </div>
+        
+        {/* Cinematic Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 z-20" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-20" />
+        
+        {/* Subtle Vignette Effect */}
+        <div className="absolute inset-0 z-20" style={{ 
+          boxShadow: 'inset 0 0 150px 50px rgba(0,0,0,0.3)' 
+        }} />
+        
+        {/* Video Progress Indicators */}
+        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-3">
+          {heroVideos.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentVideoIndex(index);
+                  setIsTransitioning(false);
+                }, 300);
+              }}
+              className={`group relative h-1 rounded-full overflow-hidden transition-all duration-500 ${
+                index === currentVideoIndex ? 'w-12 bg-white/30' : 'w-6 bg-white/20 hover:bg-white/30'
+              }`}
+            >
+              {index === currentVideoIndex && (
+                <motion.div
+                  className="absolute inset-y-0 left-0 bg-bronze-gold rounded-full"
+                  initial={{ width: '0%' }}
+                  animate={{ width: '100%' }}
+                  transition={{ duration: 8, ease: 'linear' }}
+                  key={currentVideoIndex}
+                />
+              )}
+            </button>
+          ))}
+        </div>
+        
+        {/* Scroll Indicator */}
+        <motion.div 
+          className="absolute bottom-24 inset-x-0 z-30 flex flex-col items-center gap-2"
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.8 }}
+        >
+          <span className="text-white/60 text-xs font-gotham uppercase tracking-[0.3em]">Scroll to Explore</span>
+          <motion.div
+            className="w-5 h-8 border-2 border-white/40 rounded-full flex justify-center pt-1.5"
+            animate={{ y: [0, 5, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            <motion.div 
+              className="w-1 h-2 bg-bronze-gold rounded-full"
+              animate={{ opacity: [1, 0.3, 1], y: [0, 4, 0] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            />
+          </motion.div>
+        </motion.div>
       </section>
 
       {/* Filters & Products Section - Merged */}
