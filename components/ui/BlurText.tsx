@@ -97,8 +97,8 @@ export default function BlurText({
     flexWrap: 'wrap',
   };
   
-  if (className.includes('font-aguila')) {
-    containerStyle.fontFamily = 'var(--font-aguila), serif';
+  if (className.includes('font-didot')) {
+    containerStyle.fontFamily = 'var(--font-didot), serif';
   }
 
   return (
@@ -121,7 +121,7 @@ export default function BlurText({
             animate={inView ? animateKeyframes : fromSnapshot}
             transition={spanTransition}
             onAnimationComplete={index === elements.length - 1 ? onAnimationComplete : undefined}
-            style={className.includes('font-aguila') ? { fontFamily: 'var(--font-aguila), serif' } : undefined}
+            style={className.includes('font-didot') ? { fontFamily: 'var(--font-didot), serif' } : undefined}
           >
             {segment === ' ' ? '\u00A0' : segment}
             {animateBy === 'words' && index < elements.length - 1 && '\u00A0'}

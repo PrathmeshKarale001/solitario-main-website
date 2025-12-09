@@ -176,7 +176,7 @@ export default function OrderDetailPage() {
               className="flex flex-col md:flex-row md:items-center justify-between mb-8"
             >
               <div>
-                <h1 className="text-2xl md:text-3xl font-aguila text-brand-800 mb-1">
+                <h1 className="text-2xl md:text-3xl font-didot text-brand-800 mb-1">
                   Order {order.orderNumber}
                 </h1>
                 <p className="text-brand-500 font-montserrat">Placed on {formatDate(order.date)}</p>

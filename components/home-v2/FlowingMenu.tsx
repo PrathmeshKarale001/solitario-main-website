@@ -56,7 +56,7 @@ export default function FlowingMenu() {
                   Discover
                 </motion.span>
               </div>
-              <h3 className="text-3xl md:text-4xl font-aguila text-white mb-6 transform group-hover:-translate-y-2 transition-transform duration-500">
+              <h3 className="text-3xl md:text-4xl font-didot text-white mb-6 transform group-hover:-translate-y-2 transition-transform duration-500">
                 {item.text}
               </h3>
               <div className="inline-flex items-center justify-center w-12 h-12 rounded-full border border-white/30 text-white opacity-0 group-hover:opacity-100 transform translate-y-4 group-hover:translate-y-0 transition-all duration-500">

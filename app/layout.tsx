@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import localFont from 'next/font/local'
-import { Montserrat, Playfair_Display } from 'next/font/google'
+import { Montserrat } from 'next/font/google'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { CartProvider } from '@/lib/cart-context'
@@ -15,77 +15,8 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import './globals.css'
 
-// TEMPORARY: Using Playfair Display as fallback until Aguila font files are added
-// TODO: Replace with actual Aguila font files in public/fonts/
-// To use Aguila fonts:
-// 1. Add font files: public/fonts/Aguila-Regular.woff2, Aguila-Medium.woff2, Aguila-Bold.woff2
-// 2. Uncomment the localFont code below and comment out the Playfair_Display fallback
-const aguila = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-aguila',
-  display: 'swap',
-  weight: ['400', '700'], // Reduced from 6 weights to 2 most used
-});
-
-// Uncomment this when you have Aguila font files:
-// const aguila = localFont({
-//   src: [
-//     {
-//       path: '../public/fonts/Aguila-Regular.woff2',
-//       weight: '400',
-//       style: 'normal',
-//     },
-//     {
-//       path: '../public/fonts/Aguila-Medium.woff2',
-//       weight: '500',
-//       style: 'normal',
-//     },
-//     {
-//       path: '../public/fonts/Aguila-Bold.woff2',
-//       weight: '700',
-//       style: 'normal',
-//     },
-//   ],
-//   variable: '--font-aguila',
-//   display: 'swap',
-//   fallback: ['Georgia', 'serif'],
-// });
-
-// TEMPORARY: Using Playfair Display as fallback until Didot LP font files are added
-// TODO: Replace with actual Didot LP font files in public/fonts/
-// To use Didot LP fonts:
-// 1. Add font files: public/fonts/Didot-LP-Regular.woff2, Didot-LP-Medium.woff2, Didot-LP-Bold.woff2
-// 2. Uncomment the localFont code below and comment out the Playfair_Display fallback
-const didot = Playfair_Display({
-  subsets: ['latin'],
-  variable: '--font-didot',
-  display: 'swap',
-  weight: ['400', '500'], // Reduced from 4 weights to 2 most used
-});
-
-// Uncomment this when you have Didot LP font files:
-// const didot = localFont({
-//   src: [
-//     {
-//       path: '../public/fonts/Didot-LP-Regular.woff2',
-//       weight: '400',
-//       style: 'normal',
-//     },
-//     {
-//       path: '../public/fonts/Didot-LP-Medium.woff2',
-//       weight: '500',
-//       style: 'normal',
-//     },
-//     {
-//       path: '../public/fonts/Didot-LP-Bold.woff2',
-//       weight: '700',
-//       style: 'normal',
-//     },
-//   ],
-//   variable: '--font-didot',
-//   display: 'swap',
-//   fallback: ['Georgia', 'serif'],
-// });
+// Aguila and Didot fonts are loaded via CSS @font-face in globals.css
+// They are referenced directly in Tailwind config as 'Aguila' and 'Didot'
 
 // Load Montserrat from Google Fonts for body text AND UI text
 // Montserrat is a brand font and will be used for both body and Gotham (UI) text
@@ -126,8 +57,23 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${aguila.variable} ${didot.variable} ${gotham.variable}`}>
+    <html lang="en" className={`${montserrat.variable} ${gotham.variable}`}>
       <head>
+        {/* Preload brand fonts for faster loading */}
+        <link
+          rel="preload"
+          href="/fonts/Didot-Title.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Didot-Bold.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>

@@ -36,7 +36,7 @@ export default function Stores() {
             <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
               Visit Us
             </span>
-            <h2 className="text-4xl md:text-5xl font-aguila text-white">
+            <h2 className="text-4xl md:text-5xl font-didot text-white">
               Find a Boutique
             </h2>
           </motion.div>

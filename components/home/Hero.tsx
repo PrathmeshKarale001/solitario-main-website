@@ -5,13 +5,20 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-// Video sources for the hero carousel
-const HERO_VIDEOS = [
-    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
-  '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
-
-  
-  '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (6).mp4',
+// Video and image sources for the hero carousel
+const HERO_MEDIA = [
+  {
+    type: 'video',
+    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
+  },
+  {
+    type: 'video',
+    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+  },
+  {
+    type: 'image',
+    src: '/images/home-hero/Web_Banner_YouTube-01.jpg',
+  },
 ];
 
 export default function Hero() {
@@ -20,27 +27,41 @@ export default function Hero() {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Handle video ended event to cycle to next video
+  // Handle video ended event to cycle to next media
   const handleVideoEnded = () => {
     setIsTransitioning(true);
     setTimeout(() => {
-      setCurrentVideoIndex((prev) => (prev + 1) % HERO_VIDEOS.length);
+      setCurrentVideoIndex((prev) => (prev + 1) % HERO_MEDIA.length);
       setIsTransitioning(false);
     }, 300);
   };
 
+  // Auto-advance for images (since they don't have onEnded event)
+  useEffect(() => {
+    const currentMedia = HERO_MEDIA[currentVideoIndex];
+    if (currentMedia.type === 'image') {
+      const timer = setTimeout(() => {
+        handleVideoEnded();
+      }, 5000); // Show image for 5 seconds before transitioning
+      return () => clearTimeout(timer);
+    }
+  }, [currentVideoIndex]);
+
   // Play current video when index changes
   useEffect(() => {
-    const currentVideo = videoRefs.current[currentVideoIndex];
-    if (currentVideo) {
-      // Ensure video is loaded before playing
-      currentVideo.load();
-      currentVideo.currentTime = 0;
-      const playPromise = currentVideo.play();
-      if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Autoplay was prevented, handle silently
-        });
+    const currentMedia = HERO_MEDIA[currentVideoIndex];
+    if (currentMedia.type === 'video') {
+      const currentVideo = videoRefs.current[currentVideoIndex];
+      if (currentVideo) {
+        // Ensure video is loaded before playing
+        currentVideo.load();
+        currentVideo.currentTime = 0;
+        const playPromise = currentVideo.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Autoplay was prevented, handle silently
+          });
+        }
       }
     }
     
@@ -54,9 +75,9 @@ export default function Hero() {
 
   return (
     <section ref={sectionRef} className="relative min-h-screen flex flex-col overflow-hidden bg-black">
-      {/* Video Background */}
+      {/* Video/Image Background */}
       <div className="absolute inset-0 z-0">
-        {HERO_VIDEOS.map((video, index) => (
+        {HERO_MEDIA.map((media, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0 }}
@@ -65,15 +86,23 @@ export default function Hero() {
             className="absolute inset-0"
             style={{ pointerEvents: index === currentVideoIndex ? 'auto' : 'none' }}
           >
-            <video
-              ref={(el) => { videoRefs.current[index] = el; }}
-              src={video}
-              muted
-              playsInline
-              preload="auto"
-              onEnded={handleVideoEnded}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
+            {media.type === 'video' ? (
+              <video
+                ref={(el) => { videoRefs.current[index] = el; }}
+                src={media.src}
+                muted
+                playsInline
+                preload="auto"
+                onEnded={handleVideoEnded}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <img
+                src={media.src}
+                alt="Solitario Jewelry"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            )}
             {/* Dark overlay for better CTA visibility */}
             <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
           </motion.div>
@@ -108,9 +137,9 @@ export default function Hero() {
         </motion.div>
       </div>
 
-      {/* Video indicators */}
+      {/* Media indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {HERO_VIDEOS.map((_, index) => (
+        {HERO_MEDIA.map((_, index) => (
           <button
             key={index}
             onClick={() => {
@@ -125,7 +154,7 @@ export default function Hero() {
                 ? 'w-8 bg-white'
                 : 'w-2 bg-white/30 hover:bg-white/50'
             }`}
-            aria-label={`Go to video ${index + 1}`}
+            aria-label={`Go to media ${index + 1}`}
           />
         ))}
       </div>

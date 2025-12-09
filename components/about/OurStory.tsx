@@ -18,7 +18,7 @@ export default function OurStory() {
             <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
               The Solitario Story
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Our <span className="text-classic-green">Story</span>
             </h2>
             <div className="space-y-4 text-brand-700 text-base md:text-lg leading-relaxed font-montserrat">

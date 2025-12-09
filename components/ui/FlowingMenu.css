@@ -36,7 +36,7 @@
   font-weight: 600;
   color: #f8eee7;
   font-size: 3.5vh;
-  font-family: var(--font-aguila), serif;
+  font-family: var(--font-didot), serif;
   letter-spacing: -0.02em;
   transition: color 0.3s ease;
 }

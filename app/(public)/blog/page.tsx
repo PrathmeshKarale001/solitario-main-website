@@ -166,15 +166,15 @@ export default function BlogPage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-aguila text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-aguila), serif',
+                fontFamily: 'var(--font-didot), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <BlurText
                 text="Stories That Sparkle"
-                className="font-aguila"
+                className="font-didot"
                 animateBy="characters"
                 direction="top"
                 delay={50}

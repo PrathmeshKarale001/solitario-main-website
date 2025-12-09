@@ -17,7 +17,7 @@ export default function VisionMission() {
           <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             What Drives Us
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800" style={{ letterSpacing: '-0.02em' }}>
             Vision & <span className="text-classic-green">Mission</span>
           </h2>
         </motion.div>

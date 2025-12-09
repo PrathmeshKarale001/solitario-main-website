@@ -63,7 +63,7 @@ export default function ProductCategories() {
           className="mb-4 sm:mb-8 md:mb-12 text-center"
         >
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">Collections</span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-aguila text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
             Find Your Perfect Diamond
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto font-montserrat hidden sm:block">

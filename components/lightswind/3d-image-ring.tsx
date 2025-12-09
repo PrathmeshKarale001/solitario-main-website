@@ -5,9 +5,14 @@ import { motion, AnimatePresence, useMotionValue, easeOut } from "framer-motion"
 import { cn } from "../../lib/utils"; // Assuming you have this utility for class names
 import { animate } from "framer-motion";
 
+export interface ImageItem {
+  src: string;
+  name?: string;
+}
+
 export interface ThreeDImageRingProps {
-  /** Array of image URLs to display in the ring */
-  images: string[];
+  /** Array of image URLs or image objects with names to display in the ring */
+  images: string[] | ImageItem[];
   /** Container width in pixels (will be scaled) */
   width?: number;
   /** 3D perspective value */
@@ -100,7 +105,17 @@ export function ThreeDImageRing({
   const autoRotateAnimationCtrlRef = useRef<ReturnType<typeof animate> | null>(null);
   const lastTimeRef = useRef<number>(0);
 
-  const angle = useMemo(() => 360 / images.length, [images.length]);
+  // Normalize images to always be ImageItem[]
+  const normalizedImages: ImageItem[] = useMemo(() => {
+    return images.map((img) => {
+      if (typeof img === 'string') {
+        return { src: img };
+      }
+      return img;
+    });
+  }, [images]);
+
+  const angle = useMemo(() => 360 / normalizedImages.length, [normalizedImages.length]);
 
   const getBgPos = (imageIndex: number, currentRot: number, scale: number) => {
     // Center the background image instead of parallax offset
@@ -348,7 +363,7 @@ const handleDragEnd = () => {
           }}
         >
           <AnimatePresence>
-            {showImages && images.map((imageUrl, index) => (
+            {showImages && normalizedImages.map((imageItem, index) => (
               <motion.div
                 key={index}
                 className={cn(
@@ -357,7 +372,7 @@ const handleDragEnd = () => {
                 )}
                 style={{
                   transformStyle: "preserve-3d",
-                  backgroundImage: `url(${imageUrl})`,
+                  backgroundImage: `url(${imageItem.src})`,
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
                   backfaceVisibility: "hidden",
@@ -365,6 +380,9 @@ const handleDragEnd = () => {
                   z: -imageDistance * currentScale,
                   transformOrigin: `50% 50% ${imageDistance * currentScale}px`,
                   backgroundPosition: getBgPos(index, currentRotationY.current, currentScale),
+                  borderRadius: "12px",
+                  outline: "none",
+                  border: "none",
                 }}
                 initial="hidden"
                 animate="visible"
@@ -397,7 +415,19 @@ const handleDragEnd = () => {
                     });
                   }
                 }}
-              />
+              >
+                {/* Celebrity Name Label */}
+                {imageItem.name && (
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-12 pb-4 px-4 rounded-b-xl"
+                    style={{ backfaceVisibility: "hidden" }}
+                  >
+                    <p className="text-white text-center font-didot text-lg md:text-xl tracking-wide">
+                      {imageItem.name}
+                    </p>
+                  </div>
+                )}
+              </motion.div>
             ))}
           </AnimatePresence>
         </motion.div>

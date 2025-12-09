@@ -46,10 +46,10 @@ const config: Config = {
       },
       fontFamily: {
         // Brand Typography
-        aguila: ['var(--font-aguila)', 'Georgia', 'serif'],
-        didot: ['var(--font-didot)', 'Georgia', 'serif'],
-        montserrat: ['var(--font-montserrat)', 'system-ui', 'sans-serif'],
-        gotham: ['var(--font-gotham)', 'system-ui', 'sans-serif'],
+        aguila: ['Aguila', 'Georgia', 'serif'],
+        didot: ['Didot', 'Georgia', 'serif'],
+        montserrat: ['Montserrat', 'system-ui', 'sans-serif'],
+        gotham: ['Gotham', 'system-ui', 'sans-serif'],
       },
       fontSize: {
         // Brand Type Scale

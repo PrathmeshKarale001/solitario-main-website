@@ -113,7 +113,7 @@ export default function AdminDashboard() {
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-aguila text-brand-800 mb-1">
+          <h1 className="text-2xl md:text-3xl font-didot text-brand-800 mb-1">
             Welcome back, {adminUser?.name || 'Admin'}
           </h1>
           <p className="text-brand-500 font-montserrat text-sm">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
               +12%
             </span>
           </div>
-          <p className="text-3xl font-aguila text-brand-800">{stats.totalProducts}</p>
+          <p className="text-3xl font-didot text-brand-800">{stats.totalProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Total Products</p>
         </motion.div>
 
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
               +5%
             </span>
           </div>
-          <p className="text-3xl font-aguila text-brand-800">{stats.featuredProducts}</p>
+          <p className="text-3xl font-didot text-brand-800">{stats.featuredProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Featured Items</p>
         </motion.div>
 
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
               +18%
             </span>
           </div>
-          <p className="text-3xl font-aguila text-brand-800">24</p>
+          <p className="text-3xl font-didot text-brand-800">24</p>
           <p className="text-brand-500 text-sm font-montserrat">Orders Today</p>
         </motion.div>
 
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
               +23%
             </span>
           </div>
-          <p className="text-2xl font-aguila text-brand-800">₹4.2L</p>
+          <p className="text-2xl font-didot text-brand-800">₹4.2L</p>
           <p className="text-brand-500 text-sm font-montserrat">Revenue Today</p>
         </motion.div>
       </div>

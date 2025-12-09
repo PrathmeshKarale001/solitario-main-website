@@ -24,7 +24,7 @@ export default function WishlistPage() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-aguila text-brand-800 mb-2">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-2">
                 My Wishlist
               </h1>
               <p className="text-brand-500 font-montserrat">

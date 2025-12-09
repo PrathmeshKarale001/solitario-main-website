@@ -14,7 +14,7 @@ export default function HeadOffice() {
             viewport={{ once: true }}
             className="md:w-1/3"
           >
-            <h3 className="font-aguila text-3xl text-gray-900 mb-6">Contact Us</h3>
+            <h3 className="font-didot text-3xl text-gray-900 mb-6">Contact Us</h3>
             <p className="text-gray-500 font-montserrat text-sm leading-relaxed mb-8">
               Our concierge team is available to assist you with any inquiries regarding our collections or services.
             </p>

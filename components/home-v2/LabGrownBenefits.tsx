@@ -53,7 +53,7 @@ export default function LabGrownBenefits() {
               />
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-bronze-gold rounded-full flex items-center justify-center z-20 shadow-xl">
                 <div className="text-center text-black">
-                  <span className="block text-2xl font-bold font-aguila">100%</span>
+                  <span className="block text-2xl font-bold font-didot">100%</span>
                   <span className="text-[10px] uppercase font-gotham tracking-wider">Conflict Free</span>
                 </div>
               </div>
@@ -70,7 +70,7 @@ export default function LabGrownBenefits() {
               <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
                 Why Lab Grown?
               </span>
-              <h2 className="text-4xl md:text-5xl font-aguila text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-didot text-white mb-6">
                 The Future of <span className="italic text-gray-400">Luxury</span>
               </h2>
               <p className="text-gray-400 font-montserrat leading-relaxed">

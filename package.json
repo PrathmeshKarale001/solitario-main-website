@@ -16,6 +16,7 @@
     "@shopify/shopify-api": "^12.1.2",
     "@shopify/storefront-api-client": "^1.0.9",
     "@studio-freight/lenis": "^1.0.42",
+    "canvas-confetti": "^1.9.4",
     "clsx": "^2.1.1",
     "crypto-js": "^4.2.0",
     "dotenv": "^17.2.3",
@@ -30,11 +31,13 @@
     "next-auth": "^4.24.13",
     "ogl": "^0.0.32",
     "pdf-parse": "^2.4.5",
+    "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-intersection-observer": "^10.0.0"
   },
   "devDependencies": {
+    "@types/canvas-confetti": "^1.9.0",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",

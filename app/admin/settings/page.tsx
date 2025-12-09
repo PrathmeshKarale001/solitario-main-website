@@ -46,7 +46,7 @@ export default function AdminSettingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-aguila text-brand-800 mb-1">Settings</h1>
+          <h1 className="text-2xl md:text-3xl font-didot text-brand-800 mb-1">Settings</h1>
           <p className="text-brand-500 font-montserrat text-sm">
             Manage admin panel configuration and security
           </p>

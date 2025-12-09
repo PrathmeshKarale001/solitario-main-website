@@ -56,9 +56,9 @@ export default function LabGrownDiamondsPage() {
         >
           <div className="max-w-5xl mx-auto">
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-aguila text-white leading-[1.1] tracking-tight px-4 relative z-10"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4 relative z-10"
               style={{
-                fontFamily: 'var(--font-aguila), serif',
+                fontFamily: 'var(--font-didot), serif',
                 fontWeight: 400,
                 letterSpacing: '-0.02em',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.4)'
@@ -67,7 +67,7 @@ export default function LabGrownDiamondsPage() {
               <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
                 <BlurText
                   text="Why"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={50}
@@ -75,7 +75,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="Lab"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={100}
@@ -83,7 +83,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="Grown"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={150}
@@ -99,7 +99,7 @@ export default function LabGrownDiamondsPage() {
                 </motion.span>
                 <BlurText
                   text="Diamonds"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={200}
@@ -109,7 +109,7 @@ export default function LabGrownDiamondsPage() {
               <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
                 <BlurText
                   text="Are"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={100}
@@ -117,7 +117,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="The"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={130}
@@ -125,7 +125,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="Future"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={160}
@@ -133,7 +133,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="of"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={190}
@@ -141,7 +141,7 @@ export default function LabGrownDiamondsPage() {
                 />
                 <BlurText
                   text="Luxury"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={220}
@@ -205,7 +205,7 @@ export default function LabGrownDiamondsPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-8">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
               The Brilliance That Paves To A <span className="text-classic-green">Brighter World</span>
             </h2>
             <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
@@ -231,7 +231,7 @@ export default function LabGrownDiamondsPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
                 Born From <span className="text-classic-green">Vision</span>
               </h2>
               <p className="text-base md:text-lg text-brand-700 mb-8 leading-relaxed font-montserrat">
@@ -309,7 +309,7 @@ export default function LabGrownDiamondsPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               How They're <span className="text-classic-green">Made</span>
             </h2>
             <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
@@ -375,7 +375,7 @@ export default function LabGrownDiamondsPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-4">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Every Diamond Holds <span className="text-classic-green">Wonder</span>
             </h2>
             <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
@@ -417,7 +417,7 @@ export default function LabGrownDiamondsPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
                 The 4Cs, <span className="text-classic-green">Elevated</span>
               </h2>
               <p className="text-base md:text-lg text-brand-700 mb-8 font-montserrat">
@@ -497,7 +497,7 @@ export default function LabGrownDiamondsPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-white mb-4" style={{ letterSpacing: '-0.02em' }}>
               The <span className="text-bronze-gold">Sustainable</span> Choice
             </h2>
             <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto font-montserrat">
@@ -537,7 +537,7 @@ export default function LabGrownDiamondsPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Experience the <span className="text-classic-green">Future</span> of Diamonds
             </h2>
             <p className="text-base md:text-lg text-brand-700 mb-8 font-montserrat">

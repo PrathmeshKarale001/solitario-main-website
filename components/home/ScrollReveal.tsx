@@ -64,7 +64,7 @@ export default function ScrollReveal() {
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-bronze-gold" />
             <div className="w-8 sm:w-16 h-px bg-gradient-to-l from-transparent via-bronze-gold to-bronze-gold/50" />
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-aguila text-ivory-pearl mb-3 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-didot text-ivory-pearl mb-3 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
             Our Craftsmanship
           </h2>
           <p className="text-sm sm:text-lg md:text-xl text-white/70 font-montserrat max-w-2xl mx-auto px-4">

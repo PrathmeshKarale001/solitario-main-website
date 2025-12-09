@@ -187,7 +187,7 @@ export default function AddressesPage() {
               className="flex flex-col sm:flex-row sm:items-center justify-between mb-8"
             >
               <div>
-                <h1 className="text-3xl md:text-4xl font-aguila text-brand-800 mb-2">My Addresses</h1>
+                <h1 className="text-3xl md:text-4xl font-didot text-brand-800 mb-2">My Addresses</h1>
                 <p className="text-brand-500 font-montserrat">Manage your delivery addresses</p>
               </div>
               <button

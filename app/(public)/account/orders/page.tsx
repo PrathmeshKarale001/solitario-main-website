@@ -112,7 +112,7 @@ export default function OrdersPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
             >
-              <h1 className="text-3xl md:text-4xl font-aguila text-brand-800 mb-2">My Orders</h1>
+              <h1 className="text-3xl md:text-4xl font-didot text-brand-800 mb-2">My Orders</h1>
               <p className="text-brand-500 font-montserrat">Track and manage your orders</p>
             </motion.div>
 

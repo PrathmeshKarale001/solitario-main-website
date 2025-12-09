@@ -106,7 +106,7 @@ export default function SettingsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
             >
-              <h1 className="text-3xl md:text-4xl font-aguila text-brand-800 mb-2">Profile Settings</h1>
+              <h1 className="text-3xl md:text-4xl font-didot text-brand-800 mb-2">Profile Settings</h1>
               <p className="text-brand-500 font-montserrat">Manage your account information</p>
             </motion.div>
 

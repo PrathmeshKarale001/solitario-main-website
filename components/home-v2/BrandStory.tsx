@@ -20,7 +20,7 @@ export default function BrandStory() {
             <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-6 block">
               Our Legacy
             </span>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-aguila text-white mb-8 leading-tight">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-didot text-white mb-8 leading-tight">
               Crafting <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-500">Tomorrow's</span> <br />
               Heirlooms

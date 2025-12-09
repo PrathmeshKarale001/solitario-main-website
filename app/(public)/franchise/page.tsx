@@ -83,15 +83,15 @@ export default function FranchisePage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-aguila text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-aguila), serif',
+                fontFamily: 'var(--font-didot), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <BlurText
                 text="Franchise   With   Us"
-                className="font-aguila"
+                className="font-didot"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -135,7 +135,7 @@ export default function FranchisePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Why Partner With <span className="text-classic-green">Solitario</span>?
             </h2>
             <p className="text-brand-700 font-montserrat max-w-2xl mx-auto">
@@ -174,7 +174,7 @@ export default function FranchisePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-6">
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
                 Franchise <span className="text-classic-green">Requirements</span>
               </h2>
               <p className="text-brand-700 font-montserrat mb-8">

@@ -88,7 +88,7 @@ export default function PrivacyPolicyPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <Shield className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-aguila text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
               Privacy Policy
             </h1>
             <p className="text-white/80 font-montserrat">

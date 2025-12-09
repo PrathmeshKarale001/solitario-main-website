@@ -41,29 +41,170 @@ const GLOBAL_STORES = [
 ];
 
 const INDIA_STORES = [
+  // Pune Stores
   {
-    id: 'mumbai',
-    name: 'Solitario Mumbai',
-    address: 'Phoenix Palladium, Lower Parel',
+    id: 'pune-phoenix-millennium',
+    name: 'Phoenix Mall of the Millennium',
+    address: 'Phoenix Mall of the Millennium, Wakad',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Mall+of+the+Millennium+Wakad,+Pune',
+  },
+  {
+    id: 'pune-pavilion',
+    name: 'Pavilion Mall',
+    address: 'Pavilion Mall, Shivajinagar',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Pavillion+Mall,+Pune',
+  },
+  {
+    id: 'pune-baner',
+    name: 'Baner',
+    address: 'Baner Road',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Baner,+Pune',
+  },
+  {
+    id: 'pune-phoenix-marketcity',
+    name: 'Phoenix Marketcity',
+    address: 'Phoenix Marketcity, Viman Nagar',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Marketcity,+Pune',
+  },
+  {
+    id: 'pune-koregaon-park',
+    name: 'Koregaon Park',
+    address: 'Koregaon Park',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Koregaon+Park,+Pune',
+  },
+  {
+    id: 'pune-nibm',
+    name: 'NIBM',
+    address: 'NIBM Road',
+    city: 'Pune',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+NIBM,+Pune',
+  },
+  // Mumbai Stores
+  {
+    id: 'mumbai-phoenix-kurla',
+    name: 'Phoenix Marketcity Kurla',
+    address: 'Phoenix Marketcity, Kurla West',
     city: 'Mumbai',
-    phone: '+91 22 4567 8900',
-    hours: '11:00 AM - 9:00 PM',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Marketcity+Kurla,+Mumbai',
   },
   {
-    id: 'delhi',
-    name: 'Solitario Delhi',
-    address: 'Select Citywalk, Saket',
-    city: 'New Delhi',
-    phone: '+91 11 4567 8901',
-    hours: '11:00 AM - 9:00 PM',
+    id: 'mumbai-sky-city-borivali',
+    name: 'Sky City Mall Borivali',
+    address: 'First Floor, Sky City Mall, Borivali East',
+    city: 'Mumbai',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Sky+City+Mall+Borivali,+Mumbai',
   },
   {
-    id: 'bangalore',
-    name: 'Solitario Bangalore',
-    address: 'UB City Mall, Vittal Mallya Road',
+    id: 'mumbai-infiniti-malad',
+    name: 'Infiniti Mall Malad',
+    address: 'Infiniti Mall, Malad West',
+    city: 'Mumbai',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Infiniti+Mall+Malad,+Mumbai',
+  },
+  {
+    id: 'mumbai-r-city-ghatkopar',
+    name: 'R City Mall Ghatkopar',
+    address: 'R City Mall, Ghatkopar West',
+    city: 'Mumbai',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+R+City+Mall+Ghatkopar,+Mumbai',
+  },
+  {
+    id: 'mumbai-oberoi-mall-goregaon',
+    name: 'Oberoi Mall Goregaon',
+    address: 'Oberoi Mall, Goregaon East',
+    city: 'Mumbai',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Oberoi+Mall+Goregaon,+Mumbai',
+  },
+  {
+    id: 'mumbai-viviana-thane',
+    name: 'Viviana Mall Thane',
+    address: 'Viviana Mall, Thane West',
+    city: 'Mumbai',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Viviana+Mall+Thane,+Mumbai',
+  },
+  // Other Cities
+  {
+    id: 'hyderabad-sarath-city',
+    name: 'Sarath City Capital Mall',
+    address: 'Sarath City Capital Mall, Kondapur',
+    city: 'Hyderabad',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Sarath+City+Capital+Mall,+Hyderabad',
+  },
+  {
+    id: 'bangalore-phoenix-marketcity',
+    name: 'Phoenix Marketcity',
+    address: 'Phoenix Marketcity, Whitefield',
     city: 'Bangalore',
-    phone: '+91 80 4567 8902',
-    hours: '11:00 AM - 9:00 PM',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Marketcity,+Bangalore',
+  },
+  {
+    id: 'ahmedabad-palladium',
+    name: 'Palladium Mall',
+    address: 'Palladium Mall, SG Highway',
+    city: 'Ahmedabad',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Palladium+Mall,+Ahmedabad',
+  },
+  {
+    id: 'surat-vr-mall',
+    name: 'VR Mall',
+    address: 'VR Mall, Dumas Road',
+    city: 'Surat',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+VR+Mall,+Surat',
+  },
+  {
+    id: 'indore-phoenix-citadel',
+    name: 'Phoenix Citadel',
+    address: 'Phoenix Citadel Mall',
+    city: 'Indore',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Citadel,+Indore',
+  },
+  {
+    id: 'lucknow-phoenix-palassio',
+    name: 'Phoenix Palassio',
+    address: 'Phoenix Palassio Mall',
+    city: 'Lucknow',
+    phone: '+91 788 788 3444',
+    hours: '10:00 AM - 11:00 PM',
+    mapLink: 'https://maps.google.com/?q=Solitario+Diamonds+Phoenix+Palassio,+Lucknow',
   },
 ];
 
@@ -112,16 +253,16 @@ export default function StoresPage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-aguila text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-aguila), serif',
+                fontFamily: 'var(--font-didot), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap">
                 <BlurText
                   text="Find"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={50}
@@ -129,7 +270,7 @@ export default function StoresPage() {
                 />
                 <BlurText
                   text="Your"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={150}
@@ -137,7 +278,7 @@ export default function StoresPage() {
                 />
                 <BlurText
                   text="Sparkle"
-                  className="font-aguila"
+                  className="font-didot"
                   animateBy="characters"
                   direction="top"
                   delay={250}
@@ -171,7 +312,7 @@ export default function StoresPage() {
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               International Presence
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800">
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800" style={{ letterSpacing: '-0.02em' }}>
               Our <span className="text-classic-green">Global</span> Stores
             </h2>
           </motion.div>

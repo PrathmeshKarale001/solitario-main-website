@@ -38,7 +38,7 @@ export default function FAQ() {
           <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
             Common Questions
           </span>
-          <h2 className="text-3xl md:text-4xl font-aguila text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-didot text-gray-900">
             Everything You Need to Know
           </h2>
         </motion.div>

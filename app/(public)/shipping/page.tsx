@@ -70,7 +70,7 @@ export default function ShippingPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <Truck className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-aguila text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
               Shipping & Delivery
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
@@ -89,7 +89,7 @@ export default function ShippingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-aguila text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
               Shipping Options
             </h2>
             <p className="text-brand-600 font-montserrat">
@@ -237,7 +237,7 @@ export default function ShippingPage() {
             viewport={{ once: true }}
             className="bg-gradient-to-br from-classic-green to-teal rounded-3xl p-8 md:p-12 text-center"
           >
-            <h2 className="text-2xl md:text-3xl font-aguila text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
               Have Questions About Shipping?
             </h2>
             <p className="text-white/80 font-montserrat mb-8 max-w-xl mx-auto">

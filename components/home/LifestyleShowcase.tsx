@@ -1,16 +1,18 @@
 'use client';
 
-import { ThreeDImageRing } from '@/components/lightswind/3d-image-ring';
+import { ThreeDImageRing, ImageItem } from '@/components/lightswind/3d-image-ring';
 
-// Optimized Solitario images from /public/carouselgrid
-const LIFESTYLE_IMAGES = [
-  '/carouselgrid/optimized-30.6.2025-Soltario0079-1.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0183-1.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0193-1.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0245.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0298-1.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0353.jpg',
-  '/carouselgrid/optimized-30.6.2025-Soltario0542.jpg',
+// Solitario spotted celebrities (URL-encoded paths for spaces)
+const CELEBRITY_IMAGES: ImageItem[] = [
+  { src: '/images/Solitario%20spotted%20celebrities/Zareen%20Khan/DSC00348.jpg', name: 'Zareen Khan' },
+  { src: '/images/Solitario%20spotted%20celebrities/Sunny%20leone/14.png', name: 'Sunny Leone' },
+  { src: '/images/Solitario%20spotted%20celebrities/Nargis%20Fakri/IMG_0153%20copy.jpg', name: 'Nargis Fakhri' },
+  { src: '/images/Solitario%20spotted%20celebrities/Karishma%20tanna/14.png', name: 'Karishma Tanna' },
+  { src: '/images/Solitario%20spotted%20celebrities/Esha%20deol/2.jpg', name: 'Esha Deol' },
+  { src: '/images/Solitario%20spotted%20celebrities/Sonam%20Kapoor/WhatsApp%20Image%202025-03-03%20at%2023.38.10_5a4446bd.jpg', name: 'Sonam Kapoor' },
+  { src: '/images/Solitario%20spotted%20celebrities/Taha%20Shah/8.8.2025%20Solitario1750.jpg', name: 'Taha Shah' },
+  { src: '/images/Solitario%20spotted%20celebrities/Parth%20samthaan/IMG_3236.PNG', name: 'Parth Samthaan' },
+  { src: '/images/Solitario%20spotted%20celebrities/Riddhima%20pandit/8.png', name: 'Riddhima Pandit' },
 ];
 
 export default function LifestyleShowcase() {
@@ -18,11 +20,11 @@ export default function LifestyleShowcase() {
     <section className="bg-white py-16 md:py-20 w-full">
       {/* Section Header - Centered */}
       <div className="flex flex-col items-center mb-8 md:mb-10 text-center px-4">
-        <span className="text-bronze-gold uppercase tracking-[0.2em] text-sm font-gotham mb-3">
-          Shop By Occasion
+        <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
+          Spotted With Solitario
         </span>
-        <h2 className="font-didot text-4xl md:text-5xl lg:text-6xl text-brand-800 mb-6">
-          Find Your Perfect Match
+        <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
+          Solitario Spotted Celebrities
         </h2>
         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent" />
       </div>
@@ -30,7 +32,7 @@ export default function LifestyleShowcase() {
       {/* 3D Image Ring - Full Viewport Width, Reduced Vertical Space */}
       <div className="h-[430px] md:h-[500px] lg:h-[560px] w-screen relative left-1/2 -translate-x-1/2 flex items-center justify-center overflow-visible">
         <ThreeDImageRing 
-          images={LIFESTYLE_IMAGES}
+          images={CELEBRITY_IMAGES}
           width={370}
           imageDistance={570}
           perspective={2200}

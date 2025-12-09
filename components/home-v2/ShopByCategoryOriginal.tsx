@@ -53,7 +53,7 @@ export default function ShopByCategoryOriginal() {
           <span className="text-xs md:text-sm uppercase tracking-[0.3em] font-gotham text-bronze-gold mb-3 block">
             Curated For You
           </span>
-          <h2 className="text-3xl md:text-5xl font-aguila text-white" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl md:text-5xl font-didot text-white" style={{ letterSpacing: '-0.02em' }}>
             Featured Categories
           </h2>
         </motion.div>
@@ -97,7 +97,7 @@ export default function ShopByCategoryOriginal() {
 
                   {/* Text Content */}
                   <div className="text-center relative z-10">
-                    <h3 className="text-xl md:text-2xl font-aguila text-white mb-2 group-hover:text-bronze-gold transition-colors duration-300">
+                    <h3 className="text-xl md:text-2xl font-didot text-white mb-2 group-hover:text-bronze-gold transition-colors duration-300">
                       {category.name}
                     </h3>
                     <div className="h-px w-8 bg-white/20 mx-auto group-hover:w-16 group-hover:bg-bronze-gold/50 transition-all duration-500" />

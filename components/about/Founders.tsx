@@ -52,7 +52,7 @@ const CORE_TEAM = [
 
 export default function Founders() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+    <section className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -65,10 +65,10 @@ export default function Founders() {
           <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             Our Founders
           </span>
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
             Shine with <span className="text-bronze-gold">Solitario</span>
           </h2>
-          <p className="text-base md:text-lg text-white/80 max-w-2xl mx-auto font-montserrat">
+          <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto font-montserrat">
             Visionaries committed to revolutionizing the diamond industry through sustainable practices and ethical business.
           </p>
         </motion.div>
@@ -82,7 +82,7 @@ export default function Founders() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
-              className="relative rounded-3xl overflow-hidden backdrop-blur-2xl bg-white/5 border border-white/10 hover:border-bronze-gold/30 transition-all duration-500 group"
+              className="relative rounded-3xl overflow-hidden bg-white border border-gray-200 hover:border-bronze-gold/30 shadow-lg transition-all duration-500 group"
             >
               <div className="grid md:grid-cols-2 gap-0">
                 {/* Image */}
@@ -98,13 +98,13 @@ export default function Founders() {
 
                 {/* Content */}
                 <div className="p-6 md:p-8 flex flex-col justify-center">
-                  <h3 className="text-2xl md:text-3xl font-didot text-white mb-2">
+                  <h3 className="text-2xl md:text-3xl font-didot text-gray-900 mb-2">
                     {founder.name}
                   </h3>
                   <p className="text-bronze-gold font-gotham uppercase tracking-wider text-sm mb-4">
                     {founder.title}
                   </p>
-                  <p className="text-white/70 text-sm leading-relaxed font-montserrat mb-4">
+                  <p className="text-gray-600 text-sm leading-relaxed font-montserrat mb-4">
                     {founder.bio}
                   </p>
                   {/* Signature */}
@@ -115,7 +115,7 @@ export default function Founders() {
                         alt={`${founder.name} Signature`}
                         width={150}
                         height={60}
-                        className="brightness-0 invert opacity-70"
+                        className="brightness-0 opacity-70"
                       />
                     </div>
                   )}
@@ -136,7 +136,7 @@ export default function Founders() {
           <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             Core Team
           </span>
-          <h3 className="text-2xl md:text-3xl font-didot text-white">
+          <h3 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green" style={{ letterSpacing: '-0.02em' }}>
             The Minds Behind the <span className="text-bronze-gold">Brilliance</span>
           </h3>
         </motion.div>
@@ -149,7 +149,7 @@ export default function Founders() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative rounded-2xl overflow-hidden backdrop-blur-2xl bg-white/5 border border-white/10 hover:border-bronze-gold/30 transition-all duration-500 group text-center p-6"
+              className="relative rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-bronze-gold/30 shadow-lg transition-all duration-500 group text-center p-6"
             >
               {/* Image */}
               <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-bronze-gold/30">
@@ -157,12 +157,14 @@ export default function Founders() {
                   src={member.image}
                   alt={member.name}
                   fill
-                  className="object-cover group-hover:scale-110 transition-transform duration-500"
+                  className={`object-cover group-hover:scale-110 transition-transform duration-500 ${
+                    member.id === 'kamini' ? 'scale-150 object-top' : ''
+                  }`}
                 />
               </div>
 
               {/* Content */}
-              <h4 className="text-xl font-didot text-white mb-1">
+              <h4 className="text-xl font-didot text-gray-900 mb-1">
                 {member.name}
               </h4>
               <p className="text-bronze-gold font-gotham uppercase tracking-wider text-xs mb-3">
@@ -171,14 +173,14 @@ export default function Founders() {
               
               {/* Bio */}
               {member.bio && (
-                <p className="text-white/70 text-sm leading-relaxed font-montserrat mb-4">
+                <p className="text-gray-600 text-sm leading-relaxed font-montserrat mb-4">
                   {member.bio}
                 </p>
               )}
               
               <a
                 href={`mailto:${member.email}`}
-                className="inline-flex items-center gap-2 text-white/60 hover:text-bronze-gold text-sm font-montserrat transition-colors duration-300"
+                className="inline-flex items-center gap-2 text-gray-500 hover:text-bronze-gold text-sm font-montserrat transition-colors duration-300"
               >
                 <Mail className="w-4 h-4" />
                 {member.email}

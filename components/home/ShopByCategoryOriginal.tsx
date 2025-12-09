@@ -52,10 +52,10 @@ export default function ShopByCategoryOriginal() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <span className="text-[10px] sm:text-xs uppercase tracking-[0.25em] font-gotham text-bronze-gold mb-2 sm:mb-3 block">
+          <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
             Curated For You
           </span>
-          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-aguila text-classic-green" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green" style={{ letterSpacing: '-0.02em' }}>
             Featured Categories
           </h2>
         </motion.div>
@@ -77,20 +77,14 @@ export default function ShopByCategoryOriginal() {
                 <div className="relative">
                   {/* Original Image Container - No circular frame */}
                   <div className="relative aspect-square mx-auto max-w-[220px] sm:max-w-[260px] lg:max-w-[300px] overflow-hidden rounded-lg sm:rounded-xl">
-                    {/* Subtle border on hover */}
-                    <div className="absolute inset-0 border-2 border-transparent group-hover:border-bronze-gold/30 rounded-lg sm:rounded-xl transition-colors duration-500 z-10 pointer-events-none" />
-                    
                     {/* Image */}
                     <Image
                       src={category.image}
                       alt={category.name}
                       fill
-                      className="object-contain group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="object-contain"
                       sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 300px"
                     />
-                    
-                    {/* Subtle gradient overlay on hover */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                   </div>
 
                   {/* Category Label */}
@@ -102,7 +96,7 @@ export default function ShopByCategoryOriginal() {
                       <div className="relative">
                         {/* Decorative underline on hover */}
                         <span className="absolute left-1/2 -translate-x-1/2 bottom-0 h-[1px] w-0 bg-bronze-gold/50 group-hover:w-full transition-all duration-500" />
-                        <h3 className="relative font-aguila text-lg sm:text-xl md:text-2xl text-classic-green group-hover:text-bronze-gold transition-colors duration-300 pb-1">
+                        <h3 className="relative font-didot text-lg sm:text-xl md:text-2xl text-classic-green group-hover:text-bronze-gold transition-colors duration-300 pb-1">
                           {category.name}
                         </h3>
                       </div>
