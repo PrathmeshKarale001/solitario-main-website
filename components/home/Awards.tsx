@@ -16,7 +16,7 @@ export default function Awards() {
           transition={{ duration: 0.4 }}
           className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-didot mb-2 sm:mb-4 text-classic-green">International Awards</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair mb-2 sm:mb-4 text-classic-green">International Awards</h2>
           <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-md sm:max-w-3xl mx-auto hidden sm:block">
             Our creations recognized by prestigious stages in fine jewelry
           </p>
@@ -42,7 +42,7 @@ export default function Awards() {
 
                 {/* Award Info */}
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-sm sm:text-base md:text-xl font-didot text-classic-green mb-1 sm:mb-2">
+                  <h3 className="text-sm sm:text-base md:text-xl font-playfair text-classic-green mb-1 sm:mb-2">
                     {award.title}
                   </h3>
                   <p className="text-xs sm:text-sm text-gray-600 leading-relaxed line-clamp-2 sm:line-clamp-none">

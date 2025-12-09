@@ -18,7 +18,7 @@ export default function BrandStory() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-didot mb-4 sm:mb-6 md:mb-8 text-brand-800" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair mb-4 sm:mb-6 md:mb-8 text-brand-800" style={{ letterSpacing: '-0.02em' }}>
               Designed for Today. Inspired by Tomorrow.
             </h2>
             <div className="space-y-3 sm:space-y-4 md:space-y-6 text-xs sm:text-sm md:text-base text-brand-700 leading-relaxed">

@@ -170,7 +170,7 @@ export default function FAQPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
               Frequently Asked Questions
             </h1>
             <p className="text-white/80 font-montserrat text-lg mb-8">
@@ -226,7 +226,7 @@ export default function FAQPage() {
             {currentCategory.map((category) => (
               <div key={category.id} className="mb-8">
                 {searchQuery && (
-                  <h2 className="font-didot text-xl text-brand-800 mb-4 flex items-center gap-2">
+                  <h2 className="font-playfair text-xl text-brand-800 mb-4 flex items-center gap-2">
                     <category.icon className="w-5 h-5 text-classic-green" />
                     {category.title}
                   </h2>
@@ -275,7 +275,7 @@ export default function FAQPage() {
             {searchQuery && filteredCategories.length === 0 && (
               <div className="text-center py-12">
                 <HelpCircle className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-                <h3 className="text-xl font-didot text-brand-800 mb-2">No results found</h3>
+                <h3 className="text-xl font-playfair text-brand-800 mb-2">No results found</h3>
                 <p className="text-brand-500 font-montserrat">
                   Try different keywords or browse our categories above
                 </p>
@@ -289,7 +289,7 @@ export default function FAQPage() {
               transition={{ delay: 0.3 }}
               className="mt-12 bg-gradient-to-br from-bronze-gold/10 to-bronze-gold/5 rounded-2xl p-8 text-center border border-bronze-gold/20"
             >
-              <h3 className="text-xl font-didot text-brand-800 mb-2">Still have questions?</h3>
+              <h3 className="text-xl font-playfair text-brand-800 mb-2">Still have questions?</h3>
               <p className="text-brand-600 font-montserrat mb-4">
                 Our customer support team is here to help
               </p>

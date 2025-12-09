@@ -51,7 +51,7 @@ export default function ProductListView({ products, onQuickView }: ProductListVi
                         <span className="inline-block text-[10px] uppercase tracking-[0.25em] font-gotham text-gray-400 mb-2">
                           {product.category.toUpperCase()}
                         </span>
-                        <h3 className="font-didot text-2xl md:text-3xl text-gray-900 group-hover:text-bronze-gold transition-colors mb-2">
+                        <h3 className="font-playfair text-2xl md:text-3xl text-gray-900 group-hover:text-bronze-gold transition-colors mb-2">
                           {product.name}
                         </h3>
                         <p className="text-sm text-gray-600 leading-relaxed font-montserrat line-clamp-2 mb-4">

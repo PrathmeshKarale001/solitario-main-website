@@ -64,7 +64,7 @@ export default function ScrollReveal() {
             <Sparkles className="w-5 h-5 sm:w-6 sm:h-6 text-bronze-gold" />
             <div className="w-8 sm:w-16 h-px bg-gradient-to-l from-transparent via-bronze-gold to-bronze-gold/50" />
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-didot text-ivory-pearl mb-3 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-playfair text-ivory-pearl mb-3 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
             Our Craftsmanship
           </h2>
           <p className="text-sm sm:text-lg md:text-xl text-white/70 font-montserrat max-w-2xl mx-auto px-4">
@@ -91,7 +91,7 @@ export default function ScrollReveal() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
             <div className="absolute bottom-0 left-0 right-0 p-4">
-              <h3 className="text-xl font-didot text-white mb-1">Timeless Elegance</h3>
+              <h3 className="text-xl font-playfair text-white mb-1">Timeless Elegance</h3>
               <p className="text-sm text-white/80 font-montserrat">Crafting jewelry that carries personal stories</p>
             </div>
           </motion.div>
@@ -111,7 +111,7 @@ export default function ScrollReveal() {
                   <item.icon className="w-6 h-6 text-bronze-gold" />
                 </div>
                 <div>
-                  <h4 className="text-base font-didot text-ivory-pearl mb-0.5">{item.title}</h4>
+                  <h4 className="text-base font-playfair text-ivory-pearl mb-0.5">{item.title}</h4>
                   <p className="text-xs text-white/60 font-montserrat">{item.description}</p>
                 </div>
               </motion.div>
@@ -175,7 +175,7 @@ export default function ScrollReveal() {
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent opacity-70" />
             <div className="absolute -top-8 -right-8 w-24 h-24 rotate-45 bg-bronze-gold/10 group-hover:bg-bronze-gold/20 transition-all duration-500" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
-            <h3 className="text-2xl lg:text-3xl font-didot text-bronze-gold mb-4">Timeless Elegance</h3>
+            <h3 className="text-2xl lg:text-3xl font-playfair text-bronze-gold mb-4">Timeless Elegance</h3>
             <p className="text-base text-white/80 leading-relaxed font-montserrat">Crafting jewelry that carries personal stories.</p>
             <div className="absolute bottom-3 right-3 w-3 h-3 rotate-45 bg-bronze-gold/60" />
           </motion.div>
@@ -213,7 +213,7 @@ export default function ScrollReveal() {
                 <span className="text-4xl -rotate-45 text-bronze-gold">♢</span>
               </div>
             </div>
-            <h4 className="text-lg lg:text-xl font-didot text-ivory-pearl mb-2">Lab-Grown</h4>
+            <h4 className="text-lg lg:text-xl font-playfair text-ivory-pearl mb-2">Lab-Grown</h4>
             <p className="text-sm text-ivory-pearl/90 font-montserrat">Sustainable Luxury</p>
           </motion.div>
 
@@ -247,7 +247,7 @@ export default function ScrollReveal() {
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent opacity-70" />
             <div className="absolute -top-8 -right-8 w-24 h-24 rotate-45 bg-bronze-gold/10 group-hover:bg-bronze-gold/20 transition-all duration-500" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
-            <h3 className="text-2xl lg:text-3xl font-didot text-bronze-gold mb-4">Artistry</h3>
+            <h3 className="text-2xl lg:text-3xl font-playfair text-bronze-gold mb-4">Artistry</h3>
             <p className="text-base text-white/80 leading-relaxed font-montserrat">Each piece reflects soulful elegance.</p>
             <div className="absolute bottom-3 right-3 w-3 h-3 rotate-45 bg-bronze-gold/60" />
           </motion.div>

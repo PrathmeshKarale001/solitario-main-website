@@ -240,7 +240,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </nav>
 
             {/* Product Title */}
-            <h1 className="font-didot text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="font-playfair text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-4" style={{ letterSpacing: '-0.02em' }}>
               {product.name.toUpperCase()}
             </h1>
           </motion.div>
@@ -331,7 +331,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               {/* Product Name */}
-              <h1 className="font-didot text-display-sm md:text-display-md text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+              <h1 className="font-playfair text-display-sm md:text-display-md text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
                 {product.name}
               </h1>
 
@@ -489,7 +489,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="prose max-w-none"
                 >
-                  <h3 className="font-didot text-heading-xl text-brand-800 mb-4">Description</h3>
+                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-4">Description</h3>
                   <p className="text-brand-700 leading-relaxed font-montserrat mb-4">
                     {product.description}
                   </p>
@@ -508,7 +508,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-4"
                 >
-                  <h3 className="font-didot text-heading-xl text-brand-800 mb-6">Additional Information</h3>
+                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-6">Additional Information</h3>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
@@ -544,7 +544,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  <h3 className="font-didot text-heading-xl text-brand-800 mb-6">Customer Reviews</h3>
+                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-6">Customer Reviews</h3>
                   
                   {/* No reviews yet message */}
                   <div className="text-center py-12">
@@ -562,7 +562,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {relatedProducts.length > 0 && (
         <Section variant="light" padding="lg" className="bg-white">
           <Container>
-            <h2 className="font-didot text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="font-playfair text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
               Featured Collection
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -584,7 +584,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </button>
                   </div>
                   <div>
-                    <h3 className="font-didot text-body-sm md:text-body-md text-brand-800 group-hover:text-bronze-gold transition-colors mb-1">
+                    <h3 className="font-playfair text-body-sm md:text-body-md text-brand-800 group-hover:text-bronze-gold transition-colors mb-1">
                       {relatedProduct.name}
                     </h3>
                     <p className="font-gotham text-body-sm font-semibold text-classic-green">
@@ -623,7 +623,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="w-16 h-16 bg-bronze-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
                   <feature.icon className="w-8 h-8 text-bronze-gold" />
                 </div>
-                <h3 className="font-didot text-heading-md text-brand-800 mb-2">{feature.title}</h3>
+                <h3 className="font-playfair text-heading-md text-brand-800 mb-2">{feature.title}</h3>
                 <p className="text-brand-600 font-montserrat">{feature.description}</p>
               </div>
             ))}

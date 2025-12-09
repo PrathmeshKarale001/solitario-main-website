@@ -43,9 +43,9 @@ export default function AboutHero() {
           </motion.span>
 
           <h1
-            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4 relative z-10"
+            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4 relative z-10"
             style={{
-              fontFamily: 'var(--font-didot), serif',
+              fontFamily: 'var(--font-playfair), serif',
               fontWeight: 400,
               letterSpacing: '-0.02em',
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.4)'
@@ -54,7 +54,7 @@ export default function AboutHero() {
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
               <BlurText
                 text="Designed"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -62,7 +62,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="for"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={100}
@@ -70,7 +70,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="Today"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={150}
@@ -80,7 +80,7 @@ export default function AboutHero() {
             <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
               <BlurText
                 text="Inspired"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={200}
@@ -88,7 +88,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="by"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={250}
@@ -96,7 +96,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="Tomorrow"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={300}

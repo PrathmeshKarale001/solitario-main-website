@@ -22,7 +22,7 @@ export default function LabGrownBenefits() {
           transition={{ duration: 0.4 }}
           className="text-center mb-6 sm:mb-8 md:mb-12"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-didot mb-2 sm:mb-4 text-classic-green">Luxury, Reimagined</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair mb-2 sm:mb-4 text-classic-green">Luxury, Reimagined</h2>
           <p className="text-xs sm:text-sm md:text-lg text-gray-700 max-w-md sm:max-w-2xl mx-auto hidden sm:block">
             All the beauty, minus the baggage. Lab-grown diamonds are the elegant evolution of fine jewellery.
           </p>
@@ -46,7 +46,7 @@ export default function LabGrownBenefits() {
                       <Icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" />
                     </div>
                   </div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-didot mb-2 sm:mb-4 text-classic-green">{benefit.title}</h3>
+                  <h3 className="text-sm sm:text-base md:text-lg font-playfair mb-2 sm:mb-4 text-classic-green">{benefit.title}</h3>
                   <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
                 </Card>
               </motion.div>

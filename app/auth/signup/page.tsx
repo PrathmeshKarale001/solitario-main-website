@@ -86,7 +86,7 @@ export default function SignupPage() {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
                 </div>
-                <h2 className="font-didot text-heading-xl text-brand-800 mb-2">Account Created!</h2>
+                <h2 className="font-playfair text-heading-xl text-brand-800 mb-2">Account Created!</h2>
                 <p className="text-brand-600 font-montserrat text-body-md">
                   Redirecting you to your account...
                 </p>
@@ -110,7 +110,7 @@ export default function SignupPage() {
           >
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="font-didot text-display-sm text-brand-800 mb-3">Create Account</h1>
+              <h1 className="font-playfair text-display-sm text-brand-800 mb-3">Create Account</h1>
               <p className="text-brand-600 font-montserrat text-body-md">
                 Join Solitario for exclusive benefits and offers
               </p>

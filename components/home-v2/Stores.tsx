@@ -36,7 +36,7 @@ export default function Stores() {
             <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
               Visit Us
             </span>
-            <h2 className="text-4xl md:text-5xl font-didot text-white">
+            <h2 className="text-4xl md:text-5xl font-playfair text-white">
               Find a Boutique
             </h2>
           </motion.div>
@@ -73,7 +73,7 @@ export default function Stores() {
                   <MapPin className="w-4 h-4 text-bronze-gold" />
                   <span className="text-bronze-gold text-xs font-gotham uppercase tracking-wider">Flagship Store</span>
                 </div>
-                <h3 className="text-3xl font-didot text-white mb-1">{store.city}</h3>
+                <h3 className="text-3xl font-playfair text-white mb-1">{store.city}</h3>
                 <p className="text-white/60 font-montserrat text-sm mb-6">{store.address}</p>
                 
                 <span className="inline-flex items-center gap-2 text-white text-xs font-gotham uppercase tracking-wider opacity-0 transform translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">

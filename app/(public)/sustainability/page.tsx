@@ -63,7 +63,7 @@ export default function SustainabilityPage() {
               <Leaf className="w-4 h-4" />
               Our Commitment
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-didot text-white mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-playfair text-white mb-6">
               Sustainability
             </h1>
             <p className="text-white/80 font-montserrat text-lg md:text-xl max-w-2xl mx-auto">
@@ -87,7 +87,7 @@ export default function SustainabilityPage() {
                 className="bg-white rounded-2xl p-6 shadow-brand border border-brand-100 text-center"
               >
                 <stat.icon className="w-8 h-8 text-classic-green mx-auto mb-3" />
-                <p className="text-3xl md:text-4xl font-didot text-brand-800 mb-1">{stat.value}</p>
+                <p className="text-3xl md:text-4xl font-playfair text-brand-800 mb-1">{stat.value}</p>
                 <p className="text-brand-500 font-montserrat text-sm">{stat.label}</p>
               </motion.div>
             ))}
@@ -104,7 +104,7 @@ export default function SustainabilityPage() {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-6">
+              <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-6">
                 The Sustainable Choice
               </h2>
               <p className="text-brand-600 font-montserrat mb-6 leading-relaxed">
@@ -139,7 +139,7 @@ export default function SustainabilityPage() {
                 </div>
               </div>
               <div className="absolute -bottom-6 -right-6 bg-bronze-gold text-white p-6 rounded-2xl shadow-lg">
-                <p className="text-3xl font-didot">30-40%</p>
+                <p className="text-3xl font-playfair">30-40%</p>
                 <p className="text-sm font-montserrat opacity-80">More affordable</p>
               </div>
             </motion.div>
@@ -156,7 +156,7 @@ export default function SustainabilityPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-white mb-4">
               Our Green Initiatives
             </h2>
             <p className="text-white/70 font-montserrat max-w-2xl mx-auto">
@@ -179,7 +179,7 @@ export default function SustainabilityPage() {
                     <initiative.icon className="w-6 h-6 text-bronze-gold" />
                   </div>
                   <div>
-                    <h3 className="font-didot text-lg text-white mb-2">{initiative.title}</h3>
+                    <h3 className="font-playfair text-lg text-white mb-2">{initiative.title}</h3>
                     <p className="text-white/60 font-montserrat text-sm">{initiative.description}</p>
                   </div>
                 </div>
@@ -199,7 +199,7 @@ export default function SustainabilityPage() {
             className="max-w-3xl mx-auto"
           >
             <div className="text-center mb-12">
-              <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
+              <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
                 Our Commitments
               </h2>
               <p className="text-brand-600 font-montserrat">
@@ -238,7 +238,7 @@ export default function SustainabilityPage() {
             className="bg-gradient-to-br from-classic-green to-teal rounded-3xl p-8 md:p-12 text-center"
           >
             <Leaf className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-playfair text-white mb-4">
               Join the Sustainable Luxury Movement
             </h2>
             <p className="text-white/80 font-montserrat mb-8 max-w-xl mx-auto">

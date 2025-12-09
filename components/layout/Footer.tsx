@@ -29,7 +29,7 @@ export default function Footer() {
       <div className="border-b border-bronze-gold/20">
         <div className="section-container py-6 sm:py-8 md:py-12">
           <div className="max-w-md sm:max-w-2xl mx-auto text-center px-4">
-            <h3 className="text-lg sm:text-xl md:text-2xl font-didot mb-2 sm:mb-4">Subscribe</h3>
+            <h3 className="text-lg sm:text-xl md:text-2xl font-playfair mb-2 sm:mb-4">Subscribe</h3>
             <p className="text-xs sm:text-sm text-ivory-pearl/80 mb-4 sm:mb-6 hidden sm:block">
               Stay updated on special offers and latest collection
             </p>

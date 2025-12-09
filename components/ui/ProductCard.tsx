@@ -85,7 +85,7 @@ export default function ProductCard({ product, onQuickView, onAddToCart }: Produ
           </span>
 
           {/* Product Name */}
-          <h3 className="font-didot text-xs sm:text-sm text-gray-900 line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors">
+          <h3 className="font-playfair text-xs sm:text-sm text-gray-900 line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors">
             {product.name}
           </h3>
 

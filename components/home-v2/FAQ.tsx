@@ -38,7 +38,7 @@ export default function FAQ() {
           <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
             Common Questions
           </span>
-          <h2 className="text-3xl md:text-4xl font-didot text-gray-900">
+          <h2 className="text-3xl md:text-4xl font-playfair text-gray-900">
             Everything You Need to Know
           </h2>
         </motion.div>
@@ -57,7 +57,7 @@ export default function FAQ() {
                 onClick={() => setOpenIndex(openIndex === index ? null : index)}
                 className="w-full flex items-center justify-between py-6 text-left group"
               >
-                <span className={`text-lg md:text-xl font-didot transition-colors duration-300 ${openIndex === index ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-900'}`}>
+                <span className={`text-lg md:text-xl font-playfair transition-colors duration-300 ${openIndex === index ? 'text-gray-900' : 'text-gray-500 group-hover:text-gray-900'}`}>
                   {faq.question}
                 </span>
                 <span className={`flex-shrink-0 ml-4 w-8 h-8 rounded-full flex items-center justify-center border transition-all duration-300 ${openIndex === index ? 'bg-black border-black text-white' : 'border-gray-200 text-gray-400 group-hover:border-black group-hover:text-black'}`}>

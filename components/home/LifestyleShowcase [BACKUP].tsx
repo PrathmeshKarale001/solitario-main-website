@@ -156,7 +156,7 @@ export default function LifestyleShowcase() {
 
                         {/* Text Content - Bottom Center */}
                         <div className="absolute bottom-8 left-0 right-0 text-center z-20">
-                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-didot text-white uppercase tracking-widest mb-2 drop-shadow-md">
+                          <h3 className="text-2xl md:text-3xl lg:text-4xl font-playfair text-white uppercase tracking-widest mb-2 drop-shadow-md">
                             {item.title}
                           </h3>
                           

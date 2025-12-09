@@ -14,7 +14,7 @@ export default function HeadOffice() {
             viewport={{ once: true }}
             className="md:w-1/3"
           >
-            <h3 className="font-didot text-3xl text-gray-900 mb-6">Contact Us</h3>
+            <h3 className="font-playfair text-3xl text-gray-900 mb-6">Contact Us</h3>
             <p className="text-gray-500 font-montserrat text-sm leading-relaxed mb-8">
               Our concierge team is available to assist you with any inquiries regarding our collections or services.
             </p>
@@ -31,7 +31,7 @@ export default function HeadOffice() {
                 <Phone className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-didot text-gray-900 mb-1">Call Us</h4>
+                <h4 className="font-playfair text-gray-900 mb-1">Call Us</h4>
                 <p className="font-gotham text-xs text-gray-500">+1 (800) 123-4567</p>
               </div>
             </div>
@@ -41,7 +41,7 @@ export default function HeadOffice() {
                 <Mail className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-didot text-gray-900 mb-1">Email Us</h4>
+                <h4 className="font-playfair text-gray-900 mb-1">Email Us</h4>
                 <p className="font-gotham text-xs text-gray-500">concierge@solitario.com</p>
               </div>
             </div>
@@ -51,7 +51,7 @@ export default function HeadOffice() {
                 <MapPin className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-didot text-gray-900 mb-1">Visit Us</h4>
+                <h4 className="font-playfair text-gray-900 mb-1">Visit Us</h4>
                 <p className="font-gotham text-xs text-gray-500">123 Luxury Lane, New York, NY 10001</p>
               </div>
             </div>
@@ -61,7 +61,7 @@ export default function HeadOffice() {
                 <Clock className="w-4 h-4" />
               </div>
               <div>
-                <h4 className="font-didot text-gray-900 mb-1">Opening Hours</h4>
+                <h4 className="font-playfair text-gray-900 mb-1">Opening Hours</h4>
                 <p className="font-gotham text-xs text-gray-500">Mon - Sat: 10am - 8pm</p>
               </div>
             </div>

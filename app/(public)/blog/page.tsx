@@ -166,15 +166,15 @@ export default function BlogPage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-didot), serif',
+                fontFamily: 'var(--font-playfair), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <BlurText
                 text="Stories That Sparkle"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -228,7 +228,7 @@ export default function BlogPage() {
                       <Clock className="w-4 h-4" /> {featuredPost.readTime}
                     </span>
                   </div>
-                  <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
+                  <h2 className="text-2xl md:text-3xl font-playfair text-white mb-4">
                     {featuredPost.title}
                   </h2>
                   <p className="text-white/80 font-montserrat mb-6 leading-relaxed">
@@ -272,7 +272,7 @@ export default function BlogPage() {
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               Celebrity Spotlight
             </span>
-            <h2 className="text-3xl md:text-4xl font-didot text-brand-800">
+            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800">
               Stars Who <span className="text-classic-green">Shine</span> With Us
             </h2>
           </motion.div>
@@ -290,7 +290,7 @@ export default function BlogPage() {
                 <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-classic-green/10 border-2 border-classic-green/30 flex items-center justify-center group-hover:border-classic-green/60 transition-colors">
                   <Users className="w-8 h-8 text-classic-green/60" />
                 </div>
-                <h4 className="text-brand-800 text-sm font-didot mb-1">{celeb.name}</h4>
+                <h4 className="text-brand-800 text-sm font-playfair mb-1">{celeb.name}</h4>
                 <p className="text-brand-500 text-xs font-montserrat leading-tight">{celeb.note}</p>
               </motion.div>
             ))}
@@ -308,7 +308,7 @@ export default function BlogPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-brand-800">
+            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800">
               Latest <span className="text-classic-green">Articles</span>
             </h2>
           </motion.div>
@@ -336,7 +336,7 @@ export default function BlogPage() {
                     <span>{post.date}</span>
                     <span>{post.readTime}</span>
                   </div>
-                  <h3 className="text-xl font-didot text-brand-800 mb-3 group-hover:text-classic-green transition-colors">
+                  <h3 className="text-xl font-playfair text-brand-800 mb-3 group-hover:text-classic-green transition-colors">
                     {post.title}
                   </h3>
                   <p className="text-brand-600 text-sm font-montserrat mb-4 line-clamp-2">
@@ -364,7 +364,7 @@ export default function BlogPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-playfair text-white mb-6">
               Stay <span className="text-bronze-gold">Updated</span>
             </h2>
             <p className="text-white/80 font-montserrat mb-8">

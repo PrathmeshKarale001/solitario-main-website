@@ -23,7 +23,7 @@ export default function FAQ() {
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-didot mb-2 sm:mb-4 text-classic-green">FAQ</h2>
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair mb-2 sm:mb-4 text-classic-green">FAQ</h2>
             <p className="text-xs sm:text-sm md:text-lg text-gray-600 hidden sm:block">
               Have another question? Please contact our team!
             </p>

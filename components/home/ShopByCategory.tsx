@@ -55,7 +55,7 @@ export default function ShopByCategory() {
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
             Explore Our Collection
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-classic-green" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green" style={{ letterSpacing: '-0.02em' }}>
             Shop by Category
           </h2>
         </motion.div>
@@ -107,7 +107,7 @@ export default function ShopByCategory() {
                       <div className="relative">
                         {/* Decorative lines */}
                         <span className="absolute left-0 right-0 top-1/2 h-[1px] bg-bronze-gold/30 -translate-y-1/2 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" style={{ width: '120%', left: '-10%' }} />
-                        <h3 className="relative font-didot text-lg sm:text-xl md:text-2xl text-classic-green px-4 bg-gradient-to-b from-[#FDF8F3] to-[#FAF5EF] group-hover:text-bronze-gold transition-colors duration-300">
+                        <h3 className="relative font-playfair text-lg sm:text-xl md:text-2xl text-classic-green px-4 bg-gradient-to-b from-[#FDF8F3] to-[#FAF5EF] group-hover:text-bronze-gold transition-colors duration-300">
                           {category.name}
                         </h3>
                       </div>

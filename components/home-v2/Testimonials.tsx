@@ -60,7 +60,7 @@ export default function Testimonials() {
           <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] block mb-4">
             Client Stories
           </span>
-          <h2 className="text-3xl md:text-5xl font-didot text-white">
+          <h2 className="text-3xl md:text-5xl font-playfair text-white">
             Moments of <span className="italic text-white/50">Brilliance</span>
           </h2>
         </motion.div>
@@ -93,7 +93,7 @@ export default function Testimonials() {
                     />
                   </div>
                   <div>
-                    <h4 className="text-white font-didot text-lg">{item.name}</h4>
+                    <h4 className="text-white font-playfair text-lg">{item.name}</h4>
                     <p className="text-white/40 text-xs font-gotham uppercase tracking-wider">{item.location}</p>
                   </div>
                 </div>

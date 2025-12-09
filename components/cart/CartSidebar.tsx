@@ -33,7 +33,7 @@ export default function CartSidebar() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-brand-200">
-              <h2 className="font-didot text-heading-xl text-brand-800">Shopping Cart</h2>
+              <h2 className="font-playfair text-heading-xl text-brand-800">Shopping Cart</h2>
               <button
                 onClick={closeCart}
                 className="w-10 h-10 rounded-full bg-brand-100 hover:bg-brand-200 flex items-center justify-center transition-all duration-300"
@@ -48,7 +48,7 @@ export default function CartSidebar() {
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-12">
                   <ShoppingBag className="w-20 h-20 text-brand-300 mb-4" />
-                  <p className="font-didot text-heading-md text-brand-800 mb-2">Your cart is empty</p>
+                  <p className="font-playfair text-heading-md text-brand-800 mb-2">Your cart is empty</p>
                   <p className="text-brand-600 font-montserrat text-body-md mb-6">
                     To speed up the checkout process, sign in now.
                   </p>
@@ -84,7 +84,7 @@ export default function CartSidebar() {
                           <Link
                             href={`/products/${item.product.id}`}
                             onClick={closeCart}
-                            className="font-didot text-body-md text-brand-800 hover:text-bronze-gold transition-colors line-clamp-2"
+                            className="font-playfair text-body-md text-brand-800 hover:text-bronze-gold transition-colors line-clamp-2"
                           >
                             {item.product.name}
                           </Link>
@@ -155,7 +155,7 @@ export default function CartSidebar() {
 
                 {/* Total */}
                 <div className="flex items-center justify-between pt-3 border-t border-brand-300">
-                  <span className="font-didot text-heading-sm text-brand-800">Estimated Total</span>
+                  <span className="font-playfair text-heading-sm text-brand-800">Estimated Total</span>
                   <span className="font-gotham text-heading-lg font-bold text-classic-green">
                     {formatPrice(total, items[0].product.currency)}
                   </span>

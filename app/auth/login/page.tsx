@@ -61,7 +61,7 @@ function LoginContent() {
             >
               {/* Header */}
               <div className="text-center mb-8">
-                <h1 className="font-didot text-display-sm text-brand-800 mb-3">Welcome Back</h1>
+                <h1 className="font-playfair text-display-sm text-brand-800 mb-3">Welcome Back</h1>
                 <p className="text-brand-600 font-montserrat text-body-md">
                   Sign in to access your account and orders
                 </p>

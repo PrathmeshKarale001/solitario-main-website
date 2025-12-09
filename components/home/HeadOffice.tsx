@@ -19,7 +19,7 @@ export default function HeadOffice() {
           <span className="inline-block text-classic-green text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham mb-2 sm:mb-4">
             Visit Us
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-didot text-brand-800 mb-2 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-brand-800 mb-2 sm:mb-4">
             Our <span className="text-classic-green">Head Office</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
@@ -56,7 +56,7 @@ export default function HeadOffice() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="rounded-2xl sm:rounded-3xl bg-white border border-brand-200 p-6 sm:p-8 flex flex-col justify-center shadow-brand"
           >
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-didot text-brand-800 mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-playfair text-brand-800 mb-6 sm:mb-8">
               Solitario Lab Grown <span className="text-classic-green">Pvt. Ltd.</span>
             </h3>
 

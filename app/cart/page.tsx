@@ -20,7 +20,7 @@ export default function CartPage() {
             <div className="w-32 h-32 bg-brand-100 rounded-full flex items-center justify-center mb-8">
               <Heart className="w-16 h-16 text-brand-300" />
             </div>
-            <h1 className="font-didot text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
+            <h1 className="font-playfair text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
             <p className="text-brand-600 font-montserrat text-body-md mb-8 max-w-md">
               Discover our exquisite collection and find the perfect piece for you or your loved ones.
             </p>
@@ -49,7 +49,7 @@ export default function CartPage() {
               <ChevronLeft className="w-4 h-4" />
               Continue Browsing
             </Link>
-            <h1 className="font-didot text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
+            <h1 className="font-playfair text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
             <p className="text-brand-600 font-montserrat text-body-md">
               {cart.lines.edges.length} {cart.lines.edges.length === 1 ? 'item' : 'items'} in your cart
             </p>
@@ -88,7 +88,7 @@ export default function CartPage() {
                         <div className="flex-1">
                           <Link
                             href={`/products/${cartItem.product.id}`}
-                            className="font-didot text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
+                            className="font-playfair text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
                           >
                             {cartItem.product.name}
                           </Link>
@@ -158,7 +158,7 @@ export default function CartPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 bg-brand-50 rounded-brand-xl p-6 border border-brand-200">
-                <h2 className="font-didot text-heading-xl text-brand-800 mb-6">Order Summary</h2>
+                <h2 className="font-playfair text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 <div className="space-y-3 mb-6">
                   <div className="flex items-center justify-between">
@@ -180,7 +180,7 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
-                  <span className="font-didot text-heading-md text-brand-800">Total</span>
+                  <span className="font-playfair text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
                     {formatPrice(parseFloat(cart.estimatedCost.totalAmount.amount), cart.estimatedCost.totalAmount.currencyCode)}
                   </span>

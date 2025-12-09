@@ -60,7 +60,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
           <div className="w-16 h-16 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertTriangle className="w-8 h-8 text-error" />
           </div>
-          <h1 className="text-2xl font-didot text-brand-800 mb-2">Access Denied</h1>
+          <h1 className="text-2xl font-playfair text-brand-800 mb-2">Access Denied</h1>
           <p className="text-brand-500 font-montserrat mb-6">
             You don't have permission to access the admin panel. 
             Please contact the administrator if you believe this is an error.
@@ -108,7 +108,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
             <div className="w-16 h-16 bg-classic-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
               <Shield className="w-8 h-8 text-classic-green" />
             </div>
-            <h1 className="text-2xl font-didot text-brand-800 mb-2">Admin Verification</h1>
+            <h1 className="text-2xl font-playfair text-brand-800 mb-2">Admin Verification</h1>
             <p className="text-brand-500 font-montserrat text-sm">
               Enter your admin PIN to continue
             </p>
@@ -214,7 +214,7 @@ function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
             <div className="flex items-center justify-between">
               <Link href="/admin" className="flex items-center gap-2">
                 <Shield className="w-8 h-8 text-bronze-gold" />
-                <span className="font-didot text-xl text-white">Admin</span>
+                <span className="font-playfair text-xl text-white">Admin</span>
               </Link>
               <button onClick={onClose} className="lg:hidden text-white/60 hover:text-white">
                 <X className="w-6 h-6" />

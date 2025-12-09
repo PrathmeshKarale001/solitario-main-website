@@ -422,7 +422,7 @@ const handleDragEnd = () => {
                     className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent pt-12 pb-4 px-4 rounded-b-xl"
                     style={{ backfaceVisibility: "hidden" }}
                   >
-                    <p className="text-white text-center font-didot text-lg md:text-xl tracking-wide">
+                    <p className="text-white text-center font-playfair text-lg md:text-xl tracking-wide">
                       {imageItem.name}
                     </p>
                   </div>

@@ -210,7 +210,7 @@ export default function ProductFilters({
           >
             <div className="bg-gradient-to-br from-ivory-pearl/50 to-white rounded-2xl p-6 border border-gray-200 mt-4">
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-didot text-lg text-gray-900">Price Range</h3>
+                <h3 className="font-playfair text-lg text-gray-900">Price Range</h3>
                 <button
                   onClick={() => {
                     setLocalPriceRange([0, 500000]);

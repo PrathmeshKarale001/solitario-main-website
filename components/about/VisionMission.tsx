@@ -17,7 +17,7 @@ export default function VisionMission() {
           <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             What Drives Us
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800" style={{ letterSpacing: '-0.02em' }}>
             Vision & <span className="text-classic-green">Mission</span>
           </h2>
         </motion.div>
@@ -37,7 +37,7 @@ export default function VisionMission() {
               <div className="w-16 h-16 bg-classic-green/10 rounded-full flex items-center justify-center mb-6 border border-classic-green/30">
                 <Eye className="w-8 h-8 text-classic-green" />
               </div>
-              <h3 className="text-2xl md:text-3xl font-didot text-brand-800 mb-4">Our Vision</h3>
+              <h3 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-4">Our Vision</h3>
               <p className="text-brand-700 text-base leading-relaxed font-montserrat">
                 At Solitario, we flip the script. Here, diamonds aren't exclusive indulgences but luxury that's accessible to all. Ethically crafted and tastefully designed, our pieces become an extension of your personality. We want your jewellery to be a tool of expression and a symbol of love, power, and joy.
               </p>
@@ -58,7 +58,7 @@ export default function VisionMission() {
               <div className="w-16 h-16 bg-classic-green/20 rounded-full flex items-center justify-center mb-6 border border-classic-green/30">
                 <Target className="w-8 h-8 text-classic-green" />
               </div>
-              <h3 className="text-2xl md:text-3xl font-didot text-brand-800 mb-4">Our Mission</h3>
+              <h3 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-4">Our Mission</h3>
               <p className="text-brand-700 text-base leading-relaxed font-montserrat">
                 We bling better. Our jewellery doesn't cost the Earth. Literally. With strong ethics powered by dynamic design, we create pieces that inspire and uplift. We take pride in our passion to make the world more consciously cool, one diamond at a time.
               </p>
@@ -85,7 +85,7 @@ export default function VisionMission() {
               className="rounded-xl bg-white border border-brand-200 p-4 text-center hover:shadow-brand transition-shadow"
             >
               <item.icon className="w-8 h-8 text-classic-green mx-auto mb-2" />
-              <h4 className="text-lg font-didot text-brand-800 mb-1">{item.label}</h4>
+              <h4 className="text-lg font-playfair text-brand-800 mb-1">{item.label}</h4>
               <p className="text-brand-600 text-xs font-montserrat">{item.desc}</p>
             </div>
           ))}

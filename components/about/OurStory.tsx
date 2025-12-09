@@ -18,7 +18,7 @@ export default function OurStory() {
             <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
               The Solitario Story
             </span>
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Our <span className="text-classic-green">Story</span>
             </h2>
             <div className="space-y-4 text-brand-700 text-base md:text-lg leading-relaxed font-montserrat">
@@ -43,7 +43,7 @@ export default function OurStory() {
                 className="rounded-xl bg-brand-50 border border-brand-200 p-4"
               >
                 <Diamond className="w-8 h-8 text-classic-green mb-3" />
-                <h4 className="text-lg font-didot text-brand-800 mb-1">Bespoke Designs</h4>
+                <h4 className="text-lg font-playfair text-brand-800 mb-1">Bespoke Designs</h4>
                 <p className="text-brand-600 text-sm font-montserrat">Crafted for your unique story</p>
               </motion.div>
               <motion.div
@@ -54,7 +54,7 @@ export default function OurStory() {
                 className="rounded-xl bg-brand-50 border border-brand-200 p-4"
               >
                 <Sparkles className="w-8 h-8 text-classic-green mb-3" />
-                <h4 className="text-lg font-didot text-brand-800 mb-1">Timeless Style</h4>
+                <h4 className="text-lg font-playfair text-brand-800 mb-1">Timeless Style</h4>
                 <p className="text-brand-600 text-sm font-montserrat">Created for all occasions</p>
               </motion.div>
             </div>

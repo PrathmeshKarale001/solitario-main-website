@@ -83,15 +83,15 @@ export default function FranchisePage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-didot text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-didot), serif',
+                fontFamily: 'var(--font-playfair), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <BlurText
                 text="Franchise   With   Us"
-                className="font-didot"
+                className="font-playfair"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -135,7 +135,7 @@ export default function FranchisePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Why Partner With <span className="text-classic-green">Solitario</span>?
             </h2>
             <p className="text-brand-700 font-montserrat max-w-2xl mx-auto">
@@ -156,7 +156,7 @@ export default function FranchisePage() {
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-classic-green/10 flex items-center justify-center">
                   <benefit.icon className="w-7 h-7 text-classic-green" />
                 </div>
-                <h3 className="text-xl font-didot text-brand-800 mb-3">{benefit.title}</h3>
+                <h3 className="text-xl font-playfair text-brand-800 mb-3">{benefit.title}</h3>
                 <p className="text-brand-600 text-sm font-montserrat">{benefit.description}</p>
               </motion.div>
             ))}
@@ -174,7 +174,7 @@ export default function FranchisePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-xl sm:text-2xl md:text-4xl font-didot text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
                 Franchise <span className="text-classic-green">Requirements</span>
               </h2>
               <p className="text-brand-700 font-montserrat mb-8">
@@ -229,7 +229,7 @@ export default function FranchisePage() {
             className="text-center mb-12"
           >
             <Sparkles className="w-12 h-12 text-classic-green mx-auto mb-4" />
-            <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
               Start Your <span className="text-classic-green">Journey</span>
             </h2>
             <p className="text-brand-700 font-montserrat">

@@ -43,7 +43,7 @@ export default function ProductCategories() {
             <span className="text-xs font-gotham text-bronze-gold uppercase tracking-[0.2em] mb-3 block">
               New Arrivals
             </span>
-            <h2 className="text-3xl md:text-5xl font-didot text-gray-900" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-3xl md:text-5xl font-playfair text-gray-900" style={{ letterSpacing: '-0.02em' }}>
               Trending Now
             </h2>
           </motion.div>
@@ -110,7 +110,7 @@ export default function ProductCategories() {
                   </div>
 
                   <div className="space-y-1">
-                    <h3 className="font-didot text-lg text-gray-900 group-hover:text-bronze-gold transition-colors line-clamp-1">
+                    <h3 className="font-playfair text-lg text-gray-900 group-hover:text-bronze-gold transition-colors line-clamp-1">
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between">

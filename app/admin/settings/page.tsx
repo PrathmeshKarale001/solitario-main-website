@@ -46,7 +46,7 @@ export default function AdminSettingsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-didot text-brand-800 mb-1">Settings</h1>
+          <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">Settings</h1>
           <p className="text-brand-500 font-montserrat text-sm">
             Manage admin panel configuration and security
           </p>
@@ -87,7 +87,7 @@ export default function AdminSettingsPage() {
         {activeTab === 'security' && (
           <div className="p-6 space-y-6">
             <div>
-              <h2 className="text-lg font-didot text-brand-800 mb-4">Security Settings</h2>
+              <h2 className="text-lg font-playfair text-brand-800 mb-4">Security Settings</h2>
               
               {/* Current PIN */}
               <div className="bg-brand-50 rounded-xl p-4 mb-6">
@@ -169,7 +169,7 @@ export default function AdminSettingsPage() {
         {activeTab === 'admins' && (
           <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
-              <h2 className="text-lg font-didot text-brand-800">Admin Users</h2>
+              <h2 className="text-lg font-playfair text-brand-800">Admin Users</h2>
               {isSuperAdmin && (
                 <button className="flex items-center gap-2 px-4 py-2 bg-classic-green text-white rounded-xl hover:bg-classic-green/90 transition-colors font-montserrat text-sm">
                   <Plus className="w-4 h-4" />
@@ -224,7 +224,7 @@ export default function AdminSettingsPage() {
 
             {/* Role Permissions */}
             <div className="mt-8">
-              <h3 className="font-didot text-brand-800 mb-4">Role Permissions</h3>
+              <h3 className="font-playfair text-brand-800 mb-4">Role Permissions</h3>
               <div className="overflow-x-auto">
                 <table className="w-full">
                   <thead className="bg-brand-50">
@@ -262,7 +262,7 @@ export default function AdminSettingsPage() {
         {/* Notifications Tab */}
         {activeTab === 'notifications' && (
           <div className="p-6 space-y-6">
-            <h2 className="text-lg font-didot text-brand-800 mb-4">Notification Settings</h2>
+            <h2 className="text-lg font-playfair text-brand-800 mb-4">Notification Settings</h2>
             
             <div className="space-y-4">
               <div className="flex items-center justify-between p-4 bg-brand-50 rounded-xl">
@@ -323,7 +323,7 @@ export default function AdminSettingsPage() {
         {/* API Settings Tab */}
         {activeTab === 'api' && (
           <div className="p-6 space-y-6">
-            <h2 className="text-lg font-didot text-brand-800 mb-4">API Configuration</h2>
+            <h2 className="text-lg font-playfair text-brand-800 mb-4">API Configuration</h2>
             
             <div className="bg-brand-50 rounded-xl p-4">
               <label className="block font-montserrat text-sm text-brand-700 mb-2">Shopify Store Domain</label>

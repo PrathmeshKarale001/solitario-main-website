@@ -113,7 +113,7 @@ export default function AdminDashboard() {
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-didot text-brand-800 mb-1">
+          <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">
             Welcome back, {adminUser?.name || 'Admin'}
           </h1>
           <p className="text-brand-500 font-montserrat text-sm">
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
               +12%
             </span>
           </div>
-          <p className="text-3xl font-didot text-brand-800">{stats.totalProducts}</p>
+          <p className="text-3xl font-playfair text-brand-800">{stats.totalProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Total Products</p>
         </motion.div>
 
@@ -175,7 +175,7 @@ export default function AdminDashboard() {
               +5%
             </span>
           </div>
-          <p className="text-3xl font-didot text-brand-800">{stats.featuredProducts}</p>
+          <p className="text-3xl font-playfair text-brand-800">{stats.featuredProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Featured Items</p>
         </motion.div>
 
@@ -194,7 +194,7 @@ export default function AdminDashboard() {
               +18%
             </span>
           </div>
-          <p className="text-3xl font-didot text-brand-800">24</p>
+          <p className="text-3xl font-playfair text-brand-800">24</p>
           <p className="text-brand-500 text-sm font-montserrat">Orders Today</p>
         </motion.div>
 
@@ -213,7 +213,7 @@ export default function AdminDashboard() {
               +23%
             </span>
           </div>
-          <p className="text-2xl font-didot text-brand-800">₹4.2L</p>
+          <p className="text-2xl font-playfair text-brand-800">₹4.2L</p>
           <p className="text-brand-500 text-sm font-montserrat">Revenue Today</p>
         </motion.div>
       </div>
@@ -223,7 +223,7 @@ export default function AdminDashboard() {
         {/* Quick Actions */}
         <div className="lg:col-span-2 bg-white rounded-2xl p-6 shadow-brand border border-brand-100">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-didot text-brand-800">Quick Actions</h2>
+            <h2 className="text-lg font-playfair text-brand-800">Quick Actions</h2>
             <Zap className="w-5 h-5 text-bronze-gold" />
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
@@ -273,7 +273,7 @@ export default function AdminDashboard() {
         {/* Recent Activity */}
         <div className="bg-white rounded-2xl p-6 shadow-brand border border-brand-100">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-lg font-didot text-brand-800">Recent Activity</h2>
+            <h2 className="text-lg font-playfair text-brand-800">Recent Activity</h2>
             <Activity className="w-5 h-5 text-classic-green" />
           </div>
           <div className="space-y-4">
@@ -303,7 +303,7 @@ export default function AdminDashboard() {
 
       {/* Featured Guide */}
       <div className="bg-gradient-to-r from-bronze-gold/10 to-bronze-gold/5 rounded-2xl p-6 border border-bronze-gold/20">
-        <h2 className="text-lg font-didot text-brand-800 mb-3 flex items-center gap-2">
+        <h2 className="text-lg font-playfair text-brand-800 mb-3 flex items-center gap-2">
           <Star className="w-5 h-5 text-bronze-gold" />
           How to Mark Products as Featured
         </h2>
@@ -323,7 +323,7 @@ export default function AdminDashboard() {
       <div className="bg-white rounded-2xl shadow-brand border border-brand-100 overflow-hidden">
         <div className="p-6 border-b border-brand-100">
           <div className="flex flex-col lg:flex-row lg:items-center gap-4">
-            <h2 className="text-lg font-didot text-brand-800">Products</h2>
+            <h2 className="text-lg font-playfair text-brand-800">Products</h2>
             <div className="flex-1 flex flex-col sm:flex-row gap-3">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-400" />

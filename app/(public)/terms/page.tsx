@@ -98,7 +98,7 @@ export default function TermsPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <FileText className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
               Terms & Conditions
             </h1>
             <p className="text-white/80 font-montserrat">
@@ -133,7 +133,7 @@ export default function TermsPage() {
                   transition={{ delay: index * 0.03 }}
                   className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6"
                 >
-                  <h2 className="font-didot text-lg text-brand-800 mb-3">{section.title}</h2>
+                  <h2 className="font-playfair text-lg text-brand-800 mb-3">{section.title}</h2>
                   <div className="text-brand-600 font-montserrat text-sm leading-relaxed whitespace-pre-line">
                     {section.content}
                   </div>
@@ -148,7 +148,7 @@ export default function TermsPage() {
               viewport={{ once: true }}
               className="mt-8 bg-classic-green/5 rounded-2xl p-6 border border-classic-green/20"
             >
-              <h2 className="font-didot text-xl text-brand-800 mb-4">Questions?</h2>
+              <h2 className="font-playfair text-xl text-brand-800 mb-4">Questions?</h2>
               <p className="text-brand-600 font-montserrat text-sm mb-4">
                 If you have any questions about these Terms and Conditions, please contact us:
               </p>

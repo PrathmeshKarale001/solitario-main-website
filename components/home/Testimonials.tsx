@@ -42,7 +42,7 @@ export default function Testimonials() {
             <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham text-bronze-gold">Testimonials</span>
             <Star className="w-4 h-4 sm:w-5 sm:h-5 text-bronze-gold fill-bronze-gold" />
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-didot mb-2 sm:mb-4 md:mb-6 text-classic-green">What Our Customers Say</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair mb-2 sm:mb-4 md:mb-6 text-classic-green">What Our Customers Say</h2>
           <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-md sm:max-w-2xl mx-auto font-montserrat leading-relaxed hidden sm:block">
             Real reviews from our valued customers
           </p>
@@ -73,7 +73,7 @@ export default function Testimonials() {
                   className="relative"
                 >
                   {/* Quote Text - Compact */}
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black mb-4 sm:mb-6 md:mb-8 leading-relaxed font-didot italic relative z-10" >
+                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black mb-4 sm:mb-6 md:mb-8 leading-relaxed font-playfair italic relative z-10" >
                     "{currentTestimonial.text}"
                   </p>
 

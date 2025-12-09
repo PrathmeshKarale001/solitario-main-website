@@ -54,7 +54,7 @@ function FailedContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="font-didot text-3xl md:text-4xl text-gray-900 mb-4"
+            className="font-playfair text-3xl md:text-4xl text-gray-900 mb-4"
           >
             Payment Failed
           </motion.h1>
@@ -101,7 +101,7 @@ function FailedContent() {
             transition={{ delay: 0.6 }}
             className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 mb-8"
           >
-            <h2 className="font-didot text-xl text-gray-900 mb-6">What You Can Do</h2>
+            <h2 className="font-playfair text-xl text-gray-900 mb-6">What You Can Do</h2>
             
             <div className="space-y-4 text-left">
               <div className="flex items-start gap-4 p-4 bg-gray-50 rounded-lg">

@@ -70,7 +70,7 @@ export default function ShippingPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <Truck className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
               Shipping & Delivery
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
@@ -89,7 +89,7 @@ export default function ShippingPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
               Shipping Options
             </h2>
             <p className="text-brand-600 font-montserrat">
@@ -110,7 +110,7 @@ export default function ShippingPage() {
                 <div className="w-14 h-14 bg-classic-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <option.icon className="w-7 h-7 text-classic-green" />
                 </div>
-                <h3 className="font-didot text-xl text-brand-800 mb-2">{option.name}</h3>
+                <h3 className="font-playfair text-xl text-brand-800 mb-2">{option.name}</h3>
                 <p className="text-bronze-gold font-gotham text-lg mb-1">{option.time}</p>
                 <p className="text-brand-600 font-montserrat mb-3">{option.price}</p>
                 {option.freeAbove && (
@@ -143,7 +143,7 @@ export default function ShippingPage() {
                 <div className="w-12 h-12 bg-white rounded-xl shadow-brand flex items-center justify-center mx-auto mb-4">
                   <feature.icon className="w-6 h-6 text-classic-green" />
                 </div>
-                <h3 className="font-didot text-lg text-brand-800 mb-2">{feature.title}</h3>
+                <h3 className="font-playfair text-lg text-brand-800 mb-2">{feature.title}</h3>
                 <p className="text-brand-500 font-montserrat text-sm">{feature.description}</p>
               </motion.div>
             ))}
@@ -161,7 +161,7 @@ export default function ShippingPage() {
               viewport={{ once: true }}
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-8"
             >
-              <h2 className="font-didot text-2xl text-brand-800 mb-6">Delivery Information</h2>
+              <h2 className="font-playfair text-2xl text-brand-800 mb-6">Delivery Information</h2>
               
               <div className="space-y-6">
                 <div>
@@ -213,7 +213,7 @@ export default function ShippingPage() {
               viewport={{ once: true }}
               className="mt-8 bg-bronze-gold/5 rounded-2xl p-6 border border-bronze-gold/20"
             >
-              <h3 className="font-didot text-lg text-brand-800 mb-4">
+              <h3 className="font-playfair text-lg text-brand-800 mb-4">
                 Same Day Delivery Available In
               </h3>
               <div className="flex flex-wrap gap-2">
@@ -237,7 +237,7 @@ export default function ShippingPage() {
             viewport={{ once: true }}
             className="bg-gradient-to-br from-classic-green to-teal rounded-3xl p-8 md:p-12 text-center"
           >
-            <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-playfair text-white mb-4">
               Have Questions About Shipping?
             </h2>
             <p className="text-white/80 font-montserrat mb-8 max-w-xl mx-auto">

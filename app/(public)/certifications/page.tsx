@@ -84,7 +84,7 @@ export default function CertificationsPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <Award className="w-16 h-16 text-bronze-gold mx-auto mb-6" />
-            <h1 className="text-4xl md:text-5xl font-didot text-white mb-4">
+            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
               Certifications & Quality
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
@@ -114,7 +114,7 @@ export default function CertificationsPage() {
                       <div className="w-32 h-32 bg-white rounded-2xl shadow-lg flex items-center justify-center mx-auto mb-4">
                         <Award className="w-16 h-16 text-classic-green" />
                       </div>
-                      <h3 className="font-didot text-2xl text-brand-800">{cert.name}</h3>
+                      <h3 className="font-playfair text-2xl text-brand-800">{cert.name}</h3>
                       <p className="text-brand-500 font-montserrat text-sm">{cert.fullName}</p>
                     </div>
                   </div>
@@ -150,7 +150,7 @@ export default function CertificationsPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-white mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-white mb-4">
               Understanding the 4Cs
             </h2>
             <p className="text-white/70 font-montserrat max-w-2xl mx-auto">
@@ -170,10 +170,10 @@ export default function CertificationsPage() {
               >
                 <div className="flex items-start gap-4">
                   <div className="w-12 h-12 bg-bronze-gold rounded-xl flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-didot text-xl">{c.letter}</span>
+                    <span className="text-white font-playfair text-xl">{c.letter}</span>
                   </div>
                   <div className="flex-1">
-                    <h3 className="font-didot text-xl text-white mb-2">{c.title}</h3>
+                    <h3 className="font-playfair text-xl text-white mb-2">{c.title}</h3>
                     <p className="text-white/60 font-montserrat text-sm mb-4">{c.description}</p>
                     <div className="flex flex-wrap gap-2">
                       {c.grades.map((grade) => (
@@ -199,7 +199,7 @@ export default function CertificationsPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
               Our Quality Standards
             </h2>
             <p className="text-brand-600 font-montserrat max-w-2xl mx-auto">
@@ -220,7 +220,7 @@ export default function CertificationsPage() {
                 <div className="w-14 h-14 bg-classic-green/10 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <standard.icon className="w-7 h-7 text-classic-green" />
                 </div>
-                <h3 className="font-didot text-lg text-brand-800 mb-2">{standard.title}</h3>
+                <h3 className="font-playfair text-lg text-brand-800 mb-2">{standard.title}</h3>
                 <p className="text-brand-500 font-montserrat text-sm">{standard.description}</p>
               </motion.div>
             ))}
@@ -238,7 +238,7 @@ export default function CertificationsPage() {
             className="bg-gradient-to-br from-classic-green to-teal rounded-3xl p-8 md:p-12 text-center"
           >
             <Shield className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-playfair text-white mb-4">
               Shop with Confidence
             </h2>
             <p className="text-white/80 font-montserrat mb-8 max-w-xl mx-auto">

@@ -215,7 +215,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               />
                             </div>
                             <div className="flex-1 min-w-0">
-                              <p className="font-didot text-brand-800 group-hover:text-classic-green transition-colors truncate">
+                              <p className="font-playfair text-brand-800 group-hover:text-classic-green transition-colors truncate">
                                 {product.name}
                               </p>
                               <p className="text-sm text-brand-500 font-montserrat capitalize">

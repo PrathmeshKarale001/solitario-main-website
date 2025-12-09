@@ -37,9 +37,9 @@ export default function Awards() {
                 className="text-center group"
              >
                 <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 border border-gray-200 rounded-full flex items-center justify-center group-hover:border-bronze-gold transition-colors">
-                  <span className="font-didot text-2xl text-gray-300 group-hover:text-bronze-gold">{index + 1}</span>
+                  <span className="font-playfair text-2xl text-gray-300 group-hover:text-bronze-gold">{index + 1}</span>
                 </div>
-                <h4 className="font-didot text-gray-900 text-sm md:text-base mb-1">{award.name}</h4>
+                <h4 className="font-playfair text-gray-900 text-sm md:text-base mb-1">{award.name}</h4>
                 <p className="font-gotham text-[10px] text-gray-400">{award.year}</p>
              </motion.div>
            ))}
