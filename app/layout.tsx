@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
-import localFont from 'next/font/local'
-import { Montserrat } from 'next/font/google'
+import { Montserrat, Playfair_Display } from 'next/font/google'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { CartProvider } from '@/lib/cart-context'
@@ -15,8 +14,13 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import './globals.css'
 
-// Aguila and Didot fonts are loaded via CSS @font-face in globals.css
-// They are referenced directly in Tailwind config as 'Aguila' and 'Didot'
+// Playfair Display for headings - elegant serif font
+const playfair = Playfair_Display({
+  subsets: ['latin'],
+  variable: '--font-playfair',
+  display: 'swap',
+  weight: ['400', '500', '600', '700'],
+})
 
 // Load Montserrat from Google Fonts for body text AND UI text
 // Montserrat is a brand font and will be used for both body and Gotham (UI) text
@@ -57,23 +61,8 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${montserrat.variable} ${gotham.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${gotham.variable}`}>
       <head>
-        {/* Preload brand fonts for faster loading */}
-        <link
-          rel="preload"
-          href="/fonts/Didot-Title.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
-        <link
-          rel="preload"
-          href="/fonts/Didot-Bold.woff2"
-          as="font"
-          type="font/woff2"
-          crossOrigin="anonymous"
-        />
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
