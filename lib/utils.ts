@@ -5,7 +5,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function formatPrice(price: number, currency: string = '₹'): string {
-  return `${currency}${price.toLocaleString('en-IN')}`;
+  // Ensure INR is converted to ₹ symbol
+  const symbol = currency === 'INR' ? '₹' : currency;
+  return `${symbol}${price.toLocaleString('en-IN')}`;
 }
 
 export function slugify(text: string): string {

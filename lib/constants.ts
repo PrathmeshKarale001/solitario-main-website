@@ -120,20 +120,39 @@ export const PROMISES = [
 // FAQ
 export const FAQS = [
   {
-    question: 'Are your diamonds ethically sourced?',
-    answer: 'Yes, all our diamonds are lab-grown, which means they are 100% conflict-free and ethically created without environmental damage or human rights concerns associated with traditional mining.'
+    question: 'What are lab-grown diamonds?',
+    answer:
+      'Lab-grown diamonds are real diamonds created in controlled laboratories using advanced technology that replicates the natural diamond-forming process. They have the same physical, chemical, and optical properties as mined diamonds.',
   },
   {
-    question: 'Do you offer custom/bespoke services?',
-    answer: 'Absolutely! We specialize in creating bespoke jewellery pieces tailored to your preferences. Our expert designers work closely with you to bring your vision to life.'
+    question: 'Are lab-grown diamonds real diamonds?',
+    answer:
+      'Yes. Lab-grown diamonds are 100% real diamonds. They are certified, test positive on diamond testers, and are graded by international gemological laboratories just like mined diamonds.',
   },
   {
-    question: 'What is the difference between lab-grown and mined diamonds?',
-    answer: 'Lab-grown diamonds are chemically, physically, and optically identical to mined diamonds. The only difference is their origin - one is created in a lab, the other mined from the earth. Lab-grown diamonds are more sustainable and offer better value.'
+    question: 'Do lab-grown diamonds hold resale value?',
+    answer:
+      'Like all luxury goods, resale depends on market demand. However, lab-grown diamonds deliver significantly higher value at the time of purchase since you get a larger, better diamond at a better price.',
   },
   {
-    question: 'Do you provide certification?',
-    answer: 'Yes, every diamond comes with an IGI (International Gemological Institute) certificate, and all gold is BIS hallmarked, ensuring authenticity and quality.'
+    question: 'Do you offer customization?',
+    answer:
+      'Yes! Solitario specializes in bespoke engagement rings, personalized jewellery, and custom diamond setting services.',
+  },
+  {
+    question: 'What metals do you use?',
+    answer:
+      'We use 14K & 18K gold, Vermeil (18K gold-plated 925 silver), and 925 sterling silver. All metals are hypoallergenic and designed for everyday comfort.',
+  },
+  {
+    question: 'What is your return & exchange policy?',
+    answer:
+      'Solitario offers a 7–15 day return/exchange window. Custom pieces are not returnable but can be altered.',
+  },
+  {
+    question: 'Are Solitario diamonds certified?',
+    answer:
+      'Yes. Every Solitario diamond comes with international certifications such as IGI and SGL, along with an authenticity guarantee.',
   },
 ] as const;
 

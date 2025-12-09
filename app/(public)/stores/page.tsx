@@ -78,7 +78,7 @@ export default function StoresPage() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+    <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
       <section ref={sectionRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <motion.div
@@ -87,7 +87,7 @@ export default function StoresPage() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
           <Image
-            src="/solitario/stores/spain.jpg"
+            src="/images/general/WhatsApp Image 2024-12-10 at 11.49.40 (1).jpeg"
             alt="Solitario Stores"
             fill
             className="object-cover object-center"
@@ -118,14 +118,32 @@ export default function StoresPage() {
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
-              <BlurText
-                text="Find Your Sparkle"
-                className="font-aguila"
-                animateBy="characters"
-                direction="top"
-                delay={50}
-                stepDuration={0.4}
-              />
+              <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap">
+                <BlurText
+                  text="Find"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={50}
+                  stepDuration={0.4}
+                />
+                <BlurText
+                  text="Your"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={150}
+                  stepDuration={0.4}
+                />
+                <BlurText
+                  text="Sparkle"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={250}
+                  stepDuration={0.4}
+                />
+              </div>
             </h1>
 
             <motion.p
@@ -141,7 +159,7 @@ export default function StoresPage() {
       </section>
 
       {/* Global Stores */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900">
+      <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -150,11 +168,11 @@ export default function StoresPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <span className="inline-block text-bronze-gold text-xs uppercase tracking-[0.3em] font-gotham mb-4">
+            <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               International Presence
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white">
-              Our <span className="text-bronze-gold">Global</span> Stores
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800">
+              Our <span className="text-classic-green">Global</span> Stores
             </h2>
           </motion.div>
 
@@ -210,7 +228,7 @@ export default function StoresPage() {
       </section>
 
       {/* India Stores */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-24 px-4 bg-brand-100">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -219,11 +237,11 @@ export default function StoresPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <span className="inline-block text-bronze-gold text-xs uppercase tracking-[0.3em] font-gotham mb-4">
+            <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               India
             </span>
-            <h2 className="text-3xl md:text-4xl font-didot text-white">
-              Stores Across <span className="text-bronze-gold">India</span>
+            <h2 className="text-3xl md:text-4xl font-didot text-brand-800">
+              Stores Across <span className="text-classic-green">India</span>
             </h2>
           </motion.div>
 
@@ -235,38 +253,38 @@ export default function StoresPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-bronze-gold/30 p-6 transition-all duration-500"
+                className="rounded-2xl bg-white border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-6 transition-all duration-500"
               >
-                <h3 className="text-xl font-didot text-white mb-4">{store.name}</h3>
+                <h3 className="text-xl font-didot text-brand-800 mb-4">{store.name}</h3>
                 
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
-                    <MapPin className="w-5 h-5 text-bronze-gold flex-shrink-0 mt-0.5" />
+                    <MapPin className="w-5 h-5 text-classic-green flex-shrink-0 mt-0.5" />
                     <div>
-                      <p className="text-white/80 text-sm font-montserrat">{store.address}</p>
-                      <p className="text-white/60 text-sm font-montserrat">{store.city}</p>
+                      <p className="text-brand-700 text-sm font-montserrat">{store.address}</p>
+                      <p className="text-brand-500 text-sm font-montserrat">{store.city}</p>
                     </div>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5 text-bronze-gold flex-shrink-0" />
-                    <a href={`tel:${store.phone}`} className="text-white/80 text-sm font-montserrat hover:text-bronze-gold transition-colors">
+                    <Phone className="w-5 h-5 text-classic-green flex-shrink-0" />
+                    <a href={`tel:${store.phone}`} className="text-brand-700 text-sm font-montserrat hover:text-classic-green transition-colors">
                       {store.phone}
                     </a>
                   </div>
                   
                   <div className="flex items-center gap-3">
-                    <Clock className="w-5 h-5 text-bronze-gold flex-shrink-0" />
-                    <p className="text-white/80 text-sm font-montserrat">{store.hours}</p>
+                    <Clock className="w-5 h-5 text-classic-green flex-shrink-0" />
+                    <p className="text-brand-700 text-sm font-montserrat">{store.hours}</p>
                   </div>
                 </div>
 
-                <div className="mt-6 pt-4 border-t border-white/10">
+                <div className="mt-6 pt-4 border-t border-brand-200">
                   <a
                     href={`https://maps.google.com/?q=${encodeURIComponent(store.address + ' ' + store.city)}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 text-bronze-gold text-sm font-gotham uppercase tracking-wider hover:gap-3 transition-all"
+                    className="inline-flex items-center gap-2 text-classic-green text-sm font-gotham uppercase tracking-wider hover:gap-3 transition-all"
                   >
                     Get Directions <ExternalLink className="w-4 h-4" />
                   </a>
@@ -278,7 +296,7 @@ export default function StoresPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900/30">
+      <section className="py-24 px-4 bg-classic-green">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -289,20 +307,19 @@ export default function StoresPage() {
             <h2 className="text-3xl md:text-4xl font-didot text-white mb-6">
               Can't Visit a <span className="text-bronze-gold">Store</span>?
             </h2>
-            <p className="text-white/70 font-montserrat mb-8">
+            <p className="text-white/80 font-montserrat mb-8">
               Shop our complete collection online and get your diamonds delivered to your doorstep.
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-bronze-gold/20 border border-bronze-gold/40 hover:border-bronze-gold/60 transition-all duration-500 hover:scale-105"
+                className="inline-flex items-center gap-2 px-6 py-3 text-classic-green font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-white hover:bg-ivory-pearl transition-all duration-500 hover:scale-105"
               >
                 Shop Online <ArrowRight className="w-4 h-4" />
               </Link>
               <Link
                 href="/contact"
-                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-105"
-                style={{ background: 'rgba(255,255,255,0.1)', backdropFilter: 'blur(20px)' }}
+                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg border border-white/40 hover:bg-white/10 transition-all duration-500 hover:scale-105"
               >
                 Contact Us
               </Link>

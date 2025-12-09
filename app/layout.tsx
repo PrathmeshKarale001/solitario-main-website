@@ -8,7 +8,8 @@ import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
 import AuthProvider from '@/components/providers/AuthProvider'
 import { CartSidebar } from '@/components/cart'
 import SmoothScroll from '@/components/ui/SmoothScroll'
-import CustomCursor from '@/components/ui/CustomCursor'
+// CustomCursor disabled - using default system cursor
+// import CustomCursor from '@/components/ui/CustomCursor'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
@@ -137,7 +138,6 @@ export default function RootLayout({
             <WishlistProvider>
               <CartProvider>
                 <ShopifyCartProvider>
-                  <CustomCursor />
                   <Header />
                   <main>
                     {children}

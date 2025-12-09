@@ -18,7 +18,7 @@ export default function LabGrownDiamondsPage() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+    <div className="min-h-screen bg-brand-50">
       {/* Hero Section - Matching Home Page Theme */}
       <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
@@ -27,11 +27,22 @@ export default function LabGrownDiamondsPage() {
           style={{ y: backgroundY }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-gray-900/50 to-black/80 z-10" />
+          {/* Desktop hero image */}
           <Image
-            src="/ai-generated/lab-hero.jpg"
-            alt="Lab grown diamonds laboratory"
+            src="/images/general/banner2314.jpeg"
+            alt="Lab grown diamonds"
             fill
-            className="object-cover object-center"
+            className="object-cover object-center hidden md:block"
+            priority
+            quality={85}
+            sizes="100vw"
+          />
+          {/* Mobile hero image */}
+          <Image
+            src="/images/general/1.7.2025 Solitario1347.jpg"
+            alt="Lab grown diamonds"
+            fill
+            className="object-cover object-center md:hidden"
             priority
             quality={85}
             sizes="100vw"
@@ -55,11 +66,27 @@ export default function LabGrownDiamondsPage() {
             >
               <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
                 <BlurText
-                  text="Why Lab Grown"
+                  text="Why"
                   className="font-aguila"
                   animateBy="characters"
                   direction="top"
                   delay={50}
+                  stepDuration={0.4}
+                />
+                <BlurText
+                  text="Lab"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={100}
+                  stepDuration={0.4}
+                />
+                <BlurText
+                  text="Grown"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={150}
                   stepDuration={0.4}
                 />
                 <motion.span
@@ -81,19 +108,43 @@ export default function LabGrownDiamondsPage() {
               </div>
               <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
                 <BlurText
-                  text="Are The Future of"
-                  className="font-aguila italic"
+                  text="Are"
+                  className="font-aguila"
                   animateBy="characters"
                   direction="top"
                   delay={100}
                   stepDuration={0.3}
                 />
                 <BlurText
-                  text=" Luxury"
+                  text="The"
                   className="font-aguila"
                   animateBy="characters"
                   direction="top"
-                  delay={200}
+                  delay={130}
+                  stepDuration={0.3}
+                />
+                <BlurText
+                  text="Future"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={160}
+                  stepDuration={0.3}
+                />
+                <BlurText
+                  text="of"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={190}
+                  stepDuration={0.3}
+                />
+                <BlurText
+                  text="Luxury"
+                  className="font-aguila"
+                  animateBy="characters"
+                  direction="top"
+                  delay={220}
                   stepDuration={0.4}
                 />
               </div>
@@ -146,7 +197,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* Why Lab Grown Section */}
-      <section id="why-lab-grown" className="py-24 px-4 bg-gradient-to-b from-black to-gray-900">
+      <section id="why-lab-grown" className="py-24 px-4 bg-white">
         <div className="max-w-5xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -154,16 +205,16 @@ export default function LabGrownDiamondsPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-8">
-              The Brilliance That Paves To A <span className="text-bronze-gold">Brighter World</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-8">
+              The Brilliance That Paves To A <span className="text-classic-green">Brighter World</span>
             </h2>
-            <p className="text-base md:text-lg text-white/80 mb-6 leading-relaxed font-montserrat">
+            <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
               For centuries, the pursuit of natural diamonds has cast a looming shadow on our planet. Beneath their sparkling allure lay tales of environmental degradation, exploitation, and blood-stained histories.
             </p>
-            <p className="text-base md:text-lg text-white/80 mb-6 leading-relaxed font-montserrat">
+            <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
               Welcome to the world of lab-grown diamonds — a triumph of science, ethics, and responsibility. These ethically nurtured wonders are cultivated in controlled lab environments, channeling the genius of human innovation to recreate nature's dazzling brilliance.
             </p>
-            <p className="text-base md:text-lg text-white/90 leading-relaxed font-montserrat font-medium">
+            <p className="text-base md:text-lg text-brand-800 leading-relaxed font-montserrat font-medium">
               As eco-conscious consumers increasingly opt for these sustainable gems, a new age of elegance dawns — a luxury that doesn't cost the Earth.
             </p>
           </motion.div>
@@ -171,7 +222,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-24 px-4 bg-brand-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -180,26 +231,26 @@ export default function LabGrownDiamondsPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-                Born From <span className="text-bronze-gold">Vision</span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+                Born From <span className="text-classic-green">Vision</span>
               </h2>
-              <p className="text-base md:text-lg text-white/80 mb-8 leading-relaxed font-montserrat">
+              <p className="text-base md:text-lg text-brand-700 mb-8 leading-relaxed font-montserrat">
                 Solitario was born from the vision to meet the desires of modern, consciously-minded customers seeking sustainable luxury. We believe in leaving a positive footprint for the next generation.
               </p>
 
               {/* Vision Card */}
               <motion.div
-                className="relative rounded-2xl overflow-hidden backdrop-blur-2xl bg-gray-900/20 border border-white/10 p-6 mb-6"
+                className="relative rounded-2xl overflow-hidden bg-white border border-brand-200 p-6 mb-6 shadow-brand"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-bronze-gold/20 flex items-center justify-center flex-shrink-0">
-                    <Sparkles className="w-6 h-6 text-bronze-gold" />
+                  <div className="w-12 h-12 rounded-full bg-classic-green/10 flex items-center justify-center flex-shrink-0">
+                    <Sparkles className="w-6 h-6 text-classic-green" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-didot text-white mb-2">Our Vision</h3>
-                    <p className="text-white/70 text-sm font-montserrat leading-relaxed">
+                    <h3 className="text-xl font-didot text-brand-800 mb-2">Our Vision</h3>
+                    <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
                       Solitario envisions a world where ethics and beauty combine seamlessly. Our jewelry reflects the mindful values of a transformed luxury industry.
                     </p>
                   </div>
@@ -208,17 +259,17 @@ export default function LabGrownDiamondsPage() {
 
               {/* Mission Card */}
               <motion.div
-                className="relative rounded-2xl overflow-hidden backdrop-blur-2xl bg-bronze-gold/10 border border-bronze-gold/20 p-6"
+                className="relative rounded-2xl overflow-hidden bg-classic-green/5 border border-classic-green/20 p-6 shadow-brand"
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
                 <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-bronze-gold/20 flex items-center justify-center flex-shrink-0">
-                    <Shield className="w-6 h-6 text-bronze-gold" />
+                  <div className="w-12 h-12 rounded-full bg-classic-green/20 flex items-center justify-center flex-shrink-0">
+                    <Shield className="w-6 h-6 text-classic-green" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-didot text-white mb-2">Our Mission</h3>
-                    <p className="text-white/70 text-sm font-montserrat leading-relaxed">
+                    <h3 className="text-xl font-didot text-brand-800 mb-2">Our Mission</h3>
+                    <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
                       We pioneer sustainable jewelry for a future built on unwavering ethics. Our mission is to craft adornments that enhance beauty without exploitation.
                     </p>
                   </div>
@@ -231,14 +282,14 @@ export default function LabGrownDiamondsPage() {
               whileInView={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="relative"
+              className="relative flex justify-center"
             >
-              <div className="relative rounded-3xl overflow-hidden shadow-luxury-lg">
+              <div className="relative rounded-3xl overflow-hidden shadow-luxury-lg w-[60%]">
                 <Image
-                  src="/ai-generated/lab-sustainability.jpg"
+                  src="/images/general/Solitario D26322.jpg"
                   alt="Sustainable luxury diamonds"
-                  width={800}
-                  height={600}
+                  width={480}
+                  height={360}
                   className="w-full h-auto object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
@@ -249,7 +300,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* How They're Made Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900/20">
+      <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -258,10 +309,10 @@ export default function LabGrownDiamondsPage() {
             viewport={{ once: true }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-              How They're <span className="text-bronze-gold">Made</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              How They're <span className="text-classic-green">Made</span>
             </h2>
-            <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto font-montserrat">
+            <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
               Lab-grown diamonds are created through advanced technological processes that replicate the natural conditions under which diamonds develop beneath the Earth's crust.
             </p>
           </motion.div>
@@ -289,24 +340,24 @@ export default function LabGrownDiamondsPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h3 className="text-2xl md:text-3xl font-didot text-white mb-6">The CVD Process</h3>
-              <p className="text-white/80 mb-6 leading-relaxed font-montserrat">
+              <h3 className="text-2xl md:text-3xl font-didot text-brand-800 mb-6">The CVD Process</h3>
+              <p className="text-brand-700 mb-6 leading-relaxed font-montserrat">
                 Using Chemical Vapor Deposition (CVD), we cultivate diamonds atom by atom, ensuring each stone possesses identical physical, chemical, and optical properties to mined diamonds.
               </p>
-              <p className="text-white/80 mb-8 leading-relaxed font-montserrat">
+              <p className="text-brand-700 mb-8 leading-relaxed font-montserrat">
                 The process begins with a small diamond seed placed in a chamber filled with carbon-rich gases. Under precise temperature and pressure conditions, carbon atoms deposit onto the seed, gradually building a perfect diamond crystal.
               </p>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4">
-                  <Diamond className="w-8 h-8 text-bronze-gold mb-3" />
-                  <h4 className="text-lg font-didot text-white mb-1">100% Real</h4>
-                  <p className="text-white/60 text-sm font-montserrat">Identical properties to mined diamonds</p>
+                <div className="rounded-xl bg-brand-50 border border-brand-200 p-4">
+                  <Diamond className="w-8 h-8 text-classic-green mb-3" />
+                  <h4 className="text-lg font-didot text-brand-800 mb-1">100% Real</h4>
+                  <p className="text-brand-600 text-sm font-montserrat">Identical properties to mined diamonds</p>
                 </div>
-                <div className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4">
-                  <Leaf className="w-8 h-8 text-bronze-gold mb-3" />
-                  <h4 className="text-lg font-didot text-white mb-1">Eco-Friendly</h4>
-                  <p className="text-white/60 text-sm font-montserrat">Minimal environmental impact</p>
+                <div className="rounded-xl bg-brand-50 border border-brand-200 p-4">
+                  <Leaf className="w-8 h-8 text-classic-green mb-3" />
+                  <h4 className="text-lg font-didot text-brand-800 mb-1">Eco-Friendly</h4>
+                  <p className="text-brand-600 text-sm font-montserrat">Minimal environmental impact</p>
                 </div>
               </div>
             </motion.div>
@@ -315,7 +366,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* Diamond Gallery */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900/20 to-black">
+      <section className="py-24 px-4 bg-brand-100">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -324,10 +375,10 @@ export default function LabGrownDiamondsPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-4">
-              Every Diamond Holds <span className="text-bronze-gold">Wonder</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-4">
+              Every Diamond Holds <span className="text-classic-green">Wonder</span>
             </h2>
-            <p className="text-base md:text-lg text-white/80 max-w-3xl mx-auto font-montserrat">
+            <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
               Explore the facets of Solitario lab-grown diamonds — crafted for brilliance, clarity, and a conscious footprint.
             </p>
           </motion.div>
@@ -357,7 +408,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* 4Cs Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900">
+      <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -366,10 +417,10 @@ export default function LabGrownDiamondsPage() {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-                The 4Cs, <span className="text-bronze-gold">Elevated</span>
+              <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+                The 4Cs, <span className="text-classic-green">Elevated</span>
               </h2>
-              <p className="text-base md:text-lg text-white/80 mb-8 font-montserrat">
+              <p className="text-base md:text-lg text-brand-700 mb-8 font-montserrat">
                 A diamond's journey is guided by the timeless 4Cs. Our lab-grown diamonds honor these standards while delivering a responsible future for luxury.
               </p>
 
@@ -388,12 +439,12 @@ export default function LabGrownDiamondsPage() {
                     viewport={{ once: true }}
                     className="flex gap-4 items-start"
                   >
-                    <div className="w-10 h-10 rounded-full bg-bronze-gold/20 flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-5 h-5 text-bronze-gold" />
+                    <div className="w-10 h-10 rounded-full bg-classic-green/10 flex items-center justify-center flex-shrink-0">
+                      <item.icon className="w-5 h-5 text-classic-green" />
                     </div>
                     <div>
-                      <h3 className="text-lg font-didot text-bronze-gold mb-1">{item.title}</h3>
-                      <p className="text-white/70 text-sm font-montserrat">{item.desc}</p>
+                      <h3 className="text-lg font-didot text-classic-green mb-1">{item.title}</h3>
+                      <p className="text-brand-600 text-sm font-montserrat">{item.desc}</p>
                     </div>
                   </motion.div>
                 ))}
@@ -419,7 +470,7 @@ export default function LabGrownDiamondsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.1 }}
                   viewport={{ once: true }}
-                  className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-4 overflow-hidden"
+                  className="rounded-2xl bg-brand-50 border border-brand-200 p-4 overflow-hidden"
                 >
                   <Image
                     src={item.src}
@@ -428,7 +479,7 @@ export default function LabGrownDiamondsPage() {
                     height={200}
                     className="w-full h-40 object-contain mb-3"
                   />
-                  <p className="text-white/70 text-sm font-montserrat text-center">{item.label}</p>
+                  <p className="text-brand-600 text-sm font-montserrat text-center">{item.label}</p>
                 </motion.div>
               ))}
             </motion.div>
@@ -437,7 +488,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* Stats Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-24 px-4 bg-classic-green">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -467,10 +518,10 @@ export default function LabGrownDiamondsPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 viewport={{ once: true }}
-                className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 p-6 text-center"
+                className="rounded-2xl bg-white/10 backdrop-blur-sm border border-white/20 p-6 text-center"
               >
                 <div className="text-4xl md:text-5xl font-didot text-bronze-gold mb-2">{stat.value}</div>
-                <p className="text-white/70 text-sm font-montserrat">{stat.label}</p>
+                <p className="text-white/80 text-sm font-montserrat">{stat.label}</p>
               </motion.div>
             ))}
           </div>
@@ -478,7 +529,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900/30">
+      <section className="py-24 px-4 bg-brand-100">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -486,17 +537,17 @@ export default function LabGrownDiamondsPage() {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-              Experience the <span className="text-bronze-gold">Future</span> of Diamonds
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              Experience the <span className="text-classic-green">Future</span> of Diamonds
             </h2>
-            <p className="text-base md:text-lg text-white/80 mb-8 font-montserrat">
+            <p className="text-base md:text-lg text-brand-700 mb-8 font-montserrat">
               Discover our collection of lab-grown diamonds that combine cutting-edge science with timeless beauty.
             </p>
 
             <div className="flex flex-wrap gap-4 justify-center">
               <Link
                 href="/products"
-                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg transition-all duration-500 hover:scale-105 group bg-bronze-gold/20 border border-bronze-gold/40 hover:border-bronze-gold/60 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg transition-all duration-500 hover:scale-105 group bg-classic-green hover:bg-classic-green/90"
               >
                 <span>Shop Collection</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -504,12 +555,7 @@ export default function LabGrownDiamondsPage() {
               <Link
                 href="https://thesolitario.com/assets/imgs/diamonds/solitario-catalogue.pdf"
                 target="_blank"
-                className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg transition-all duration-500 hover:scale-105 group relative overflow-hidden"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.1)',
-                  backdropFilter: 'blur(20px)',
-                  border: '1px solid rgba(255, 255, 255, 0.2)',
-                }}
+                className="inline-flex items-center gap-2 px-6 py-3 text-classic-green font-gotham uppercase tracking-[0.25em] text-sm rounded-lg transition-all duration-500 hover:scale-105 group bg-white border border-brand-200 hover:border-classic-green/40"
               >
                 <Download className="w-4 h-4" />
                 <span>Download Catalogue</span>

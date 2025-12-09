@@ -37,7 +37,7 @@ export function PromoBanner1() {
 // Banner 2 - "Shine of luxury, without compromise" - Links to Products
 export function PromoBanner2() {
   return (
-    <section className="pb-4 sm:pb-6 md:pb-8 px-0 bg-black">
+    <section className="pb-4 sm:pb-6 md:pb-8 px-0 bg-ivory-pearl">
       <motion.div
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -21,11 +21,11 @@ export default function Testimonials() {
   const currentTestimonial = TESTIMONIALS[currentIndex];
 
   return (
-    <Section variant="dark" padding="md" className="bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
+    <Section variant="light" padding="md" className="bg-classic-green relative overflow-hidden">
       {/* Decorative Background Elements - Smaller on mobile */}
-      <div className="absolute inset-0 opacity-5 pointer-events-none">
-        <div className="absolute top-10 left-5 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 border border-bronze-gold/20 rounded-full" />
-        <div className="absolute bottom-20 right-10 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 border border-bronze-gold/20 rounded-full" />
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="absolute top-10 left-5 w-32 h-32 sm:w-48 sm:h-48 md:w-64 md:h-64 border border-white/30 rounded-full" />
+        <div className="absolute bottom-20 right-10 w-24 h-24 sm:w-32 sm:h-32 md:w-48 md:h-48 border border-white/30 rounded-full" />
       </div>
 
       <Container className="relative z-10">
@@ -42,9 +42,9 @@ export default function Testimonials() {
             <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham text-bronze-gold">Testimonials</span>
             <Star className="w-4 h-4 sm:w-5 sm:h-5 text-bronze-gold fill-bronze-gold" />
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-aguila mb-2 sm:mb-4 md:mb-6 text-white">Trusted by Leaders</h2>
-          <p className="text-xs sm:text-sm md:text-lg text-white/70 max-w-md sm:max-w-2xl mx-auto font-montserrat leading-relaxed hidden sm:block">
-            Discover what leading publications say about Solitario
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-aguila mb-2 sm:mb-4 md:mb-6 text-classic-green">What Our Customers Say</h2>
+          <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-md sm:max-w-2xl mx-auto font-montserrat leading-relaxed hidden sm:block">
+            Real reviews from our valued customers
           </p>
         </motion.div>
 
@@ -73,7 +73,7 @@ export default function Testimonials() {
                   className="relative"
                 >
                   {/* Quote Text - Compact */}
-                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-white mb-4 sm:mb-6 md:mb-8 leading-relaxed font-didot italic relative z-10">
+                  <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black mb-4 sm:mb-6 md:mb-8 leading-relaxed font-didot italic relative z-10" >
                     "{currentTestimonial.text}"
                   </p>
 
@@ -88,10 +88,10 @@ export default function Testimonials() {
                       />
                     </div>
                     <div>
-                      <h4 className="text-white font-gotham text-sm sm:text-base md:text-lg font-semibold">
+                      <h4 className="text-black font-gotham text-sm sm:text-base md:text-lg font-semibold">
                         {currentTestimonial.name}
                       </h4>
-                      <p className="text-white/60 text-xs sm:text-sm font-montserrat">
+                      <p className="text-black text-xs sm:text-sm font-montserrat">
                         {currentTestimonial.title}
                       </p>
                     </div>
@@ -152,17 +152,17 @@ export default function Testimonials() {
               <div className="flex gap-2 sm:gap-3 mt-4 sm:mt-6 md:mt-8">
                 <button
                   onClick={prevTestimonial}
-                  className="p-2 sm:p-3 rounded-full bg-white/5 hover:bg-bronze-gold/20 text-white border border-white/10 hover:border-bronze-gold/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
+                  className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
                 <button
                   onClick={nextTestimonial}
-                  className="p-3 rounded-full bg-white/5 hover:bg-bronze-gold/20 text-white border border-white/10 hover:border-bronze-gold/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm"
+                  className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
                   aria-label="Next testimonial"
                 >
-                  <ChevronRight className="w-5 h-5" />
+                  <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
               </div>
             </motion.div>
@@ -195,7 +195,7 @@ export default function Testimonials() {
                     className="object-cover transition-transform duration-700 group-hover:scale-110"
                   />
 
-                  {/* Company Badge */}
+                  {/* Customer Badge */}
                   <div className="absolute bottom-6 left-6 right-6 z-20">
                     <div className="bg-white/95 backdrop-blur-md rounded-2xl p-4 border border-white/20 shadow-luxury-lg">
                       <div className="flex items-center gap-3">
@@ -204,10 +204,10 @@ export default function Testimonials() {
                         </div>
                         <div className="flex-1">
                           <p className="text-xs uppercase tracking-[0.2em] text-gray-500 font-gotham mb-1">
-                            Featured In
+                            Verified Review
                           </p>
                           <p className="text-lg font-bold text-gray-900 font-gotham">
-                            {currentTestimonial.company}
+                            {currentTestimonial.name}
                           </p>
                         </div>
                       </div>
@@ -222,32 +222,28 @@ export default function Testimonials() {
             </motion.div>
           </div>
 
-          {/* Company Logos Carousel */}
+          {/* Google Reviews Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 pt-12 border-t border-bronze-gold/20"
+            className="mt-16 pt-12 border-t border-white/20"
           >
-            <p className="text-center text-white/50 text-sm uppercase tracking-[0.2em] font-gotham mb-8">
-              Trusted by Leading Publications
-            </p>
-            <div className="flex flex-wrap items-center justify-center gap-8 lg:gap-12">
-              {['Forbes', 'Vogue', 'The New York Times', 'Harper\'s Bazaar', 'Bloomberg'].map((company, index) => (
-                <motion.div
-                  key={company}
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  className="px-6 py-3 bg-white/5 backdrop-blur-sm rounded-lg border border-white/10 hover:border-bronze-gold/30 hover:bg-white/10 transition-all duration-300"
-                >
-                  <p className="text-white/60 hover:text-bronze-gold font-gotham font-semibold text-sm uppercase tracking-wider transition-colors">
-                    {company}
-                  </p>
-                </motion.div>
-              ))}
+            <div className="flex flex-wrap items-center justify-center gap-4">
+              <div className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <div className="flex items-center gap-2">
+                  <div className="flex gap-0.5">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-4 h-4 fill-bronze-gold text-bronze-gold" />
+                    ))}
+                  </div>
+                  <span className="text-white font-gotham text-sm">4.9 Rating on Google</span>
+                </div>
+              </div>
+              <div className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+                <p className="text-white/80 font-gotham text-sm">100+ Happy Customers</p>
+              </div>
             </div>
           </motion.div>
         </div>

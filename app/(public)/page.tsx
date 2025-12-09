@@ -4,7 +4,7 @@ import {
   ProductCategories,
   ShopByCategoryOriginal,
   LifestyleShowcase,
-  PromoBanner1,
+  // PromoBanner1, // Disabled
 } from '@/components/home';
 import { Promise } from '@/components/about';
 
@@ -13,7 +13,7 @@ const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuCli
   loading: () => <div className="h-[40vh] bg-[#FAF5EF]" />,
 });
 const LabGrownBenefits = dynamic(() => import('@/components/home/LabGrownBenefits'));
-const PromoBanner2 = dynamic(() => import('@/components/home/PromoBanners').then(mod => ({ default: mod.PromoBanner2 })));
+// const PromoBanner2 = dynamic(() => import('@/components/home/PromoBanners').then(mod => ({ default: mod.PromoBanner2 }))); // Disabled
 const Stores = dynamic(() => import('@/components/home/Stores'));
 const FAQ = dynamic(() => import('@/components/home/FAQ'));
 const BrandStory = dynamic(() => import('@/components/home/BrandStory'));
@@ -56,8 +56,8 @@ export default function Home() {
       {/* 3a. LIFESTYLE SHOWCASE - Shop by Occasion */}
       <LifestyleShowcase />
       
-      {/* 4. PROMO BANNER - Drive urgency/offers */}
-      <PromoBanner1 />
+      {/* 4. PROMO BANNER - Drive urgency/offers (DISABLED) */}
+      {/* <PromoBanner1 /> */}
       
       {/* 5. PROMISE - Brand values (kept high for trust) */}
       <Promise />
@@ -70,8 +70,8 @@ export default function Home() {
       {/* 7. LAB GROWN BENEFITS - Key selling point (brief) */}
       <LabGrownBenefits />
       
-      {/* 8. SECOND PROMO BANNER - Another conversion opportunity */}
-      <PromoBanner2 />
+      {/* 8. SECOND PROMO BANNER - Another conversion opportunity (DISABLED) */}
+      {/* <PromoBanner2 /> */}
       
       {/* 9. STORES - Where to buy */}
       <Stores />

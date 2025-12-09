@@ -870,53 +870,48 @@ export interface Testimonial {
 export const TESTIMONIALS: Testimonial[] = [
   {
     id: 'test-1',
-    name: 'Sarah Mitchell',
-    title: 'Luxury Lifestyle Editor',
-    company: 'Forbes',
-    companyLogo: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&h=200&fit=crop&q=90',
+    name: 'Shruti Rana',
+    title: 'Verified Customer',
+    company: 'Google Review',
     rating: 5,
-    text: 'Solitario has redefined luxury jewelry with their commitment to sustainability. The lab-grown diamonds are indistinguishable from mined ones, and the craftsmanship is exceptional. A true leader in ethical luxury.',
-    image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
+    text: 'The staff was very friendly nature and price is very affordable. Debasmita was given excellent service!',
+    // image: '/reviews/shruti-rana.jpg'
   },
   {
     id: 'test-2',
-    name: 'Emma Thompson',
-    title: 'Fashion Director',
-    company: 'Vogue',
-    companyLogo: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&h=200&fit=crop&q=90',
+    name: 'Om',
+    title: 'Verified Customer',
+    company: 'Google Review',
     rating: 5,
-    text: 'The bespoke designs from Solitario are absolutely stunning. Each piece tells a story and the attention to detail is remarkable. Their collection seamlessly blends timeless elegance with modern sophistication.',
-    image: 'https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
+    text: 'Nice collection. Nikita is too good staff and the vermeil collection is super price. We afford the price. Thank you Solitario!',
+    // image: '/reviews/om.jpg'
   },
   {
     id: 'test-3',
-    name: 'James Anderson',
-    title: 'Chief Editor',
-    company: 'The New York Times',
-    companyLogo: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&h=200&fit=crop&q=90',
-    rating: 4.8,
-    text: 'As someone who values both quality and ethics, Solitario delivers on both fronts. The IGI certification and lifetime buyback guarantee give me complete confidence in my investment.',
-    image: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
+    name: 'Gargi Lodwal',
+    title: 'Verified Customer',
+    company: 'Google Review',
+    rating: 4,
+    text: 'I recently visited this store and I\'m genuinely impressed. The brilliance and clarity are amazing, you honestly can\'t tell the difference from a mined diamond. It\'s eco-friendly, ethically sourced, and much more affordable. Highly recommend for anyone looking for a beautiful, responsible choice!',
+    image: 'https://images.pexels.com/photos/774909/pexels-photo-774909.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
   },
   {
     id: 'test-4',
-    name: 'Sophie Chen',
-    title: 'Luxury Brand Consultant',
-    company: 'Harper\'s Bazaar',
-    companyLogo: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&h=200&fit=crop&q=90',
+    name: 'Yashshree Bhagwat',
+    title: 'Verified Customer',
+    company: 'Google Review',
     rating: 5,
-    text: 'The Italian Palladio Award-winning designs speak for themselves. Solitario has mastered the art of creating jewelry that is both contemporary and timeless. A must-have for any jewelry connoisseur.',
-    image: 'https://images.pexels.com/photos/1181690/pexels-photo-1181690.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
+    text: 'I recently visited Solitario on Linking Road, Mumbai, and had an absolutely wonderful experience. The designs were stunning, and the team—Pooja ma\'am, Gautam sir, and Sushil sir—welcomed us with such warmth. They patiently guided me through the options and helped me choose a design that truly suited me. Highly recommended!',
+    image: 'https://images.pexels.com/photos/1181519/pexels-photo-1181519.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
   },
   {
     id: 'test-5',
-    name: 'Michael Roberts',
-    title: 'Investment Advisor',
-    company: 'Bloomberg',
-    companyLogo: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=200&h=200&fit=crop&q=90',
-    rating: 4.9,
-    text: 'The value proposition is outstanding. Lab-grown diamonds offer 40% more value while maintaining the same brilliance. Combined with the lifetime buyback guarantee, it\'s a smart investment.',
-    image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
+    name: 'Prashant Dhavale',
+    title: 'Verified Customer',
+    company: 'Google Review',
+    rating: 5,
+    text: 'Got a men\'s customized band in vermeil gold. The quality feels solid and already getting compliments. Would definitely recommend!',
+    image: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=800&h=800&fit=crop'
   },
 ];
 

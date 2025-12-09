@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Instagram, Twitter, Mail } from 'lucide-react';
+import { Facebook, Instagram, Mail } from 'lucide-react';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -88,15 +88,6 @@ export default function Footer() {
                 aria-label="Instagram"
               >
                 <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
-              </a>
-              <a
-                href="https://twitter.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-ivory-pearl hover:text-bronze-gold transition-colors"
-                aria-label="Twitter"
-              >
-                <Twitter className="w-4 h-4 sm:w-5 sm:h-5" />
               </a>
               <a
                 href="mailto:info@solitario.com"

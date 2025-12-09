@@ -49,7 +49,7 @@ export default function FranchisePage() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+    <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
       <section ref={sectionRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <motion.div
@@ -58,7 +58,7 @@ export default function FranchisePage() {
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
           <Image
-            src="/solitario/featured/overlay1.jpg"
+            src="/images/general/Copy of WhatsApp Image 2025-02-19 at 5.13.42 PM (1).jpeg"
             alt="Franchise Opportunities"
             fill
             className="object-cover object-center"
@@ -126,7 +126,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Why Partner Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-black to-gray-900">
+      <section className="py-24 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -135,10 +135,10 @@ export default function FranchisePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-              Why Partner With <span className="text-bronze-gold">Solitario</span>?
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              Why Partner With <span className="text-classic-green">Solitario</span>?
             </h2>
-            <p className="text-white/70 font-montserrat max-w-2xl mx-auto">
+            <p className="text-brand-700 font-montserrat max-w-2xl mx-auto">
               Be part of the fastest-growing segment in the jewelry industry with a brand that stands for innovation, sustainability, and luxury.
             </p>
           </motion.div>
@@ -151,13 +151,13 @@ export default function FranchisePage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="rounded-2xl bg-white/5 backdrop-blur-sm border border-white/10 hover:border-bronze-gold/30 p-6 text-center transition-all duration-500"
+                className="rounded-2xl bg-brand-50 border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-6 text-center transition-all duration-500"
               >
-                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-bronze-gold/20 flex items-center justify-center">
-                  <benefit.icon className="w-7 h-7 text-bronze-gold" />
+                <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-classic-green/10 flex items-center justify-center">
+                  <benefit.icon className="w-7 h-7 text-classic-green" />
                 </div>
-                <h3 className="text-xl font-didot text-white mb-3">{benefit.title}</h3>
-                <p className="text-white/60 text-sm font-montserrat">{benefit.description}</p>
+                <h3 className="text-xl font-didot text-brand-800 mb-3">{benefit.title}</h3>
+                <p className="text-brand-600 text-sm font-montserrat">{benefit.description}</p>
               </motion.div>
             ))}
           </div>
@@ -165,7 +165,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Requirements Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-24 px-4 bg-brand-100">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -174,10 +174,10 @@ export default function FranchisePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-3xl md:text-4xl font-didot text-white mb-6">
-                Franchise <span className="text-bronze-gold">Requirements</span>
+              <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-6">
+                Franchise <span className="text-classic-green">Requirements</span>
               </h2>
-              <p className="text-white/70 font-montserrat mb-8">
+              <p className="text-brand-700 font-montserrat mb-8">
                 We're looking for passionate partners who share our vision for sustainable luxury and exceptional customer experiences.
               </p>
 
@@ -191,8 +191,8 @@ export default function FranchisePage() {
                     transition={{ duration: 0.5, delay: idx * 0.1 }}
                     className="flex items-start gap-3"
                   >
-                    <CheckCircle className="w-5 h-5 text-bronze-gold flex-shrink-0 mt-0.5" />
-                    <p className="text-white/80 font-montserrat">{req}</p>
+                    <CheckCircle className="w-5 h-5 text-classic-green flex-shrink-0 mt-0.5" />
+                    <p className="text-brand-700 font-montserrat">{req}</p>
                   </motion.div>
                 ))}
               </div>
@@ -206,11 +206,12 @@ export default function FranchisePage() {
               className="relative rounded-3xl overflow-hidden"
             >
               <Image
-                src="/solitario/stores/dubai.jpg"
+                src="/images/general/DSC09569.jpg"
                 alt="Solitario Store"
                 width={600}
                 height={400}
                 className="w-full h-auto object-cover"
+                quality={60}
               />
             </motion.div>
           </div>
@@ -218,7 +219,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Apply Form Section */}
-      <section id="apply" className="py-24 px-4 bg-gradient-to-b from-black to-gray-900/30">
+      <section id="apply" className="py-24 px-4 bg-white">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -227,11 +228,11 @@ export default function FranchisePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <Sparkles className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h2 className="text-3xl md:text-4xl font-didot text-white mb-4">
-              Start Your <span className="text-bronze-gold">Journey</span>
+            <Sparkles className="w-12 h-12 text-classic-green mx-auto mb-4" />
+            <h2 className="text-3xl md:text-4xl font-didot text-brand-800 mb-4">
+              Start Your <span className="text-classic-green">Journey</span>
             </h2>
-            <p className="text-white/70 font-montserrat">
+            <p className="text-brand-700 font-montserrat">
               Fill out the form below and our franchise team will get in touch with you.
             </p>
           </motion.div>
@@ -241,53 +242,53 @@ export default function FranchisePage() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="space-y-6 rounded-3xl bg-white/5 backdrop-blur-sm border border-white/10 p-8"
+            className="space-y-6 rounded-3xl bg-brand-50 border border-brand-200 p-8 shadow-brand"
           >
             <div className="grid md:grid-cols-2 gap-6">
               <div>
-                <label className="block text-white/80 text-sm font-montserrat mb-2">Full Name</label>
+                <label className="block text-brand-800 text-sm font-montserrat mb-2">Full Name</label>
                 <input
                   type="text"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white font-montserrat focus:border-bronze-gold/60 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-brand-200 text-brand-800 font-montserrat focus:border-classic-green focus:outline-none transition-colors"
                   placeholder="Your name"
                 />
               </div>
               <div>
-                <label className="block text-white/80 text-sm font-montserrat mb-2">Phone</label>
+                <label className="block text-brand-800 text-sm font-montserrat mb-2">Phone</label>
                 <input
                   type="tel"
-                  className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white font-montserrat focus:border-bronze-gold/60 focus:outline-none transition-colors"
+                  className="w-full px-4 py-3 rounded-lg bg-white border border-brand-200 text-brand-800 font-montserrat focus:border-classic-green focus:outline-none transition-colors"
                   placeholder="+91 XXXXX XXXXX"
                 />
               </div>
             </div>
             <div>
-              <label className="block text-white/80 text-sm font-montserrat mb-2">Email</label>
+              <label className="block text-brand-800 text-sm font-montserrat mb-2">Email</label>
               <input
                 type="email"
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white font-montserrat focus:border-bronze-gold/60 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-brand-200 text-brand-800 font-montserrat focus:border-classic-green focus:outline-none transition-colors"
                 placeholder="your@email.com"
               />
             </div>
             <div>
-              <label className="block text-white/80 text-sm font-montserrat mb-2">Preferred City</label>
+              <label className="block text-brand-800 text-sm font-montserrat mb-2">Preferred City</label>
               <input
                 type="text"
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white font-montserrat focus:border-bronze-gold/60 focus:outline-none transition-colors"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-brand-200 text-brand-800 font-montserrat focus:border-classic-green focus:outline-none transition-colors"
                 placeholder="City where you want to open franchise"
               />
             </div>
             <div>
-              <label className="block text-white/80 text-sm font-montserrat mb-2">Message</label>
+              <label className="block text-brand-800 text-sm font-montserrat mb-2">Message</label>
               <textarea
                 rows={4}
-                className="w-full px-4 py-3 rounded-lg bg-white/5 border border-white/20 text-white font-montserrat focus:border-bronze-gold/60 focus:outline-none transition-colors resize-none"
+                className="w-full px-4 py-3 rounded-lg bg-white border border-brand-200 text-brand-800 font-montserrat focus:border-classic-green focus:outline-none transition-colors resize-none"
                 placeholder="Tell us about your experience and why you want to partner with Solitario..."
               />
             </div>
             <button
               type="submit"
-              className="w-full py-4 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-bronze-gold/20 border border-bronze-gold/40 hover:border-bronze-gold/60 transition-all duration-500 hover:scale-[1.02]"
+              className="w-full py-4 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-classic-green hover:bg-classic-green/90 transition-all duration-500 hover:scale-[1.02]"
             >
               Submit Application
             </button>

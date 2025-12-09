@@ -18,22 +18,13 @@ export default function AboutHero() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-black via-gray-900 to-black">
-      {/* Background Image with Parallax */}
+    <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-b from-classic-green via-classic-green/90 to-classic-green">
+      {/* Plain dark green gradient backdrop */}
       <motion.div
-        className="absolute inset-0 z-0"
+        className="absolute inset-0 z-0 bg-gradient-to-b from-classic-green via-classic-green/95 to-classic-green"
         style={{ y: backgroundY }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-gray-900/50 to-black/80 z-10" />
-        <Image
-          src="/about/story-side.jpg"
-          alt="Solitario craftsmanship"
-          fill
-          className="object-cover object-center"
-          priority
-          quality={85}
-          sizes="100vw"
-        />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 z-10" />
       </motion.div>
 
       {/* Hero Content with BlurText Animation */}
@@ -62,11 +53,19 @@ export default function AboutHero() {
           >
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
               <BlurText
-                text="Designed for"
+                text="Designed"
                 className="font-aguila"
                 animateBy="characters"
                 direction="top"
                 delay={50}
+                stepDuration={0.4}
+              />
+              <BlurText
+                text="for"
+                className="font-aguila"
+                animateBy="characters"
+                direction="top"
+                delay={100}
                 stepDuration={0.4}
               />
               <BlurText
@@ -80,11 +79,19 @@ export default function AboutHero() {
             </div>
             <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
               <BlurText
-                text="Inspired by"
+                text="Inspired"
                 className="font-aguila italic"
                 animateBy="characters"
                 direction="top"
-                delay={100}
+                delay={200}
+                stepDuration={0.3}
+              />
+              <BlurText
+                text="by"
+                className="font-aguila italic"
+                animateBy="characters"
+                direction="top"
+                delay={250}
                 stepDuration={0.3}
               />
               <BlurText
@@ -92,7 +99,7 @@ export default function AboutHero() {
                 className="font-aguila"
                 animateBy="characters"
                 direction="top"
-                delay={200}
+                delay={300}
                 stepDuration={0.4}
               />
             </div>

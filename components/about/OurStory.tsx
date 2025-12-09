@@ -6,7 +6,7 @@ import { Diamond, Sparkles } from 'lucide-react';
 
 export default function OurStory() {
   return (
-    <section id="our-story" className="py-24 px-4 bg-gradient-to-b from-black to-gray-900">
+    <section id="our-story" className="py-24 px-4 bg-white">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
@@ -15,13 +15,13 @@ export default function OurStory() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
+            <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
               The Solitario Story
             </span>
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-white mb-6">
-              Our <span className="text-bronze-gold">Story</span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-didot text-brand-800 mb-6">
+              Our <span className="text-classic-green">Story</span>
             </h2>
-            <div className="space-y-4 text-white/80 text-base md:text-lg leading-relaxed font-montserrat">
+            <div className="space-y-4 text-brand-700 text-base md:text-lg leading-relaxed font-montserrat">
               <p>
                 Solitario saw an opportunity when more modern and consciously-minded customers asked for timeless sustainable luxury. We created Solitario Diamonds with an aim to leave a positive footprint for the next generation.
               </p>
@@ -40,22 +40,22 @@ export default function OurStory() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.2 }}
-                className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4"
+                className="rounded-xl bg-brand-50 border border-brand-200 p-4"
               >
-                <Diamond className="w-8 h-8 text-bronze-gold mb-3" />
-                <h4 className="text-lg font-didot text-white mb-1">Bespoke Designs</h4>
-                <p className="text-white/60 text-sm font-montserrat">Crafted for your unique story</p>
+                <Diamond className="w-8 h-8 text-classic-green mb-3" />
+                <h4 className="text-lg font-didot text-brand-800 mb-1">Bespoke Designs</h4>
+                <p className="text-brand-600 text-sm font-montserrat">Crafted for your unique story</p>
               </motion.div>
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: 0.3 }}
-                className="rounded-xl bg-white/5 backdrop-blur-sm border border-white/10 p-4"
+                className="rounded-xl bg-brand-50 border border-brand-200 p-4"
               >
-                <Sparkles className="w-8 h-8 text-bronze-gold mb-3" />
-                <h4 className="text-lg font-didot text-white mb-1">Timeless Style</h4>
-                <p className="text-white/60 text-sm font-montserrat">Created for all occasions</p>
+                <Sparkles className="w-8 h-8 text-classic-green mb-3" />
+                <h4 className="text-lg font-didot text-brand-800 mb-1">Timeless Style</h4>
+                <p className="text-brand-600 text-sm font-montserrat">Created for all occasions</p>
               </motion.div>
             </div>
           </motion.div>

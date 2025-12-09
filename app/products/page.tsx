@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/lib/data';
@@ -9,23 +9,32 @@ import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
+import Image from 'next/image';
 
 const PRODUCTS_PER_PAGE = 12;
+
+// Hero images - Desktop versions
+const HERO_IMAGES_DESKTOP = [
+  // '/images/home-hero/Great Places to Work Creatives Sept 2025-10 Solitario Website.jpg',
+  '/images/home-hero/Dagaduseth Web Banner 4-03.jpg',
+  '/images/home-hero/Web_Banner_YouTube-01.jpg',
+  '/images/home-hero/Dagaduseth Web Banner-02.jpg',
+  '/images/home-hero/WedforDesktop_Bling better-1920X1070.png',
+];
+
+// Hero images - Mobile versions
+const HERO_IMAGES_MOBILE = [
+  '/images/home-hero/Great Places to Work Creatives Sept 2025-11 Solitario Mobile Website.jpg',
+  '/images/home-hero/Web_Banner_Mobile-01.jpg',
+  '/images/home-hero/WedforMobile_Bling better-480x530.png',
+];
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get('category');
-  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  
-  // Video sources for the hero carousel
-  const heroVideos = [
-    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds.mp4',
-    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
-    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
-    '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (6).mp4',
-  ];
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const imageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
@@ -62,25 +71,33 @@ function ProductsPageContent() {
     }
   }, [categoryParam]);
 
-  // Handle video ended event to cycle to next video
-  const handleVideoEnded = () => {
-    setIsTransitioning(true);
-    setTimeout(() => {
-      setCurrentVideoIndex((prev) => (prev + 1) % heroVideos.length);
-      setIsTransitioning(false);
-    }, 300);
-  };
-
-  // Play current video when index changes
+  // Detect mobile viewport
   useEffect(() => {
-    const currentVideo = videoRefs.current[currentVideoIndex];
-    if (currentVideo) {
-      currentVideo.currentTime = 0;
-      currentVideo.play().catch(() => {
-        // Autoplay was prevented, handle silently
-      });
-    }
-  }, [currentVideoIndex]);
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Get current hero images based on viewport
+  const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
+
+  // Start cycling images
+  useEffect(() => {
+    const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
+    imageIntervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 6000);
+
+    return () => {
+      if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
+    };
+  }, [isMobile]);
+
+  // Reset index when viewport changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [isMobile]);
 
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
@@ -177,84 +194,54 @@ function ProductsPageContent() {
 
   return (
     <div>
-      {/* Immersive Hero Section with Cycling Video Background */}
-      <section className="relative min-h-[100vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
-        {/* Video Background with Crossfade */}
+      {/* Hero Section with Image Carousel */}
+      <section className="relative min-h-[80vh] md:min-h-[91vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
+        {/* Image Background with Crossfade */}
         <div className="absolute inset-0">
-          {heroVideos.map((video, index) => (
-            <video
-              key={video}
-              ref={(el) => { videoRefs.current[index] = el; }}
-              muted
-              playsInline
-              onEnded={handleVideoEnded}
-              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ${
-                index === currentVideoIndex ? 'opacity-100 z-10' : 'opacity-0 z-0'
-              } ${isTransitioning ? 'opacity-0' : ''}`}
-            >
-              <source src={video} type="video/mp4" />
-            </video>
-          ))}
+          <AnimatePresence mode="wait">
+            {heroImages.map((imageSrc, index) => (
+              index === currentImageIndex % heroImages.length && (
+                <motion.div
+                  key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 1.2, ease: 'easeInOut' }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={imageSrc}
+                    alt={`Products hero ${index + 1}`}
+                    fill
+                    className="object-cover object-center"
+                    priority={index === 0}
+                    quality={index === 0 ? 85 : 75}
+                    sizes="100vw"
+                  />
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
         </div>
         
-        {/* Cinematic Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 z-20" />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/20 via-transparent to-black/20 z-20" />
+        Gradient Overlays
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 z-10" />
         
-        {/* Subtle Vignette Effect */}
-        <div className="absolute inset-0 z-20" style={{ 
-          boxShadow: 'inset 0 0 150px 50px rgba(0,0,0,0.3)' 
-        }} />
-        
-        {/* Video Progress Indicators */}
-        <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-3">
-          {heroVideos.map((_, index) => (
+        {/* Image Indicators */}
+        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {heroImages.map((_, index) => (
             <button
               key={index}
-              onClick={() => {
-                setIsTransitioning(true);
-                setTimeout(() => {
-                  setCurrentVideoIndex(index);
-                  setIsTransitioning(false);
-                }, 300);
-              }}
-              className={`group relative h-1 rounded-full overflow-hidden transition-all duration-500 ${
-                index === currentVideoIndex ? 'w-12 bg-white/30' : 'w-6 bg-white/20 hover:bg-white/30'
+              onClick={() => setCurrentImageIndex(index)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                index === currentImageIndex % heroImages.length
+                  ? 'w-8 bg-classic-green'
+                  : 'w-2 bg-classic-green/30 hover:bg-classic-green/50'
               }`}
-            >
-              {index === currentVideoIndex && (
-                <motion.div
-                  className="absolute inset-y-0 left-0 bg-bronze-gold rounded-full"
-                  initial={{ width: '0%' }}
-                  animate={{ width: '100%' }}
-                  transition={{ duration: 8, ease: 'linear' }}
-                  key={currentVideoIndex}
-                />
-              )}
-            </button>
+              aria-label={`Go to slide ${index + 1}`}
+            />
           ))}
         </div>
-        
-        {/* Scroll Indicator */}
-        <motion.div 
-          className="absolute bottom-24 inset-x-0 z-30 flex flex-col items-center gap-2"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.8 }}
-        >
-          <span className="text-white/60 text-xs font-gotham uppercase tracking-[0.3em]">Scroll to Explore</span>
-          <motion.div
-            className="w-5 h-8 border-2 border-white/40 rounded-full flex justify-center pt-1.5"
-            animate={{ y: [0, 5, 0] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-          >
-            <motion.div 
-              className="w-1 h-2 bg-bronze-gold rounded-full"
-              animate={{ opacity: [1, 0.3, 1], y: [0, 4, 0] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            />
-          </motion.div>
-        </motion.div>
       </section>
 
       {/* Filters & Products Section - Merged */}

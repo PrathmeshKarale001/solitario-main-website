@@ -5,7 +5,9 @@ import { Product } from './data';
 export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   const firstVariant = product.variants.edges[0]?.node;
   const price = firstVariant ? parseFloat(firstVariant.price.amount) : 0;
-  const currency = firstVariant ? firstVariant.price.currencyCode : '₹';
+  // Convert currency code to symbol (INR -> ₹)
+  const currencyCode = firstVariant?.price.currencyCode || 'INR';
+  const currency = currencyCode === 'INR' ? '₹' : currencyCode;
   const image = product.images.edges[0]?.node.url || '/images/placeholder.svg';
   
   // Get ALL images from Shopify

@@ -9,14 +9,16 @@ const FOUNDERS = [
     id: 'ricky',
     name: 'Ricky Vasandani',
     title: 'Chief Executive Officer',
-    image: '/about/ricky2.jpg',
-    bio: 'Born in Africa, Ricky is a visionary entrepreneur who has lived across four continents of the world. Hailing from a family that has successfully scaled a legacy diamond jewellery business over decades, Ricky brings his acumen in the diamond jewellery business to the fore with Solitario Diamonds. His business ventures in the Sports and F&B domains are a major success story in Spain. Ricky drives the day-to-day business at Solitario Diamonds with unmatched expertise in Marketing & Operations.',
+    image: '/about/IMG_0061.JPG',
+    signature: '/images/Signatures/ricky-vasandani-png.png',
+    bio: 'Born in Africa, Ricky is a visionary entrepreneur who has lived across four continents of the world. Hailing from a family that has successfully scaled a legacy diamond jewellery business over decades, Ricky brings his acumen in the diamond jewellery business to the fore with Solitario Diamonds. His business ventures in the Sports and F&B domains are a major success story in Spain. Ricky drives the day-to-day business at Solitario Diamonds with unmatched expertise in Marketing & Operations. ',
   },
   {
     id: 'vivek',
     name: 'Dr. Vivek Anand Oberoi',
     title: 'Co-Founder',
     image: '/about/vivek-oberoi.jpg',
+    signature: '/images/Signatures/vivek-oberoi-signature.png',
     bio: 'Dr. Vivek Anand Oberoi is a distinguished figure known for his multifaceted career spanning Indian cinema, entrepreneurship, and philanthropy. With a prolific acting portfolio of 47 films across seven languages, including an Emmy nomination for "Inside Edge," Vivek has exceptional entrepreneurial acumen steering successful ventures across real estate, social impact, and luxury sectors. Recognized as one of the Top 40 Philanthropists globally, he actively sits on boards across India and globally, shaping strategies that enhance profitability while aligning with ethical business conduct and social impact.',
   },
 ];
@@ -34,7 +36,7 @@ const CORE_TEAM = [
     id: 'kamini',
     name: 'Kamini Singh',
     title: 'Chief Business Officer',
-    image: '/about/kamini-singh.jpg',
+    image: '/about/IMG_0373.JPG',
     email: 'kamini@thesolitario.com',
     bio: 'Expert in retail leasing and business development. Drives strategic partnerships for luxury retail expansion.',
   },
@@ -102,9 +104,21 @@ export default function Founders() {
                   <p className="text-bronze-gold font-gotham uppercase tracking-wider text-sm mb-4">
                     {founder.title}
                   </p>
-                  <p className="text-white/70 text-sm leading-relaxed font-montserrat">
+                  <p className="text-white/70 text-sm leading-relaxed font-montserrat mb-4">
                     {founder.bio}
                   </p>
+                  {/* Signature */}
+                  {founder.signature && (
+                    <div className="mt-auto pt-4">
+                      <Image
+                        src={founder.signature}
+                        alt={`${founder.name} Signature`}
+                        width={150}
+                        height={60}
+                        className="brightness-0 invert opacity-70"
+                      />
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>

@@ -16,7 +16,6 @@ const NAV_LINKS = [
   { href: '/products', label: 'Shop' },
   { href: '/lab-grown-diamonds', label: 'Lab Diamonds' },
   { href: '/about', label: 'About' },
-  { href: '/stores', label: 'Stores' },
 ];
 
 // Mobile menu categories for better organization
@@ -42,7 +41,6 @@ const MOBILE_MENU_SECTIONS = [
   {
     title: 'Connect',
     links: [
-      { href: '/stores', label: 'Find a Store', icon: MapPin },
       { href: '/contact', label: 'Contact Us', icon: Phone },
       { href: '/franchise', label: 'Franchise' },
     ],
@@ -94,12 +92,12 @@ export default function Header() {
     return null;
   }
 
-  // Fully transparent on hero pages until scroll; 60% dark glass after scroll; solid dark elsewhere
+  // Fully transparent on hero pages until scroll; solid black after scroll; solid dark elsewhere
   const headerClasses = isTransparentHeroPage
     ? isScrolled
-      ? 'bg-black/60 backdrop-blur-md shadow-luxury'
+      ? 'bg-[#146552] shadow-luxury'
       : 'bg-transparent'
-    : 'bg-black/90 backdrop-blur-xl shadow-luxury';
+    : 'bg-[#146552] shadow-luxury';
 
   return (
     <>

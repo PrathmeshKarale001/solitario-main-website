@@ -41,11 +41,74 @@ const BLOG_POSTS = [
   },
   {
     id: 'lab-vs-mined',
-    title: 'Lab Grown Diamonds vs Mined Diamonds',
+    title: 'Lab Grown Diamonds vs Mined Diamonds: The Complete Guide',
     excerpt: 'They say everything natural has an incomparable charm. While we don\'t deny that, it may not apply to diamonds. Here\'s why lab-grown diamonds are the future.',
     image: '/solitario/blog/lab-vs-mined.jpg',
     date: 'October 2024',
     readTime: '6 min read',
+    featured: false,
+  },
+  {
+    id: 'engagement-ring-guide',
+    title: 'How to Choose the Perfect Lab-Grown Diamond Engagement Ring',
+    excerpt: 'Your complete guide to selecting the ideal lab-grown diamond engagement ring. From the 4Cs to settings, we cover everything you need to know.',
+    image: '/solitario/blog/celebrities.jpg',
+    date: 'October 2024',
+    readTime: '7 min read',
+    featured: false,
+  },
+  {
+    id: 'sustainability-diamonds',
+    title: 'The Environmental Impact: Why Lab-Grown Diamonds Are Sustainable',
+    excerpt: 'Discover how lab-grown diamonds are revolutionizing the jewelry industry with their minimal environmental footprint and ethical production.',
+    image: '/solitario/blog/myths.jpg',
+    date: 'September 2024',
+    readTime: '5 min read',
+    featured: false,
+  },
+  {
+    id: 'diamond-certification',
+    title: 'Understanding Diamond Certification: IGI vs GIA for Lab-Grown',
+    excerpt: 'Learn about diamond certification standards and why IGI certification is the gold standard for lab-grown diamonds worldwide.',
+    image: '/solitario/blog/lab-vs-mined.jpg',
+    date: 'September 2024',
+    readTime: '4 min read',
+    featured: false,
+  },
+  {
+    id: 'investment-value',
+    title: 'Are Lab-Grown Diamonds a Good Investment in 2024?',
+    excerpt: 'Exploring the value proposition of lab-grown diamonds and why they offer exceptional quality at accessible prices.',
+    image: '/solitario/blog/celebrities.jpg',
+    date: 'August 2024',
+    readTime: '6 min read',
+    featured: false,
+  },
+  {
+    id: 'wedding-trends',
+    title: 'Lab-Grown Diamond Wedding Trends for Modern Couples',
+    excerpt: 'From solitaires to halo settings, discover the latest wedding jewelry trends featuring stunning lab-grown diamonds.',
+    image: '/solitario/blog/myths.jpg',
+    date: 'August 2024',
+    readTime: '5 min read',
+    featured: false,
+  },
+  {
+    id: 'care-maintenance',
+    title: 'How to Care for Your Lab-Grown Diamond Jewelry',
+    excerpt: 'Expert tips on cleaning, storing, and maintaining your lab-grown diamond pieces to keep them sparkling for generations.',
+    image: '/solitario/blog/lab-vs-mined.jpg',
+    date: 'July 2024',
+    readTime: '4 min read',
+    featured: false,
+  },
+  {
+    id: 'technology-creation',
+    title: 'The Science Behind Lab-Grown Diamonds: CVD vs HPHT',
+    excerpt: 'A deep dive into the cutting-edge technology used to create lab-grown diamonds that are identical to mined diamonds.',
+    image: '/solitario/blog/celebrities.jpg',
+    date: 'July 2024',
+    readTime: '8 min read',
     featured: false,
   },
 ];
@@ -69,7 +132,7 @@ export default function BlogPage() {
   const featuredPost = BLOG_POSTS.find(post => post.featured);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-black via-gray-900 to-black">
+    <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
       <section ref={sectionRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
         <motion.div
@@ -133,7 +196,7 @@ export default function BlogPage() {
 
       {/* Featured Post */}
       {featuredPost && (
-        <section className="py-16 px-4 bg-gradient-to-b from-black to-gray-900">
+        <section className="py-16 px-4 bg-white">
           <div className="max-w-7xl mx-auto">
             <motion.div
               initial={{ opacity: 0, y: 40 }}
@@ -156,8 +219,8 @@ export default function BlogPage() {
                     </span>
                   </div>
                 </div>
-                <div className="bg-white/5 backdrop-blur-xl border border-white/10 p-8 md:p-12 flex flex-col justify-center">
-                  <div className="flex items-center gap-4 text-white/60 text-sm font-montserrat mb-4">
+                <div className="bg-classic-green p-8 md:p-12 flex flex-col justify-center">
+                  <div className="flex items-center gap-4 text-white/70 text-sm font-montserrat mb-4">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-4 h-4" /> {featuredPost.date}
                     </span>
@@ -168,13 +231,13 @@ export default function BlogPage() {
                   <h2 className="text-2xl md:text-3xl font-didot text-white mb-4">
                     {featuredPost.title}
                   </h2>
-                  <p className="text-white/70 font-montserrat mb-6 leading-relaxed">
+                  <p className="text-white/80 font-montserrat mb-6 leading-relaxed">
                     {featuredPost.excerpt}
                   </p>
                   
                   {/* Celebrity Highlight */}
                   {featuredPost.content && (
-                    <div className="bg-bronze-gold/10 border border-bronze-gold/30 rounded-xl p-4 mb-6">
+                    <div className="bg-white/10 border border-white/20 rounded-xl p-4 mb-6">
                       <p className="text-bronze-gold text-sm font-montserrat font-medium">
                         <Sparkles className="w-4 h-4 inline mr-2" />
                         {featuredPost.content.highlight}
@@ -197,7 +260,7 @@ export default function BlogPage() {
       )}
 
       {/* Celebrity Spotlights */}
-      <section className="py-16 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-16 px-4 bg-brand-100">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -206,11 +269,11 @@ export default function BlogPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <span className="inline-block text-bronze-gold text-xs uppercase tracking-[0.3em] font-gotham mb-4">
+            <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               Celebrity Spotlight
             </span>
-            <h2 className="text-3xl md:text-4xl font-didot text-white">
-              Stars Who <span className="text-bronze-gold">Shine</span> With Us
+            <h2 className="text-3xl md:text-4xl font-didot text-brand-800">
+              Stars Who <span className="text-classic-green">Shine</span> With Us
             </h2>
           </motion.div>
 
@@ -224,11 +287,11 @@ export default function BlogPage() {
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 className="text-center group"
               >
-                <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-gradient-to-br from-bronze-gold/30 to-bronze-gold/10 border-2 border-bronze-gold/30 flex items-center justify-center group-hover:border-bronze-gold/60 transition-colors">
-                  <Users className="w-8 h-8 text-bronze-gold/60" />
+                <div className="w-20 h-20 mx-auto mb-3 rounded-full bg-classic-green/10 border-2 border-classic-green/30 flex items-center justify-center group-hover:border-classic-green/60 transition-colors">
+                  <Users className="w-8 h-8 text-classic-green/60" />
                 </div>
-                <h4 className="text-white text-sm font-didot mb-1">{celeb.name}</h4>
-                <p className="text-white/50 text-xs font-montserrat leading-tight">{celeb.note}</p>
+                <h4 className="text-brand-800 text-sm font-didot mb-1">{celeb.name}</h4>
+                <p className="text-brand-500 text-xs font-montserrat leading-tight">{celeb.note}</p>
               </motion.div>
             ))}
           </div>
@@ -236,7 +299,7 @@ export default function BlogPage() {
       </section>
 
       {/* All Blog Posts */}
-      <section className="py-16 px-4 bg-gradient-to-b from-black to-gray-900">
+      <section className="py-16 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -245,8 +308,8 @@ export default function BlogPage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-didot text-white">
-              Latest <span className="text-bronze-gold">Articles</span>
+            <h2 className="text-3xl md:text-4xl font-didot text-brand-800">
+              Latest <span className="text-classic-green">Articles</span>
             </h2>
           </motion.div>
 
@@ -258,7 +321,7 @@ export default function BlogPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
-                className="group rounded-2xl overflow-hidden bg-white/5 backdrop-blur-sm border border-white/10 hover:border-bronze-gold/30 transition-all duration-500"
+                className="group rounded-2xl overflow-hidden bg-brand-50 border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg transition-all duration-500"
               >
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <Image
@@ -267,22 +330,21 @@ export default function BlogPage() {
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-700"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                 </div>
                 <div className="p-6">
-                  <div className="flex items-center gap-4 text-white/50 text-xs font-montserrat mb-3">
+                  <div className="flex items-center gap-4 text-brand-500 text-xs font-montserrat mb-3">
                     <span>{post.date}</span>
                     <span>{post.readTime}</span>
                   </div>
-                  <h3 className="text-xl font-didot text-white mb-3 group-hover:text-bronze-gold transition-colors">
+                  <h3 className="text-xl font-didot text-brand-800 mb-3 group-hover:text-classic-green transition-colors">
                     {post.title}
                   </h3>
-                  <p className="text-white/60 text-sm font-montserrat mb-4 line-clamp-2">
+                  <p className="text-brand-600 text-sm font-montserrat mb-4 line-clamp-2">
                     {post.excerpt}
                   </p>
                   <Link
                     href={`/blog/${post.id}`}
-                    className="inline-flex items-center gap-2 text-bronze-gold text-sm font-gotham uppercase tracking-wider group-hover:gap-3 transition-all"
+                    className="inline-flex items-center gap-2 text-classic-green text-sm font-gotham uppercase tracking-wider group-hover:gap-3 transition-all"
                   >
                     Read More <ArrowRight className="w-4 h-4" />
                   </Link>
@@ -294,7 +356,7 @@ export default function BlogPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-gradient-to-b from-gray-900 to-black">
+      <section className="py-24 px-4 bg-classic-green">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -305,12 +367,12 @@ export default function BlogPage() {
             <h2 className="text-3xl md:text-4xl font-didot text-white mb-6">
               Stay <span className="text-bronze-gold">Updated</span>
             </h2>
-            <p className="text-white/70 font-montserrat mb-8">
+            <p className="text-white/80 font-montserrat mb-8">
               Subscribe to receive our latest stories, exclusive offers, and diamond insights.
             </p>
             <Link
               href="/contact"
-              className="inline-flex items-center gap-2 px-6 py-3 text-white font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-bronze-gold/20 border border-bronze-gold/40 hover:border-bronze-gold/60 transition-all duration-500 hover:scale-105"
+              className="inline-flex items-center gap-2 px-6 py-3 text-classic-green font-gotham uppercase tracking-[0.25em] text-sm rounded-lg bg-white hover:bg-ivory-pearl transition-all duration-500 hover:scale-105"
             >
               Subscribe Now <ArrowRight className="w-4 h-4" />
             </Link>
