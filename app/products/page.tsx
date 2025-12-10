@@ -224,9 +224,8 @@ function ProductsPageContent() {
           </AnimatePresence>
         </div>
         
-        Gradient Overlays
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-black/20 z-10" />
-        
+        {/* Gradient Overlays */}
+        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-[1]" style={{ height: '20%', bottom: 0, top: 'auto' }} />
         {/* Image Indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {heroImages.map((_, index) => (

@@ -8,9 +8,11 @@ import { useShopifyCart } from '@/lib/shopify-cart-context';
 import { shopifyLineToCartItem } from '@/lib/shopify-cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
+import { useIsShopSubdomain } from '@/lib/use-shop-subdomain';
 
 export default function CartPage() {
   const { cart, isLoading, updateQuantity, removeFromCart, total, checkoutUrl } = useShopifyCart();
+  const isShopSubdomain = useIsShopSubdomain();
 
   if (!cart || cart.lines.edges.length === 0) {
     return (
@@ -188,7 +190,14 @@ export default function CartPage() {
                 <p className="text-body-sm text-brand-500 font-montserrat mb-6">(Prices include VAT)</p>
 
                 {/* Checkout Button */}
-                {checkoutUrl ? (
+                {isShopSubdomain ? (
+                  <Link
+                    href="/shop-checkout"
+                    className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
+                  >
+                    Proceed to Checkout
+                  </Link>
+                ) : checkoutUrl ? (
                   <Link
                     href={checkoutUrl}
                     className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
