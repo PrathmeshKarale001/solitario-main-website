@@ -36,6 +36,8 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+  const [isRedirectingToShop, setIsRedirectingToShop] = useState(false);
+  const [isShopHost, setIsShopHost] = useState(false);
   
   const [customer, setCustomer] = useState<CustomerForm>({
     firstName: '',
@@ -50,6 +52,18 @@ export default function CheckoutPage() {
   });
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
+
+  // If on shop.thesolitario.com, use the temporary shop checkout flow
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    const host = window.location.hostname.toLowerCase();
+    const isShopSubdomain = host.startsWith('shop.') || host.includes('shop.thesolitario.com');
+    if (isShopSubdomain) {
+      setIsRedirectingToShop(true);
+      setIsShopHost(true);
+      router.replace('/shop-checkout');
+    }
+  }, [router]);
 
   // Shipping cost calculation
   const shipping = total >= 50000 ? 0 : 500; // Free shipping above ₹50,000
@@ -86,16 +100,15 @@ export default function CheckoutPage() {
 
   // Initialize Razorpay payment
   const initiatePayment = async () => {
+    if (isRedirectingToShop) return; // redirect handled by useEffect
     if (!validateForm()) {
       setError('Please fill all required fields correctly');
       return;
     }
-
     if (!razorpayLoaded) {
       setError('Payment gateway is loading. Please wait...');
       return;
     }
-
     setIsProcessing(true);
     setError(null);
 
