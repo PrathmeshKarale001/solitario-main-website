@@ -169,10 +169,27 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }, []);
   
   const shareText = `Check out ${product.name} from Solitario!`;
-  const descriptionBullets = product.description
-    .split('.')
-    .map((item) => item.trim())
-    .filter((item) => item.length > 0);
+  
+  // Parse Shopify HTML description format
+  const parseDescription = (html: string) => {
+    if (!html) return { mainText: '', specifications: [] };
+    
+    // Extract main paragraph text (before Specifications)
+    const mainTextMatch = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+    const mainText = mainTextMatch 
+      ? mainTextMatch[1].replace(/<[^>]*>/g, '').trim() 
+      : html.replace(/<[^>]*>/g, '').split('Specifications')[0].trim();
+    
+    // Extract specifications from <li> tags - more robust regex
+    const specMatches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || [];
+    const specifications = specMatches.map(li => 
+      li.replace(/<\/?[^>]+(>|$)/g, '').trim()
+    ).filter(spec => spec.length > 0);
+    
+    return { mainText, specifications };
+  };
+  
+  const { mainText: descriptionText, specifications } = parseDescription(product.description || '');
 
   // Random jewelry background images from Unsplash
   const jewelryBackgrounds = [
@@ -397,13 +414,26 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 </div>
 
-                {/* Description Preview - Bullet Points Only */}
-                {descriptionBullets.length > 0 && (
-                  <ul className="list-disc list-inside space-y-2 text-brand-700 font-montserrat text-sm md:text-base">
-                    {descriptionBullets.map((point, idx) => (
-                      <li key={idx}>{point}</li>
-                    ))}
-                  </ul>
+                {/* Description Text */}
+                {descriptionText && (
+                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base">
+                    {descriptionText}
+                  </p>
+                )}
+                
+                {/* Specifications */}
+                {specifications.length > 0 && (
+                  <div className="mt-4">
+                    <h4 className="font-gotham text-sm uppercase tracking-wider text-brand-800 mb-2">Specifications</h4>
+                    <ul className="space-y-1 text-brand-700 font-montserrat text-sm">
+                      {specifications.map((spec, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="text-bronze-gold mt-1">•</span>
+                          <span>{spec}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 )}
 
                 {/* Action Buttons */}
@@ -500,14 +530,20 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 >
                   <h3 className="font-playfair text-heading-lg text-brand-800 mb-4">Description</h3>
                   <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-4">
-                    {product.description}
+                    {descriptionText}
                   </p>
-                  {descriptionBullets.length > 0 && (
-                    <ul className="list-disc list-inside space-y-2 text-brand-700 font-montserrat text-sm md:text-base mb-4">
-                      {descriptionBullets.map((point, idx) => (
-                        <li key={idx}>{point}</li>
-                      ))}
-                    </ul>
+                  {specifications.length > 0 && (
+                    <div className="mb-6">
+                      <h4 className="font-gotham text-sm uppercase tracking-wider text-brand-800 mb-3">Specifications</h4>
+                      <ul className="space-y-2 text-brand-700 font-montserrat text-sm md:text-base">
+                        {specifications.map((spec, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-bronze-gold mt-1">•</span>
+                            <span>{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   )}
                   <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base">
                     Elevate your style with our exquisite {product.name} crafted from high-quality materials. 

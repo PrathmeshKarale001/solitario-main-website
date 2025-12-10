@@ -10,16 +10,16 @@ import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
 import Image from 'next/image';
-
 const PRODUCTS_PER_PAGE = 12;
 
 // Hero images - Desktop versions
 const HERO_IMAGES_DESKTOP = [
   // '/images/home-hero/Great Places to Work Creatives Sept 2025-10 Solitario Website.jpg',
-  '/images/home-hero/Dagaduseth Web Banner 4-03.jpg',
+  // '/images/home-hero/Dagaduseth Web Banner 4-03.jpg',
+    '/images/home-hero/WedforDesktop_Bling better-1920X1070.png',
   '/images/home-hero/Web_Banner_YouTube-01.jpg',
-  '/images/home-hero/Dagaduseth Web Banner-02.jpg',
-  '/images/home-hero/WedforDesktop_Bling better-1920X1070.png',
+  // '/images/home-hero/Dagaduseth Web Banner-02.jpg',
+
 ];
 
 // Hero images - Mobile versions

@@ -46,9 +46,8 @@ export default function ShopCheckoutPage() {
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
 
-  // Shipping cost calculation
-  const shipping = total >= 50000 ? 0 : 500; // Free shipping above ₹50,000
-  const grandTotal = total + shipping;
+  // No additional charges - free shipping
+  const grandTotal = total;
 
   // Wait for cart to load from localStorage before checking if empty
   useEffect(() => {
@@ -126,7 +125,7 @@ export default function ShopCheckoutPage() {
           image: item.product.images?.[0] || item.product.image || '',
         })),
         subtotal: total,
-        shipping,
+        shipping: 0,
         grandTotal,
         paymentMethod: customer.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Pending)',
         orderDate: new Date().toISOString(),
@@ -474,13 +473,7 @@ export default function ShopCheckoutPage() {
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-gray-600">Shipping</span>
-                  <span className="font-medium">
-                    {shipping === 0 ? (
-                      <span className="text-classic-green">FREE</span>
-                    ) : (
-                      formatPrice(shipping)
-                    )}
-                  </span>
+                  <span className="font-medium text-classic-green">FREE</span>
                 </div>
                 <div className="flex justify-between text-lg font-semibold border-t border-gray-100 pt-3">
                   <span>Total</span>

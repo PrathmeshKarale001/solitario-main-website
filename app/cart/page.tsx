@@ -11,9 +11,8 @@ import { Section, Container } from '@/components/ui';
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total } = useCart();
 
-  // Shipping cost calculation
-  const shipping = total >= 50000 ? 0 : 500;
-  const grandTotal = total + shipping;
+  // No additional charges
+  const grandTotal = total;
 
   if (items.length === 0) {
     return (
@@ -168,13 +167,7 @@ export default function CartPage() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-brand-600 font-montserrat">Shipping</span>
-                    <span className="font-gotham text-brand-800">
-                      {shipping === 0 ? (
-                        <span className="text-classic-green">FREE</span>
-                      ) : (
-                        formatPrice(shipping)
-                      )}
-                    </span>
+                    <span className="font-gotham text-classic-green">FREE</span>
                   </div>
                 </div>
 

@@ -13,7 +13,8 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   // Get ALL images from Shopify
   const images = product.images.edges.map(edge => edge.node.url);
   
-  const description = product.description || product.descriptionHtml.replace(/<[^>]*>/g, '') || '';
+  // Keep HTML for parsing specifications - use descriptionHtml if available
+  const description = product.descriptionHtml || product.description || '';
 
   // Use productType directly as category (already normalized from upload)
   const category = product.productType.toLowerCase().replace(/\s+/g, '-') || 'jewellery';
