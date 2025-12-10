@@ -175,11 +175,11 @@ export default function CartSidebar() {
                     View Cart
                   </Link>
                   <Link
-                    href={isShopSubdomain ? "/shop-checkout" : "/checkout"}
+                    href="/shop-checkout"
                     onClick={closeCart}
                     className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500"
                   >
-                    {isShopSubdomain ? "Proceed to Checkout" : "Checkout"}
+                    Proceed to Checkout
                   </Link>
                 </div>
 

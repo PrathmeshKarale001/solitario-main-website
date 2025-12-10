@@ -29,6 +29,7 @@ export default function ShopCheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   
   const [customer, setCustomer] = useState<CustomerForm>({
     firstName: '',
@@ -49,12 +50,21 @@ export default function ShopCheckoutPage() {
   const shipping = total >= 50000 ? 0 : 500; // Free shipping above ₹50,000
   const grandTotal = total + shipping;
 
-  // Redirect if cart is empty
+  // Wait for cart to load from localStorage before checking if empty
   useEffect(() => {
-    if (items.length === 0 && !success) {
+    // Give cart context time to load from localStorage
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Redirect if cart is empty (only after loading)
+  useEffect(() => {
+    if (!isLoading && items.length === 0 && !success) {
       router.push('/products');
     }
-  }, [items, router, success]);
+  }, [items, router, success, isLoading]);
 
   // Validate form
   const validateForm = (): boolean => {
@@ -148,7 +158,8 @@ export default function ShopCheckoutPage() {
     }
   };
 
-  if (items.length === 0 && !success) {
+  // Show loading while cart is being loaded from localStorage
+  if (isLoading || (items.length === 0 && !success)) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <Loader2 className="w-8 h-8 animate-spin text-classic-green" />

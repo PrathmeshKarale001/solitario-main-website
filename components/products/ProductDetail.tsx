@@ -45,7 +45,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleBuyNow = () => {
     addToCartContext(product, quantity);
-    window.location.href = '/checkout';
+    // Use shop-checkout for the temporary email-based flow
+    window.location.href = '/shop-checkout';
   };
 
   const toggleWishlist = () => {
@@ -168,6 +169,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }, []);
   
   const shareText = `Check out ${product.name} from Solitario!`;
+  const descriptionBullets = product.description
+    .split('.')
+    .map((item) => item.trim())
+    .filter((item) => item.length > 0);
 
   // Random jewelry background images from Unsplash
   const jewelryBackgrounds = [
@@ -331,13 +336,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               {/* Product Name */}
-              <h1 className="font-playfair text-display-sm md:text-display-md text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+              <h1 className="font-playfair text-2xl md:text-3xl text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
                 {product.name}
               </h1>
 
               {/* Price */}
               <div className="flex items-center gap-3">
-                <span className="font-gotham text-3xl font-semibold text-classic-green">
+                <span className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green">
                   {formatPrice(product.price, product.currency)}
                 </span>
               </div>
@@ -392,10 +397,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 </div>
 
-                {/* Description Preview */}
-                <p className="text-brand-700 leading-relaxed font-montserrat">
-                  {product.description}
-                </p>
+                {/* Description Preview - Bullet Points Only */}
+                {descriptionBullets.length > 0 && (
+                  <ul className="list-disc list-inside space-y-2 text-brand-700 font-montserrat text-sm md:text-base">
+                    {descriptionBullets.map((point, idx) => (
+                      <li key={idx}>{point}</li>
+                    ))}
+                  </ul>
+                )}
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-4">
@@ -489,11 +498,18 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="prose max-w-none"
                 >
-                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-4">Description</h3>
-                  <p className="text-brand-700 leading-relaxed font-montserrat mb-4">
+                  <h3 className="font-playfair text-heading-lg text-brand-800 mb-4">Description</h3>
+                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-4">
                     {product.description}
                   </p>
-                  <p className="text-brand-700 leading-relaxed font-montserrat">
+                  {descriptionBullets.length > 0 && (
+                    <ul className="list-disc list-inside space-y-2 text-brand-700 font-montserrat text-sm md:text-base mb-4">
+                      {descriptionBullets.map((point, idx) => (
+                        <li key={idx}>{point}</li>
+                      ))}
+                    </ul>
+                  )}
+                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base">
                     Elevate your style with our exquisite {product.name} crafted from high-quality materials. 
                     This piece effortlessly combines timeless elegance with modern sophistication, making it a versatile 
                     accessory for any occasion. Each piece is meticulously handcrafted to ensure exceptional quality and 
