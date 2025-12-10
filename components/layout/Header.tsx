@@ -53,12 +53,13 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const isProductDetailPage = pathname?.startsWith('/products/'); // Individual product pages
   const isTransparentHeroPage =
     isHomePage ||
     pathname === '/lab-grown-diamonds' ||
     pathname === '/about' ||
     pathname === '/stores' ||
-    pathname?.startsWith('/products');
+    (pathname === '/products'); // Only products listing, not product detail
   const isAdminPage = pathname?.startsWith('/admin');
   const { itemCount, toggleCart } = useCart();
   const { wishlistCount } = useWishlist();
