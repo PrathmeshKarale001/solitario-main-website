@@ -43,16 +43,20 @@ export default function LabGrownBenefitsV2() {
             viewport={{ once: true }}
             className="lg:w-1/2"
           >
-            <div className="relative aspect-square max-w-lg mx-auto">
-              <div className="absolute inset-0 bg-gradient-to-tr from-classic-green/20 to-transparent rounded-full blur-3xl" />
-              <Image
-                src="https://images.unsplash.com/photo-1617038220319-276d3cf66958?q=80&w=1000&auto=format&fit=crop"
-                alt="Lab Grown Diamond Close up"
-                fill
-                className="object-cover rounded-2xl shadow-2xl relative z-10"
-              />
-              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-classic-green rounded-full flex items-center justify-center z-20 shadow-xl">
-                <div className="text-center text-white">
+            <div className="relative aspect-square max-w-lg mx-auto flex items-center justify-center">
+              {/* Logo Frame with solid background */}
+              <div className="relative w-3/4 aspect-square bg-classic-green rounded-2xl shadow-2xl flex items-center justify-center p-8">
+                <Image
+                  src="/logo.svg"
+                  alt="Solitario Logo"
+                  width={300}
+                  height={100}
+                  className="w-full h-auto brightness-0 invert"
+                />
+              </div>
+              {/* Badge */}
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#FAF5EF] border border-bronze-gold/30 rounded-full flex items-center justify-center z-20 shadow-xl">
+                <div className="text-center text-brand-800">
                   <span className="block text-2xl font-bold font-playfair">100%</span>
                   <span className="text-[10px] uppercase font-gotham tracking-wider">Conflict Free</span>
                 </div>

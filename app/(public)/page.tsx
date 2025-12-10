@@ -63,7 +63,7 @@ export default function Home() {
       <Promise />
       
       {/* 6. QUICK NAVIGATION - Easy access to key pages */}
-      <section className="relative pt-6 sm:pt-8 md:pt-6 h-[35vh] sm:h-[40vh] md:h-[50vh] min-h-[280px] sm:min-h-[320px] md:min-h-[400px]">
+      <section className="relative bg-[#FAF5EF] pt-6 sm:pt-8 md:pt-6 h-[35vh] sm:h-[40vh] md:h-[50vh] min-h-[280px] sm:min-h-[320px] md:min-h-[400px]">
         <FlowingMenuClient items={menuItems} />
       </section>
       

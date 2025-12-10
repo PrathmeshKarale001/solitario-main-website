@@ -26,7 +26,7 @@ export default function Promise() {
   const allPromises = [...PROMISES, ...PROMISES];
 
   return (
-    <Section variant="light" padding="sm" className="bg-gradient-to-b from-[#FDF8F3] to-[#FAF5EF] relative overflow-hidden py-6 sm:py-10 md:py-14">
+    <Section variant="light" padding="sm" className="bg-[#FAF5EF] relative overflow-hidden py-6 sm:py-10 md:py-14">
       {/* Decorative Elements - Smaller on mobile */}
       <div className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-bronze-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-classic-green/5 rounded-full blur-3xl" />
