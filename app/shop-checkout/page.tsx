@@ -20,7 +20,7 @@ interface CustomerForm {
   city: string;
   state: string;
   pincode: string;
-  paymentMethod: 'cod' | 'online';
+  paymentMethod: 'online';
 }
 
 export default function ShopCheckoutPage() {
@@ -41,7 +41,7 @@ export default function ShopCheckoutPage() {
     city: '',
     state: '',
     pincode: '',
-    paymentMethod: 'cod',
+    paymentMethod: 'online',
   });
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
@@ -127,7 +127,7 @@ export default function ShopCheckoutPage() {
         subtotal: total,
         shipping: 0,
         grandTotal,
-        paymentMethod: customer.paymentMethod === 'cod' ? 'Cash on Delivery' : 'Online Payment (Pending)',
+        paymentMethod: 'Online Payment (Pending)',
         orderDate: new Date().toISOString(),
       };
 
@@ -378,54 +378,16 @@ export default function ShopCheckoutPage() {
               </div>
             </div>
 
-            {/* Payment Method */}
+            {/* Payment Method - Online Only */}
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Payment Method</h2>
               
-              <div className="space-y-3">
-                <label
-                  className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all ${
-                    customer.paymentMethod === 'cod'
-                      ? 'border-classic-green bg-classic-green/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="cod"
-                    checked={customer.paymentMethod === 'cod'}
-                    onChange={() => handleInputChange('paymentMethod', 'cod')}
-                    className="w-4 h-4 text-classic-green focus:ring-classic-green"
-                  />
-                  <Banknote className="w-5 h-5 text-classic-green" />
-                  <div>
-                    <p className="font-medium text-gray-900">Cash on Delivery</p>
-                    <p className="text-sm text-gray-500">Pay when you receive your order</p>
-                  </div>
-                </label>
-
-                <label
-                  className={`flex items-center gap-4 p-4 border rounded-lg cursor-pointer transition-all ${
-                    customer.paymentMethod === 'online'
-                      ? 'border-classic-green bg-classic-green/5'
-                      : 'border-gray-200 hover:border-gray-300'
-                  }`}
-                >
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    value="online"
-                    checked={customer.paymentMethod === 'online'}
-                    onChange={() => handleInputChange('paymentMethod', 'online')}
-                    className="w-4 h-4 text-classic-green focus:ring-classic-green"
-                  />
-                  <CreditCard className="w-5 h-5 text-classic-green" />
-                  <div>
-                    <p className="font-medium text-gray-900">Online Payment</p>
-                    <p className="text-sm text-gray-500">Our team will contact you with payment details</p>
-                  </div>
-                </label>
+              <div className="flex items-center gap-4 p-4 border border-classic-green bg-classic-green/5 rounded-lg">
+                <CreditCard className="w-5 h-5 text-classic-green" />
+                <div>
+                  <p className="font-medium text-gray-900">Online Payment</p>
+                  <p className="text-sm text-gray-500">Our team will contact you with payment details</p>
+                </div>
               </div>
             </div>
           </div>
