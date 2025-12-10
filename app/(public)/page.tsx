@@ -12,7 +12,7 @@ import { Promise } from '@/components/about';
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
   loading: () => <div className="h-[40vh] bg-[#FAF5EF]" />,
 });
-const LabGrownBenefits = dynamic(() => import('@/components/home/LabGrownBenefits'));
+const LabGrownBenefits = dynamic(() => import('@/components/home-v2/LabGrownBenefits'));
 // const PromoBanner2 = dynamic(() => import('@/components/home/PromoBanners').then(mod => ({ default: mod.PromoBanner2 }))); // Disabled
 const Stores = dynamic(() => import('@/components/home/Stores'));
 const FAQ = dynamic(() => import('@/components/home/FAQ'));
