@@ -240,7 +240,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </nav>
 
             {/* Product Title */}
-            <h1 className="font-playfair text-5xl md:text-6xl lg:text-7xl text-white leading-tight mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="font-playfair text-3xl md:text-4xl lg:text-5xl text-white leading-tight mb-4" style={{ letterSpacing: '-0.02em' }}>
               {product.name.toUpperCase()}
             </h1>
           </motion.div>
