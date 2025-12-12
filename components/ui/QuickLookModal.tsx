@@ -109,9 +109,9 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                     {product.name}
                   </h2>
 
-                  {/* Description */}
+                  {/* Description - Strip HTML tags */}
                   <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
-                    {product.description}
+                    {product.description?.replace(/<[^>]*>/g, '').split('Specifications')[0].trim() || product.description}
                   </p>
 
                   {/* Price */}

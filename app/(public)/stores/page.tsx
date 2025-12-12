@@ -15,7 +15,7 @@ const GLOBAL_STORES = [
     country: 'Europe',
     image: '/solitario/stores/spain.jpg',
     description: 'Experience luxury lab-grown diamonds in the heart of Spain. Our European flagship brings Solitario\'s brilliance to the Mediterranean.',
-    link: '/stores/spain',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Spain'),
     featured: true,
   },
   {
@@ -25,7 +25,7 @@ const GLOBAL_STORES = [
     country: 'Asia Pacific',
     image: '/solitario/stores/malaysia.jpg',
     description: 'Discover sustainable luxury in Southeast Asia. Our Malaysian store showcases the finest lab-grown diamond collections.',
-    link: '/stores/malaysia',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Malaysia'),
     featured: true,
   },
   {
@@ -35,7 +35,7 @@ const GLOBAL_STORES = [
     country: 'Middle East',
     image: '/solitario/stores/dubai.jpg',
     description: 'Luxury meets innovation in the jewel of the Middle East. Experience Solitario\'s exclusive collections in Dubai.',
-    link: '/stores/dubai',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Dubai Dubai, UAE'),
     featured: true,
   },
 ];
@@ -327,6 +327,13 @@ export default function StoresPage() {
                 transition={{ duration: 0.6, delay: idx * 0.1 }}
                 className="group relative rounded-3xl overflow-hidden"
               >
+                <a
+                  href={store.mapLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="absolute inset-0 z-10"
+                  aria-label={`Show ${store.name} on map`}
+                />
                 {/* Image */}
                 <div className="relative aspect-[4/5] overflow-hidden">
                   <Image
@@ -355,12 +362,14 @@ export default function StoresPage() {
                   <p className="text-white/60 text-sm font-montserrat mb-4 line-clamp-2">
                     {store.description}
                   </p>
-                  <Link
-                    href={store.link}
-                    className="inline-flex items-center gap-2 text-bronze-gold text-sm font-gotham uppercase tracking-wider group-hover:gap-3 transition-all"
+                  <a
+                    href={store.mapLink}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="relative z-20 inline-flex items-center gap-2 text-bronze-gold text-sm font-gotham uppercase tracking-wider group-hover:gap-3 transition-all"
                   >
-                    Explore Store <ArrowRight className="w-4 h-4" />
-                  </Link>
+                    Show on Map <ExternalLink className="w-4 h-4" />
+                  </a>
                 </div>
               </motion.div>
             ))}

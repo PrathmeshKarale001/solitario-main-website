@@ -342,6 +342,27 @@
   animation-play-state: paused;
 }
 
+/* Features horizontal scroll animation */
+@keyframes scroll-features {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scroll-features {
+  animation: scroll-features 20s linear infinite;
+  display: flex;
+  will-change: transform;
+  width: max-content;
+}
+
+.animate-scroll-features:hover {
+  animation-play-state: paused;
+}
+
 /* Brand Motif Pattern */
 .brand-pattern {
   background-image: url('/patterns/brand-motif.svg');

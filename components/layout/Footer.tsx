@@ -114,6 +114,11 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/lab-grown-diamonds" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Lab Diamonds
+                </Link>
+              </li>
+              <li>
                 <Link href="/about" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   About
                 </Link>

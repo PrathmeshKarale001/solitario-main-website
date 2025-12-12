@@ -224,7 +224,10 @@ function ProductsPageContent() {
           </AnimatePresence>
         </div>
         
-        {/* Gradient Overlays */}
+        {/* Top Gradient for Navbar visibility */}
+        <div className="absolute top-0 left-0 right-0 h-32 bg-gradient-to-b from-black/60 via-black/30 to-transparent z-[1]" />
+        
+        {/* Bottom Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-[1]" style={{ height: '20%', bottom: 0, top: 'auto' }} />
         {/* Image Indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">

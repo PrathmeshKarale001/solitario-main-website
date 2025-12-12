@@ -12,6 +12,7 @@ const FEATURED_STORES = [
     location: 'Spain',
     country: 'Europe',
     image: '/solitario/stores/spain.jpg',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Spain'),
   },
   {
     id: 'malaysia',
@@ -19,6 +20,7 @@ const FEATURED_STORES = [
     location: 'Malaysia',
     country: 'Asia Pacific',
     image: '/solitario/stores/malaysia.jpg',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Malaysia'),
   },
   {
     id: 'dubai',
@@ -26,6 +28,7 @@ const FEATURED_STORES = [
     location: 'Dubai, UAE',
     country: 'Middle East',
     image: '/solitario/stores/dubai.jpg',
+    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Dubai Dubai, UAE'),
   },
 ];
 
@@ -55,13 +58,16 @@ export default function Stores() {
         {/* Store Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {FEATURED_STORES.map((store, idx) => (
-            <motion.div
+            <motion.a
               key={store.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden"
+              href={store.mapLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden block"
             >
               {/* Image */}
               <div className="relative aspect-[4/5] overflow-hidden">
@@ -89,7 +95,7 @@ export default function Stores() {
                   {store.location}
                 </div>
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 

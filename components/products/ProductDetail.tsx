@@ -25,6 +25,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [lightboxPosition, setLightboxPosition] = useState({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const { addToCart: addToCartContext } = useCart();
@@ -409,22 +410,35 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 </div>
 
-                {/* Description Text */}
+                {/* Description Text with Read More */}
                 {descriptionText && (
-                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base">
-                    {descriptionText}
-                  </p>
+                  <div>
+                    <p className={`text-brand-700 leading-relaxed font-montserrat text-sm md:text-base ${!isDescriptionExpanded ? 'line-clamp-3' : ''}`}>
+                      {descriptionText}
+                    </p>
+                    {descriptionText.length > 150 && (
+                      <button
+                        onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                        className="text-bronze-gold text-sm font-montserrat mt-1 hover:underline"
+                      >
+                        {isDescriptionExpanded ? 'Show Less' : 'Read More'}
+                      </button>
+                    )}
+                  </div>
                 )}
                 
-                {/* Specifications */}
+                {/* Specifications - Highlighted */}
                 {specifications.length > 0 && (
-                  <div className="mt-4">
-                    <h4 className="font-gotham text-sm uppercase tracking-wider text-brand-800 mb-2">Specifications</h4>
-                    <ul className="space-y-1 text-brand-700 font-montserrat text-sm">
+                  <div className="mt-4 bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
+                    <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
+                      <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
+                      Specifications
+                    </h4>
+                    <ul className="space-y-2 text-brand-800 font-montserrat text-sm">
                       {specifications.map((spec, idx) => (
                         <li key={idx} className="flex items-start gap-2">
-                          <span className="text-bronze-gold mt-1">•</span>
-                          <span>{spec}</span>
+                          <span className="text-classic-green mt-0.5">✓</span>
+                          <span className="font-medium">{spec}</span>
                         </li>
                       ))}
                     </ul>
@@ -490,8 +504,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </Container>
       </Section>
 
-      {/* Product Details Tabs */}
-      <Section variant="light" padding="lg" className="bg-brand-50">
+      {/* Product Details Tabs - Reduced gap */}
+      <Section variant="light" padding="sm" className="bg-brand-50 pt-0">
         <Container>
           <div className="max-w-4xl mx-auto">
             {/* Tabs */}
@@ -527,25 +541,40 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-4">
                     {descriptionText}
                   </p>
-                  {specifications.length > 0 && (
-                    <div className="mb-6">
-                      <h4 className="font-gotham text-sm uppercase tracking-wider text-brand-800 mb-3">Specifications</h4>
-                      <ul className="space-y-2 text-brand-700 font-montserrat text-sm md:text-base">
-                        {specifications.map((spec, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <span className="text-bronze-gold mt-1">•</span>
-                            <span>{spec}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base">
+                  <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-6">
                     Elevate your style with our exquisite {product.name} crafted from high-quality materials. 
                     This piece effortlessly combines timeless elegance with modern sophistication, making it a versatile 
                     accessory for any occasion. Each piece is meticulously handcrafted to ensure exceptional quality and 
                     lasting beauty.
                   </p>
+                  
+                  {/* Specifications - Highlighted in Description Tab */}
+                  {specifications.length > 0 && (
+                    <div className="mb-6 bg-brand-50 border border-bronze-gold/20 rounded-xl p-5">
+                      <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-4 flex items-center gap-2">
+                        <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
+                        Specifications
+                      </h4>
+                      <ul className="space-y-2 text-brand-800 font-montserrat text-sm md:text-base">
+                        {specifications.map((spec, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <span className="text-classic-green mt-0.5">✓</span>
+                            <span className="font-medium">{spec}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  
+                  {/* Buy Now CTA in Description */}
+                  <div className="mt-6 pt-6 border-t border-brand-200">
+                    <button
+                      onClick={handleBuyNow}
+                      className="w-full sm:w-auto flex items-center justify-center gap-3 bg-classic-green hover:bg-classic-green/90 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500"
+                    >
+                      Buy Now
+                    </button>
+                  </div>
                 </motion.div>
               )}
 
@@ -645,35 +674,49 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </Section>
       )}
 
-      {/* Features Section */}
-      <Section variant="light" padding="lg" className="bg-brand-50">
-        <Container>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                icon: Package,
-                title: 'Quality Products',
-                description: 'Presented in an elegant jewelry box, perfect for gifting.',
-              },
-              {
-                icon: RotateCcw,
-                title: 'Safe Return Process',
-                description: 'Smooth, secure and hassle-free return process.',
-              },
-              {
-                icon: Truck,
-                title: 'Fast Delivery',
-                description: 'Receive your order faster than ever before!',
-              },
-            ].map((feature, index) => (
-              <div key={index} className="text-center">
-                <div className="w-16 h-16 bg-bronze-gold/10 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <feature.icon className="w-8 h-8 text-bronze-gold" />
-                </div>
-                <h3 className="font-playfair text-heading-md text-brand-800 mb-2">{feature.title}</h3>
-                <p className="text-brand-600 font-montserrat">{feature.description}</p>
-              </div>
-            ))}
+      {/* Features Section - Horizontal Scroll Loop */}
+      <Section variant="light" padding="sm" className="bg-brand-50 py-6 sm:py-8 overflow-hidden">
+        <Container className="relative">
+          <div 
+            className="overflow-hidden"
+            style={{
+              maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+              WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
+            }}
+          >
+            <div className="flex gap-6 animate-scroll-features">
+              {/* Duplicate items for seamless loop */}
+              {[...Array(2)].map((_, setIndex) => (
+                [
+                  {
+                    icon: Package,
+                    title: 'Quality Products',
+                    description: 'Presented in an elegant jewelry box, perfect for gifting.',
+                  },
+                  {
+                    icon: RotateCcw,
+                    title: 'Safe Return Process',
+                    description: 'Smooth, secure and hassle-free return process.',
+                  },
+                  {
+                    icon: Truck,
+                    title: 'Fast Delivery',
+                    description: 'Receive your order faster than ever before!',
+                  },
+                ].map((feature, index) => (
+                  <div 
+                    key={`${setIndex}-${index}`} 
+                    className="flex-shrink-0 w-64 bg-white rounded-xl p-5 border border-brand-200 shadow-sm text-center"
+                  >
+                    <div className="w-12 h-12 bg-bronze-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
+                      <feature.icon className="w-6 h-6 text-bronze-gold" />
+                    </div>
+                    <h3 className="font-playfair text-base text-brand-800 mb-1">{feature.title}</h3>
+                    <p className="text-brand-600 font-montserrat text-xs">{feature.description}</p>
+                  </div>
+                ))
+              ))}
+            </div>
           </div>
         </Container>
       </Section>

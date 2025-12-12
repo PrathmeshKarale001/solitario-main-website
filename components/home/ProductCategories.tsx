@@ -52,7 +52,7 @@ export default function ProductCategories() {
   })();
 
   return (
-    <Section variant="light" padding="md">
+    <Section variant="light" padding="sm" className="py-6 sm:py-8 md:py-10">
       <Container>
         {/* Compact Header for Mobile */}
         <motion.div
@@ -60,7 +60,7 @@ export default function ProductCategories() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.4 }}
-          className="mb-4 sm:mb-8 md:mb-12 text-center"
+          className="mb-3 sm:mb-6 md:mb-8 text-center"
         >
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">Collections</span>
           <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>

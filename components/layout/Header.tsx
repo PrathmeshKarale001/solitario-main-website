@@ -14,7 +14,7 @@ import SearchModal from '@/components/ui/SearchModal';
 // Clean navigation structure - only essential links
 const NAV_LINKS = [
   { href: '/products', label: 'Shop' },
-  { href: '/lab-grown-diamonds', label: 'Lab Diamonds' },
+  { href: '/stores', label: 'Stores' },
   { href: '/about', label: 'About' },
 ];
 
@@ -33,7 +33,7 @@ const MOBILE_MENU_SECTIONS = [
   {
     title: 'Discover',
     links: [
-      { href: '/lab-grown-diamonds', label: 'Lab Grown Diamonds', icon: Diamond },
+      { href: '/stores', label: 'Our Stores', icon: MapPin },
       { href: '/about', label: 'Our Story' },
       { href: '/blog', label: 'Blog' },
     ],
@@ -108,9 +108,9 @@ export default function Header() {
           headerClasses
         )}
       >
-        {/* Main Header - Compact for mobile */}
-        <div className="px-3 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16 lg:h-18">
+        {/* Main Header - Increased padding */}
+        <div className="px-3 sm:px-4 lg:px-8 py-2 sm:py-3 lg:py-4">
+          <div className="flex items-center justify-between">
             {/* Mobile: Menu Button | Desktop: Navigation */}
             <div className="flex items-center">
               {/* Mobile Menu Button */}
