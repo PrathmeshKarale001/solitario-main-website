@@ -67,6 +67,7 @@ export interface CustomerDetails {
 export interface CartItemForOrder {
   productId: string;
   variantId?: string;
+  sku?: string;
   name: string;
   price: number;
   quantity: number;

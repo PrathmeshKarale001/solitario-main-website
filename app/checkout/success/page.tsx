@@ -12,6 +12,7 @@ function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const paymentId = searchParams.get('paymentId');
+  const waybill = searchParams.get('waybill');
   const [copied, setCopied] = useState(false);
 
   // Trigger confetti on mount
@@ -141,6 +142,25 @@ function SuccessContent() {
                 </div>
                 <CheckCircle className="w-6 h-6 text-classic-green" />
               </div>
+
+              {/* Tracking Number (if available) */}
+              {waybill && (
+                <div className="flex items-center justify-between p-4 bg-bronze-gold/10 rounded-lg">
+                  <div>
+                    <p className="text-sm text-gray-500">Tracking Number (Delhivery)</p>
+                    <p className="font-mono font-semibold text-gray-900">{waybill}</p>
+                  </div>
+                  <a
+                    href={`https://www.delhivery.com/track/package/${waybill}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-1 text-sm text-classic-green hover:underline"
+                  >
+                    <Truck className="w-4 h-4" />
+                    Track
+                  </a>
+                </div>
+              )}
             </div>
           </motion.div>
 

@@ -113,10 +113,11 @@ export default function CheckoutPage() {
     setError(null);
 
     try {
-      // Prepare order data
+      // Prepare order data with SKU for shipping
       const orderItems = items.map(item => ({
         productId: item.product.id,
         variantId: item.product.variantId,
+        sku: item.product.sku || item.product.id, // Use SKU if available
         name: item.product.name,
         price: item.product.price,
         quantity: item.quantity,
@@ -202,9 +203,12 @@ export default function CheckoutPage() {
             const verifyData = await verifyResponse.json();
 
             if (verifyData.success) {
-              // Clear cart and redirect to success page
+              // Clear cart and redirect to success page with tracking info
               clearCart();
-              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}`);
+              const waybillParam = verifyData.order.delhiveryWaybill 
+                ? `&waybill=${verifyData.order.delhiveryWaybill}` 
+                : '';
+              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}${waybillParam}`);
             } else {
               throw new Error(verifyData.error || 'Payment verification failed');
             }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
+import { createDelhiveryShipment, isDelhiveryConfigured } from '@/lib/delhivery';
 import crypto from 'crypto';
 
 export async function POST(request: NextRequest) {
@@ -60,20 +61,58 @@ export async function POST(request: NextRequest) {
     // Generate order ID for internal tracking
     const orderId = `SOL${Date.now().toString(36).toUpperCase()}`;
     
-    // In production: 
-    // 1. Save order to database
-    // 2. Create order in Shopify for fulfillment
-    // 3. Send confirmation email
-    // 4. Update inventory
-
-    // Create order in Shopify (optional - for inventory management)
+    // Step 1: Create order in Shopify for inventory management
     let shopifyOrderId = null;
+    let shopifyOrderName = null;
     try {
-      // Uncomment when ready to sync with Shopify
-      // shopifyOrderId = await createShopifyOrder(orderData, razorpay_payment_id);
+      const shopifyResult = await createShopifyOrder(orderData, razorpay_payment_id, orderId);
+      shopifyOrderId = shopifyResult.id;
+      shopifyOrderName = shopifyResult.name;
+      console.log(`Shopify order created: ${shopifyOrderName} (${shopifyOrderId})`);
     } catch (shopifyError) {
       console.error('Failed to create Shopify order:', shopifyError);
       // Don't fail the payment - just log the error
+    }
+
+    // Step 2: Create shipment in Delhivery
+    let delhiveryWaybill = null;
+    if (isDelhiveryConfigured()) {
+      try {
+        // Prepare items with SKU for Delhivery
+        const shippingItems = orderData.items.map(item => ({
+          name: item.name,
+          sku: item.sku || item.productId, // Use SKU if available, fallback to productId
+          quantity: item.quantity,
+          price: item.price,
+        }));
+
+        const delhiveryResult = await createDelhiveryShipment(
+          orderId,
+          orderData.customer,
+          shippingItems,
+          orderData.total,
+          'Prepaid' // Payment already done via Razorpay
+        );
+
+        if (delhiveryResult.success && delhiveryResult.waybill) {
+          delhiveryWaybill = delhiveryResult.waybill;
+          console.log(`Delhivery shipment created: ${delhiveryWaybill}`);
+
+          // Update Shopify order with tracking number
+          if (shopifyOrderId) {
+            try {
+              await updateShopifyOrderWithTracking(shopifyOrderId, delhiveryWaybill);
+            } catch (trackingError) {
+              console.error('Failed to update Shopify with tracking:', trackingError);
+            }
+          }
+        } else {
+          console.error('Delhivery shipment creation failed:', delhiveryResult.error);
+        }
+      } catch (delhiveryError) {
+        console.error('Error creating Delhivery shipment:', delhiveryError);
+        // Don't fail the order - shipping can be created manually
+      }
     }
 
     const confirmedOrder = {
@@ -81,6 +120,8 @@ export async function POST(request: NextRequest) {
       razorpayOrderId: razorpay_order_id,
       razorpayPaymentId: razorpay_payment_id,
       shopifyOrderId,
+      shopifyOrderName,
+      delhiveryWaybill,
       items: orderData.items,
       customer: orderData.customer,
       subtotal: orderData.subtotal,
@@ -107,7 +148,11 @@ export async function POST(request: NextRequest) {
 }
 
 // Helper function to create order in Shopify (for inventory/fulfillment)
-async function createShopifyOrder(orderData: any, paymentId: string) {
+async function createShopifyOrder(
+  orderData: any, 
+  paymentId: string, 
+  internalOrderId: string
+): Promise<{ id: string; name: string }> {
   const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
   const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
   
@@ -119,6 +164,8 @@ async function createShopifyOrder(orderData: any, paymentId: string) {
     variant_id: item.variantId?.replace('gid://shopify/ProductVariant/', ''),
     quantity: item.quantity,
     price: item.price.toString(),
+    sku: item.sku || undefined,
+    name: item.name,
   }));
 
   const shopifyOrder = {
@@ -142,8 +189,8 @@ async function createShopifyOrder(orderData: any, paymentId: string) {
         phone: orderData.customer.phone,
       },
       financial_status: 'paid',
-      note: `Razorpay Payment ID: ${paymentId}`,
-      tags: 'razorpay,website',
+      note: `Razorpay Payment ID: ${paymentId}\nInternal Order ID: ${internalOrderId}`,
+      tags: 'razorpay,website,solitario',
       transactions: [
         {
           kind: 'sale',
@@ -173,5 +220,46 @@ async function createShopifyOrder(orderData: any, paymentId: string) {
   }
 
   const data = await response.json();
-  return data.order.id;
+  return { id: data.order.id, name: data.order.name };
+}
+
+// Helper function to update Shopify order with Delhivery tracking number
+async function updateShopifyOrderWithTracking(
+  shopifyOrderId: string, 
+  waybill: string
+): Promise<void> {
+  const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
+  const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+  
+  if (!shopifyDomain || !adminToken) {
+    throw new Error('Shopify not configured');
+  }
+
+  // Add fulfillment with tracking info
+  const fulfillmentData = {
+    fulfillment: {
+      tracking_number: waybill,
+      tracking_company: 'Delhivery',
+      tracking_url: `https://www.delhivery.com/track/package/${waybill}`,
+      notify_customer: true,
+    },
+  };
+
+  const response = await fetch(
+    `https://${shopifyDomain}.myshopify.com/admin/api/2024-01/orders/${shopifyOrderId}/fulfillments.json`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Shopify-Access-Token': adminToken,
+      },
+      body: JSON.stringify(fulfillmentData),
+    }
+  );
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    console.error('Failed to add tracking to Shopify:', errorData);
+    // Don't throw - this is not critical
+  }
 }
