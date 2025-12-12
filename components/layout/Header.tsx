@@ -53,6 +53,7 @@ export default function Header() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const pathname = usePathname();
   const isHomePage = pathname === '/';
+  const isProductsPage = pathname === '/products';
   const isProductDetailPage = pathname?.startsWith('/products/'); // Individual product pages
   const isTransparentHeroPage =
     isHomePage ||
@@ -97,7 +98,9 @@ export default function Header() {
   const headerClasses = isTransparentHeroPage
     ? isScrolled
       ? 'bg-[#146552] shadow-luxury'
-      : 'bg-transparent'
+      : isProductsPage
+        ? 'bg-gradient-to-b from-black/70 via-black/35 to-transparent'
+        : 'bg-transparent'
     : 'bg-[#146552] shadow-luxury';
 
   return (
