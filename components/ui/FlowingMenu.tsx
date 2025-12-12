@@ -27,7 +27,7 @@ function MenuItem({ link, text }: MenuItem) {
 
 export default function FlowingMenu({ items = [] }: FlowingMenuProps) {
   return (
-    <div className="py-12 px-8" style={{ backgroundColor: '#FAF5EF' }}>
+    <div className="py-8 px-8" style={{ backgroundColor: '#FAF5EF' }}>
       <nav className="max-w-4xl mx-auto">
         {items.map((item, idx) => (
           <MenuItem key={idx} {...item} />

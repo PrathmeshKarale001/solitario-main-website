@@ -17,14 +17,14 @@ const CELEBRITY_IMAGES: ImageItem[] = [
 
 export default function LifestyleShowcase() {
   return (
-    <section className="bg-white py-16 md:py-20 w-full">
+    <section className="bg-white py-12 md:py-16 w-full">
       {/* Section Header - Centered */}
-      <div className="flex flex-col items-center mb-8 md:mb-10 text-center px-4">
+      <div className="flex flex-col items-center mb-6 md:mb-8 text-center px-4">
         <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
-          Spotted With Solitario
+          Radiate Elegance
         </span>
         <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
-          Solitario Spotted Celebrities
+          Celebrity Cameo with Solitario
         </h2>
         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent" />
       </div>
@@ -56,7 +56,7 @@ export default function LifestyleShowcase() {
       </div>
       
       {/* Instruction Text */}
-      <div className="text-center mt-5 md:mt-8">
+      <div className="text-center mt-4 md:mt-6">
         <p className="text-brand-500 font-montserrat text-sm md:text-base">
           ← Drag to Explore →
         </p>
