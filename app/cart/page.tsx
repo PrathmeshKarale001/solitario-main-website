@@ -57,7 +57,7 @@ export default function CartPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
             {/* Cart Items */}
             <div className="lg:col-span-2 space-y-6">
               {items.map((item) => (
@@ -66,12 +66,12 @@ export default function CartPage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  className="flex gap-6 p-6 bg-white border border-brand-200 rounded-brand-xl hover:border-bronze-gold/30 transition-all duration-300 shadow-brand"
+                  className="flex gap-3 md:gap-6 p-4 md:p-6 bg-white border border-brand-200 rounded-xl md:rounded-brand-xl hover:border-bronze-gold/30 transition-all duration-300 shadow-brand"
                 >
                   {/* Product Image */}
                   <Link
                     href={`/products/${item.product.id}`}
-                    className="relative w-32 h-32 flex-shrink-0 bg-gradient-to-br from-brand-50 to-white rounded-brand-lg overflow-hidden border border-brand-200 hover:border-bronze-gold/50 transition-all duration-300"
+                    className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-gradient-to-br from-brand-50 to-white rounded-lg md:rounded-brand-lg overflow-hidden border border-brand-200 hover:border-bronze-gold/50 transition-all duration-300"
                   >
                     <Image
                       src={item.product.image}
@@ -114,21 +114,21 @@ export default function CartPage() {
                     <div className="flex items-center justify-between">
                       {/* Quantity Controls */}
                       <div className="flex items-center gap-1">
-                        <span className="text-body-sm text-brand-600 font-montserrat mr-3">Qty:</span>
-                        <div className="flex items-center border border-brand-200 rounded-brand overflow-hidden">
+                        <span className="text-body-sm text-brand-600 font-montserrat mr-2 md:mr-3">Qty:</span>
+                        <div className="flex items-center border border-brand-200 rounded-lg overflow-hidden">
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity - 1)}
-                            className="px-3 py-2 hover:bg-brand-100 transition-colors"
+                            className="px-2 md:px-3 py-1.5 md:py-2 hover:bg-brand-100 transition-colors"
                             aria-label="Decrease quantity"
                           >
                             <Minus className="w-3 h-3" />
                           </button>
-                          <span className="px-4 py-2 text-body-sm font-gotham border-x border-brand-200 min-w-[40px] text-center">
+                          <span className="px-3 md:px-4 py-1.5 md:py-2 text-body-sm font-gotham border-x border-brand-200 min-w-[36px] md:min-w-[40px] text-center">
                             {item.quantity}
                           </span>
                           <button
                             onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
-                            className="px-3 py-2 hover:bg-brand-100 transition-colors"
+                            className="px-2 md:px-3 py-1.5 md:py-2 hover:bg-brand-100 transition-colors"
                             aria-label="Increase quantity"
                           >
                             <Plus className="w-3 h-3" />
@@ -137,7 +137,7 @@ export default function CartPage() {
                       </div>
 
                       {/* Price */}
-                      <div className="text-right">
+                      <div className="text-left sm:text-right">
                         <p className="font-gotham text-heading-md font-semibold text-classic-green">
                           {formatPrice(item.product.price * item.quantity)}
                         </p>

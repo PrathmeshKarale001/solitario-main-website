@@ -170,10 +170,10 @@ export default function FAQPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center max-w-3xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
+            <h1 className="text-2xl sm:text-3xl md:text-5xl font-playfair text-white mb-4">
               Frequently Asked Questions
             </h1>
-            <p className="text-white/80 font-montserrat text-lg mb-8">
+            <p className="text-white/80 font-montserrat text-sm md:text-lg mb-6 md:mb-8 px-4">
               Find answers to common questions about our products, shipping, and services
             </p>
             

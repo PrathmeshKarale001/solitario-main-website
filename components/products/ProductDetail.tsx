@@ -8,8 +8,8 @@ import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Fa
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
-import { PRODUCTS } from '@/lib/data';
 import { useCart } from '@/lib/cart-context';
+import { NearestStore } from '@/components/stores';
 
 interface ProductDetailProps {
   product: Product;
@@ -26,14 +26,37 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoadingRelated, setIsLoadingRelated] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const { addToCart: addToCartContext } = useCart();
 
-  // Get related products (same category, excluding current product)
-  const relatedProducts = PRODUCTS
-    .filter(p => p.category === product.category && p.id !== product.id)
-    .slice(0, 6);
+  // Fetch related products from Shopify
+  useEffect(() => {
+    const fetchRelatedProducts = async () => {
+      setIsLoadingRelated(true);
+      try {
+        const params = new URLSearchParams();
+        params.set('category', product.category);
+        params.set('exclude', product.id);
+        params.set('limit', '6');
+
+        const res = await fetch(`/api/products?${params.toString()}`);
+        const data = await res.json();
+        setRelatedProducts(Array.isArray(data?.products) ? data.products : []);
+      } catch (error) {
+        console.error('Error fetching related products:', error);
+        setRelatedProducts([]);
+      } finally {
+        setIsLoadingRelated(false);
+      }
+    };
+
+    if (product.category && product.id) {
+      fetchRelatedProducts();
+    }
+  }, [product.category, product.id]);
 
   // Use real images from Shopify, fallback to single image repeated
   const productImages = product.images && product.images.length > 0 
@@ -268,13 +291,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Product Main Section */}
       <Section variant="light" padding="lg">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16">
             {/* Product Images */}
-            <div className="space-y-4">
+            <div className="space-y-3 md:space-y-4">
               {/* Main Image with Hover Zoom */}
               <div
                 ref={imageRef}
-                className="relative aspect-square bg-gradient-to-br from-brand-50 via-white to-brand-50 rounded-brand-xl overflow-hidden border border-brand-200/50 shadow-brand group cursor-zoom-in"
+                className="relative aspect-square bg-gradient-to-br from-brand-50 via-white to-brand-50 rounded-xl md:rounded-brand-xl overflow-hidden border border-brand-200/50 shadow-brand group cursor-zoom-in max-w-full"
                 onMouseEnter={() => setIsHovering(true)}
                 onMouseLeave={() => setIsHovering(false)}
                 onMouseMove={handleImageMouseMove}
@@ -291,7 +314,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     src={productImages[selectedImage]}
                     alt={product.name}
                     fill
-                    className="object-contain p-8 select-none"
+                    className="object-contain p-4 md:p-8 select-none"
                     priority
                     draggable={false}
                   />
@@ -309,7 +332,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     e.stopPropagation();
                     toggleWishlist();
                   }}
-                  className="absolute top-4 right-4 w-12 h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-brand hover:scale-110 transition-all duration-300 z-10"
+                  className="absolute top-2 right-2 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-brand hover:scale-110 transition-all duration-300 z-10"
                   aria-label="Add to wishlist"
                 >
                   <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-bronze-gold text-bronze-gold' : 'text-brand-600'}`} />
@@ -317,12 +340,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               {/* Thumbnail Images */}
-              <div className="flex gap-3">
+              <div className="flex gap-2 md:gap-3 overflow-x-auto pb-2 -mx-1 px-1 scrollbar-hide">
                 {productImages.map((img, index) => (
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative aspect-square flex-1 rounded-brand overflow-hidden border-2 transition-all duration-300 ${
+                    className={`relative aspect-square w-16 h-16 md:w-auto md:h-auto md:flex-1 flex-shrink-0 rounded-lg md:rounded-brand overflow-hidden border-2 transition-all duration-300 ${
                       selectedImage === index
                         ? 'border-bronze-gold shadow-brand'
                         : 'border-brand-200 hover:border-bronze-gold/50'
@@ -446,31 +469,34 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 )}
 
                 {/* Action Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                   <button
                     onClick={handleAddToCart}
-                    className="flex-1 flex items-center justify-center gap-3 bg-bronze-gold hover:bg-soft-bronze text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 group"
+                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 bg-bronze-gold hover:bg-soft-bronze text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 group"
                   >
-                    <ShoppingCart className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <ShoppingCart className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
                     Add to Cart
                   </button>
                   <button
                     onClick={handleBuyNow}
-                    className="flex-1 flex items-center justify-center gap-3 bg-classic-green hover:bg-classic-green/90 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500"
+                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 bg-classic-green hover:bg-classic-green/90 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500"
                   >
                     Buy Now
                   </button>
                 </div>
 
+                {/* Nearest Store CTA */}
+                <NearestStore compact={true} />
+
                 {/* Social Share - Working Links */}
-                <div className="flex items-center gap-4 pt-4 border-t border-brand-200">
+                <div className="flex items-center gap-3 md:gap-4 pt-4 border-t border-brand-200">
                   <span className="text-body-sm text-brand-600 font-montserrat">Share:</span>
                   <div className="flex items-center gap-3">
                     <a 
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
                       <Facebook className="w-4 h-4" />
                     </a>
@@ -478,7 +504,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       href={`https://www.instagram.com/`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
                       <Instagram className="w-4 h-4" />
                     </a>
@@ -486,13 +512,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="w-10 h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
                       <Twitter className="w-4 h-4" />
                     </a>
                     <a 
                       href={`mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(`Check out this beautiful piece: ${currentUrl}`)}`}
-                      className="w-10 h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
+                      className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
                       <Mail className="w-4 h-4" />
                     </a>
@@ -509,7 +535,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         <Container>
           <div className="max-w-4xl mx-auto">
             {/* Tabs */}
-            <div className="flex border-b border-brand-300 mb-8">
+            <div className="flex border-b border-brand-300 mb-6 md:mb-8 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
               {[
                 { id: 'description', label: 'Description' },
                 { id: 'information', label: 'Additional Information' },
@@ -518,7 +544,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-8 py-4 font-gotham text-ui uppercase tracking-luxury border-b-2 transition-colors ${
+                  className={`px-4 md:px-8 py-3 md:py-4 font-gotham text-[10px] md:text-ui uppercase tracking-wider md:tracking-luxury border-b-2 transition-colors whitespace-nowrap flex-shrink-0 ${
                     activeTab === tab.id
                       ? 'border-bronze-gold text-bronze-gold'
                       : 'border-transparent text-brand-600 hover:text-brand-800'
@@ -635,12 +661,24 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </Section>
 
       {/* Featured Collection */}
-      {relatedProducts.length > 0 && (
-        <Section variant="light" padding="lg" className="bg-white">
-          <Container>
-            <h2 className="font-playfair text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
-              Featured Collection
-            </h2>
+      <Section variant="light" padding="lg" className="bg-white">
+        <Container>
+          <h2 className="font-playfair text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
+            Featured Collection
+          </h2>
+          
+          {isLoadingRelated ? (
+            // Loading skeleton
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+              {[...Array(6)].map((_, index) => (
+                <div key={index} className="animate-pulse">
+                  <div className="relative aspect-square bg-gray-200 rounded-brand mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2"></div>
+                  <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                </div>
+              ))}
+            </div>
+          ) : relatedProducts.length > 0 ? (
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
               {relatedProducts.map((relatedProduct) => (
                 <Link
@@ -670,9 +708,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </Link>
               ))}
             </div>
-          </Container>
-        </Section>
-      )}
+          ) : (
+            // No related products found
+            <div className="text-center py-12">
+              <p className="text-brand-600 font-montserrat">No related products found.</p>
+            </div>
+          )}
+        </Container>
+      </Section>
 
       {/* Features Section - Horizontal Scroll Loop */}
       <Section variant="light" padding="sm" className="bg-brand-50 py-6 sm:py-8 overflow-hidden">
@@ -737,15 +780,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             }}
           >
             {/* Top Bar - Controls */}
-            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center z-50 pointer-events-none">
-               <div className="pointer-events-auto bg-white/80 backdrop-blur-md rounded-full px-4 py-2 shadow-sm border border-brand-100 flex items-center gap-4">
-                 <span className="text-brand-500 font-gotham text-sm tracking-widest">
+            <div className="absolute top-0 left-0 right-0 p-3 md:p-6 flex justify-between items-center z-50 pointer-events-none">
+               <div className="pointer-events-auto bg-white/80 backdrop-blur-md rounded-full px-3 md:px-4 py-1.5 md:py-2 shadow-sm border border-brand-100 flex items-center gap-2 md:gap-4">
+                 <span className="text-brand-500 font-gotham text-xs md:text-sm tracking-widest">
                    {selectedImage + 1} / {productImages.length}
                  </span>
                </div>
                
-               <div className="pointer-events-auto flex items-center gap-3">
-                 <div className="bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-brand-100 flex items-center gap-1">
+               <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+                 {/* Zoom controls - hidden on mobile */}
+                 <div className="hidden md:flex bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-brand-100 items-center gap-1">
                     <button
                       onClick={handleZoomIn}
                       className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
@@ -773,10 +817,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
                  <button
                    onClick={closeLightbox}
-                   className="w-12 h-12 bg-white/80 backdrop-blur-md hover:bg-brand-50 rounded-full flex items-center justify-center text-brand-800 transition-all duration-300 border border-brand-100 shadow-sm"
+                   className="w-10 h-10 md:w-12 md:h-12 bg-white/80 backdrop-blur-md hover:bg-brand-50 rounded-full flex items-center justify-center text-brand-800 transition-all duration-300 border border-brand-100 shadow-sm"
                    title="Close"
                  >
-                   <X className="w-6 h-6" />
+                   <X className="w-5 h-5 md:w-6 md:h-6" />
                  </button>
                </div>
             </div>
@@ -784,16 +828,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             {/* Navigation Arrows */}
             <button
               onClick={handlePrevImage}
-              className="absolute left-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
+              className="absolute left-2 md:left-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
             >
-              <ChevronLeft className="w-6 h-6 group-hover:-translate-x-0.5 transition-transform" />
+              <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:-translate-x-0.5 transition-transform" />
             </button>
 
             <button
               onClick={handleNextImage}
-              className="absolute right-6 top-1/2 -translate-y-1/2 w-14 h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
+              className="absolute right-2 md:right-6 top-1/2 -translate-y-1/2 w-10 h-10 md:w-14 md:h-14 bg-white/80 backdrop-blur-md hover:bg-white text-brand-800 rounded-full flex items-center justify-center transition-all duration-300 shadow-sm border border-brand-100 z-40 group"
             >
-              <ChevronRight className="w-6 h-6 group-hover:translate-x-0.5 transition-transform" />
+              <ChevronRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform" />
             </button>
 
             {/* Main Image Container */}
@@ -830,8 +874,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </div>
 
             {/* Bottom Strip - Thumbnails */}
-            <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-40 max-w-[90vw]">
-              <div className="bg-white/80 backdrop-blur-md rounded-2xl p-2 shadow-lg border border-brand-100 flex gap-2 overflow-x-auto no-scrollbar">
+            <div className="absolute bottom-4 md:bottom-8 left-1/2 -translate-x-1/2 z-40 max-w-[95vw] md:max-w-[90vw]">
+              <div className="bg-white/80 backdrop-blur-md rounded-xl md:rounded-2xl p-1.5 md:p-2 shadow-lg border border-brand-100 flex gap-1.5 md:gap-2 overflow-x-auto no-scrollbar">
                 {productImages.map((img, index) => (
                   <button
                     key={index}
@@ -840,7 +884,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       setSelectedImage(index);
                       handleResetZoom();
                     }}
-                    className={`relative w-16 h-16 rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${
+                    className={`relative w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${
                       selectedImage === index
                         ? 'ring-2 ring-bronze-gold ring-offset-2 opacity-100 scale-105'
                         : 'opacity-60 hover:opacity-100 hover:scale-105'

@@ -8,7 +8,7 @@ export default function ContactPage() {
         <Container>
           <div className="text-center max-w-3xl mx-auto">
             <h1 className="heading-xl mb-6">Get In Touch</h1>
-            <p className="text-xl text-ivory-pearl/90">
+            <p className="text-base md:text-xl text-ivory-pearl/90">
               Have questions about our lab-grown diamond jewellery? 
               We'd love to hear from you.
             </p>
@@ -18,7 +18,7 @@ export default function ContactPage() {
 
       <Section variant="light" padding="md">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
             {/* Contact Form */}
             <div>
               <h2 className="heading-md mb-6">Send Us a Message</h2>

@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
 import { Product } from '@/lib/data';
 import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
@@ -47,6 +47,8 @@ function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+  const [showMobileSort, setShowMobileSort] = useState(false);
 
   // Fetch products on mount via API
   useEffect(() => {
@@ -157,6 +159,16 @@ function ProductsPageContent() {
     return productList;
   }, [products, activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
 
+  // Calculate category counts for sidebar
+  const categoryCounts = useMemo(() => {
+    const counts: Record<string, number> = { all: products.length };
+    products.forEach(product => {
+      const cat = product.category.toLowerCase();
+      counts[cat] = (counts[cat] || 0) + 1;
+    });
+    return counts;
+  }, [products]);
+
   // Pagination calculations
   const totalPages = Math.ceil(filteredAndSortedProducts.length / PRODUCTS_PER_PAGE);
   const paginatedProducts = useMemo(() => {
@@ -243,120 +255,91 @@ function ProductsPageContent() {
         </div>
       </section>
 
-      {/* Filters & Products Section - Merged */}
-      <Section variant="light" padding="lg" className="bg-gradient-to-b from-white via-ivory-pearl/30 to-white">
+      {/* Sidebar + Products Section */}
+      <Section variant="light" padding="lg" className="bg-gradient-to-b from-white via-ivory-pearl/30 to-white pb-24 lg:pb-16">
         <Container>
-          {/* Filters */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mb-6"
-          >
-            <ProductFilters
-              activeCategory={activeCategory}
-              onCategoryChange={setActiveCategory}
-              sortBy={sortBy}
-              onSortChange={setSortBy}
-              viewMode={viewMode}
-              onViewModeChange={setViewMode}
-              searchQuery={searchQuery}
-              onSearchChange={setSearchQuery}
-              priceRange={priceRange}
-              onPriceRangeChange={setPriceRange}
-              showFeaturedOnly={showFeaturedOnly}
-              onFeaturedToggle={setShowFeaturedOnly}
-            />
-          </motion.div>
+          <div className="flex gap-8">
+            {/* Left Sidebar - Desktop Only, Fixed Position */}
+            <aside className="hidden lg:block w-72 flex-shrink-0">
+              <div className="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide">
+                <ProductFilters
+                  activeCategory={activeCategory}
+                  onCategoryChange={setActiveCategory}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  priceRange={priceRange}
+                  onPriceRangeChange={setPriceRange}
+                  showFeaturedOnly={showFeaturedOnly}
+                  onFeaturedToggle={setShowFeaturedOnly}
+                  productCounts={categoryCounts}
+                />
+              </div>
+            </aside>
 
-          {/* Products */}
-          <motion.div
-            ref={productsRef}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.4 }}
-            className="scroll-mt-20"
-          >
-            {/* Results Header */}
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
-              <div>
-                <p className="text-gray-600 font-montserrat text-sm sm:text-base">
-                  Showing <span className="font-semibold text-classic-green">{paginatedProducts.length}</span> of {filteredAndSortedProducts.length} products
-                  {filteredAndSortedProducts.length !== products.length && (
-                    <span className="text-gray-400"> (filtered from {products.length})</span>
+            {/* Main Content - Products */}
+            <div
+              ref={productsRef}
+              className="flex-1 min-w-0"
+            >
+              {/* Results Header */}
+              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+                <div>
+                  <p className="text-gray-600 font-montserrat text-sm sm:text-base">
+                    Showing <span className="font-semibold text-classic-green">{paginatedProducts.length}</span> of {filteredAndSortedProducts.length} products
+                    {filteredAndSortedProducts.length !== products.length && (
+                      <span className="text-gray-400"> (filtered from {products.length})</span>
+                    )}
+                  </p>
+                  {searchQuery && (
+                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                      Results for "<span className="font-semibold">{searchQuery}</span>"
+                    </p>
                   )}
-                </p>
-                {searchQuery && (
-                  <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                    Results for "<span className="font-semibold">{searchQuery}</span>"
+                </div>
+                {totalPages > 1 && (
+                  <p className="text-xs sm:text-sm text-gray-500 font-montserrat">
+                    Page {currentPage} of {totalPages}
                   </p>
                 )}
               </div>
-              {totalPages > 1 && (
-                <p className="text-xs sm:text-sm text-gray-500 font-montserrat">
-                  Page {currentPage} of {totalPages}
-                </p>
-              )}
-            </div>
-            
-            {filteredAndSortedProducts.length === 0 && (
-              <div className="text-center py-12">
-                <p className="text-lg text-gray-500 font-montserrat">No products match your filters.</p>
-                <button
-                  onClick={() => {
-                    setSearchQuery('');
-                    setPriceRange([0, 500000]);
-                    setShowFeaturedOnly(false);
-                    setActiveCategory('all');
-                  }}
-                  className="mt-4 text-bronze-gold hover:underline font-gotham text-sm uppercase tracking-wider"
-                >
-                  Clear all filters
-                </button>
-              </div>
-            )}
-
-            {/* Products Display - Using paginated products */}
-            {viewMode === 'grid' ? (
-              <ProductGrid
-                products={paginatedProducts}
-                onQuickView={setSelectedProduct}
-              />
-            ) : (
-              <ProductListView
-                products={paginatedProducts}
-                onQuickView={setSelectedProduct}
-              />
-            )}
-
-            {/* Pagination Controls */}
-            {totalPages > 1 && (
-              <div className="mt-8 sm:mt-12 flex flex-col sm:flex-row items-center justify-center gap-4">
-                {/* Mobile: Simple prev/next */}
-                <div className="flex items-center gap-2 sm:hidden">
+              
+              {filteredAndSortedProducts.length === 0 && (
+                <div className="text-center py-12">
+                  <p className="text-lg text-gray-500 font-montserrat">No products match your filters.</p>
                   <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="flex items-center gap-1 px-4 py-2.5 rounded-lg bg-classic-green text-white disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
+                    onClick={() => {
+                      setSearchQuery('');
+                      setPriceRange([0, 500000]);
+                      setShowFeaturedOnly(false);
+                      setActiveCategory('all');
+                    }}
+                    className="mt-4 text-bronze-gold hover:underline font-gotham text-sm uppercase tracking-wider"
                   >
-                    <ChevronLeft className="w-4 h-4" />
-                    Prev
-                  </button>
-                  <span className="px-4 py-2 text-sm font-montserrat text-gray-600">
-                    {currentPage} / {totalPages}
-                  </span>
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="flex items-center gap-1 px-4 py-2.5 rounded-lg bg-classic-green text-white disabled:opacity-50 disabled:cursor-not-allowed touch-manipulation"
-                  >
-                    Next
-                    <ChevronRight className="w-4 h-4" />
+                    Clear all filters
                   </button>
                 </div>
+              )}
 
-                {/* Desktop: Full pagination */}
-                <div className="hidden sm:flex items-center gap-2">
+              {/* Products Display - Using paginated products */}
+              {viewMode === 'grid' ? (
+                <ProductGrid
+                  products={paginatedProducts}
+                  onQuickView={setSelectedProduct}
+                />
+              ) : (
+                <ProductListView
+                  products={paginatedProducts}
+                  onQuickView={setSelectedProduct}
+                />
+              )}
+
+              {/* Pagination Controls */}
+              {totalPages > 1 && (
+                <div className="mt-8 flex items-center justify-center gap-2">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
@@ -366,23 +349,9 @@ function ProductsPageContent() {
                     <ChevronLeft className="w-5 h-5" />
                   </button>
 
-                  {getPageNumbers().map((page, idx) => (
-                    typeof page === 'number' ? (
-                      <button
-                        key={idx}
-                        onClick={() => handlePageChange(page)}
-                        className={`min-w-[40px] h-10 rounded-lg font-montserrat text-sm transition-colors ${
-                          currentPage === page
-                            ? 'bg-classic-green text-white'
-                            : 'border border-gray-200 hover:border-classic-green hover:text-classic-green'
-                        }`}
-                      >
-                        {page}
-                      </button>
-                    ) : (
-                      <span key={idx} className="px-2 text-gray-400">...</span>
-                    )
-                  ))}
+                  <span className="px-4 py-2 text-sm font-montserrat text-gray-600">
+                    {currentPage} / {totalPages}
+                  </span>
 
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
@@ -393,11 +362,148 @@ function ProductsPageContent() {
                     <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>
-              </div>
-            )}
-          </motion.div>
+              )}
+            </div>
+          </div>
         </Container>
       </Section>
+
+      {/* Mobile Bottom Sticky Bar */}
+      <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-50 safe-area-inset-bottom">
+        <div className="flex">
+          <button
+            onClick={() => setShowMobileFilters(true)}
+            className="flex-1 flex items-center justify-center gap-2 py-4 text-gray-700 font-gotham text-xs uppercase tracking-wider border-r border-gray-200 active:bg-gray-50"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            Filter
+          </button>
+          <button
+            onClick={() => setShowMobileSort(true)}
+            className="flex-1 flex items-center justify-center gap-2 py-4 text-gray-700 font-gotham text-xs uppercase tracking-wider active:bg-gray-50"
+          >
+            <ArrowUpDown className="w-4 h-4" />
+            Sort
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Filter Modal */}
+      <AnimatePresence>
+        {showMobileFilters && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black/50 z-[60]"
+            onClick={() => setShowMobileFilters(false)}
+          >
+            <motion.div
+              initial={{ x: '-100%' }}
+              animate={{ x: 0 }}
+              exit={{ x: '-100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="absolute left-0 top-0 bottom-0 w-[85%] max-w-sm bg-white overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
+                <h2 className="font-playfair text-xl text-gray-900">Filters</h2>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4">
+                <ProductFilters
+                  activeCategory={activeCategory}
+                  onCategoryChange={(cat) => {
+                    setActiveCategory(cat);
+                    setShowMobileFilters(false);
+                  }}
+                  sortBy={sortBy}
+                  onSortChange={setSortBy}
+                  viewMode={viewMode}
+                  onViewModeChange={setViewMode}
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  priceRange={priceRange}
+                  onPriceRangeChange={setPriceRange}
+                  showFeaturedOnly={showFeaturedOnly}
+                  onFeaturedToggle={setShowFeaturedOnly}
+                  productCounts={categoryCounts}
+                />
+              </div>
+              <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="w-full py-3 bg-classic-green text-white rounded-lg font-gotham text-sm uppercase tracking-wider"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Mobile Sort Modal */}
+      <AnimatePresence>
+        {showMobileSort && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="lg:hidden fixed inset-0 bg-black/50 z-[60]"
+            onClick={() => setShowMobileSort(false)}
+          >
+            <motion.div
+              initial={{ y: '100%' }}
+              animate={{ y: 0 }}
+              exit={{ y: '100%' }}
+              transition={{ type: 'tween', duration: 0.3 }}
+              className="absolute left-0 right-0 bottom-0 bg-white rounded-t-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="p-4 border-b border-gray-200 flex items-center justify-between">
+                <h2 className="font-playfair text-xl text-gray-900">Sort By</h2>
+                <button
+                  onClick={() => setShowMobileSort(false)}
+                  className="p-2 hover:bg-gray-100 rounded-full"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <div className="p-4 space-y-2">
+                {[
+                  { value: 'featured', label: 'Featured First' },
+                  { value: 'price-low', label: 'Price: Low to High' },
+                  { value: 'price-high', label: 'Price: High to Low' },
+                  { value: 'name-asc', label: 'Name: A to Z' },
+                  { value: 'name-desc', label: 'Name: Z to A' },
+                ].map((option) => (
+                  <button
+                    key={option.value}
+                    onClick={() => {
+                      setSortBy(option.value);
+                      setShowMobileSort(false);
+                    }}
+                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${
+                      sortBy === option.value
+                        ? 'bg-classic-green/10 text-classic-green font-medium'
+                        : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+              <div className="p-4 pb-8 safe-area-inset-bottom" />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Quick Look Modal */}
       <QuickLookModal

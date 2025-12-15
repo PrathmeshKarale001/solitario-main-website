@@ -1,10 +1,9 @@
 'use client';
 
-import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { useState, useMemo } from 'react';
 import { CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
-import { SlidersHorizontal, X, Search, Grid3x3, List, ArrowUpDown } from 'lucide-react';
+import { Grid3x3, List, ChevronDown, ChevronUp } from 'lucide-react';
 
 export interface ProductFiltersProps {
   activeCategory: string;
@@ -19,6 +18,7 @@ export interface ProductFiltersProps {
   onPriceRangeChange: (range: [number, number]) => void;
   showFeaturedOnly: boolean;
   onFeaturedToggle: (show: boolean) => void;
+  productCounts?: Record<string, number>;
 }
 
 export default function ProductFilters({
@@ -28,28 +28,23 @@ export default function ProductFilters({
   onSortChange,
   viewMode,
   onViewModeChange,
-  searchQuery,
-  onSearchChange,
   priceRange,
   onPriceRangeChange,
   showFeaturedOnly,
   onFeaturedToggle,
+  productCounts = {},
 }: ProductFiltersProps) {
-  const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
-  const [showSortDropdown, setShowSortDropdown] = useState(false);
   const [localPriceRange, setLocalPriceRange] = useState(priceRange);
+  const [expandedSections, setExpandedSections] = useState({
+    sort: true,
+    price: true,
+    categories: true,
+    view: true,
+  });
 
-  // Close dropdown when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as HTMLElement;
-      if (showSortDropdown && !target.closest('.sort-dropdown-container')) {
-        setShowSortDropdown(false);
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [showSortDropdown]);
+  const toggleSection = (section: keyof typeof expandedSections) => {
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+  };
 
   const handlePriceRangeApply = () => {
     onPriceRangeChange(localPriceRange);
@@ -65,204 +60,202 @@ export default function ProductFilters({
 
   return (
     <div className="space-y-6">
-      {/* Search Bar */}
-      <div className="relative">
-        <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-        <input
-          type="text"
-          placeholder="Search products..."
-          value={searchQuery}
-          onChange={(e) => onSearchChange(e.target.value)}
-          className="w-full pl-12 pr-4 py-3.5 bg-white border border-gray-200 rounded-full focus:outline-none focus:ring-2 focus:ring-bronze-gold/20 focus:border-bronze-gold transition-all font-montserrat text-sm"
-        />
-      </div>
-
-      {/* Category Filter Pills - Horizontal scroll on mobile */}
-      <div className="relative -mx-4 px-4 sm:mx-0 sm:px-0">
-        <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2 sm:pb-0 sm:flex-wrap sm:justify-center scrollbar-hide">
-          {CATEGORIES.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => onCategoryChange(category.slug)}
-              className={cn(
-                'flex-shrink-0 px-4 sm:px-6 py-2 sm:py-2.5 rounded-full font-gotham text-[10px] sm:text-xs uppercase tracking-[0.1em] sm:tracking-[0.15em] transition-all duration-300 touch-manipulation',
-                activeCategory === category.slug
-                  ? 'bg-gradient-to-r from-bronze-gold to-bronze-gold/80 text-white shadow-luxury-lg'
-                  : 'bg-white text-gray-700 hover:bg-bronze-gold/10 hover:text-bronze-gold border border-gray-200 hover:shadow-luxury hover:border-bronze-gold/30'
-              )}
-            >
-              {category.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Controls Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pt-4">
-        {/* Left: Sort & Filters */}
-        <div className="flex items-center gap-3 flex-wrap">
-          {/* Sort Dropdown */}
-          <div className="relative sort-dropdown-container">
-            <button 
-              onClick={() => setShowSortDropdown(!showSortDropdown)}
-              className="flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-200 rounded-full hover:border-bronze-gold/50 hover:shadow-luxury transition-all font-gotham text-xs uppercase tracking-[0.15em] text-gray-700"
-            >
-              <ArrowUpDown className="w-4 h-4" />
-              <span>Sort</span>
-            </button>
-            <AnimatePresence>
-              {showSortDropdown && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  transition={{ duration: 0.2 }}
-                  className="absolute top-full left-0 mt-2 w-56 bg-white rounded-2xl shadow-luxury-lg border border-gray-100 z-50"
-                >
-                  <div className="p-2">
-                    {sortOptions.map((option) => (
-                      <button
-                        key={option.value}
-                        onClick={() => {
-                          onSortChange(option.value);
-                          setShowSortDropdown(false);
-                        }}
-                        className={cn(
-                          'w-full text-left px-4 py-2.5 rounded-lg text-sm font-montserrat transition-all',
-                          sortBy === option.value
-                            ? 'bg-bronze-gold/10 text-bronze-gold font-semibold'
-                            : 'text-gray-700 hover:bg-gray-50'
-                        )}
-                      >
-                        {option.label}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+      {/* Sort By Section */}
+      <div className="border-b border-gray-200 pb-6">
+        <button
+          onClick={() => toggleSection('sort')}
+          className="flex items-center justify-between w-full mb-4"
+        >
+          <h3 className="font-playfair text-lg text-gray-900">Sort By</h3>
+          {expandedSections.sort ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+        {expandedSections.sort && (
+          <div className="space-y-2">
+            {sortOptions.map((option) => (
+              <label
+                key={option.value}
+                className="flex items-center gap-3 cursor-pointer group"
+              >
+                <input
+                  type="radio"
+                  name="sort"
+                  checked={sortBy === option.value}
+                  onChange={() => onSortChange(option.value)}
+                  className="w-4 h-4 text-bronze-gold border-gray-300 focus:ring-bronze-gold"
+                />
+                <span className={cn(
+                  'text-sm font-montserrat transition-colors',
+                  sortBy === option.value ? 'text-bronze-gold font-medium' : 'text-gray-600 group-hover:text-gray-900'
+                )}>
+                  {option.label}
+                </span>
+              </label>
+            ))}
           </div>
+        )}
+      </div>
 
-          {/* Advanced Filters Toggle */}
-          <button
-            onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
-            className={cn(
-              'flex items-center gap-2 px-4 py-2.5 rounded-full border transition-all font-gotham text-xs uppercase tracking-[0.15em]',
-              showAdvancedFilters
-                ? 'bg-bronze-gold/10 border-bronze-gold text-bronze-gold'
-                : 'bg-white border-gray-200 text-gray-700 hover:border-bronze-gold/50 hover:shadow-luxury'
-            )}
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            <span>Filters</span>
-          </button>
+      {/* Price Filter Section */}
+      <div className="border-b border-gray-200 pb-6">
+        <button
+          onClick={() => toggleSection('price')}
+          className="flex items-center justify-between w-full mb-4"
+        >
+          <h3 className="font-playfair text-lg text-gray-900">Price Filter</h3>
+          {expandedSections.price ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+        {expandedSections.price && (
+          <div className="space-y-4">
+            <div className="relative pt-2">
+              <input
+                type="range"
+                min="0"
+                max="500000"
+                step="10000"
+                value={localPriceRange[0]}
+                onChange={(e) => setLocalPriceRange([Number(e.target.value), localPriceRange[1]])}
+                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-classic-green"
+              />
+              <input
+                type="range"
+                min="0"
+                max="500000"
+                step="10000"
+                value={localPriceRange[1]}
+                onChange={(e) => setLocalPriceRange([localPriceRange[0], Number(e.target.value)])}
+                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-classic-green mt-2"
+              />
+            </div>
+            <div className="flex items-center justify-between text-sm font-montserrat text-gray-700">
+              <span>₹{localPriceRange[0].toLocaleString()}</span>
+              <span>-</span>
+              <span>₹{localPriceRange[1].toLocaleString()}</span>
+            </div>
+            <button
+              onClick={handlePriceRangeApply}
+              className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-gotham text-xs uppercase tracking-wider transition-colors"
+            >
+              Filter
+            </button>
+          </div>
+        )}
+      </div>
 
-          {/* Featured Toggle */}
-          <button
-            onClick={() => onFeaturedToggle(!showFeaturedOnly)}
-            className={cn(
-              'px-4 py-2.5 rounded-full border transition-all font-gotham text-xs uppercase tracking-[0.15em]',
-              showFeaturedOnly
-                ? 'bg-bronze-gold text-white border-bronze-gold shadow-luxury'
-                : 'bg-white border-gray-200 text-gray-700 hover:border-bronze-gold/50'
-            )}
-          >
-            ⭐ Featured
-          </button>
-        </div>
-
-        {/* Right: View Toggle */}
-        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-full p-1">
-          <button
-            onClick={() => onViewModeChange('grid')}
-            className={cn(
-              'p-2 rounded-lg transition-all',
-              viewMode === 'grid'
-                ? 'bg-bronze-gold text-white shadow-luxury'
-                : 'text-gray-400 hover:text-gray-600'
-            )}
-          >
-            <Grid3x3 className="w-4 h-4" />
-          </button>
-          <button
-            onClick={() => onViewModeChange('list')}
-            className={cn(
-              'p-2 rounded-lg transition-all',
-              viewMode === 'list'
-                ? 'bg-bronze-gold text-white shadow-luxury'
-                : 'text-gray-400 hover:text-gray-600'
-            )}
-          >
-            <List className="w-4 h-4" />
-          </button>
+      {/* Product Status Section */}
+      <div className="border-b border-gray-200 pb-6">
+        <h3 className="font-playfair text-lg text-gray-900 mb-4">Product Status</h3>
+        <div className="space-y-3">
+          <label className="flex items-center gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              checked={showFeaturedOnly}
+              onChange={() => onFeaturedToggle(!showFeaturedOnly)}
+              className="w-4 h-4 text-bronze-gold border-gray-300 rounded focus:ring-bronze-gold"
+            />
+            <span className={cn(
+              'text-sm font-montserrat transition-colors',
+              showFeaturedOnly ? 'text-bronze-gold font-medium' : 'text-gray-600 group-hover:text-gray-900'
+            )}>
+              Featured Only
+            </span>
+          </label>
         </div>
       </div>
 
-      {/* Advanced Filters Panel */}
-      <AnimatePresence>
-        {showAdvancedFilters && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="overflow-hidden"
-          >
-            <div className="bg-gradient-to-br from-ivory-pearl/50 to-white rounded-2xl p-6 border border-gray-200 mt-4">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-playfair text-lg text-gray-900">Price Range</h3>
-                <button
-                  onClick={() => {
-                    setLocalPriceRange([0, 500000]);
-                    onPriceRangeChange([0, 500000]);
-                  }}
-                  className="text-xs text-bronze-gold hover:underline font-gotham"
-                >
-                  Reset
-                </button>
-              </div>
-              <div className="space-y-4">
-                <div className="flex items-center gap-4">
-                  <div className="flex-1">
-                    <label className="block text-xs text-gray-600 mb-2 font-gotham uppercase tracking-wider">
-                      Min: ₹{localPriceRange[0].toLocaleString()}
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="500000"
-                      step="10000"
-                      value={localPriceRange[0]}
-                      onChange={(e) => setLocalPriceRange([Number(e.target.value), localPriceRange[1]])}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-bronze-gold"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <label className="block text-xs text-gray-600 mb-2 font-gotham uppercase tracking-wider">
-                      Max: ₹{localPriceRange[1].toLocaleString()}
-                    </label>
-                    <input
-                      type="range"
-                      min="0"
-                      max="500000"
-                      step="10000"
-                      value={localPriceRange[1]}
-                      onChange={(e) => setLocalPriceRange([localPriceRange[0], Number(e.target.value)])}
-                      className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-bronze-gold"
-                    />
-                  </div>
-                </div>
-                <button
-                  onClick={handlePriceRangeApply}
-                  className="w-full py-2.5 bg-bronze-gold hover:bg-bronze-gold/90 text-white rounded-full font-gotham text-xs uppercase tracking-[0.2em] transition-all shadow-luxury hover:shadow-glow"
-                >
-                  Apply Price Filter
-                </button>
-              </div>
-            </div>
-          </motion.div>
+      {/* Categories Section */}
+      <div className="border-b border-gray-200 pb-6">
+        <button
+          onClick={() => toggleSection('categories')}
+          className="flex items-center justify-between w-full mb-4"
+        >
+          <h3 className="font-playfair text-lg text-gray-900">Categories</h3>
+          {expandedSections.categories ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+        {expandedSections.categories && (
+          <div className="space-y-2">
+            {CATEGORIES.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => onCategoryChange(category.slug)}
+                className={cn(
+                  'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
+                  activeCategory === category.slug
+                    ? 'bg-classic-green/10 text-classic-green font-medium'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                )}
+              >
+                <span className="flex items-center gap-2">
+                  <span className={cn(
+                    'w-1.5 h-1.5 rounded-full',
+                    activeCategory === category.slug ? 'bg-classic-green' : 'bg-gray-300'
+                  )} />
+                  {category.label}
+                </span>
+                {productCounts[category.slug] !== undefined && (
+                  <span className="text-xs text-gray-400">
+                    {productCounts[category.slug]}
+                  </span>
+                )}
+              </button>
+            ))}
+          </div>
         )}
-      </AnimatePresence>
+      </div>
+
+      {/* View Mode Section */}
+      <div>
+        <button
+          onClick={() => toggleSection('view')}
+          className="flex items-center justify-between w-full mb-4"
+        >
+          <h3 className="font-playfair text-lg text-gray-900">View Mode</h3>
+          {expandedSections.view ? (
+            <ChevronUp className="w-4 h-4 text-gray-500" />
+          ) : (
+            <ChevronDown className="w-4 h-4 text-gray-500" />
+          )}
+        </button>
+        {expandedSections.view && (
+          <div className="flex gap-2">
+            <button
+              onClick={() => onViewModeChange('grid')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border transition-all font-gotham text-xs uppercase tracking-wider',
+                viewMode === 'grid'
+                  ? 'bg-classic-green text-white border-classic-green'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+              )}
+            >
+              <Grid3x3 className="w-4 h-4" />
+              Grid
+            </button>
+            <button
+              onClick={() => onViewModeChange('list')}
+              className={cn(
+                'flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg border transition-all font-gotham text-xs uppercase tracking-wider',
+                viewMode === 'list'
+                  ? 'bg-classic-green text-white border-classic-green'
+                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+              )}
+            >
+              <List className="w-4 h-4" />
+              List
+            </button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

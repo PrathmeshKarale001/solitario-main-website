@@ -178,7 +178,7 @@ export default function ShopCheckoutPage() {
           Back to Cart
         </Link>
 
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-12">
           {/* Left Column - Customer Details */}
           <div className="space-y-6">
             <div>
@@ -206,7 +206,7 @@ export default function ShopCheckoutPage() {
             <div className="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Contact Information</h2>
               
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     First Name *
@@ -244,7 +244,7 @@ export default function ShopCheckoutPage() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4 mt-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Email *
@@ -319,7 +319,7 @@ export default function ShopCheckoutPage() {
                   />
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       City *
@@ -357,7 +357,7 @@ export default function ShopCheckoutPage() {
                   </div>
                 </div>
 
-                <div className="w-1/2">
+                <div className="w-full sm:w-1/2">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     PIN Code *
                   </label>

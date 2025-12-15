@@ -226,17 +226,7 @@ export default function Footer() {
               </Link>
             </div>
             <p className="text-sm text-ivory-pearl/70">© 2025 Solitario. All rights reserved.</p>
-            <p className="text-sm text-ivory-pearl/70">
-              Marketed by{' '}
-              <a
-                href="https://yashus.in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-bronze-gold hover:underline"
-              >
-                Yashus
-              </a>
-            </p>
+            
           </div>
         </div>
       </div>

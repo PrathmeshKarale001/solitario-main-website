@@ -76,9 +76,6 @@ export default function Home() {
       {/* 9. STORES - Where to buy */}
       <Stores />
       
-      {/* 10. FAQ - Remove purchase objections */}
-      <FAQ />
-      
       {/* 11. BRAND STORY - For interested customers */}
       <BrandStory />
       
@@ -90,6 +87,9 @@ export default function Home() {
       
       {/* 14. HEAD OFFICE - Contact info */}
       <HeadOffice />
+
+      {/* 10. FAQ - Remove purchase objections */}
+      <FAQ />
       
       {/* REMOVED: ScrollReveal (decorative, slows journey to products) */}
     </div>

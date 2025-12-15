@@ -327,7 +327,7 @@ const handleDragEnd = () => {
     <div
       ref={containerRef}
       className={cn(
-        "w-full h-full overflow-hidden select-none relative",
+        "w-full h-full select-none relative",
         containerClassName
       )}
       style={{
@@ -367,18 +367,22 @@ const handleDragEnd = () => {
               <motion.div
                 key={index}
                 className={cn(
-                  "w-full h-full absolute",
+                  "absolute",
                   imageClassName
                 )}
                 style={{
+                  width: "85%",
+                  height: "85%",
+                  left: "7.5%",
+                  top: "7.5%",
                   transformStyle: "preserve-3d",
                   backgroundImage: `url(${imageItem.src})`,
                   backgroundSize: "cover",
                   backgroundRepeat: "no-repeat",
                   backfaceVisibility: "hidden",
                   rotateY: index * -angle,
-                  z: -imageDistance * currentScale,
-                  transformOrigin: `50% 50% ${imageDistance * currentScale}px`,
+                  z: -imageDistance,
+                  transformOrigin: `50% 50% ${imageDistance}px`,
                   backgroundPosition: getBgPos(index, currentRotationY.current, currentScale),
                   borderRadius: "12px",
                   outline: "none",

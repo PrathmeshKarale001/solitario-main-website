@@ -866,3 +866,48 @@ export const ADMIN_CUSTOMER_UPDATE_MUTATION = `
     }
   }
 `;
+
+// Helper function to fetch related products by category
+export async function getRelatedProducts(category: string, currentProductId: string, limit: number = 6) {
+  try {
+    // Query products by category tag
+    const query = `tag:${category}`;
+    
+    const response = await shopifyStorefrontFetch(GET_PRODUCTS_QUERY, {
+      first: limit + 10, // Fetch more to filter out current product
+      query: query
+    });
+
+    if (!response.data?.products?.edges) {
+      return [];
+    }
+
+    // Transform Shopify products to our Product interface
+    const products = response.data.products.edges
+      .map((edge: any) => {
+        const node = edge.node;
+        const variant = node.variants.edges[0]?.node;
+        
+        return {
+          id: node.id,
+          name: node.title,
+          category: category,
+          price: parseFloat(variant?.price?.amount || '0'),
+          currency: variant?.price?.currencyCode || 'INR',
+          image: node.images.edges[0]?.node?.url || '',
+          images: node.images.edges.map((img: any) => img.node.url),
+          description: node.description,
+          sku: variant?.sku,
+          inStock: variant?.availableForSale || false,
+          variantId: variant?.id,
+        };
+      })
+      .filter((product: any) => product.id !== currentProductId) // Exclude current product
+      .slice(0, limit); // Limit to requested number
+
+    return products;
+  } catch (error) {
+    console.error('Error fetching related products:', error);
+    return [];
+  }
+}

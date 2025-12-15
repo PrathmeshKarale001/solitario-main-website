@@ -30,7 +30,7 @@ export default function LifestyleShowcase() {
       </div>
 
       {/* 3D Image Ring - Full Viewport Width, Reduced Vertical Space */}
-      <div className="h-[430px] md:h-[500px] lg:h-[560px] w-screen relative left-1/2 -translate-x-1/2 flex items-center justify-center overflow-visible">
+      <div className="h-[200px] md:h-[500px] lg:h-[560px] w-screen relative left-1/2 -translate-x-1/2 flex items-center justify-center overflow-visible">
         <ThreeDImageRing 
           images={CELEBRITY_IMAGES}
           width={370}
@@ -39,7 +39,7 @@ export default function LifestyleShowcase() {
           animationDuration={1.4}
           staggerDelay={0.1}
           hoverOpacity={0.4}
-          mobileScaleFactor={0.55}
+          mobileScaleFactor={0.5}
           mobileBreakpoint={768}
           inertiaPower={0.7}
           inertiaTimeConstant={350}

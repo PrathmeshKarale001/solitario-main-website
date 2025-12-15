@@ -55,6 +55,7 @@ export default function Header() {
   const isHomePage = pathname === '/';
   const isProductsPage = pathname === '/products';
   const isProductDetailPage = pathname?.startsWith('/products/'); // Individual product pages
+  const isStoresPage = pathname === '/stores';
   const isTransparentHeroPage =
     isHomePage ||
     pathname === '/lab-grown-diamonds' ||
@@ -68,14 +69,16 @@ export default function Header() {
 
   useEffect(() => {
     const updateScroll = () => {
-      const heroThreshold = window.innerHeight * 0.99; // wait until hero is essentially passed
+      const heroThreshold = isStoresPage
+        ? window.innerHeight * 0.65
+        : window.innerHeight * 0.99; // wait until hero is essentially passed
       setIsScrolled(window.scrollY > heroThreshold);
     };
 
     updateScroll();
     window.addEventListener('scroll', updateScroll);
     return () => window.removeEventListener('scroll', updateScroll);
-  }, []);
+  }, [isStoresPage]);
 
   // Prevent body scroll when mobile menu is open
   useEffect(() => {
@@ -108,7 +111,8 @@ export default function Header() {
       <header
         className={cn(
           'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          headerClasses
+          headerClasses,
+          isMobileMenuOpen && 'lg:block hidden'
         )}
       >
         {/* Main Header - Increased padding */}
@@ -216,7 +220,7 @@ export default function Header() {
       {/* Mobile Menu - Full Screen Overlay */}
       <div
         className={cn(
-          "fixed inset-0 z-40 lg:hidden transition-all duration-300",
+          "fixed inset-0 z-[60] lg:hidden transition-all duration-300",
           isMobileMenuOpen ? "visible" : "invisible"
         )}
       >

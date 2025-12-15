@@ -6,6 +6,7 @@ import { ArrowRight, MapPin, Phone, Clock, Globe, ExternalLink } from 'lucide-re
 import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
+import { NearestStore } from '@/components/stores';
 
 const GLOBAL_STORES = [
   {
@@ -298,6 +299,9 @@ export default function StoresPage() {
           </div>
         </motion.div>
       </section>
+
+      {/* Nearest Store Section */}
+      <NearestStore showTitle={true} maxStores={3} />
 
       {/* Global Stores */}
       <section className="py-24 px-4 bg-white">

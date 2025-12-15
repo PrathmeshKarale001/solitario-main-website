@@ -90,11 +90,29 @@ export default function FranchisePage() {
               }}
             >
               <BlurText
-                text="Franchise   With   Us"
-                className="font-playfair"
+                text="Franchise"
+                className="font-playfair inline-block"
                 animateBy="characters"
                 direction="top"
                 delay={50}
+                stepDuration={0.4}
+              />
+              <span className="inline-block">&nbsp;</span>
+              <BlurText
+                text="With"
+                className="font-playfair inline-block"
+                animateBy="characters"
+                direction="top"
+                delay={150}
+                stepDuration={0.4}
+              />
+              <span className="inline-block">&nbsp;</span>
+              <BlurText
+                text="Us"
+                className="font-playfair inline-block"
+                animateBy="characters"
+                direction="top"
+                delay={250}
                 stepDuration={0.4}
               />
             </h1>

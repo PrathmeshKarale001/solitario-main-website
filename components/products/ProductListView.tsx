@@ -16,6 +16,20 @@ export interface ProductListViewProps {
 export default function ProductListView({ products, onQuickView }: ProductListViewProps) {
   const { addToCart } = useCart();
 
+  const getCleanDescription = (description?: string) => {
+    if (!description) return '';
+
+    const decodeHtmlEntities = (value: string) => {
+      if (typeof window === 'undefined') return value;
+      const textarea = document.createElement('textarea');
+      textarea.innerHTML = value;
+      return textarea.value;
+    };
+
+    const decoded = decodeHtmlEntities(description);
+    return decoded.replace(/<[^>]*>/g, '').split('Specifications')[0].trim();
+  };
+
   return (
     <div className="space-y-4">
       {products.map((product, index) => (
@@ -55,7 +69,7 @@ export default function ProductListView({ products, onQuickView }: ProductListVi
                           {product.name}
                         </h3>
                         <p className="text-sm text-gray-600 leading-relaxed font-montserrat line-clamp-2 mb-4">
-                          {product.description}
+                          {getCleanDescription(product.description) || product.description}
                         </p>
                       </div>
                     </div>

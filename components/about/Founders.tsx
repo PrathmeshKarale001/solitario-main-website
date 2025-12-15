@@ -19,7 +19,7 @@ const FOUNDERS = [
     title: 'Co-Founder',
     image: '/about/vivek-oberoi.jpg',
     signature: '/images/Signatures/vivek-oberoi-signature.png',
-    bio: 'Dr. Vivek Anand Oberoi is a distinguished figure known for his multifaceted career spanning Indian cinema, entrepreneurship, and philanthropy. With a prolific acting portfolio of 47 films across seven languages, including an Emmy nomination for "Inside Edge," Vivek has exceptional entrepreneurial acumen steering successful ventures across real estate, social impact, and luxury sectors. Recognized as one of the Top 40 Philanthropists globally, he actively sits on boards across India and globally, shaping strategies that enhance profitability while aligning with ethical business conduct and social impact.',
+    bio: 'Dr. Vivek Anand Oberoi is a distinguished actor, entrepreneur, and philanthropist. With 47 films across seven languages and an Emmy nomination for "Inside Edge," Vivek brings exceptional entrepreneurial acumen to Solitario. Recognized as one of the Top 40 Philanthropists globally, he shapes strategies that enhance profitability while aligning with ethical business conduct and social impact.',
   },
 ];
 
