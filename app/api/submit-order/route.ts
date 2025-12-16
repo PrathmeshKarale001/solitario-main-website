@@ -1,10 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Resend } from 'resend';
+import { createDelhiveryShipment, isDelhiveryConfigured } from '@/lib/delhivery';
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 interface OrderItem {
   name: string;
+  sku?: string;
+  productId?: string;
   variant: string;
   quantity: number;
   price: number;

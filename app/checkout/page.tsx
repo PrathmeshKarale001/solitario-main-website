@@ -30,6 +30,15 @@ interface CustomerForm {
   pincode: string;
 }
 
+interface PincodeCheck {
+  checked: boolean;
+  serviceable: boolean;
+  cod: boolean;
+  prepaid: boolean;
+  loading: boolean;
+  error?: string;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCart();
@@ -38,6 +47,13 @@ export default function CheckoutPage() {
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [isRedirectingToShop, setIsRedirectingToShop] = useState(false);
   const [isShopHost, setIsShopHost] = useState(false);
+  const [pincodeCheck, setPincodeCheck] = useState<PincodeCheck>({
+    checked: false,
+    serviceable: false,
+    cod: false,
+    prepaid: false,
+    loading: false,
+  });
   
   const [customer, setCustomer] = useState<CustomerForm>({
     firstName: '',
@@ -96,6 +112,62 @@ export default function CheckoutPage() {
     if (formErrors[field]) {
       setFormErrors(prev => ({ ...prev, [field]: undefined }));
     }
+    // Reset pincode check when pincode changes
+    if (field === 'pincode') {
+      setPincodeCheck({
+        checked: false,
+        serviceable: false,
+        cod: false,
+        prepaid: false,
+        loading: false,
+      });
+    }
+  };
+
+  // Check pincode serviceability
+  const checkPincode = async (pincode: string) => {
+    if (!/^\d{6}$/.test(pincode)) return;
+    
+    setPincodeCheck(prev => ({ ...prev, loading: true, error: undefined }));
+    
+    try {
+      const response = await fetch(`/api/shipping/check-pincode?pincode=${pincode}`);
+      const data = await response.json();
+      
+      if (data.success) {
+        setPincodeCheck({
+          checked: true,
+          serviceable: data.serviceable,
+          cod: data.cod || false,
+          prepaid: data.prepaid || false,
+          loading: false,
+        });
+        
+        if (!data.serviceable) {
+          setError('Sorry, delivery is not available to this pincode. Please try a different address.');
+        } else {
+          setError(null);
+        }
+      } else {
+        setPincodeCheck({
+          checked: true,
+          serviceable: false,
+          cod: false,
+          prepaid: false,
+          loading: false,
+          error: data.error || 'Failed to check pincode',
+        });
+      }
+    } catch (err) {
+      setPincodeCheck({
+        checked: true,
+        serviceable: false,
+        cod: false,
+        prepaid: false,
+        loading: false,
+        error: 'Failed to verify delivery availability',
+      });
+    }
   };
 
   // Initialize Razorpay payment
@@ -105,6 +177,22 @@ export default function CheckoutPage() {
       setError('Please fill all required fields correctly');
       return;
     }
+    
+    // Check pincode serviceability before payment
+    if (!pincodeCheck.checked) {
+      await checkPincode(customer.pincode);
+      // Re-check after async call
+      if (!pincodeCheck.serviceable && pincodeCheck.checked) {
+        setError('Please verify delivery availability for your pincode before proceeding.');
+        return;
+      }
+    }
+    
+    if (pincodeCheck.checked && !pincodeCheck.serviceable) {
+      setError('Delivery is not available to this pincode. Please use a different address.');
+      return;
+    }
+    
     if (!razorpayLoaded) {
       setError('Payment gateway is loading. Please wait...');
       return;
@@ -425,16 +513,46 @@ export default function CheckoutPage() {
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">PIN Code *</label>
-                      <input
-                        type="text"
-                        value={customer.pincode}
-                        onChange={(e) => handleInputChange('pincode', e.target.value.replace(/\D/g, '').slice(0, 6))}
-                        placeholder="400001"
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.pincode ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
-                      />
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={customer.pincode}
+                          onChange={(e) => handleInputChange('pincode', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          placeholder="400001"
+                          className={`flex-1 px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
+                            formErrors.pincode ? 'border-red-300 bg-red-50' : pincodeCheck.checked && pincodeCheck.serviceable ? 'border-green-500 bg-green-50' : 'border-gray-200'
+                          }`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => checkPincode(customer.pincode)}
+                          disabled={customer.pincode.length !== 6 || pincodeCheck.loading}
+                          className="px-3 py-2 text-xs font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-lg transition-colors whitespace-nowrap"
+                        >
+                          {pincodeCheck.loading ? (
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                          ) : (
+                            'Check'
+                          )}
+                        </button>
+                      </div>
                       {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
+                      {pincodeCheck.checked && (
+                        <div className={`flex items-center gap-1 mt-1 text-xs ${pincodeCheck.serviceable ? 'text-green-600' : 'text-red-500'}`}>
+                          {pincodeCheck.serviceable ? (
+                            <>
+                              <CheckCircle className="w-3 h-3" />
+                              <span>Delivery available</span>
+                              {pincodeCheck.prepaid && <span className="ml-1 text-gray-500">• Prepaid ✓</span>}
+                            </>
+                          ) : (
+                            <>
+                              <AlertCircle className="w-3 h-3" />
+                              <span>Delivery not available to this pincode</span>
+                            </>
+                          )}
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>

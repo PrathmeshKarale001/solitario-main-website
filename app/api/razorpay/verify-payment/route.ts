@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
-import { createDelhiveryShipment, isDelhiveryConfigured } from '@/lib/delhivery';
 import crypto from 'crypto';
+
+// Delhivery integration is now handled via Shopify-Delhivery sync
+// Orders created in Shopify will automatically appear in Delhivery ONE as "Pending AWB"
+// Management can then approve and generate AWB from Delhivery dashboard
 
 export async function POST(request: NextRequest) {
   try {
@@ -74,46 +77,15 @@ export async function POST(request: NextRequest) {
       // Don't fail the payment - just log the error
     }
 
-    // Step 2: Create shipment in Delhivery
-    let delhiveryWaybill = null;
-    if (isDelhiveryConfigured()) {
-      try {
-        // Prepare items with SKU for Delhivery
-        const shippingItems = orderData.items.map(item => ({
-          name: item.name,
-          sku: item.sku || item.productId, // Use SKU if available, fallback to productId
-          quantity: item.quantity,
-          price: item.price,
-        }));
-
-        const delhiveryResult = await createDelhiveryShipment(
-          orderId,
-          orderData.customer,
-          shippingItems,
-          orderData.total,
-          'Prepaid' // Payment already done via Razorpay
-        );
-
-        if (delhiveryResult.success && delhiveryResult.waybill) {
-          delhiveryWaybill = delhiveryResult.waybill;
-          console.log(`Delhivery shipment created: ${delhiveryWaybill}`);
-
-          // Update Shopify order with tracking number
-          if (shopifyOrderId) {
-            try {
-              await updateShopifyOrderWithTracking(shopifyOrderId, delhiveryWaybill);
-            } catch (trackingError) {
-              console.error('Failed to update Shopify with tracking:', trackingError);
-            }
-          }
-        } else {
-          console.error('Delhivery shipment creation failed:', delhiveryResult.error);
-        }
-      } catch (delhiveryError) {
-        console.error('Error creating Delhivery shipment:', delhiveryError);
-        // Don't fail the order - shipping can be created manually
-      }
-    }
+    // Step 2: Delhivery shipping is handled via Shopify-Delhivery integration
+    // Orders created in Shopify will automatically sync to Delhivery ONE as "Pending AWB"
+    // Management can then review and approve orders, generating AWB when ready
+    console.log(`📦 Order ${orderId} created in Shopify`);
+    console.log(`   → Will sync to Delhivery ONE as "Pending AWB"`);
+    console.log(`   → Management can approve and generate AWB from Delhivery dashboard`);
+    console.log(`   Customer: ${orderData.customer.name}`);
+    console.log(`   Address: ${orderData.customer.address.line1}, ${orderData.customer.address.city} - ${orderData.customer.address.pincode}`);
+    console.log(`   Total: ₹${orderData.total}`)
 
     const confirmedOrder = {
       orderId,
@@ -121,7 +93,7 @@ export async function POST(request: NextRequest) {
       razorpayPaymentId: razorpay_payment_id,
       shopifyOrderId,
       shopifyOrderName,
-      delhiveryWaybill,
+      delhiveryStatus: 'pending_sync', // Will sync to Delhivery via Shopify integration
       items: orderData.items,
       customer: orderData.customer,
       subtotal: orderData.subtotal,
@@ -223,43 +195,5 @@ async function createShopifyOrder(
   return { id: data.order.id, name: data.order.name };
 }
 
-// Helper function to update Shopify order with Delhivery tracking number
-async function updateShopifyOrderWithTracking(
-  shopifyOrderId: string, 
-  waybill: string
-): Promise<void> {
-  const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
-  const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
-  
-  if (!shopifyDomain || !adminToken) {
-    throw new Error('Shopify not configured');
-  }
-
-  // Add fulfillment with tracking info
-  const fulfillmentData = {
-    fulfillment: {
-      tracking_number: waybill,
-      tracking_company: 'Delhivery',
-      tracking_url: `https://www.delhivery.com/track/package/${waybill}`,
-      notify_customer: true,
-    },
-  };
-
-  const response = await fetch(
-    `https://${shopifyDomain}.myshopify.com/admin/api/2024-01/orders/${shopifyOrderId}/fulfillments.json`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Shopify-Access-Token': adminToken,
-      },
-      body: JSON.stringify(fulfillmentData),
-    }
-  );
-
-  if (!response.ok) {
-    const errorData = await response.json();
-    console.error('Failed to add tracking to Shopify:', errorData);
-    // Don't throw - this is not critical
-  }
-}
+// Note: Delhivery tracking is now handled via Shopify-Delhivery integration
+// When Delhivery generates AWB, it will automatically update Shopify with tracking info

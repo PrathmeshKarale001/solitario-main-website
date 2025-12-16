@@ -54,9 +54,10 @@ export interface DelhiveryShipmentRequest {
     seller_inv?: string;
     quantity: number;
     waybill?: string;
-    shipment_width?: number;
-    shipment_height?: number;
-    weight?: number;
+    shipment_length?: number; // Box length in cm
+    shipment_width?: number;  // Box width in cm
+    shipment_height?: number; // Box height in cm
+    weight?: number; // Weight in grams
     seller_gst_tin?: string;
     shipping_mode?: 'Surface' | 'Express';
     address_type?: 'home' | 'office';
@@ -123,6 +124,7 @@ export const isDelhiveryConfigured = (): boolean => {
 };
 
 // Create a shipment in Delhivery
+// Set manifestLater=true to create order without immediate manifest (can be manifested later via dashboard)
 export async function createDelhiveryShipment(
   orderId: string,
   customer: {
@@ -145,8 +147,14 @@ export async function createDelhiveryShipment(
     price: number;
   }>,
   orderTotal: number,
-  paymentMode: 'Prepaid' | 'COD' = 'Prepaid'
-): Promise<{ success: boolean; waybill?: string; error?: string }> {
+  paymentMode: 'Prepaid' | 'COD' = 'Prepaid',
+  options: {
+    manifestLater?: boolean; // If true, order is created but not manifested immediately
+    shippingMode?: 'Surface' | 'Express';
+    weight?: number; // Weight in grams (leave undefined to let Delhivery calculate)
+    boxDimensions?: { length: number; width: number; height: number }; // Box size in cm
+  } = {}
+): Promise<{ success: boolean; waybill?: string; error?: string; manifested?: boolean }> {
   if (!DELHIVERY_API_KEY) {
     console.error('Delhivery API key not configured');
     return { success: false, error: 'Shipping service not configured' };
@@ -159,6 +167,13 @@ export async function createDelhiveryShipment(
       .join(', ');
 
     const totalQuantity = items.reduce((sum, item) => sum + item.quantity, 0);
+
+    const { 
+      manifestLater = false, 
+      shippingMode = 'Surface', 
+      weight, // Don't set default - let Delhivery calculate if not provided
+      boxDimensions = { length: 20, width: 20, height: 8 } // Default box size: 20x20x8 cm
+    } = options;
 
     const shipmentData: DelhiveryShipmentRequest = {
       shipments: [
@@ -186,8 +201,13 @@ export async function createDelhiveryShipment(
           seller_add: WAREHOUSE.add,
           seller_name: WAREHOUSE.name,
           quantity: totalQuantity,
-          shipping_mode: 'Surface', // or 'Express' for faster delivery
-          weight: 100, // Weight in grams - adjust based on product
+          shipping_mode: shippingMode,
+          // Box dimensions (20x20x8 cm default)
+          shipment_length: boxDimensions.length,
+          shipment_width: boxDimensions.width,
+          shipment_height: boxDimensions.height,
+          // Weight is optional - Delhivery will calculate if not provided
+          ...(weight ? { weight } : {}),
         },
       ],
       pickup_location: {
@@ -204,7 +224,18 @@ export async function createDelhiveryShipment(
     // Format data for Delhivery API
     const formData = `format=json&data=${encodeURIComponent(JSON.stringify(shipmentData))}`;
 
-    const response = await fetch(`${DELHIVERY_BASE_URL}/api/cmu/create.json`, {
+    // Delhivery API endpoints:
+    // /api/cmu/create.json - Creates order (waybill generated, ready for manifest)
+    // /api/p/packing_slip - For manifest/pickup scheduling (done separately by management)
+    // 
+    // Orders created via create.json will appear in "Pending AWB" or "Ready to Ship" 
+    // in Delhivery dashboard. Management can then manifest them when ready.
+    const endpoint = `${DELHIVERY_BASE_URL}/api/cmu/create.json`;
+
+    console.log(`Calling Delhivery API: ${endpoint}`);
+    console.log(`Shipment data:`, JSON.stringify(shipmentData, null, 2));
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -223,13 +254,28 @@ export async function createDelhiveryShipment(
 
     if (result.success && result.packages && result.packages.length > 0) {
       const waybill = result.packages[0].waybill;
-      console.log(`Delhivery shipment created: Waybill ${waybill} for Order ${orderId}`);
-      return { success: true, waybill };
+      const status = result.packages[0].status;
+      console.log(`Delhivery shipment created: Waybill ${waybill} for Order ${orderId} (Status: ${status})`);
+      
+      // If manifestLater is true, the order is created but needs manual manifest via Delhivery dashboard
+      // The waybill is generated but pickup won't be scheduled until manifest
+      return { 
+        success: true, 
+        waybill,
+        manifested: !manifestLater // If manifestLater=false, it's manifested immediately
+      };
     } else {
-      console.error('Delhivery shipment creation failed:', result);
+      // Log full error details including remarks array
+      const packageError = result.packages?.[0];
+      const remarksArray = packageError?.remarks;
+      const remarksStr = Array.isArray(remarksArray) ? remarksArray.join(', ') : remarksArray;
+      
+      console.error('Delhivery shipment creation failed:', JSON.stringify(result, null, 2));
+      console.error('Package remarks:', remarksStr);
+      
       return { 
         success: false, 
-        error: result.rmk || result.packages?.[0]?.remarks || 'Failed to create shipment' 
+        error: remarksStr || result.rmk || 'Failed to create shipment' 
       };
     }
   } catch (error) {
