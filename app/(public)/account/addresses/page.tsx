@@ -27,6 +27,8 @@ export default function AddressesPage() {
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingAddress, setEditingAddress] = useState<Address | null>(null);
   const [formData, setFormData] = useState<Partial<Address>>({
@@ -73,54 +75,79 @@ export default function AddressesPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setSaving(true);
+    setError(null);
 
     try {
-      if (editingAddress) {
-        await fetch('/api/account/addresses', {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            id: editingAddress.id,
-            ...formData,
-          }),
-        });
-      } else {
-        await fetch('/api/account/addresses', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(formData),
-        });
+      const res = editingAddress
+        ? await fetch('/api/account/addresses', {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              id: editingAddress.id,
+              ...formData,
+            }),
+          })
+        : await fetch('/api/account/addresses', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(formData),
+          });
+
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to save address');
       }
+
       await fetchAddresses();
       closeModal();
-    } catch (error) {
-      console.error('Failed to save address:', error);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save address');
+    } finally {
+      setSaving(false);
     }
   };
 
   const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this address?')) return;
+    
+    setError(null);
     try {
-      await fetch(`/api/account/addresses?id=${encodeURIComponent(id)}`, {
+      const res = await fetch(`/api/account/addresses?id=${encodeURIComponent(id)}`, {
         method: 'DELETE',
       });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to delete address');
+      }
+      
       await fetchAddresses();
-    } catch (error) {
-      console.error('Failed to delete address:', error);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete address');
     }
   };
 
   const handleSetDefault = async (id: string) => {
     const target = addresses.find(a => a.id === id);
     if (!target) return;
+    
+    setError(null);
     try {
-      await fetch('/api/account/addresses', {
+      const res = await fetch('/api/account/addresses', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...target, isDefault: true }),
       });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to set default address');
+      }
+      
       await fetchAddresses();
-    } catch (error) {
-      console.error('Failed to set default address:', error);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to set default address');
     }
   };
 
@@ -179,6 +206,21 @@ export default function AddressesPage() {
               <ChevronLeft className="w-4 h-4" />
               Back to Account
             </Link>
+
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3"
+              >
+                <X className="w-5 h-5 text-red-500 flex-shrink-0" />
+                <p className="text-red-700 font-montserrat text-sm">{error}</p>
+                <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">
+                  <X className="w-4 h-4" />
+                </button>
+              </motion.div>
+            )}
 
             {/* Header */}
             <motion.div
@@ -433,9 +475,17 @@ export default function AddressesPage() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full py-3 bg-classic-green text-white rounded-xl hover:bg-classic-green/90 transition-colors font-montserrat font-medium"
+                    disabled={saving}
+                    className="w-full py-3 bg-classic-green text-white rounded-xl hover:bg-classic-green/90 transition-colors font-montserrat font-medium disabled:opacity-50 flex items-center justify-center gap-2"
                   >
-                    {editingAddress ? 'Update Address' : 'Save Address'}
+                    {saving ? (
+                      <>
+                        <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                        Saving...
+                      </>
+                    ) : (
+                      editingAddress ? 'Update Address' : 'Save Address'
+                    )}
                   </button>
                 </form>
               </div>

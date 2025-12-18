@@ -2,10 +2,10 @@
 
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { User, ChevronLeft, Mail, Phone, Calendar, Shield, Bell, Eye, EyeOff, Check, Camera } from 'lucide-react';
+import { User, ChevronLeft, Mail, Phone, Calendar, Shield, Bell, Eye, EyeOff, Check, Camera, AlertCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
 interface UserProfile {
@@ -19,8 +19,6 @@ interface UserProfile {
     promotions: boolean;
   };
 }
-
-const STORAGE_KEY = 'solitario_user_profile';
 
 export default function SettingsPage() {
   const { data: session, status } = useSession();
@@ -46,39 +44,78 @@ export default function SettingsPage() {
     }
   }, [status, router]);
 
-  useEffect(() => {
-    if (session?.user) {
-      // Load profile from localStorage or use session data
-      try {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          setProfile(JSON.parse(stored));
-        } else {
-          setProfile(prev => ({
-            ...prev,
-            name: session.user?.name || '',
-            email: session.user?.email || '',
-          }));
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchProfile = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch('/api/account/profile');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.profile) {
+          setProfile({
+            name: data.profile.name || '',
+            email: data.profile.email || '',
+            phone: data.profile.phone || '',
+            birthday: data.profile.birthday || '',
+            notifications: {
+              email: data.profile.notifications?.email ?? true,
+              sms: data.profile.notifications?.sms ?? false,
+              promotions: data.profile.notifications?.promotions ?? true,
+            },
+          });
         }
-      } catch (error) {
-        console.error('Failed to load profile:', error);
+      } else {
+        // Fallback to session data
+        setProfile(prev => ({
+          ...prev,
+          name: session?.user?.name || '',
+          email: session?.user?.email || '',
+        }));
       }
+    } catch (err) {
+      console.error('Failed to fetch profile:', err);
+      // Fallback to session data
+      setProfile(prev => ({
+        ...prev,
+        name: session?.user?.name || '',
+        email: session?.user?.email || '',
+      }));
+    } finally {
       setLoading(false);
     }
   }, [session]);
 
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      fetchProfile();
+    }
+  }, [status, session, fetchProfile]);
+
   const handleSave = async () => {
     setSaving(true);
+    setError(null);
     
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 500));
-    
-    // Save to localStorage
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
-    
-    setSaving(false);
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2000);
+    try {
+      const res = await fetch('/api/account/profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(profile),
+      });
+      
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.error || 'Failed to save profile');
+      }
+      
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to save profile');
+    } finally {
+      setSaving(false);
+    }
   };
 
   if (status === 'loading' || loading) {
@@ -109,6 +146,18 @@ export default function SettingsPage() {
               <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">Profile Settings</h1>
               <p className="text-brand-500 font-montserrat">Manage your account information</p>
             </motion.div>
+
+            {/* Error Message */}
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3"
+              >
+                <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0" />
+                <p className="text-red-700 font-montserrat text-sm">{error}</p>
+              </motion.div>
+            )}
 
             {/* Profile Picture */}
             <motion.div

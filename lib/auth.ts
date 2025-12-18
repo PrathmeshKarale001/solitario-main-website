@@ -2,9 +2,15 @@ import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import { shopifyAdminFetch, shopifyStorefrontFetch, CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION } from './shopify';
+import crypto from 'crypto';
 
-// Shopify Admin API: Find or create customer
-async function findOrCreateShopifyCustomer(email: string, firstName?: string, lastName?: string) {
+// Generate a secure random password for OAuth users
+function generateSecurePassword(): string {
+  return crypto.randomBytes(32).toString('base64') + '!Aa1';
+}
+
+// Shopify Admin API: Find or create customer with password for OAuth
+async function findOrCreateShopifyCustomer(email: string, firstName?: string, lastName?: string, createWithPassword: boolean = false) {
   // First, try to find existing customer by email
   const findQuery = `
     query findCustomer($email: String!) {
@@ -15,6 +21,10 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
             email
             firstName
             lastName
+            phone
+            metafield(namespace: "custom", key: "oauth_password") {
+              value
+            }
           }
         }
       }
@@ -22,14 +32,21 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
   `;
 
   const findResult = await shopifyAdminFetch<{
-    customers: { edges: Array<{ node: { id: string; email: string; firstName: string; lastName: string } }> };
+    customers: { edges: Array<{ node: { id: string; email: string; firstName: string; lastName: string; phone: string | null; metafield: { value: string } | null } }> };
   }>(findQuery, { email: `email:${email}` });
 
   if (findResult.data?.customers?.edges?.length) {
-    return findResult.data.customers.edges[0].node;
+    const existingCustomer = findResult.data.customers.edges[0].node;
+    // Return existing customer with stored password if available
+    return {
+      ...existingCustomer,
+      storedPassword: existingCustomer.metafield?.value || null,
+    };
   }
 
   // Customer not found, create new one
+  const password = createWithPassword ? generateSecurePassword() : null;
+  
   const createMutation = `
     mutation customerCreate($input: CustomerInput!) {
       customerCreate(input: $input) {
@@ -38,6 +55,7 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
           email
           firstName
           lastName
+          phone
         }
         userErrors {
           field
@@ -49,7 +67,7 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
 
   const createResult = await shopifyAdminFetch<{
     customerCreate: {
-      customer: { id: string; email: string; firstName: string; lastName: string } | null;
+      customer: { id: string; email: string; firstName: string; lastName: string; phone: string | null } | null;
       userErrors: Array<{ field: string; message: string }>;
     };
   }>(createMutation, {
@@ -57,15 +75,27 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
       email,
       firstName: firstName || '',
       lastName: lastName || '',
+      ...(password && { password, passwordConfirmation: password }),
       emailMarketingConsent: {
         marketingState: 'NOT_SUBSCRIBED',
         marketingOptInLevel: 'SINGLE_OPT_IN',
       },
+      metafields: password ? [
+        {
+          namespace: 'custom',
+          key: 'oauth_password',
+          value: password,
+          type: 'single_line_text_field',
+        },
+      ] : undefined,
     },
   });
 
   if (createResult.data?.customerCreate?.customer) {
-    return createResult.data.customerCreate.customer;
+    return {
+      ...createResult.data.customerCreate.customer,
+      storedPassword: password,
+    };
   }
 
   if (createResult.data?.customerCreate?.userErrors?.length) {
@@ -73,6 +103,28 @@ async function findOrCreateShopifyCustomer(email: string, firstName?: string, la
   }
 
   return null;
+}
+
+// Get Shopify customer access token using stored password (for OAuth users)
+async function getShopifyAccessTokenForOAuthUser(email: string, password: string): Promise<{ accessToken: string; expiresAt: string } | null> {
+  try {
+    const result = await shopifyStorefrontFetch<{
+      customerAccessTokenCreate: {
+        customerAccessToken: { accessToken: string; expiresAt: string } | null;
+        customerUserErrors: Array<{ code: string; field: string[]; message: string }>;
+      };
+    }>(CUSTOMER_ACCESS_TOKEN_CREATE_MUTATION, {
+      input: { email, password },
+    });
+
+    if (result.data?.customerAccessTokenCreate?.customerAccessToken) {
+      return result.data.customerAccessTokenCreate.customerAccessToken;
+    }
+    return null;
+  } catch (error) {
+    console.error('Failed to get Shopify access token for OAuth user:', error);
+    return null;
+  }
 }
 
 // Shopify Storefront API: Login customer with email/password
@@ -134,33 +186,84 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // For Google sign-in, upsert customer in Shopify
+      // For Google sign-in, upsert customer in Shopify with password for API access
       if (account?.provider === 'google' && user.email) {
         try {
           const nameParts = user.name?.split(' ') || [];
           const firstName = nameParts[0] || '';
           const lastName = nameParts.slice(1).join(' ') || '';
 
-          const shopifyCustomer = await findOrCreateShopifyCustomer(user.email, firstName, lastName);
+          // Create customer with password for OAuth users
+          const shopifyCustomer = await findOrCreateShopifyCustomer(user.email, firstName, lastName, true);
           
           if (shopifyCustomer) {
-            // Attach Shopify customer ID to user object
             (user as any).shopifyCustomerId = shopifyCustomer.id;
+            
+            // Get Shopify access token using the stored password
+            if (shopifyCustomer.storedPassword) {
+              const tokenResult = await getShopifyAccessTokenForOAuthUser(user.email, shopifyCustomer.storedPassword);
+              if (tokenResult) {
+                (user as any).shopifyAccessToken = tokenResult.accessToken;
+                (user as any).shopifyTokenExpires = tokenResult.expiresAt;
+              }
+            }
           }
         } catch (error) {
           console.error('Failed to sync customer to Shopify:', error);
-          // Don't block sign-in if Shopify sync fails
         }
       }
       return true;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger }) {
+      // Initial sign in
       if (user) {
         token.email = user.email;
+        token.name = user.name;
         token.shopifyCustomerId = (user as any).shopifyCustomerId;
         token.shopifyAccessToken = (user as any).shopifyAccessToken;
         token.shopifyTokenExpires = (user as any).shopifyTokenExpires;
       }
+      
+      // Check if token needs refresh (for OAuth users)
+      if (token.shopifyTokenExpires && trigger !== 'signIn') {
+        const expiresAt = new Date(token.shopifyTokenExpires as string);
+        const now = new Date();
+        // Refresh if token expires in less than 1 day
+        if (expiresAt.getTime() - now.getTime() < 24 * 60 * 60 * 1000) {
+          try {
+            // Try to renew the token
+            const renewResult = await shopifyStorefrontFetch<{
+              customerAccessTokenRenew: {
+                customerAccessToken: { accessToken: string; expiresAt: string } | null;
+                userErrors: Array<{ field: string[]; message: string }>;
+              };
+            }>(`
+              mutation customerAccessTokenRenew($customerAccessToken: String!) {
+                customerAccessTokenRenew(customerAccessToken: $customerAccessToken) {
+                  customerAccessToken {
+                    accessToken
+                    expiresAt
+                  }
+                  userErrors {
+                    field
+                    message
+                  }
+                }
+              }
+            `, {
+              customerAccessToken: token.shopifyAccessToken,
+            });
+            
+            if (renewResult.data?.customerAccessTokenRenew?.customerAccessToken) {
+              token.shopifyAccessToken = renewResult.data.customerAccessTokenRenew.customerAccessToken.accessToken;
+              token.shopifyTokenExpires = renewResult.data.customerAccessTokenRenew.customerAccessToken.expiresAt;
+            }
+          } catch (error) {
+            console.error('Failed to renew Shopify token:', error);
+          }
+        }
+      }
+      
       return token;
     },
     async session({ session, token }) {
