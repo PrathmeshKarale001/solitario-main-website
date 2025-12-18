@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { Suspense } from 'react'
 import { Montserrat, Playfair_Display } from 'next/font/google'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
@@ -70,7 +71,9 @@ export default function RootLayout({
       <body className="antialiased">
         <GoogleAnalytics />
         <SmoothScroll>
-          <ScrollToTopOnRouteChange />
+          <Suspense fallback={null}>
+            <ScrollToTopOnRouteChange />
+          </Suspense>
           <AuthProvider>
             <WishlistProvider>
               <CartProvider>
