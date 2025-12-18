@@ -5,19 +5,41 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 
-// Video and image sources for the hero carousel
+// Video and image sources for the hero carousel (new images first, existing last)
 const HERO_MEDIA = [
   {
-    type: 'video',
-    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
+    type: 'image',
+    src: '/images/HERO BANNER 1.jpg',
+    pos: 'object-[50%_35%]',
   },
   {
+    type: 'image',
+    src: '/images/HERO BANNER 2.jpg',
+    pos: 'object-[50%_20%]',
+  },
+  {
+    type: 'image',
+    src: '/images/HERO BANNER 3.png',
+    pos: 'object-center',
+  },
+  {
+    type: 'image',
+    src: '/images/HERO BANNER 4.jpg',
+    pos: 'object-center',
+  },
+   {
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
   },
   {
+    type: 'video',
+    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
+  },
+ 
+  {
     type: 'image',
     src: '/images/home-hero/Web_Banner_YouTube-01.jpg',
+    pos: 'object-center',
   },
 ];
 
@@ -100,7 +122,7 @@ export default function Hero() {
               <img
                 src={media.src}
                 alt="Solitario Jewelry"
-                className="absolute inset-0 w-full h-full object-cover"
+                className={`absolute inset-0 w-full h-full object-cover ${(media as any).pos ?? 'object-center'}`}
               />
             )}
             {/* Dark overlay for better CTA visibility */}

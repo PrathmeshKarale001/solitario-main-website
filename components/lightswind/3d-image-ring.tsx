@@ -4,10 +4,12 @@ import React, { useEffect, useRef, useState, useMemo } from "react";
 import { motion, AnimatePresence, useMotionValue, easeOut } from "framer-motion";
 import { cn } from "../../lib/utils"; // Assuming you have this utility for class names
 import { animate } from "framer-motion";
+import { useRouter } from "next/navigation";
 
 export interface ImageItem {
   src: string;
   name?: string;
+  href?: string;
 }
 
 export interface ThreeDImageRingProps {
@@ -89,6 +91,8 @@ export function ThreeDImageRing({
 }: ThreeDImageRingProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const ringRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const dragStartPos = useRef<{ x: number; y: number } | null>(null);
 
   const rotationY = useMotionValue(initialRotation);
   const startX = useRef<number>(0);
@@ -245,11 +249,28 @@ export function ThreeDImageRing({
     }, autoRotateDelay);
   };
 
+  // Handle click on image (navigate if href exists and wasn't a drag)
+  const handleImageClick = (imageItem: ImageItem, event: React.MouseEvent) => {
+    // Only navigate if it was a click (not a drag) and href exists
+    if (dragStartPos.current && imageItem.href) {
+      const dx = Math.abs(event.clientX - dragStartPos.current.x);
+      const dy = Math.abs(event.clientY - dragStartPos.current.y);
+      // If movement is less than 5px, consider it a click
+      if (dx < 5 && dy < 5) {
+        router.push(imageItem.href);
+      }
+    }
+  };
+
   const handleDragStart = (event: React.MouseEvent | React.TouchEvent) => {
     if (!draggable) return;
+    // Store start position for click detection
+    const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
+    const clientY = "touches" in event ? event.touches[0].clientY : event.clientY;
+    dragStartPos.current = { x: clientX, y: clientY };
+    
     stopAutoRotation(); // Stop auto-rotation when user starts dragging
     isDragging.current = true;
-    const clientX = "touches" in event ? event.touches[0].clientX : event.clientX;
     startX.current = clientX;
     // Stop any ongoing animation instantly when drag starts
     rotationY.stop();
@@ -399,6 +420,7 @@ const handleDragEnd = () => {
                   ease: easeOut, // Apply ease for entrance animation
                 }}
                 whileHover={{ opacity: 1, transition: { duration: 0.15 } }}
+                onClick={(e) => handleImageClick(imageItem, e)}
                 onHoverStart={() => {
                   // Prevent hover effects while dragging
                   if (isDragging.current) return;

@@ -2,17 +2,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export function middleware(request: NextRequest) {
-  const hostname = request.headers.get('host') || '';
-  const pathname = request.nextUrl.pathname;
-
-  // Check if request is from shop subdomain
-  const isShopSubdomain = hostname.startsWith('shop.') || hostname.includes('shop.thesolitario.com');
-
-  // Redirect /checkout to /shop-checkout for shop subdomain
-  if (isShopSubdomain && pathname === '/checkout') {
-    return NextResponse.redirect(new URL('/shop-checkout', request.url));
-  }
-
+  // All domains now use the same Razorpay checkout flow
   return NextResponse.next();
 }
 

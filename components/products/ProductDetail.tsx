@@ -69,8 +69,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleBuyNow = () => {
     addToCartContext(product, quantity);
-    // Use shop-checkout for the temporary email-based flow
-    window.location.href = '/shop-checkout';
+    window.location.href = '/checkout';
   };
 
   const toggleWishlist = () => {
@@ -533,7 +532,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Product Details Tabs - Reduced gap */}
       <Section variant="light" padding="sm" className="bg-brand-50 pt-0">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-5xl mx-auto">
             {/* Tabs */}
             <div className="flex border-b border-brand-300 mb-6 md:mb-8 overflow-x-auto scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
               {[

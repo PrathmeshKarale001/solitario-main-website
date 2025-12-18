@@ -7,6 +7,7 @@ import {
   // PromoBanner1, // Disabled
 } from '@/components/home';
 import { Promise } from '@/components/about';
+import LoginPopup from '@/components/home/LoginPopup';
 
 // Lazy load below-fold components for better performance
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
@@ -42,6 +43,9 @@ const menuItems = [
 export default function Home() {
   return (
     <div>
+      {/* Marketing Login Popup for first-time visitors */}
+      <LoginPopup />
+      
       {/* 1. HERO - First impression with CTA */}
       <Hero />
       

@@ -31,7 +31,7 @@ export default function Promise() {
       <div className="absolute top-0 right-0 w-48 sm:w-96 h-48 sm:h-96 bg-bronze-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-48 sm:w-96 h-48 sm:h-96 bg-classic-green/5 rounded-full blur-3xl" />
       
-      <Container className="relative z-10 px-3 sm:px-4">
+      <Container className="relative z-10 px-4 sm:px-6 lg:px-8">
         {/* Compact Header */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}

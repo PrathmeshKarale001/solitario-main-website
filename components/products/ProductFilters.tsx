@@ -5,6 +5,9 @@ import { CATEGORIES } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 import { Grid3x3, List, ChevronDown, ChevronUp } from 'lucide-react';
 
+// Helper to capitalize first letter
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
+
 export interface ProductFiltersProps {
   activeCategory: string;
   onCategoryChange: (category: string) => void;
@@ -185,31 +188,56 @@ export default function ProductFilters({
         </button>
         {expandedSections.categories && (
           <div className="space-y-2">
-            {CATEGORIES.map((category) => (
-              <button
-                key={category.id}
-                onClick={() => onCategoryChange(category.slug)}
-                className={cn(
-                  'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
-                  activeCategory === category.slug
-                    ? 'bg-classic-green/10 text-classic-green font-medium'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                )}
-              >
-                <span className="flex items-center gap-2">
-                  <span className={cn(
-                    'w-1.5 h-1.5 rounded-full',
-                    activeCategory === category.slug ? 'bg-classic-green' : 'bg-gray-300'
-                  )} />
-                  {category.label}
+            {/* All category first */}
+            <button
+              onClick={() => onCategoryChange('all')}
+              className={cn(
+                'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
+                activeCategory === 'all'
+                  ? 'bg-classic-green/10 text-classic-green font-medium'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+              )}
+            >
+              <span className="flex items-center gap-2">
+                <span className={cn(
+                  'w-1.5 h-1.5 rounded-full',
+                  activeCategory === 'all' ? 'bg-classic-green' : 'bg-gray-300'
+                )} />
+                All
+              </span>
+              {productCounts['all'] !== undefined && (
+                <span className="text-xs text-gray-400">
+                  {productCounts['all']}
                 </span>
-                {productCounts[category.slug] !== undefined && (
-                  <span className="text-xs text-gray-400">
-                    {productCounts[category.slug]}
+              )}
+            </button>
+            {/* Dynamic categories from actual products */}
+            {Object.entries(productCounts)
+              .filter(([slug]) => slug !== 'all' && productCounts[slug] > 0)
+              .sort((a, b) => b[1] - a[1]) // Sort by count descending
+              .map(([slug, count]) => (
+                <button
+                  key={slug}
+                  onClick={() => onCategoryChange(slug)}
+                  className={cn(
+                    'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
+                    activeCategory === slug
+                      ? 'bg-classic-green/10 text-classic-green font-medium'
+                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                  )}
+                >
+                  <span className="flex items-center gap-2">
+                    <span className={cn(
+                      'w-1.5 h-1.5 rounded-full',
+                      activeCategory === slug ? 'bg-classic-green' : 'bg-gray-300'
+                    )} />
+                    {capitalize(slug.replace(/-/g, ' '))}
                   </span>
-                )}
-              </button>
-            ))}
+                  <span className="text-xs text-gray-400">
+                    {count}
+                  </span>
+                </button>
+              ))}
           </div>
         )}
       </div>

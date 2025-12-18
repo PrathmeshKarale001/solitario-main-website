@@ -13,6 +13,7 @@
  *   --start=N    Start from product N (0-indexed)
  */
 
+
 import * as dotenv from 'dotenv';
 import * as XLSX from 'xlsx';
 import * as fs from 'fs';

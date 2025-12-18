@@ -34,7 +34,7 @@ const FEATURED_STORES = [
 
 export default function Stores() {
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-3 sm:px-4 bg-white">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div

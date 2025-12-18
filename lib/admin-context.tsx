@@ -53,7 +53,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
 
   const verifyAccess = (code: string): boolean => {
     // Simple PIN verification - in production, use proper 2FA
-    const validPins = ['123456', 'ADMIN1', 'SOL2024']; // Change these!
+    const validPins = ['Payment@thesolitario.com', 'SOL2024']; // Change these!
     
     if (validPins.includes(code.toUpperCase())) {
       setIsVerified(true);

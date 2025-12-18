@@ -45,8 +45,6 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-  const [isRedirectingToShop, setIsRedirectingToShop] = useState(false);
-  const [isShopHost, setIsShopHost] = useState(false);
   const [pincodeCheck, setPincodeCheck] = useState<PincodeCheck>({
     checked: false,
     serviceable: false,
@@ -69,20 +67,8 @@ export default function CheckoutPage() {
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
 
-  // If on shop.thesolitario.com, use the temporary shop checkout flow
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    const host = window.location.hostname.toLowerCase();
-    const isShopSubdomain = host.startsWith('shop.') || host.includes('shop.thesolitario.com');
-    if (isShopSubdomain) {
-      setIsRedirectingToShop(true);
-      setIsShopHost(true);
-      router.replace('/shop-checkout');
-    }
-  }, [router]);
-
   // Shipping cost calculation
-  const shipping = total >= 50000 ? 0 : 500; // Free shipping above ₹50,000
+  const shipping = 0;
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const grandTotal = total + shipping;
 
@@ -172,7 +158,6 @@ export default function CheckoutPage() {
 
   // Initialize Razorpay payment
   const initiatePayment = async () => {
-    if (isRedirectingToShop) return; // redirect handled by useEffect
     if (!validateForm()) {
       setError('Please fill all required fields correctly');
       return;
@@ -628,9 +613,7 @@ export default function CheckoutPage() {
                       )}
                     </span>
                   </div>
-                  {shipping > 0 && (
-                    <p className="text-xs text-gray-500">Free shipping on orders above ₹50,000</p>
-                  )}
+                  <p className="text-xs text-gray-500">Free shipping on orders above ₹5,000</p>
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">GST (Included)</span>
                     <span className="font-medium text-gray-900">

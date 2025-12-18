@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function HeadOffice() {
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-3 sm:px-4 bg-brand-100">
+    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-brand-100">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div

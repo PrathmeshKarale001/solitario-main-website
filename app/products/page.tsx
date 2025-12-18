@@ -12,21 +12,20 @@ import { Section, Container, QuickLookModal } from '@/components/ui';
 import Image from 'next/image';
 const PRODUCTS_PER_PAGE = 12;
 
-// Hero images - Desktop versions
+// Hero images - Desktop versions (new Shop images first, then existing last)
 const HERO_IMAGES_DESKTOP = [
-  // '/images/home-hero/Great Places to Work Creatives Sept 2025-10 Solitario Website.jpg',
-  // '/images/home-hero/Dagaduseth Web Banner 4-03.jpg',
-    '/images/home-hero/WedforDesktop_Bling better-1920X1070.png',
-  '/images/home-hero/Web_Banner_YouTube-01.jpg',
-  // '/images/home-hero/Dagaduseth Web Banner-02.jpg',
-
+  { src: '/images/Shop/1.png', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/2.png', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/3.jpg', pos: 'object-[50%_25%]' },
+  { src: '/images/home-hero/Web_Banner_YouTube-01.jpg', pos: 'object-center' },
 ];
 
 // Hero images - Mobile versions
 const HERO_IMAGES_MOBILE = [
-  '/images/home-hero/Great Places to Work Creatives Sept 2025-11 Solitario Mobile Website.jpg',
-  '/images/home-hero/Web_Banner_Mobile-01.jpg',
-  '/images/home-hero/WedforMobile_Bling better-480x530.png',
+  { src: '/images/Shop/ShopMobile.jpg', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/ShopMobile2.jpg', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/ShopMobile3.jpg', pos: 'object-[50%_25%]' },
+  { src: '/images/home-hero/Web_Banner_Mobile-01.jpg', pos: 'object-center' },
 ];
 
 function ProductsPageContent() {
@@ -211,7 +210,7 @@ function ProductsPageContent() {
         {/* Image Background with Crossfade */}
         <div className="absolute inset-0">
           <AnimatePresence mode="wait">
-            {heroImages.map((imageSrc, index) => (
+            {heroImages.map((item, index) => (
               index === currentImageIndex % heroImages.length && (
                 <motion.div
                   key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
@@ -222,10 +221,10 @@ function ProductsPageContent() {
                   className="absolute inset-0"
                 >
                   <Image
-                    src={imageSrc}
+                    src={item.src}
                     alt={`Products hero ${index + 1}`}
                     fill
-                    className="object-cover object-center"
+                    className={`object-cover ${item.pos}`}
                     priority={index === 0}
                     quality={index === 0 ? 85 : 75}
                     sizes="100vw"
@@ -237,7 +236,7 @@ function ProductsPageContent() {
         </div>
         
         {/* Bottom Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-[1]" style={{ height: '20%', bottom: 0, top: 'auto' }} />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-[1]" style={{ height: '15%', bottom: 0, top: 'auto' }} />
         {/* Image Indicators */}
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
           {heroImages.map((_, index) => (
@@ -261,7 +260,7 @@ function ProductsPageContent() {
           <div className="flex gap-8">
             {/* Left Sidebar - Desktop Only, Fixed Position */}
             <aside className="hidden lg:block w-72 flex-shrink-0">
-              <div className="sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto scrollbar-hide">
+              <div className="sticky top-24 max-h-[calc(100vh-140px)] overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin' }}>
                 <ProductFilters
                   activeCategory={activeCategory}
                   onCategoryChange={setActiveCategory}

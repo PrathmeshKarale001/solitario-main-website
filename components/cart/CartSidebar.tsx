@@ -6,11 +6,9 @@ import Link from 'next/link';
 import { X, ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
-import { useIsShopSubdomain } from '@/lib/use-shop-subdomain';
 
 export default function CartSidebar() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
-  const isShopSubdomain = useIsShopSubdomain();
 
   return (
     <AnimatePresence>
@@ -175,7 +173,7 @@ export default function CartSidebar() {
                     View Cart
                   </Link>
                   <Link
-                    href="/shop-checkout"
+                    href="/checkout"
                     onClick={closeCart}
                     className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500"
                   >

@@ -181,7 +181,7 @@ export default function CartPage() {
 
                 {/* Checkout Button */}
                 <Link
-                  href="/shop-checkout"
+                  href="/checkout"
                   className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
                 >
                   Proceed to Checkout

@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const paymentEntity = payload.payload?.payment?.entity;
     const orderEntity = payload.payload?.order?.entity;
 
-    console.log(`Razorpay webhook received: ${event}`);
+    // Webhook event received: ${event}
 
     // Handle different webhook events
     switch (event) {
@@ -71,7 +71,7 @@ export async function POST(request: NextRequest) {
         break;
       
       default:
-        console.log(`Unhandled webhook event: ${event}`);
+        // Unhandled webhook event
     }
 
     return NextResponse.json({ received: true });
@@ -86,7 +86,6 @@ export async function POST(request: NextRequest) {
 
 // Handle successful payment capture
 async function handlePaymentCaptured(payment: any) {
-  console.log('Payment captured:', payment.id);
   
   // In production:
   // 1. Update order status in database
@@ -106,7 +105,6 @@ async function handlePaymentCaptured(payment: any) {
 
 // Handle failed payment
 async function handlePaymentFailed(payment: any) {
-  console.log('Payment failed:', payment.id, payment.error_description);
   
   // In production:
   // 1. Update order status
@@ -125,19 +123,16 @@ async function handlePaymentFailed(payment: any) {
 
 // Handle payment authorization (before capture)
 async function handlePaymentAuthorized(payment: any) {
-  console.log('Payment authorized:', payment.id);
   // Usually auto-captured, but can implement manual capture logic here
 }
 
 // Handle order paid event
 async function handleOrderPaid(order: any) {
-  console.log('Order paid:', order.id);
   // Additional order processing if needed
 }
 
 // Handle refund creation
 async function handleRefundCreated(refund: any) {
-  console.log('Refund created:', refund.id);
   
   // In production:
   // 1. Update order status to refunded

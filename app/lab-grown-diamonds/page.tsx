@@ -222,7 +222,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* Vision & Mission Section */}
-      <section className="py-24 px-4 bg-brand-100">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-brand-100">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -299,49 +299,8 @@ export default function LabGrownDiamondsPage() {
         </div>
       </section>
 
-      {/* Diamond Gallery */}
-      <section className="py-24 px-4 bg-brand-100">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 40 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            viewport={{ once: true }}
-            className="text-center mb-12"
-          >
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
-              Every Diamond Holds <span className="text-classic-green">Wonder</span>
-            </h2>
-            <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
-              Explore the facets of Solitario lab-grown diamonds — crafted for brilliance, clarity, and a conscious footprint.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['/diamonds/dia1.jpg', '/diamonds/dia2.jpg', '/diamonds/dia3.jpg', '/diamonds/dia4.jpg'].map((src, idx) => (
-              <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                viewport={{ once: true }}
-                className="relative rounded-2xl overflow-hidden"
-              >
-                <Image
-                  src={src}
-                  alt={`Diamond detail ${idx + 1}`}
-                  width={400}
-                  height={400}
-                  className="w-full object-cover"
-                />
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* How They're Made Section */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -407,7 +366,7 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* 4Cs Section */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -486,8 +445,49 @@ export default function LabGrownDiamondsPage() {
         </div>
       </section>
 
+      {/* Diamond Gallery - Every Diamond Holds Wonder */}
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+              Every Diamond Holds <span className="text-classic-green">Wonder</span>
+            </h2>
+            <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
+              Explore the facets of Solitario lab-grown diamonds — crafted for brilliance, clarity, and a conscious footprint.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {['/diamonds/dia1.jpg', '/diamonds/dia2.jpg', '/diamonds/dia3.jpg', '/diamonds/dia4.jpg'].map((src, idx) => (
+              <motion.div
+                key={src}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                viewport={{ once: true }}
+                className="relative rounded-2xl overflow-hidden"
+              >
+                <Image
+                  src={src}
+                  alt={`Diamond detail ${idx + 1}`}
+                  width={400}
+                  height={400}
+                  className="w-full object-cover"
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-brand-100">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-brand-100">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}

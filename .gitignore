@@ -8,6 +8,17 @@
 # testing
 /coverage
 
+# playwright
+/playwright-report/
+/test-results/
+
+# tests (not part of production deploy)
+/tests/
+/e2e/
+jest.config.js
+vitest.config.ts
+playwright.config.ts
+
 # next.js
 /.next/
 /out/
@@ -18,6 +29,7 @@
 # misc
 .DS_Store
 *.pem
+*.new
 
 # debug
 npm-debug.log*
@@ -38,3 +50,6 @@ next-env.d.ts
 
 # Large video files
 public/product-hero-assets/*.mov
+
+# Accidental large image set (do not commit)
+public/images/Size 4_3/

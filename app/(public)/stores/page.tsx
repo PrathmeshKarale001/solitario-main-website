@@ -7,6 +7,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
 import { NearestStore } from '@/components/stores';
+import { Container } from '@/components/ui';
 
 const GLOBAL_STORES = [
   {
@@ -304,8 +305,8 @@ export default function StoresPage() {
       <NearestStore showTitle={true} maxStores={3} />
 
       {/* Global Stores */}
-      <section className="py-24 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 bg-white">
+        <Container>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -378,12 +379,12 @@ export default function StoresPage() {
               </motion.div>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* India Stores */}
-      <section className="py-24 px-4 bg-brand-100">
-        <div className="max-w-7xl mx-auto">
+      <section className="py-24 bg-brand-100">
+        <Container>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -446,12 +447,12 @@ export default function StoresPage() {
               </motion.div>
             ))}
           </div>
-        </div>
+        </Container>
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 px-4 bg-classic-green">
-        <div className="max-w-4xl mx-auto text-center">
+      <section className="py-24 bg-classic-green">
+        <Container size="md" className="text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -479,7 +480,7 @@ export default function StoresPage() {
               </Link>
             </div>
           </motion.div>
-        </div>
+        </Container>
       </section>
     </div>
   );

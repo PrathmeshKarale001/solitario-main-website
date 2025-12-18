@@ -1,11 +1,25 @@
 'use client';
 
-import { useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { useRef, useState, useEffect } from 'react';
+import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
 import { ArrowRight, Building2, TrendingUp, Users, Shield, Sparkles, CheckCircle } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
+
+// Hero images for desktop
+const HERO_IMAGES_DESKTOP = [
+  { src: '/images/general/Copy of WhatsApp Image 2025-02-19 at 5.13.42 PM (1).jpeg', pos: 'object-center' },
+  { src: '/images/Franchise/2.PNG', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/3.JPG', pos: 'object-[50%_25%]' },
+];
+
+// Hero images for mobile
+const HERO_IMAGES_MOBILE = [
+  { src: '/images/Franchise/Mobile1.png', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/2.PNG', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/3.JPG', pos: 'object-[50%_25%]' },
+];
 
 const BENEFITS = [
   {
@@ -31,7 +45,7 @@ const BENEFITS = [
 ];
 
 const REQUIREMENTS = [
-  'Minimum investment capacity of ₹50 Lakhs',
+  'Minimum investment capacity of ₹1 Crore',
   'Retail space of 500-1000 sq ft in premium location',
   'Passion for luxury retail and customer service',
   'Commitment to brand values and sustainability',
@@ -40,6 +54,10 @@ const REQUIREMENTS = [
 
 export default function FranchisePage() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const imageIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -47,6 +65,27 @@ export default function FranchisePage() {
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Auto-rotate images
+  useEffect(() => {
+    const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
+    imageIntervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % heroImages.length);
+    }, 5000);
+    return () => {
+      if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
+    };
+  }, [isMobile]);
+
+  const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
 
   return (
     <div className="min-h-screen bg-brand-50">
@@ -57,15 +96,30 @@ export default function FranchisePage() {
           style={{ y: backgroundY }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
-          <Image
-            src="/images/general/Copy of WhatsApp Image 2025-02-19 at 5.13.42 PM (1).jpeg"
-            alt="Franchise Opportunities"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={85}
-            sizes="100vw"
-          />
+          <AnimatePresence mode="wait">
+            {heroImages.map((item, index) => (
+              index === currentImageIndex % heroImages.length && (
+                <motion.div
+                  key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
+                  initial={{ opacity: 0, scale: 1.05 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.05 }}
+                  transition={{ duration: 1.2, ease: 'easeInOut' }}
+                  className="absolute inset-0"
+                >
+                  <Image
+                    src={item.src}
+                    alt={`Franchise Opportunities ${index + 1}`}
+                    fill
+                    className={`object-cover ${item.pos}`}
+                    priority={index === 0}
+                    quality={index === 0 ? 85 : 75}
+                    sizes="100vw"
+                  />
+                </motion.div>
+              )
+            ))}
+          </AnimatePresence>
         </motion.div>
 
         <motion.div

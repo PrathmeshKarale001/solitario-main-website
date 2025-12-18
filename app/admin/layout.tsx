@@ -1,7 +1,7 @@
 'use client';
 
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
@@ -15,11 +15,12 @@ import {
   LogOut,
   Menu,
   X,
-  Shield,
   Lock,
   AlertTriangle,
-  ChevronRight
+  ChevronRight,
+  ExternalLink
 } from 'lucide-react';
+import Image from 'next/image';
 import { AdminProvider, useAdmin } from '@/lib/admin-context';
 import { isAdmin } from '@/lib/admin-auth';
 
@@ -105,8 +106,13 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
           className="bg-white rounded-2xl p-8 max-w-md w-full shadow-2xl"
         >
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-classic-green/10 rounded-full flex items-center justify-center mx-auto mb-4">
-              <Shield className="w-8 h-8 text-classic-green" />
+            <div className="w-20 h-20 relative mx-auto mb-4">
+              <Image
+                src="/solitario/logos/dark-logo.png"
+                alt="Solitario"
+                fill
+                className="object-contain"
+              />
             </div>
             <h1 className="text-2xl font-playfair text-brand-800 mb-2">Admin Verification</h1>
             <p className="text-brand-500 font-montserrat text-sm">
@@ -176,6 +182,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
 function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const { adminUser, logout } = useAdmin();
   const router = useRouter();
+  const pathname = usePathname();
 
   const navItems = [
     { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
@@ -210,11 +217,21 @@ function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
       <aside className={`fixed top-0 left-0 h-full w-64 bg-brand-900 z-50 transform transition-transform duration-300 lg:translate-x-0 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}>
         <div className="flex flex-col h-full">
           {/* Header */}
-          <div className="p-6 border-b border-white/10">
+          <div className="p-4 border-b border-white/10">
             <div className="flex items-center justify-between">
-              <Link href="/admin" className="flex items-center gap-2">
-                <Shield className="w-8 h-8 text-bronze-gold" />
-                <span className="font-playfair text-xl text-white">Admin</span>
+              <Link href="/admin" className="flex items-center gap-3">
+                <div className="w-10 h-10 relative">
+                  <Image
+                    src="/solitario/logos/white-logo.png"
+                    alt="Solitario"
+                    fill
+                    className="object-contain"
+                  />
+                </div>
+                <div>
+                  <span className="font-playfair text-lg text-white block leading-tight">Solitario</span>
+                  <span className="text-[10px] text-bronze-gold font-gotham uppercase tracking-wider">Admin Panel</span>
+                </div>
               </Link>
               <button onClick={onClose} className="lg:hidden text-white/60 hover:text-white">
                 <X className="w-6 h-6" />
@@ -224,17 +241,26 @@ function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
 
           {/* Navigation */}
           <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                onClick={onClose}
-                className="flex items-center gap-3 px-4 py-3 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors font-montserrat text-sm"
-              >
-                <item.icon className="w-5 h-5" />
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item) => {
+              const isActive = item.href === '/admin' 
+                ? pathname === '/admin' 
+                : pathname?.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onClose}
+                  className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-colors font-montserrat text-sm ${
+                    isActive 
+                      ? 'bg-bronze-gold/20 text-bronze-gold' 
+                      : 'text-white/70 hover:text-white hover:bg-white/10'
+                  }`}
+                >
+                  <item.icon className="w-5 h-5" />
+                  {item.label}
+                </Link>
+              );
+            })}
           </nav>
 
           {/* User Info */}

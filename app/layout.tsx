@@ -12,6 +12,7 @@ import SmoothScroll from '@/components/ui/SmoothScroll'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
+import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
 import './globals.css'
 
 // Playfair Display for headings - elegant serif font
@@ -69,6 +70,7 @@ export default function RootLayout({
       <body className="antialiased">
         <GoogleAnalytics />
         <SmoothScroll>
+          <ScrollToTopOnRouteChange />
           <AuthProvider>
             <WishlistProvider>
               <CartProvider>

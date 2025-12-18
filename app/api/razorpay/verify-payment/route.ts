@@ -2,6 +2,15 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
 import crypto from 'crypto';
 
+// Track verified payments to prevent replay attacks
+const verifiedPayments = new Set<string>();
+const PAYMENT_CACHE_TTL = 3600000; // 1 hour
+
+// Cleanup old entries periodically
+setInterval(() => {
+  verifiedPayments.clear();
+}, PAYMENT_CACHE_TTL);
+
 // Delhivery integration is now handled via Shopify-Delhivery sync
 // Orders created in Shopify will automatically appear in Delhivery ONE as "Pending AWB"
 // Management can then approve and generate AWB from Delhivery dashboard
@@ -34,6 +43,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Prevent replay attacks - check if payment was already verified
+    const paymentKey = `${razorpay_order_id}:${razorpay_payment_id}`;
+    if (verifiedPayments.has(paymentKey)) {
+      return NextResponse.json(
+        { error: 'Payment already processed' },
+        { status: 400 }
+      );
+    }
+
     // Get secret key
     const secret = process.env.RAZORPAY_KEY_SECRET;
     if (!secret) {
@@ -60,7 +78,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Payment verified successfully
+    // Payment verified successfully - mark as processed to prevent replay
+    verifiedPayments.add(paymentKey);
+    
     // Generate order ID for internal tracking
     const orderId = `SOL${Date.now().toString(36).toUpperCase()}`;
     
@@ -71,7 +91,6 @@ export async function POST(request: NextRequest) {
       const shopifyResult = await createShopifyOrder(orderData, razorpay_payment_id, orderId);
       shopifyOrderId = shopifyResult.id;
       shopifyOrderName = shopifyResult.name;
-      console.log(`Shopify order created: ${shopifyOrderName} (${shopifyOrderId})`);
     } catch (shopifyError) {
       console.error('Failed to create Shopify order:', shopifyError);
       // Don't fail the payment - just log the error
@@ -80,12 +99,6 @@ export async function POST(request: NextRequest) {
     // Step 2: Delhivery shipping is handled via Shopify-Delhivery integration
     // Orders created in Shopify will automatically sync to Delhivery ONE as "Pending AWB"
     // Management can then review and approve orders, generating AWB when ready
-    console.log(`📦 Order ${orderId} created in Shopify`);
-    console.log(`   → Will sync to Delhivery ONE as "Pending AWB"`);
-    console.log(`   → Management can approve and generate AWB from Delhivery dashboard`);
-    console.log(`   Customer: ${orderData.customer.name}`);
-    console.log(`   Address: ${orderData.customer.address.line1}, ${orderData.customer.address.city} - ${orderData.customer.address.pincode}`);
-    console.log(`   Total: ₹${orderData.total}`)
 
     const confirmedOrder = {
       orderId,

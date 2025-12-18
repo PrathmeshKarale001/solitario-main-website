@@ -1,8 +1,40 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRazorpayInstance, generateReceiptId, rupeesToPaise, CartItemForOrder, CustomerDetails } from '@/lib/razorpay';
 
+// Rate limiting: Simple in-memory store (use Redis in production for multi-instance)
+const orderAttempts = new Map<string, { count: number; lastAttempt: number }>();
+const RATE_LIMIT_WINDOW = 60000; // 1 minute
+const MAX_ATTEMPTS = 5; // Max 5 orders per minute per IP
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const record = orderAttempts.get(ip);
+  
+  if (!record || now - record.lastAttempt > RATE_LIMIT_WINDOW) {
+    orderAttempts.set(ip, { count: 1, lastAttempt: now });
+    return true;
+  }
+  
+  if (record.count >= MAX_ATTEMPTS) {
+    return false;
+  }
+  
+  record.count++;
+  record.lastAttempt = now;
+  return true;
+}
+
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting check
+    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: 'Too many requests. Please wait a moment before trying again.' },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { items, customer, subtotal, shipping, tax, total } = body as {
       items: CartItemForOrder[];
@@ -31,6 +63,22 @@ export async function POST(request: NextRequest) {
     if (!total || total <= 0) {
       return NextResponse.json(
         { error: 'Invalid order total' },
+        { status: 400 }
+      );
+    }
+
+    // Validate minimum order amount (Razorpay minimum is ₹1)
+    if (total < 1) {
+      return NextResponse.json(
+        { error: 'Order total must be at least ₹1' },
+        { status: 400 }
+      );
+    }
+
+    // Validate maximum order amount (₹50 lakhs for safety)
+    if (total > 5000000) {
+      return NextResponse.json(
+        { error: 'Order total exceeds maximum limit. Please contact support for large orders.' },
         { status: 400 }
       );
     }

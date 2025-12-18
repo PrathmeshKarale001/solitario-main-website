@@ -210,19 +210,19 @@ function SuccessContent() {
             <p className="text-gray-600 mb-4">Need help with your order?</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <a
-                href="tel:+919876543210"
+                href="tel:+917887883444"
                 className="flex items-center gap-2 text-classic-green hover:underline"
               >
                 <Phone className="w-4 h-4" />
-                +91 98765 43210
+                +91 788 788 3444
               </a>
               <span className="hidden sm:block text-gray-300">|</span>
               <a
-                href="mailto:support@thesolitario.com"
+                href="mailto:paymentdesk@thesolitario.com"
                 className="flex items-center gap-2 text-classic-green hover:underline"
               >
                 <Mail className="w-4 h-4" />
-                support@thesolitario.com
+                paymentdesk@thesolitario.com
               </a>
             </div>
           </motion.div>

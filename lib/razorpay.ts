@@ -154,7 +154,7 @@ export const getRazorpayCheckoutOptions = (
     },
     modal: {
       ondismiss: () => {
-        console.log('Payment modal closed');
+        // Payment modal closed by user
       },
       confirm_close: true,
       escape: false,

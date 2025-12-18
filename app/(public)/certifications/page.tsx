@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { Award, Shield, CheckCircle, FileCheck, Diamond, Star } from 'lucide-react';
+import { Award, Shield, CheckCircle, FileCheck, Diamond, Star, Download, Scissors, Palette, Search, Scale } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
 const certifications = [
@@ -12,13 +12,15 @@ const certifications = [
     description: 'All our diamonds are certified by IGI, one of the world\'s largest independent gemological laboratories. Each diamond comes with a detailed grading report.',
     features: ['Cut Grade', 'Color Grade', 'Clarity Grade', 'Carat Weight', 'Fluorescence', 'Proportions'],
     logo: '/images/certifications/igi.png',
+    pdfLink: '/certifications/IGI  Certification.pdf.pdf',
   },
   {
-    name: 'BIS Hallmark',
-    fullName: 'Bureau of Indian Standards',
-    description: 'Our gold jewellery is BIS hallmarked, guaranteeing the purity of gold as per Indian standards. Look for the hallmark on every piece.',
-    features: ['Gold Purity Verification', 'Assaying Center Mark', 'Jeweller\'s Mark', 'Year of Marking'],
-    logo: '/images/certifications/bis.png',
+    name: 'SGLP Certified',
+    fullName: 'SGL Precious Metals',
+    description: 'Our diamonds are also certified by SGLP, ensuring the highest standards of quality and authenticity. Each piece comes with comprehensive documentation.',
+    features: ['Diamond Authentication', 'Quality Verification', 'Detailed Grading Report', 'Authenticity Certificate'],
+    logo: '/images/certifications/sgl.png',
+    pdfLink: '/certifications/SGLP Certification.pdf',
   },
 ];
 
@@ -46,30 +48,10 @@ const qualityStandards = [
 ];
 
 const fourCs = [
-  {
-    letter: 'C',
-    title: 'Cut',
-    description: 'The cut determines how well a diamond reflects light. Our diamonds are cut to maximize brilliance and fire.',
-    grades: ['Excellent', 'Very Good', 'Good']
-  },
-  {
-    letter: 'C',
-    title: 'Color',
-    description: 'Diamond color is graded from D (colorless) to Z. We offer diamonds in the D-J range for optimal beauty.',
-    grades: ['D-F (Colorless)', 'G-J (Near Colorless)']
-  },
-  {
-    letter: 'C',
-    title: 'Clarity',
-    description: 'Clarity measures the absence of inclusions. Our diamonds range from FL (Flawless) to SI (Slightly Included).',
-    grades: ['FL/IF', 'VVS1/VVS2', 'VS1/VS2', 'SI1/SI2']
-  },
-  {
-    letter: 'C',
-    title: 'Carat',
-    description: 'Carat refers to the weight of the diamond. We offer a wide range of carat weights to suit every preference.',
-    grades: ['0.25 - 0.50 ct', '0.50 - 1.00 ct', '1.00 - 2.00 ct', '2.00+ ct']
-  },
+  { icon: Scissors, title: 'Cut', desc: 'Heart of the sparkle — light dances through precision-cut facets for unmatched brilliance.' },
+  { icon: Palette, title: 'Colour', desc: 'Near-colourless to colourless grades that showcase pure, luminous beauty.' },
+  { icon: Search, title: 'Clarity', desc: 'Minimal inclusions for a captivating, flawless look — refined by technology.' },
+  { icon: Scale, title: 'Carat', desc: 'Presence with purpose — select the size that fits your style and values.' },
 ];
 
 export default function CertificationsPage() {
@@ -125,7 +107,7 @@ export default function CertificationsPage() {
                     <h4 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-3">
                       What's Included
                     </h4>
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">
                       {cert.features.map((feature) => (
                         <div key={feature} className="flex items-center gap-2">
                           <CheckCircle className="w-4 h-4 text-classic-green flex-shrink-0" />
@@ -133,6 +115,16 @@ export default function CertificationsPage() {
                         </div>
                       ))}
                     </div>
+                    {cert.pdfLink && (
+                      <Link
+                        href={cert.pdfLink}
+                        target="_blank"
+                        className="inline-flex items-center gap-2 px-4 py-2 bg-classic-green text-white rounded-lg hover:bg-classic-green/90 transition-colors font-gotham text-xs uppercase tracking-wider"
+                      >
+                        <Download className="w-4 h-4" />
+                        View Certificate
+                      </Link>
+                    )}
                   </div>
                 </div>
               </motion.div>
@@ -162,27 +154,18 @@ export default function CertificationsPage() {
             {fourCs.map((c, index) => (
               <motion.div
                 key={c.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10"
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="flex gap-4 items-start"
               >
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 bg-bronze-gold rounded-xl flex items-center justify-center flex-shrink-0">
-                    <span className="text-white font-playfair text-xl">{c.letter}</span>
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-playfair text-xl text-white mb-2">{c.title}</h3>
-                    <p className="text-white/60 font-montserrat text-sm mb-4">{c.description}</p>
-                    <div className="flex flex-wrap gap-2">
-                      {c.grades.map((grade) => (
-                        <span key={grade} className="px-3 py-1 bg-white/10 rounded-full text-white/80 text-xs font-montserrat">
-                          {grade}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
+                <div className="w-10 h-10 rounded-full bg-classic-green/10 flex items-center justify-center flex-shrink-0">
+                  <c.icon className="w-5 h-5 text-bronze-gold" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-playfair text-bronze-gold mb-1">{c.title}</h3>
+                  <p className="text-white/70 text-sm font-montserrat">{c.desc}</p>
                 </div>
               </motion.div>
             ))}
