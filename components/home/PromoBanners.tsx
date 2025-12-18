@@ -19,13 +19,13 @@ export function PromoBanner1() {
           className="block relative overflow-hidden group"
         >
           <Image
-              src="/images/banners/banner2-v2.png"
+              src="/images/banners/banner2-v2.webp"
               alt="Forever diamonds, ethically crafted"
               width={1920}
               height={600}
               className="w-full h-auto group-hover:scale-[1.02] transition-transform duration-700"
-              sizes="100vw"
-              quality={90}
+              sizes="(max-width: 768px) 100vw, 1920px"
+              quality={80}
               priority
             />
         </Link>

@@ -14,15 +14,15 @@ const PRODUCTS_PER_PAGE = 12;
 
 // Hero images - Desktop versions (new Shop images first, then existing last)
 const HERO_IMAGES_DESKTOP = [
-  { src: '/images/Shop/Banner1 1.jpg', pos: 'object-[50%_0%]' },
-  { src: '/images/Shop/2.png', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/3.png', pos: 'object-[50%_25%]' },
+  { src: '/images/Shop/Banner1 1.webp', pos: 'object-[50%_0%]' },
+  { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/3.webp', pos: 'object-[50%_25%]' },
 ];
 
 // Hero images - Mobile versions
 const HERO_IMAGES_MOBILE = [
-  { src: '/images/Shop/ShopMobile.jpg', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/ShopMobile2.jpg', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/ShopMobile.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
 ];
 
 function ProductsPageContent() {
@@ -222,9 +222,9 @@ function ProductsPageContent() {
                     alt={`Products hero ${index + 1}`}
                     fill
                     className={`object-cover ${item.pos}`}
-                    priority={index === 0}
+                    priority={index === currentImageIndex % heroImages.length}
                     quality={index === 0 ? 85 : 75}
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 1920px"
                   />
                 </motion.div>
               )

@@ -23,22 +23,36 @@ const categories = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products for dynamic URLs
   let productUrls: MetadataRoute.Sitemap = [];
-  
-  try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/products`, {
-      next: { revalidate: 3600 }, // Revalidate every hour
-    });
-    const data = await response.json();
-    const products = data.products || [];
-    
-    productUrls = products.map((product: { id: string }) => ({
-      url: `${BASE_URL}/products/${product.id}`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly' as const,
-      priority: 0.8,
-    }));
-  } catch (error) {
-    console.error('Failed to fetch products for sitemap:', error);
+
+  // Dynamic product URLs are best-effort. During CI/build the API may not be reachable and
+  // we must not fail or hang the build.
+  const productsApiBaseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+  if (productsApiBaseUrl) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
+
+    try {
+      const response = await fetch(`${productsApiBaseUrl}/api/products`, {
+        next: { revalidate: 3600 },
+        signal: controller.signal,
+      });
+
+      if (response.ok) {
+        const data = (await response.json()) as { products?: Array<{ id: string }> };
+        const products = Array.isArray(data.products) ? data.products : [];
+
+        productUrls = products.map((product) => ({
+          url: `${BASE_URL}/products/${product.id}`,
+          lastModified: new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.8,
+        }));
+      }
+    } catch {
+      // Ignore: sitemap must still generate quickly.
+    } finally {
+      clearTimeout(timeout);
+    }
   }
 
   // Static pages

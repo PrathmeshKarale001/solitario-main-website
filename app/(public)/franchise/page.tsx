@@ -10,15 +10,15 @@ import BlurText from '@/components/ui/BlurText';
 // Hero images for desktop
 const HERO_IMAGES_DESKTOP = [
   { src: '/images/general/Copy of WhatsApp Image 2025-02-19 at 5.13.42 PM (1).jpeg', pos: 'object-center' },
-  { src: '/images/Franchise/2.PNG', pos: 'object-[50%_20%]' },
-  { src: '/images/Franchise/3.JPG', pos: 'object-[50%_25%]' },
+  { src: '/images/Franchise/2.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/3.webp', pos: 'object-[50%_25%]' },
 ];
 
 // Hero images for mobile
 const HERO_IMAGES_MOBILE = [
-  { src: '/images/Franchise/Mobile1.png', pos: 'object-[50%_20%]' },
-  { src: '/images/Franchise/2.PNG', pos: 'object-[50%_20%]' },
-  { src: '/images/Franchise/3.JPG', pos: 'object-[50%_25%]' },
+  { src: '/images/Franchise/Mobile1.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/2.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Franchise/3.webp', pos: 'object-[50%_25%]' },
 ];
 
 const BENEFITS = [
@@ -114,7 +114,7 @@ export default function FranchisePage() {
                     className={`object-cover ${item.pos}`}
                     priority={index === 0}
                     quality={index === 0 ? 85 : 75}
-                    sizes="100vw"
+                    sizes="(max-width: 768px) 100vw, 1920px"
                   />
                 </motion.div>
               )

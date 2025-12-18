@@ -4,30 +4,31 @@ import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 // Video and image sources for the hero carousel (new images first, existing last)
 const HERO_MEDIA = [
   {
     type: 'image',
-    src: '/images/HERO BANNER 1.jpg',
+    src: '/images/HERO BANNER 1.webp',
     pos: 'object-[50%_35%]',
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 2.jpg',
+    src: '/images/HERO BANNER 2.webp',
     pos: 'object-[50%_20%]',
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 3.png',
+    src: '/images/HERO BANNER 3.webp',
     pos: 'object-center',
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 4.jpg',
+    src: '/images/HERO BANNER 4.webp',
     pos: 'object-center',
   },
-   {
+  {
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
   },
@@ -35,10 +36,10 @@ const HERO_MEDIA = [
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
   },
- 
+
   {
     type: 'image',
-    src: '/images/home-hero/Web_Banner_YouTube-01.jpg',
+    src: '/images/home-hero/Web_Banner_YouTube-01.webp',
     pos: 'object-center',
   },
 ];
@@ -119,10 +120,13 @@ export default function Hero() {
                 className="absolute inset-0 w-full h-full object-cover"
               />
             ) : (
-              <img
+              <Image
                 src={media.src}
                 alt="Solitario Jewelry"
-                className={`absolute inset-0 w-full h-full object-cover ${(media as any).pos ?? 'object-center'}`}
+                fill
+                priority={index === currentVideoIndex && !isTransitioning}
+                sizes="(max-width: 768px) 100vw, 1920px"
+                className={`object-cover ${(media as any).pos ?? 'object-center'}`}
               />
             )}
             {/* Dark overlay for better CTA visibility */}

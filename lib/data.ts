@@ -28,7 +28,7 @@ const getProductImage = (category: string, index: number): string => {
       '/images/products/imgi_14_IZRG0113_AP.png',
       '/images/products/imgi_15_IZRG0108_AP.png',
       '/images/products/imgi_16_IZRG0087_AP.png',
-      '/images/products/imgi_26_ring22.png',
+      '/images/products/imgi_26_ring22.jpg',
       '/images/products/imgi_60_IZRG0084_AP.png',
       '/images/products/imgi_61_IZRG0081_AP.png',
       '/images/products/imgi_62_IZRG0080_AP.png',
