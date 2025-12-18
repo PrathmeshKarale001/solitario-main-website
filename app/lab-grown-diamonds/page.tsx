@@ -67,7 +67,7 @@ export default function LabGrownDiamondsPage() {
               <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
                 <BlurText
                   text="Why"
-                  className="font-playfair"
+                  className="font-playfair italic"
                   animateBy="characters"
                   direction="top"
                   delay={50}

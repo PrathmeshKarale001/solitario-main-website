@@ -37,12 +37,12 @@ export default function Awards() {
                 className="bg-white rounded-xl overflow-hidden border border-brand-200 shadow-sm hover:shadow-lg hover:border-bronze-gold/30 transition-all duration-300 group"
               >
                 {/* Award Image */}
-                <div className="relative aspect-square">
+                <div className="relative aspect-square bg-white p-3">
                   <Image
                     src={award.image}
                     alt={award.title}
                     fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="object-contain group-hover:scale-[1.02] transition-transform duration-500"
                   />
                 </div>
                 {/* Award Info */}

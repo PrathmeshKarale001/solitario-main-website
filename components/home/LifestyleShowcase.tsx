@@ -6,14 +6,14 @@ import { ThreeDImageRing, ImageItem } from '@/components/lightswind/3d-image-rin
 // Solitario spotted celebrities (URL-encoded paths for spaces)
 const CELEBRITY_IMAGES: ImageItem[] = [
   { src: '/images/Solitario%20spotted%20celebrities/Zareen%20Khan/DSC00348.jpg', name: 'Zareen Khan', href: '/products' },
-  { src: '/images/Solitario%20spotted%20celebrities/Sunny%20leone/14.png', name: 'Sunny Leone', href: '/products' },
+  { src: '/images/Solitario%20spotted%20celebrities/Sunny%20leone/14.jpg', name: 'Sunny Leone', href: '/products' },
   { src: '/images/Solitario%20spotted%20celebrities/Nargis%20Fakri/IMG_0153%20copy.jpg', name: 'Nargis Fakhri', href: '/products' },
-  { src: '/images/Solitario%20spotted%20celebrities/Karishma%20tanna/14.png', name: 'Karishma Tanna', href: '/products' },
+  { src: '/images/Solitario%20spotted%20celebrities/Karishma%20tanna/14.jpg', name: 'Karishma Tanna', href: '/products' },
   { src: '/images/Solitario%20spotted%20celebrities/Esha%20deol/2.jpg', name: 'Esha Deol', href: '/products' },
   { src: '/images/Solitario%20spotted%20celebrities/Sonam%20Kapoor/WhatsApp%20Image%202025-03-03%20at%2023.38.10_5a4446bd.jpg', name: 'Sonam Kapoor', href: '/products' },
   { src: '/images/Solitario%20spotted%20celebrities/Taha%20Shah/8.8.2025%20Solitario1750.jpg', name: 'Taha Shah', href: '/products' },
   { src: '/images/Solitario%20spotted%20celebrities/Parth%20samthaan/IMG_3236.PNG', name: 'Parth Samthaan', href: '/products' },
-  { src: '/images/Solitario%20spotted%20celebrities/Riddhima%20pandit/8.png', name: 'Riddhima Pandit', href: '/products' },
+  { src: '/images/Solitario%20spotted%20celebrities/Riddhima%20pandit/8.jpg', name: 'Riddhima Pandit', href: '/products' },
 ];
 
 export default function LifestyleShowcase() {

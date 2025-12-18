@@ -57,18 +57,6 @@ export const LAB_GROWN_BENEFITS = [
 export const AWARDS = [
   {
     year: '2024',
-    title: 'Digital Icons - Top 30 CMOs of India',
-    description: 'Kabir Kate',
-    image: '/images/Awards/7069EA4D-48E7-44E4-A515-1109BB36CBCE.png'
-  },
-  {
-    year: '2024',
-    title: 'Business Prism - Best Corporate Leaders in Asia',
-    description: 'Kamini Singh',
-    image: '/images/Awards/4df9f9a4-d1a8-488a-92f4-1021e4e0a413.jpg'
-  },
-  {
-    year: '2024',
     title: 'ET Top 50 Jewellery Brands of India',
     description: 'Solitario',
     image: '/images/Awards/B2D557F6-4CEC-4EB5-A4CA-20A081038F36.png'
@@ -78,6 +66,18 @@ export const AWARDS = [
     title: 'Great Places to Work - Top 100 SME Companies',
     description: 'Solitario',
     image: '/images/Awards/e7c62ddf-4b55-4199-acb7-dc45df14d356.jpg'
+  },
+  {
+    year: '2024',
+    title: 'Business Prism - Best Corporate Leaders in Asia',
+    description: 'Kamini Singh',
+    image: '/images/Awards/4df9f9a4-d1a8-488a-92f4-1021e4e0a413.jpg'
+  },
+  {
+    year: '2024',
+    title: 'Digital Icons - Top 30 CMOs of India',
+    description: 'Kabir Kate',
+    image: '/images/Awards/7069EA4D-48E7-44E4-A515-1109BB36CBCE.png'
   },
 ] as const;
 

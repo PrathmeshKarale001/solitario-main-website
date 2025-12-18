@@ -32,16 +32,6 @@ const HERO_MEDIA = [
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
   },
-  {
-    type: 'video',
-    src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (5).mp4',
-  },
-
-  {
-    type: 'image',
-    src: '/images/home-hero/Web_Banner_YouTube-01.webp',
-    pos: 'object-center',
-  },
 ];
 
 export default function Hero() {
