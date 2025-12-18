@@ -14,18 +14,15 @@ const PRODUCTS_PER_PAGE = 12;
 
 // Hero images - Desktop versions (new Shop images first, then existing last)
 const HERO_IMAGES_DESKTOP = [
-  { src: '/images/Shop/1.png', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/Banner1 1.jpg', pos: 'object-[50%_0%]' },
   { src: '/images/Shop/2.png', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/3.jpg', pos: 'object-[50%_25%]' },
-  { src: '/images/home-hero/Web_Banner_YouTube-01.jpg', pos: 'object-center' },
+  { src: '/images/Shop/3.png', pos: 'object-[50%_25%]' },
 ];
 
 // Hero images - Mobile versions
 const HERO_IMAGES_MOBILE = [
   { src: '/images/Shop/ShopMobile.jpg', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/ShopMobile2.jpg', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/ShopMobile3.jpg', pos: 'object-[50%_25%]' },
-  { src: '/images/home-hero/Web_Banner_Mobile-01.jpg', pos: 'object-center' },
 ];
 
 function ProductsPageContent() {

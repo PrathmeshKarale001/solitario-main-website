@@ -33,7 +33,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [loading, setLoading] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
-  const debounceRef = useRef<NodeJS.Timeout>();
+  const debounceRef = useRef<NodeJS.Timeout>(undefined);
 
   // Load recent searches from localStorage
   useEffect(() => {

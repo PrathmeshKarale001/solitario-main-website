@@ -1,12 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import logger from '@/lib/logger';
 
 const SHOPIFY_WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET || '';
 
 // Verify Shopify webhook HMAC signature
 function verifyShopifyWebhook(body: string, hmacHeader: string): boolean {
   if (!SHOPIFY_WEBHOOK_SECRET) {
-    console.warn('SHOPIFY_WEBHOOK_SECRET not set, skipping verification');
+    logger.warn('SHOPIFY_WEBHOOK_SECRET not set, skipping verification');
     return true; // Allow in dev if not configured
   }
 
@@ -32,13 +33,13 @@ export async function POST(request: NextRequest) {
 
     // Verify HMAC signature
     if (!verifyShopifyWebhook(body, hmacHeader)) {
-      console.error('Invalid Shopify webhook signature');
+      logger.error('Invalid Shopify webhook signature');
       return NextResponse.json({ error: 'Invalid signature' }, { status: 401 });
     }
 
     const payload = JSON.parse(body);
 
-    console.log(`[Shopify Webhook] Topic: ${topic}, Shop: ${shopDomain}`);
+    logger.log(`[Shopify Webhook] Topic: ${topic}, Shop: ${shopDomain}`);
 
     // Handle different webhook topics
     switch (topic) {
@@ -73,120 +74,97 @@ export async function POST(request: NextRequest) {
         await handleInventoryUpdate(payload);
         break;
       default:
-        console.log(`[Shopify Webhook] Unhandled topic: ${topic}`);
+        logger.log(`[Shopify Webhook] Unhandled topic: ${topic}`);
     }
 
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error('[Shopify Webhook] Error:', error);
+    logger.error('[Shopify Webhook] Error:', error);
     return NextResponse.json({ error: 'Webhook processing failed' }, { status: 500 });
   }
 }
 
-// Webhook handlers
+// Webhook handlers - These log in dev only via logger
 async function handleOrderCreate(payload: any) {
-  console.log('[Order Created]', {
+  logger.log('[Order Created]', {
     id: payload.id,
     orderNumber: payload.order_number,
-    email: payload.email,
     totalPrice: payload.total_price,
-    currency: payload.currency,
     itemCount: payload.line_items?.length || 0,
   });
-
-  // TODO: Emit analytics event, send to warehouse, trigger notifications
-  // Example: await emitEvent('order_created', payload);
+  // Order processing handled by Shopify-Delhivery integration
 }
 
 async function handleOrderPaid(payload: any) {
-  console.log('[Order Paid]', {
+  logger.log('[Order Paid]', {
     id: payload.id,
     orderNumber: payload.order_number,
-    email: payload.email,
     totalPrice: payload.total_price,
   });
-
-  // TODO: Update order status in sidecar DB, trigger fulfillment workflow
+  // Payment confirmation handled by Razorpay verify-payment route
 }
 
 async function handleOrderFulfilled(payload: any) {
-  console.log('[Order Fulfilled]', {
+  logger.log('[Order Fulfilled]', {
     id: payload.id,
     orderNumber: payload.order_number,
     fulfillmentStatus: payload.fulfillment_status,
   });
-
-  // TODO: Send shipping notification, update analytics
+  // Fulfillment tracking handled by Delhivery integration
 }
 
 async function handleOrderCancelled(payload: any) {
-  console.log('[Order Cancelled]', {
+  logger.log('[Order Cancelled]', {
     id: payload.id,
     orderNumber: payload.order_number,
     cancelReason: payload.cancel_reason,
   });
-
-  // TODO: Process refund, update inventory, notify customer
+  // Cancellation/refund handled via Shopify admin
 }
 
 async function handleProductCreate(payload: any) {
-  console.log('[Product Created]', {
+  logger.log('[Product Created]', {
     id: payload.id,
     title: payload.title,
     handle: payload.handle,
-    status: payload.status,
   });
-
-  // TODO: Revalidate ISR cache, update search index
-  // Example: await revalidatePath('/products');
+  // Products fetched fresh from Shopify API on each request
 }
 
 async function handleProductUpdate(payload: any) {
-  console.log('[Product Updated]', {
+  logger.log('[Product Updated]', {
     id: payload.id,
     title: payload.title,
     handle: payload.handle,
-    status: payload.status,
   });
-
-  // TODO: Revalidate ISR cache, update search index
-  // Example: await revalidatePath(`/products/${payload.handle}`);
+  // Products fetched fresh from Shopify API on each request
 }
 
 async function handleProductDelete(payload: any) {
-  console.log('[Product Deleted]', {
-    id: payload.id,
-  });
-
-  // TODO: Remove from search index, handle redirects
+  logger.log('[Product Deleted]', { id: payload.id });
+  // Products fetched fresh from Shopify API on each request
 }
 
 async function handleCustomerCreate(payload: any) {
-  console.log('[Customer Created]', {
+  logger.log('[Customer Created]', {
     id: payload.id,
     email: payload.email,
-    firstName: payload.first_name,
-    lastName: payload.last_name,
   });
-
-  // TODO: Emit analytics event, sync to CRM
+  // Customer data managed via Shopify
 }
 
 async function handleCustomerUpdate(payload: any) {
-  console.log('[Customer Updated]', {
+  logger.log('[Customer Updated]', {
     id: payload.id,
     email: payload.email,
   });
-
-  // TODO: Sync to CRM, update sidecar DB
+  // Customer data managed via Shopify
 }
 
 async function handleInventoryUpdate(payload: any) {
-  console.log('[Inventory Updated]', {
+  logger.log('[Inventory Updated]', {
     inventoryItemId: payload.inventory_item_id,
-    locationId: payload.location_id,
     available: payload.available,
   });
-
-  // TODO: Update product availability, trigger back-in-stock notifications
+  // Inventory managed via Shopify
 }

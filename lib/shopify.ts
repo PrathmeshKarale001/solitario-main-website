@@ -145,9 +145,7 @@ const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
 const STOREFRONT_TOKEN = process.env.SHOPIFY_STOREFRONT_ACCESS_TOKEN;
 const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
-if (!SHOPIFY_DOMAIN || !STOREFRONT_TOKEN) {
-  console.warn('Missing Shopify environment variables. Using fallback data.');
-}
+// Shopify config validation happens at runtime, not module load
 
 const STOREFRONT_API_VERSION = '2024-01';
 const ADMIN_API_VERSION = '2024-01';
@@ -177,14 +175,10 @@ export async function shopifyStorefrontFetch<T = any>(
   );
 
   if (!response.ok) {
-    console.error('Shopify Storefront API error:', response.status, response.statusText);
     throw new Error(`Shopify Storefront API error: ${response.status}`);
   }
 
   const json = await response.json();
-  if (json.errors) {
-    console.error('Shopify Storefront GraphQL errors:', json.errors);
-  }
   return json;
 }
 
@@ -210,13 +204,11 @@ export async function shopifyAdminFetch<T = any>(
   );
 
   if (!response.ok) {
-    console.error('Shopify Admin API error:', response.status, response.statusText);
     throw new Error(`Shopify Admin API error: ${response.status}`);
   }
 
   const json = await response.json();
   if (json.errors) {
-    console.error('Shopify Admin GraphQL errors:', json.errors);
   }
   return json;
 }

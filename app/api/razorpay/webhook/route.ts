@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
+import logger from '@/lib/logger';
 
 // Razorpay Webhook Handler
 // Configure webhook URL in Razorpay Dashboard: https://yourdomain.com/api/razorpay/webhook
-// Webhook Secret: Add RAZORPAY_WEBHOOK_SECRET to .env.local
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,10 +17,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verify webhook signature
     const webhookSecret = process.env.RAZORPAY_WEBHOOK_SECRET;
     if (!webhookSecret) {
-      console.error('Webhook secret not configured');
+      logger.error('Razorpay webhook secret not configured');
       return NextResponse.json(
         { error: 'Webhook not configured' },
         { status: 503 }
@@ -33,50 +32,43 @@ export async function POST(request: NextRequest) {
       .digest('hex');
 
     if (expectedSignature !== signature) {
-      console.error('Invalid webhook signature');
+      logger.error('Invalid Razorpay webhook signature');
       return NextResponse.json(
         { error: 'Invalid signature' },
         { status: 400 }
       );
     }
 
-    // Parse webhook payload
     const payload = JSON.parse(body);
     const event = payload.event;
     const paymentEntity = payload.payload?.payment?.entity;
     const orderEntity = payload.payload?.order?.entity;
 
-    // Webhook event received: ${event}
+    logger.log(`[Razorpay Webhook] Event: ${event}`);
 
-    // Handle different webhook events
     switch (event) {
       case 'payment.captured':
         await handlePaymentCaptured(paymentEntity);
         break;
-      
       case 'payment.failed':
         await handlePaymentFailed(paymentEntity);
         break;
-      
       case 'payment.authorized':
         await handlePaymentAuthorized(paymentEntity);
         break;
-      
       case 'order.paid':
         await handleOrderPaid(orderEntity);
         break;
-      
       case 'refund.created':
         await handleRefundCreated(payload.payload?.refund?.entity);
         break;
-      
       default:
-        // Unhandled webhook event
+        logger.log(`[Razorpay Webhook] Unhandled event: ${event}`);
     }
 
     return NextResponse.json({ received: true });
   } catch (error) {
-    console.error('Webhook error:', error);
+    logger.error('Razorpay webhook error:', error);
     return NextResponse.json(
       { error: 'Webhook processing failed' },
       { status: 500 }
@@ -84,68 +76,27 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Handle successful payment capture
+// Payment captured - order already processed via verify-payment route
 async function handlePaymentCaptured(payment: any) {
-  
-  // In production:
-  // 1. Update order status in database
-  // 2. Send confirmation email
-  // 3. Trigger fulfillment process
-  
-  // Example: Update order status
-  // await db.orders.update({
-  //   where: { razorpayOrderId: payment.order_id },
-  //   data: { 
-  //     status: 'paid',
-  //     razorpayPaymentId: payment.id,
-  //     paidAt: new Date(),
-  //   }
-  // });
+  logger.log('[Payment Captured]', { orderId: payment?.order_id, paymentId: payment?.id });
 }
 
-// Handle failed payment
+// Payment failed - customer will see error on checkout page
 async function handlePaymentFailed(payment: any) {
-  
-  // In production:
-  // 1. Update order status
-  // 2. Send failure notification email
-  // 3. Log for analytics
-  
-  // Example:
-  // await db.orders.update({
-  //   where: { razorpayOrderId: payment.order_id },
-  //   data: { 
-  //     status: 'failed',
-  //     failureReason: payment.error_description,
-  //   }
-  // });
+  logger.log('[Payment Failed]', { orderId: payment?.order_id, reason: payment?.error_description });
 }
 
-// Handle payment authorization (before capture)
+// Payment authorized - auto-captured in our flow
 async function handlePaymentAuthorized(payment: any) {
-  // Usually auto-captured, but can implement manual capture logic here
+  logger.log('[Payment Authorized]', { orderId: payment?.order_id });
 }
 
-// Handle order paid event
+// Order paid - confirmation already sent via verify-payment route
 async function handleOrderPaid(order: any) {
-  // Additional order processing if needed
+  logger.log('[Order Paid]', { orderId: order?.id });
 }
 
-// Handle refund creation
+// Refund created - handled via Razorpay dashboard
 async function handleRefundCreated(refund: any) {
-  
-  // In production:
-  // 1. Update order status to refunded
-  // 2. Send refund confirmation email
-  // 3. Update inventory if needed
-  
-  // Example:
-  // await db.orders.update({
-  //   where: { razorpayPaymentId: refund.payment_id },
-  //   data: { 
-  //     status: 'refunded',
-  //     refundId: refund.id,
-  //     refundedAt: new Date(),
-  //   }
-  // });
+  logger.log('[Refund Created]', { paymentId: refund?.payment_id, refundId: refund?.id });
 }

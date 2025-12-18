@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
 import crypto from 'crypto';
+import logger from '@/lib/logger';
 
 // Track verified payments to prevent replay attacks
 const verifiedPayments = new Set<string>();
@@ -71,7 +72,7 @@ export async function POST(request: NextRequest) {
     const isValid = expectedSignature === razorpay_signature;
 
     if (!isValid) {
-      console.error('Payment signature verification failed');
+      logger.error('Payment signature verification failed');
       return NextResponse.json(
         { error: 'Payment verification failed. Please contact support.' },
         { status: 400 }
@@ -92,7 +93,7 @@ export async function POST(request: NextRequest) {
       shopifyOrderId = shopifyResult.id;
       shopifyOrderName = shopifyResult.name;
     } catch (shopifyError) {
-      console.error('Failed to create Shopify order:', shopifyError);
+      logger.error('Failed to create Shopify order:', shopifyError);
       // Don't fail the payment - just log the error
     }
 
@@ -124,7 +125,7 @@ export async function POST(request: NextRequest) {
       order: confirmedOrder,
     });
   } catch (error) {
-    console.error('Error verifying payment:', error);
+    logger.error('Error verifying payment:', error);
     return NextResponse.json(
       { error: 'Payment verification failed. Please contact support.' },
       { status: 500 }

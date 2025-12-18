@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRazorpayInstance, generateReceiptId, rupeesToPaise, CartItemForOrder, CustomerDetails } from '@/lib/razorpay';
+import logger from '@/lib/logger';
 
 // Rate limiting: Simple in-memory store (use Redis in production for multi-instance)
 const orderAttempts = new Map<string, { count: number; lastAttempt: number }>();
@@ -129,9 +130,8 @@ export async function POST(request: NextRequest) {
       orderData,
     });
   } catch (error) {
-    console.error('Error creating Razorpay order:', error);
+    logger.error('Error creating Razorpay order:', error);
     
-    // Check if it's a Razorpay API key error
     if (error instanceof Error && error.message.includes('API keys not configured')) {
       return NextResponse.json(
         { error: 'Payment gateway not configured. Please contact support.' },
