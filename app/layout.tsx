@@ -41,6 +41,11 @@ export const metadata: Metadata = {
   description: 'India\'s most loved new-age diamond jewellery brand. Discover timeless, sustainable luxury with lab-grown diamonds. Crafted for modern and future generations.',
   keywords: ['lab grown diamonds', 'sustainable jewellery', 'diamond rings', 'luxury jewellery', 'ethical diamonds', 'Solitario'],
   authors: [{ name: 'Solitario' }],
+  icons: {
+    icon: '/solitariofavicon.svg',
+    shortcut: '/solitariofavicon.svg',
+    apple: '/solitariofavicon.svg',
+  },
   openGraph: {
     title: 'Solitario - Lab Grown Diamond Jewellery',
     description: 'Luxury that doesn\'t cost the Earth. Discover our collection of ethically crafted lab-grown diamond jewellery.',

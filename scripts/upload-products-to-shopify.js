@@ -382,6 +382,10 @@ async function createProduct(product, publications, locationId) {
     // Update variant with price, SKU, and inventory management
     if (variantId) {
       console.log(`  💰 Setting price: ₹${product.price} & SKU: ${product.sku}`);
+      
+      // Add delay to ensure product is fully created
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
       const variantResult = await shopifyAdminFetch(UPDATE_VARIANT_MUTATION, {
         input: {
           id: variantId,
@@ -390,6 +394,16 @@ async function createProduct(product, publications, locationId) {
           inventoryManagement: 'SHOPIFY',
         },
       });
+      
+      // Check for errors in variant update
+      if (variantResult.errors || variantResult.data?.productVariantUpdate?.userErrors?.length > 0) {
+        const errors = variantResult.errors || variantResult.data?.productVariantUpdate?.userErrors;
+        console.error(`  ❌ Variant update failed:`, JSON.stringify(errors));
+        console.error(`  ⚠️ Price may not be set correctly for ${product.sku}`);
+      } else {
+        const updatedPrice = variantResult.data?.productVariantUpdate?.productVariant?.price;
+        console.log(`  ✅ Price confirmed: ₹${updatedPrice}`);
+      }
       
       // Get inventory item ID and set inventory
       if (locationId) {
