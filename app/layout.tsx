@@ -7,39 +7,33 @@ import { CartProvider } from '@/lib/cart-context'
 import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
 import AuthProvider from '@/components/providers/AuthProvider'
 import { CartSidebar } from '@/components/cart'
-import SmoothScroll from '@/components/ui/SmoothScroll'
-// CustomCursor disabled - using default system cursor
-// import CustomCursor from '@/components/ui/CustomCursor'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
+import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
 import './globals.css'
 
 // Playfair Display for headings - elegant serif font
+// Reduced weights from 4 to 2 most used (400 for body, 600 for emphasis)
 const playfair = Playfair_Display({
   subsets: ['latin'],
   variable: '--font-playfair',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['400', '600'], // Reduced from 4 weights to 2
+  preload: true,
+  fallback: ['Georgia', 'serif'],
 })
 
 // Load Montserrat from Google Fonts for body text AND UI text
-// Montserrat is a brand font and will be used for both body and Gotham (UI) text
+// Consolidated: Using single instance for both body and Gotham (UI) to reduce font loading
 const montserrat = Montserrat({
   subsets: ['latin'],
   variable: '--font-montserrat',
   display: 'swap',
-  weight: ['400', '500', '600'], // Reduced from 7 weights to 3 most used
-})
-
-// Use Montserrat for Gotham (UI text) as well - it's a brand font
-// If you have actual Gotham font files, load them as localFont similar to Aguila
-const gotham = Montserrat({
-  subsets: ['latin'],
-  variable: '--font-gotham',
-  display: 'swap',
-  weight: ['400', '500'], // Reduced from 7 weights to 2 most used for UI
+  weight: ['400', '500', '600'], // All weights needed across body and UI
+  preload: true, // Preload for faster LCP
+  fallback: ['system-ui', 'arial'], // System font fallback to reduce CLS
 })
 
 export const metadata: Metadata = {
@@ -63,14 +57,14 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${montserrat.variable} ${gotham.variable}`}>
+    <html lang="en" className={`${playfair.variable} ${montserrat.variable}`} style={{ '--font-gotham': 'var(--font-montserrat)' } as React.CSSProperties}>
       <head>
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
-        <SmoothScroll>
+        <SmoothScrollWrapper>
           <Suspense fallback={null}>
             <ScrollToTopOnRouteChange />
           </Suspense>
@@ -88,7 +82,7 @@ export default function RootLayout({
               </CartProvider>
             </WishlistProvider>
           </AuthProvider>
-        </SmoothScroll>
+        </SmoothScrollWrapper>
       </body>
     </html>
   )

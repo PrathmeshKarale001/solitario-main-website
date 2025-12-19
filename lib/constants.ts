@@ -19,8 +19,9 @@ export const NAV_LINKS = [
 export const CATEGORIES = [
   { id: 'all', label: 'All', slug: 'all' },
   { id: 'rings', label: 'Rings', slug: 'rings' },
-  { id: 'necklaces', label: 'Necklaces', slug: 'necklaces' },
   { id: 'earrings', label: 'Earrings', slug: 'earrings' },
+  { id: 'necklaces', label: 'Necklaces', slug: 'necklaces' },
+  { id: 'pendants', label: 'Pendants', slug: 'pendants' },
   { id: 'bracelets', label: 'Bracelets', slug: 'bracelets' },
 ] as const;
 

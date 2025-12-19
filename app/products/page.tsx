@@ -222,9 +222,9 @@ function ProductsPageContent() {
                     alt={`Products hero ${index + 1}`}
                     fill
                     className={`object-cover ${item.pos}`}
-                    priority={index === currentImageIndex % heroImages.length}
-                    quality={index === 0 ? 85 : 75}
-                    sizes="(max-width: 768px) 100vw, 1920px"
+                    priority={index === 0} // Always prioritize first image for LCP
+                    quality={index === 0 ? 90 : 75}
+                    sizes="100vw"
                   />
                 </motion.div>
               )

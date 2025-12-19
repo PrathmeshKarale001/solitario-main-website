@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Menu, X, Heart, Search, ShoppingBag, User, ChevronRight, Sparkles, MapPin, Phone, Diamond } from 'lucide-react';
+import { Menu, X, Heart, Search, ShoppingBag, User, ChevronRight, Sparkles, MapPin, Phone, Diamond, CircleDot, Gem, Star, Gift, BookOpen, Hexagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
@@ -18,23 +18,24 @@ const NAV_LINKS = [
   { href: '/about', label: 'About' },
 ];
 
-// Mobile menu categories for better organization
+// Mobile menu categories for better organization - using dedicated category pages
 const MOBILE_MENU_SECTIONS = [
   {
     title: 'Shop',
     links: [
-      { href: '/products', label: 'All Products', icon: Sparkles },
-      { href: '/products?category=rings', label: 'Rings' },
-      { href: '/products?category=earrings', label: 'Earrings' },
-      { href: '/products?category=pendants', label: 'Pendants' },
-      { href: '/products?category=bracelets', label: 'Bracelets' },
+      { href: '/products', label: 'All Products', icon: Sparkles, highlight: true },
+      { href: '/products/category/rings', label: 'Rings', icon: CircleDot },
+      { href: '/products/category/earrings', label: 'Earrings', icon: Gem },
+      { href: '/products/category/necklaces', label: 'Necklaces', icon: Diamond },
+      { href: '/products/category/pendants', label: 'Pendants', icon: Star },
+      { href: '/products/category/bracelets', label: 'Bracelets', icon: Gift },
     ],
   },
   {
     title: 'Discover',
     links: [
       { href: '/stores', label: 'Our Stores', icon: MapPin },
-      { href: '/about', label: 'Our Story' },
+      { href: '/about', label: 'Our Story', icon: BookOpen },
       { href: '/blog', label: 'Blog' },
     ],
   },
@@ -272,30 +273,52 @@ export default function Header() {
           </div>
 
           {/* Menu Sections */}
-          <nav className="px-4 py-6 space-y-6">
+          <nav className="px-5 py-6 space-y-8">
             {MOBILE_MENU_SECTIONS.map((section) => (
               <div key={section.title}>
-                <h3 className="text-bronze-gold text-xs font-gotham uppercase tracking-wider mb-3">
+                <h3 className="text-bronze-gold/80 text-[10px] font-gotham uppercase tracking-[0.2em] mb-4 px-1">
                   {section.title}
                 </h3>
                 <div className="space-y-1">
-                  {section.links.map((link) => (
-                    <Link
-                      key={link.href}
-                      href={link.href}
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className={cn(
-                        "flex items-center justify-between py-3 px-3 rounded-lg text-white hover:bg-white/10 transition-colors touch-manipulation",
-                        pathname === link.href && "bg-white/10"
-                      )}
-                    >
-                      <span className="flex items-center gap-3">
-                        {link.icon && <link.icon className="w-4 h-4 text-bronze-gold" />}
-                        <span className="font-montserrat text-sm">{link.label}</span>
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-white/40" />
-                    </Link>
-                  ))}
+                  {section.links.map((link) => {
+                    const isHighlight = (link as any).highlight;
+                    const isActive = pathname === link.href || pathname?.startsWith(link.href + '/');
+                    return (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={cn(
+                          "flex items-center justify-between py-3.5 px-4 rounded-xl transition-all duration-200 touch-manipulation group",
+                          isHighlight 
+                            ? "bg-bronze-gold/20 text-white border border-bronze-gold/30" 
+                            : isActive 
+                              ? "bg-white/15 text-white" 
+                              : "text-white/90 hover:bg-white/10 hover:text-white"
+                        )}
+                      >
+                        <span className="flex items-center gap-3.5">
+                          {link.icon && (
+                            <span className={cn(
+                              "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
+                              isHighlight ? "bg-bronze-gold/30" : "bg-white/10 group-hover:bg-white/15"
+                            )}>
+                              <link.icon className={cn(
+                                "w-4 h-4",
+                                isHighlight ? "text-bronze-gold" : "text-white/80"
+                              )} />
+                            </span>
+                          )}
+                          {!link.icon && <span className="w-8" />}
+                          <span className="font-montserrat text-[15px] font-medium">{link.label}</span>
+                        </span>
+                        <ChevronRight className={cn(
+                          "w-4 h-4 transition-transform group-hover:translate-x-0.5",
+                          isHighlight ? "text-bronze-gold/60" : "text-white/30"
+                        )} />
+                      </Link>
+                    );
+                  })}
                 </div>
               </div>
             ))}

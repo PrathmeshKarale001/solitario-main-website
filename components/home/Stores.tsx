@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Globe, ArrowRight } from 'lucide-react';
 import Link from 'next/link';
@@ -12,6 +13,7 @@ const FEATURED_STORES = [
     location: 'Spain',
     country: 'Europe',
     image: '/solitario/stores/spain.jpg',
+    mobileImage: '/images/Stores/1.jpg',
     mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Spain'),
   },
   {
@@ -20,6 +22,7 @@ const FEATURED_STORES = [
     location: 'Malaysia',
     country: 'Asia Pacific',
     image: '/solitario/stores/malaysia.jpg',
+    mobileImage: '/images/Stores/3.jpg',
     mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Malaysia'),
   },
   {
@@ -28,11 +31,21 @@ const FEATURED_STORES = [
     location: 'Dubai, UAE',
     country: 'Middle East',
     image: '/solitario/stores/dubai.jpg',
+    mobileImage: '/images/Stores/10.jpg',
     mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Dubai Dubai, UAE'),
   },
 ];
 
 export default function Stores() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
@@ -72,7 +85,7 @@ export default function Stores() {
               {/* Image */}
               <div className="relative aspect-[4/5] overflow-hidden">
                 <Image
-                  src={store.image}
+                  src={isMobile ? (store as any).mobileImage : store.image}
                   alt={store.name}
                   fill
                   className="object-cover group-hover:scale-105 transition-transform duration-700"

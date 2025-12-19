@@ -6,8 +6,7 @@ import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// Video and image sources for the hero carousel (new images first, existing last)
-const HERO_MEDIA = [
+const HERO_MEDIA_DESKTOP = [
   {
     type: 'image',
     src: '/images/HERO BANNER 1.webp',
@@ -34,35 +33,64 @@ const HERO_MEDIA = [
   },
 ];
 
+const HERO_MEDIA_MOBILE = [
+  {
+    type: 'image',
+    src: '/images/Hero_Mobile/Hero%20banner%202.jpg',
+    pos: 'object-center',
+  },
+  {
+    type: 'image',
+    src: '/images/Hero_Mobile/Hero%20banner%203.jpg',
+    pos: 'object-center',
+  },
+  {
+    type: 'image',
+    src: '/images/Hero_Mobile/Hero%20banner%204.jpg',
+    pos: 'object-center',
+  },
+  
+];
+
 export default function Hero() {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const heroMedia = isMobile ? HERO_MEDIA_MOBILE : HERO_MEDIA_DESKTOP;
 
   // Handle video ended event to cycle to next media
   const handleVideoEnded = () => {
     setIsTransitioning(true);
     setTimeout(() => {
-      setCurrentVideoIndex((prev) => (prev + 1) % HERO_MEDIA.length);
+      setCurrentVideoIndex((prev) => (prev + 1) % heroMedia.length);
       setIsTransitioning(false);
     }, 300);
   };
 
   // Auto-advance for images (since they don't have onEnded event)
   useEffect(() => {
-    const currentMedia = HERO_MEDIA[currentVideoIndex];
+    const currentMedia = heroMedia[currentVideoIndex];
     if (currentMedia.type === 'image') {
       const timer = setTimeout(() => {
         handleVideoEnded();
       }, 5000); // Show image for 5 seconds before transitioning
       return () => clearTimeout(timer);
     }
-  }, [currentVideoIndex]);
+  }, [currentVideoIndex, heroMedia]);
 
   // Play current video when index changes
   useEffect(() => {
-    const currentMedia = HERO_MEDIA[currentVideoIndex];
+    const currentMedia = heroMedia[currentVideoIndex];
     if (currentMedia.type === 'video') {
       const currentVideo = videoRefs.current[currentVideoIndex];
       if (currentVideo) {
@@ -84,13 +112,17 @@ export default function Hero() {
         video.pause();
       }
     });
-  }, [currentVideoIndex]);
+  }, [currentVideoIndex, heroMedia]);
+
+  useEffect(() => {
+    setCurrentVideoIndex(0);
+  }, [isMobile]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-screen flex flex-col overflow-hidden bg-black">
+    <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-screen flex flex-col overflow-hidden bg-black">
       {/* Video/Image Background */}
       <div className="absolute inset-0 z-0">
-        {HERO_MEDIA.map((media, index) => (
+        {heroMedia.map((media, index) => (
           <motion.div
             key={index}
             initial={{ opacity: 0 }}
@@ -114,8 +146,9 @@ export default function Hero() {
                 src={media.src}
                 alt="Solitario Jewelry"
                 fill
-                priority={index === currentVideoIndex && !isTransitioning}
-                sizes="(max-width: 768px) 100vw, 1920px"
+                priority={index === 0} // Always prioritize first image for LCP
+                quality={index === 0 ? 90 : 75} // Higher quality for LCP image
+                sizes="100vw"
                 className={`object-cover ${(media as any).pos ?? 'object-center'}`}
               />
             )}
@@ -155,7 +188,7 @@ export default function Hero() {
 
       {/* Media indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {HERO_MEDIA.map((_, index) => (
+        {heroMedia.map((_, index) => (
           <button
             key={index}
             onClick={() => {

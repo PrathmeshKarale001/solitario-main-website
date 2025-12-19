@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowRight, MapPin, Phone, Clock, Globe, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
@@ -212,6 +212,7 @@ const INDIA_STORES = [
 
 export default function StoresPage() {
   const sectionRef = useRef<HTMLElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ['start start', 'end start'],
@@ -220,17 +221,28 @@ export default function StoresPage() {
   const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  const heroImageSrc = isMobile
+    ? '/images/Stores/1.jpg'
+    : '/images/general/WhatsApp Image 2024-12-10 at 11.49.40 (1).jpeg';
+
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
-      <section ref={sectionRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden">
         <motion.div
           className="absolute inset-0 z-0"
           style={{ y: backgroundY }}
         >
           <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
           <Image
-            src="/images/general/WhatsApp Image 2024-12-10 at 11.49.40 (1).jpeg"
+            src={heroImageSrc}
             alt="Solitario Stores"
             fill
             className="object-cover object-center"

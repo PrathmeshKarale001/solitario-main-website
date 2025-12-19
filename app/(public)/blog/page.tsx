@@ -134,7 +134,7 @@ export default function BlogPage() {
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
-      <section ref={sectionRef} className="relative min-h-[70vh] flex items-center justify-center overflow-hidden">
+      <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden">
         <motion.div
           className="absolute inset-0 z-0"
           style={{ y: backgroundY }}

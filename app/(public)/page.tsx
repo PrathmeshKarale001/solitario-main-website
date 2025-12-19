@@ -9,18 +9,31 @@ import {
 import { Promise } from '@/components/about';
 import LoginPopup from '@/components/home/LoginPopup';
 
-// Lazy load below-fold components for better performance
+// Lazy load below-fold components for better performance and reduced initial bundle
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
   loading: () => <div className="h-[40vh] bg-[#FAF5EF]" />,
 });
-const LabGrownBenefits = dynamic(() => import('@/components/home-v2/LabGrownBenefits'));
-// const PromoBanner2 = dynamic(() => import('@/components/home/PromoBanners').then(mod => ({ default: mod.PromoBanner2 }))); // Disabled
-const Stores = dynamic(() => import('@/components/home/Stores'));
-const FAQ = dynamic(() => import('@/components/home/FAQ'));
-const BrandStory = dynamic(() => import('@/components/home/BrandStory'));
-const Awards = dynamic(() => import('@/components/home/Awards'));
-const Testimonials = dynamic(() => import('@/components/home/Testimonials'));
-const HeadOffice = dynamic(() => import('@/components/home/HeadOffice'));
+const LabGrownBenefits = dynamic(() => import('@/components/home-v2/LabGrownBenefits'), {
+  loading: () => <div className="h-[60vh] bg-gradient-to-b from-white to-ivory-pearl/30" />,
+});
+const Stores = dynamic(() => import('@/components/home/Stores'), {
+  loading: () => <div className="h-[80vh] bg-white" />,
+});
+const FAQ = dynamic(() => import('@/components/home/FAQ'), {
+  loading: () => <div className="h-[60vh] bg-gradient-to-b from-ivory-pearl/30 to-white" />,
+});
+const BrandStory = dynamic(() => import('@/components/home/BrandStory'), {
+  loading: () => <div className="h-[70vh] bg-white" />,
+});
+const Awards = dynamic(() => import('@/components/home/Awards'), {
+  loading: () => <div className="h-[60vh] bg-gradient-to-b from-white to-ivory-pearl/30" />,
+});
+const Testimonials = dynamic(() => import('@/components/home/Testimonials'), {
+  loading: () => <div className="h-[70vh] bg-white" />,
+});
+const HeadOffice = dynamic(() => import('@/components/home/HeadOffice'), {
+  loading: () => <div className="h-[50vh] bg-ivory-pearl" />,
+});
 
 const menuItems = [
   { 

@@ -20,7 +20,7 @@ export default function LabGrownDiamondsPage() {
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section - Matching Home Page Theme */}
-      <section ref={sectionRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
+      <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Parallax */}
         <motion.div
           className="absolute inset-0 z-0"

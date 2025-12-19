@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { MapPin, ArrowRight } from 'lucide-react';
@@ -9,21 +10,33 @@ const featuredStores = [
   {
     city: "New York",
     address: "5th Avenue, NY",
-    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80"
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80",
+    mobileImage: "/images/Stores/1.jpg"
   },
   {
     city: "Dubai",
     address: "Dubai Mall",
-    image: "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800&q=80"
+    image: "https://images.unsplash.com/photo-1580674285054-bed31e145f59?w=800&q=80",
+    mobileImage: "/images/Stores/3.jpg"
   },
   {
     city: "London",
     address: "Bond Street",
-    image: "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=800&q=80"
+    image: "https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=800&q=80",
+    mobileImage: "/images/Stores/10.jpg"
   }
 ];
 
 export default function Stores() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
   return (
     <section className="bg-black py-24 relative">
       <div className="container mx-auto px-4 relative z-10">
@@ -61,7 +74,7 @@ export default function Stores() {
               className="group relative h-[400px] overflow-hidden rounded-xl"
             >
               <Image
-                src={store.image}
+                src={isMobile ? (store as any).mobileImage : store.image}
                 alt={`${store.city} Store`}
                 fill
                 className="object-cover transition-transform duration-700 group-hover:scale-110"
