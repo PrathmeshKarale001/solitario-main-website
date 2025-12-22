@@ -10,28 +10,28 @@ const categories = [
     name: 'Rings',
     subtitle: 'Shop',
     image: '/category-home/Ring.png',
-    href: '/products?category=rings',
+    href: '/products/category/rings',
   },
   {
     id: 'earrings',
     name: 'Earrings',
     subtitle: 'Shop',
     image: '/category-home/Earrings.png',
-    href: '/products?category=earrings',
+    href: '/products/category/earrings',
   },
   {
     id: 'bracelets',
     name: 'Bracelets',
     subtitle: 'Shop',
     image: '/category-home/Bracelet.png',
-    href: '/products?category=bracelets',
+    href: '/products/category/bracelets',
   },
   {
     id: 'necklaces',
     name: 'Necklaces',
     subtitle: 'Shop',
     image: '/category-home/Necklace.png',
-    href: '/products?category=necklaces',
+    href: '/products/category/necklaces',
   },
 ];
 

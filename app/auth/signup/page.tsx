@@ -46,18 +46,36 @@ export default function SignupPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.error || 'Signup failed');
+        const errorData = await response.json();
+        const errorMessage = errorData.details || errorData.error || 'Signup failed';
+        throw new Error(errorMessage);
       }
 
       setSuccess(true);
       
       // Auto-login after successful signup
-      setTimeout(() => {
-        signIn('credentials', {
-          email,
-          password,
-          callbackUrl: '/account',
-        });
+      setTimeout(async () => {
+        try {
+          const result = await signIn('credentials', {
+            email,
+            password,
+            redirect: false,
+          });
+          
+          if (result?.error) {
+            console.error('Auto-login failed:', result.error);
+            // Redirect to login page with error
+            window.location.href = '/auth/login?error=CredentialsSignin&callbackUrl=/account';
+          } else if (result?.url) {
+            window.location.href = result.url;
+          } else {
+            // Fallback redirect
+            window.location.href = '/account';
+          }
+        } catch (error) {
+          console.error('Auto-login error:', error);
+          window.location.href = '/auth/login?callbackUrl=/account';
+        }
       }, 1500);
     } catch (err) {
       setFormError(err instanceof Error ? err.message : 'An unexpected error occurred');

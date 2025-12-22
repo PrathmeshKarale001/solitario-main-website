@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
@@ -16,6 +17,7 @@ interface ProductDetailProps {
 }
 
 export default function ProductDetail({ product }: ProductDetailProps) {
+  const router = useRouter();
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'information' | 'reviews'>('description');
@@ -31,6 +33,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const { addToCart: addToCartContext } = useCart();
+
+  // Check wishlist status after hydration to prevent SSR mismatch
+  useEffect(() => {
+    // Check if product is in wishlist from localStorage
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
+    setIsWishlisted(isInWishlist);
+  }, [product.id]);
 
   // Fetch related products from Shopify
   useEffect(() => {
@@ -69,7 +79,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleBuyNow = () => {
     addToCartContext(product, quantity);
-    window.location.href = '/checkout';
+    router.push('/checkout');
   };
 
   const toggleWishlist = () => {
@@ -332,9 +342,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     toggleWishlist();
                   }}
                   className="absolute top-2 right-2 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-brand hover:scale-110 transition-all duration-300 z-10"
-                  aria-label="Add to wishlist"
+                  aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                 >
-                  <Heart className={`w-5 h-5 ${isWishlisted ? 'fill-bronze-gold text-bronze-gold' : 'text-brand-600'}`} />
+                  <Heart 
+                    size={16} 
+                    fill={isWishlisted ? "currentColor" : "none"} 
+                    strokeWidth={1.5} 
+                    className={isWishlisted ? 'fill-bronze-gold text-bronze-gold' : 'text-brand-600'}
+                  />
                 </button>
               </div>
 

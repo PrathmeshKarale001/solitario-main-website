@@ -13,7 +13,7 @@ const FEATURED_STORES = [
     location: 'Spain',
     country: 'Europe',
     image: '/solitario/stores/spain.jpg',
-    mobileImage: '/images/Stores/1.jpg',
+    mobileImage: '/solitario/stores/spain.jpg',
     mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Spain'),
   },
   {
@@ -31,7 +31,7 @@ const FEATURED_STORES = [
     location: 'Dubai, UAE',
     country: 'Middle East',
     image: '/solitario/stores/dubai.jpg',
-    mobileImage: '/images/Stores/10.jpg',
+    mobileImage: '/solitario/stores/dubai.jpg',
     mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Dubai Dubai, UAE'),
   },
 ];

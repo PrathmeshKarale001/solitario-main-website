@@ -30,8 +30,11 @@ export async function POST(request: NextRequest) {
     });
 
     if (result.errors) {
-      console.error('Shopify GraphQL errors:', result.errors);
-      return NextResponse.json({ error: 'Failed to create account' }, { status: 500 });
+      console.error('Shopify GraphQL errors:', JSON.stringify(result.errors, null, 2));
+      return NextResponse.json({ 
+        error: 'Failed to create account',
+        details: result.errors.map((e: any) => e.message).join(', ')
+      }, { status: 500 });
     }
 
     if (result.data?.customerCreate?.customerUserErrors?.length) {

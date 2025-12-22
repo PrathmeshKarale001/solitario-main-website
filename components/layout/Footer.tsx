@@ -52,11 +52,11 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Main Footer Content - Compact */}
-      <div className="section-container py-6 sm:py-8 md:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 md:gap-8">
+      {/* Main Footer Content - Uniform Layout */}
+      <div className="section-container py-8 sm:py-10 md:py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Brand Section */}
-          <div>
+          <div className="flex flex-col items-start">
             <Link href="/" className="inline-block mb-4">
               <Image
                 src="/logo.svg"
@@ -66,10 +66,10 @@ export default function Footer() {
                 className="w-auto brightness-0 invert h-[2.6rem] md:h-[3.55rem]"
               />
             </Link>
-            <p className="text-xs sm:text-sm text-ivory-pearl/80 mb-3 sm:mb-4">
+            <p className="text-sm text-ivory-pearl/80 mb-4">
               India's most loved new-age diamond jewellery brand. Luxury that doesn't cost the Earth.
             </p>
-            <div className="flex space-x-3 sm:space-x-4">
+            <div className="flex space-x-4">
               <a
                 href="https://facebook.com"
                 target="_blank"
@@ -77,7 +77,7 @@ export default function Footer() {
                 className="text-ivory-pearl hover:text-bronze-gold transition-colors"
                 aria-label="Facebook"
               >
-                <Facebook className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Facebook className="w-5 h-5" />
               </a>
               <a
                 href="https://instagram.com"
@@ -86,123 +86,123 @@ export default function Footer() {
                 className="text-ivory-pearl hover:text-bronze-gold transition-colors"
                 aria-label="Instagram"
               >
-                <Instagram className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="mailto:info@solitario.com"
                 className="text-ivory-pearl hover:text-bronze-gold transition-colors"
                 aria-label="Email"
               >
-                <Mail className="w-4 h-4 sm:w-5 sm:h-5" />
+                <Mail className="w-5 h-5" />
               </a>
             </div>
           </div>
 
-          {/* Quick Links - Compact */}
-          <div>
-            <h4 className="font-semibold text-sm sm:text-base mb-2 sm:mb-4">Quick Links</h4>
-            <ul className="space-y-1 sm:space-y-2">
+          {/* Quick Links */}
+          <div className="flex flex-col items-start">
+            <h4 className="font-semibold text-base mb-4">Quick Links</h4>
+            <ul className="space-y-2">
               <li>
-                <Link href="/" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="/products" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/products" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Products
                 </Link>
               </li>
               <li>
-                <Link href="/lab-grown-diamonds" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/lab-grown-diamonds" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Lab Diamonds
                 </Link>
               </li>
               <li>
-                <Link href="/about" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/about" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   About
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/contact" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Contact
                 </Link>
               </li>
               <li>
-                <Link href="/blog" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/blog" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Blog
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Categories - Compact */}
-          <div>
-            <h4 className="font-semibold text-sm sm:text-base mb-2 sm:mb-4">Categories</h4>
-            <ul className="space-y-1 sm:space-y-2">
+          {/* Categories */}
+          <div className="flex flex-col items-start">
+            <h4 className="font-semibold text-base mb-4">Categories</h4>
+            <ul className="space-y-2">
               <li>
-                <Link href="/products?category=rings" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/products/category/rings" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Rings
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=necklaces" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/products/category/necklaces" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Necklaces
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=earrings" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/products/category/earrings" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Earrings
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=bracelets" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/products/category/bracelets" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Bracelets
+                </Link>
+              </li>
+              <li>
+                <Link href="/products/category/pendants" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Pendants
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Customer Service - Compact */}
-          <div>
-            <h4 className="font-semibold text-sm sm:text-base mb-2 sm:mb-4">Service</h4>
-            <ul className="space-y-1 sm:space-y-2">
+          {/* Customer Service */}
+          <div className="flex flex-col items-start">
+            <h4 className="font-semibold text-base mb-4">Customer Service</h4>
+            <ul className="space-y-2">
               <li>
-                <Link href="/faq" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/faq" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/shipping" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/shipping" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Shipping
                 </Link>
               </li>
               <li>
-                <Link href="/returns" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/returns" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Returns
                 </Link>
               </li>
               <li>
-                <Link href="/stores" className="text-ivory-pearl/80 hover:text-bronze-gold transition-colors text-sm">
+                <Link href="/stores" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Store Locator
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-ivory-pearl/80 hover:text-bronze-gold transition-colors text-sm">
+                <Link href="/contact" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/certifications" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/certifications" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Certifications
                 </Link>
               </li>
-              {/* <li>
-                <Link href="/sustainability" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
-                  Sustainability
-                </Link>
-              </li> */}
               <li>
-                <Link href="/franchise" className="text-xs sm:text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                <Link href="/franchise" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Franchise
                 </Link>
               </li>
