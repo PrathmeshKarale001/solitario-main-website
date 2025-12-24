@@ -152,14 +152,14 @@ export default function Testimonials() {
               <div className="flex gap-2 sm:gap-3 mt-4 sm:mt-6 md:mt-8">
                 <button
                   onClick={prevTestimonial}
-                  className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
+                  className="p-2 sm:p-3 rounded-full bg-bronze-gold/10 hover:bg-bronze-gold/20 text-bronze-gold border border-bronze-gold/20 hover:border-bronze-gold/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
                   aria-label="Previous testimonial"
                 >
                   <ChevronLeft className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
                 </button>
                 <button
                   onClick={nextTestimonial}
-                  className="p-2 sm:p-3 rounded-full bg-white/10 hover:bg-white/20 text-white border border-white/20 hover:border-white/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
+                  className="p-2 sm:p-3 rounded-full bg-bronze-gold/10 hover:bg-bronze-gold/20 text-bronze-gold border border-bronze-gold/20 hover:border-bronze-gold/40 transition-all duration-300 hover:scale-110 backdrop-blur-sm touch-manipulation"
                   aria-label="Next testimonial"
                 >
                   <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4 md:w-5 md:h-5" />
@@ -228,21 +228,21 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 pt-12 border-t border-white/20"
+            className="mt-16 pt-12 border-t border-bronze-gold/20"
           >
             <div className="flex flex-wrap items-center justify-center gap-4">
-              <div className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
+              <div className="px-6 py-3 bg-bronze-gold/10 backdrop-blur-sm rounded-lg border border-bronze-gold/20">
                 <div className="flex items-center gap-2">
                   <div className="flex gap-0.5">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-bronze-gold text-bronze-gold" />
                     ))}
                   </div>
-                  <span className="text-white font-gotham text-sm">4.9 Rating on Google</span>
+                  <span className="text-bronze-gold font-gotham text-sm">4.9 Rating on Google</span>
                 </div>
               </div>
-              <div className="px-6 py-3 bg-white/10 backdrop-blur-sm rounded-lg border border-white/20">
-                <p className="text-white/80 font-gotham text-sm">100+ Happy Customers</p>
+              <div className="px-6 py-3 bg-bronze-gold/10 backdrop-blur-sm rounded-lg border border-bronze-gold/20">
+                <p className="text-bronze-gold/80 font-gotham text-sm">100+ Happy Customers</p>
               </div>
             </div>
           </motion.div>

@@ -5,6 +5,8 @@ import { Product } from './data';
 export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   const firstVariant = product.variants.edges[0]?.node;
   const price = firstVariant ? parseFloat(firstVariant.price.amount) : 0;
+  const compareAtPrice = firstVariant?.compareAtPrice ? parseFloat(firstVariant.compareAtPrice.amount) : undefined;
+  
   // Convert currency code to symbol (INR -> ₹)
   const currencyCode = firstVariant?.price.currencyCode || 'INR';
   const currency = currencyCode === 'INR' ? '₹' : currencyCode;
@@ -51,6 +53,7 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
     sku, // Real SKU from Shopify
     inStock, // Real stock status
     variantId: firstVariant?.id, // Shopify variant ID for cart
+    comparePrice: compareAtPrice, // Compare at price from Shopify
   };
 }
 

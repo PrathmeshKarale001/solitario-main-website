@@ -9,8 +9,8 @@ import Image from 'next/image';
 const HERO_MEDIA_DESKTOP = [
   {
     type: 'image',
-    src: '/images/HERO BANNER 1.webp',
-    pos: 'object-[50%_35%]',
+    src: '/images/home-hero/newhero/1st.png',
+    pos: 'object-center',
   },
   {
     type: 'image',
@@ -19,7 +19,7 @@ const HERO_MEDIA_DESKTOP = [
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 3.webp',
+    src: '/images/home-hero/newhero/3rd.png',
     pos: 'object-center',
   },
   {
@@ -36,12 +36,17 @@ const HERO_MEDIA_DESKTOP = [
 const HERO_MEDIA_MOBILE = [
   {
     type: 'image',
+    src: '/images/home-hero/newhero/1stMobile.png',
+    pos: 'object-center',
+  },
+  {
+    type: 'image',
     src: '/images/Hero_Mobile/Hero%20banner%202.jpg',
     pos: 'object-center',
   },
   {
     type: 'image',
-    src: '/images/Hero_Mobile/Hero%20banner%203.jpg',
+    src: '/images/home-hero/newhero/3rdMobile.png',
     pos: 'object-center',
   },
   {

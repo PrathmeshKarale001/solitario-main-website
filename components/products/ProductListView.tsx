@@ -76,9 +76,25 @@ export default function ProductListView({ products, onQuickView }: ProductListVi
                   </div>
 
                   <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <p className="font-gotham text-2xl font-semibold text-classic-green tracking-wide">
-                      {formatPrice(product.price, product.currency)}
-                    </p>
+                    <div className="flex items-center gap-3">
+                      {product.comparePrice ? (
+                        <>
+                          <p className="font-gotham text-2xl font-semibold text-classic-green tracking-wide">
+                            {formatPrice(product.price, product.currency)}
+                          </p>
+                          <p className="font-gotham text-lg text-gray-400 line-through">
+                            {formatPrice(product.comparePrice, product.currency)}
+                          </p>
+                          <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-600 text-xs font-gotham font-semibold rounded">
+                            {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
+                          </span>
+                        </>
+                      ) : (
+                        <p className="font-gotham text-2xl font-semibold text-classic-green tracking-wide">
+                          {formatPrice(product.price, product.currency)}
+                        </p>
+                      )}
+                    </div>
                     <div className="flex items-center gap-3">
                       {onQuickView && (
                         <button

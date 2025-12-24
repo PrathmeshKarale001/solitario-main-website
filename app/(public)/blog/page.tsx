@@ -172,14 +172,34 @@ export default function BlogPage() {
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
-              <BlurText
-                text="Stories That Sparkle"
-                className="font-playfair"
-                animateBy="characters"
-                direction="top"
-                delay={50}
-                stepDuration={0.4}
-              />
+              <span className="inline-block">
+                <BlurText
+                  text="Stories"
+                  className="font-playfair"
+                  animateBy="characters"
+                  direction="top"
+                  delay={50}
+                  stepDuration={0.3}
+                />
+                {" "}
+                <BlurText
+                  text="That"
+                  className="font-playfair"
+                  animateBy="characters"
+                  direction="top"
+                  delay={200}
+                  stepDuration={0.5}
+                />
+                {" "}
+                <BlurText
+                  text="Sparkle"
+                  className="font-playfair"
+                  animateBy="characters"
+                  direction="top"
+                  delay={350}
+                  stepDuration={0.7}
+                />
+              </span>
             </h1>
 
             <motion.p

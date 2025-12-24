@@ -11,9 +11,12 @@ import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
 import Image from 'next/image';
 const PRODUCTS_PER_PAGE = 12;
+const LOAD_MORE_THRESHOLD = 12;
 
 // Hero images - Desktop versions (new Shop images first, then existing last)
 const HERO_IMAGES_DESKTOP = [
+  { src: '/images/home-hero/newhero/ChatGPT Banner Design Dec 24 2025.png', pos: 'object-center' },
+  { src: '/images/home-hero/newhero/2nd.png', pos: 'object-center' },
   { src: '/images/Shop/Banner1 1.webp', pos: 'object-[50%_0%]' },
   { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/3.webp', pos: 'object-[50%_25%]' },
@@ -21,6 +24,8 @@ const HERO_IMAGES_DESKTOP = [
 
 // Hero images - Mobile versions
 const HERO_IMAGES_MOBILE = [
+  { src: '/images/home-hero/newhero/ChatGPT Banner Design Dec 24 2025 (1).png', pos: 'object-center' },
+  { src: '/images/home-hero/newhero/2ndMobile.png', pos: 'object-center' },
   { src: '/images/Shop/ShopMobile.webp', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
 ];
@@ -42,11 +47,14 @@ function ProductsPageContent() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMobileSort, setShowMobileSort] = useState(false);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Fetch products on mount via API
+  // Load initial products
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -63,47 +71,16 @@ function ProductsPageContent() {
     loadProducts();
   }, []);
 
-  useEffect(() => {
-    if (categoryParam) {
-      setActiveCategory(categoryParam);
-    }
-  }, [categoryParam]);
-
-  // Detect mobile viewport
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
   // Get current hero images based on viewport
   const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
 
-  // Start cycling images
-  useEffect(() => {
-    const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
-    imageIntervalRef.current = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 6000);
-
-    return () => {
-      if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
-    };
-  }, [isMobile]);
-
-  // Reset index when viewport changes
-  useEffect(() => {
-    setCurrentImageIndex(0);
-  }, [isMobile]);
-
   // Filter and sort products
-  const filteredAndSortedProducts = useMemo(() => {
+  const filteredAndSortedProducts: Product[] = useMemo(() => {
     let productList = [...products];
 
     // Category filter (case-insensitive)
     if (activeCategory !== 'all') {
-      productList = productList.filter(product => 
+      productList = productList.filter(product =>
         product.category.toLowerCase() === activeCategory.toLowerCase()
       );
     }
@@ -155,6 +132,83 @@ function ProductsPageContent() {
     return productList;
   }, [products, activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
 
+  // Update displayed products when filters change
+  useEffect(() => {
+    const initialLoad = Math.min(LOAD_MORE_THRESHOLD, filteredAndSortedProducts.length);
+    setDisplayedProducts(filteredAndSortedProducts.slice(0, initialLoad));
+    setHasMore(filteredAndSortedProducts.length > initialLoad);
+  }, [filteredAndSortedProducts]);
+
+  // Intersection Observer for infinite scroll
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      async (entries) => {
+        if (entries[0].isIntersecting && hasMore && !isLoadingMore) {
+          setIsLoadingMore(true);
+          // Simulate loading delay for better UX
+          await new Promise(resolve => setTimeout(resolve, 500));
+          
+          setDisplayedProducts(prev => {
+            const currentLength = prev.length;
+            const nextBatch = filteredAndSortedProducts.slice(
+              currentLength,
+              currentLength + LOAD_MORE_THRESHOLD
+            );
+            const newProducts = [...prev, ...nextBatch];
+            
+            // Check if there are more products to load
+            if (newProducts.length >= filteredAndSortedProducts.length) {
+              setHasMore(false);
+            }
+            
+            return newProducts;
+          });
+          
+          setIsLoadingMore(false);
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (sentinelRef.current) {
+      observer.observe(sentinelRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasMore, isLoadingMore, filteredAndSortedProducts]);
+
+  useEffect(() => {
+    if (categoryParam) {
+      setActiveCategory(categoryParam);
+    }
+  }, [categoryParam]);
+
+  // Detect mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Start cycling images
+  useEffect(() => {
+    const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
+    imageIntervalRef.current = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % images.length);
+    }, 6000);
+
+    return () => {
+      if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
+    };
+  }, [isMobile]);
+
+  // Reset index when viewport changes
+  useEffect(() => {
+    setCurrentImageIndex(0);
+  }, [isMobile]);
+
+
   // Calculate category counts for sidebar
   const categoryCounts = useMemo(() => {
     const counts: Record<string, number> = { all: products.length };
@@ -165,39 +219,28 @@ function ProductsPageContent() {
     return counts;
   }, [products]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredAndSortedProducts.length / PRODUCTS_PER_PAGE);
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    return filteredAndSortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
-  }, [filteredAndSortedProducts, currentPage]);
-
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
-
-  // Scroll to products section when page changes
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-
-  // Generate page numbers for pagination
-  const getPageNumbers = () => {
-    const pages: (number | string)[] = [];
-    if (totalPages <= 7) {
-      for (let i = 1; i <= totalPages; i++) pages.push(i);
-    } else {
-      if (currentPage <= 3) {
-        pages.push(1, 2, 3, 4, '...', totalPages);
-      } else if (currentPage >= totalPages - 2) {
-        pages.push(1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages);
-      } else {
-        pages.push(1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages);
-      }
-    }
-    return pages;
+  // Load more products manually (fallback)
+  const loadMore = () => {
+    if (!hasMore || isLoadingMore) return;
+    
+    setIsLoadingMore(true);
+    setTimeout(() => {
+      setDisplayedProducts(prev => {
+        const currentLength = prev.length;
+        const nextBatch = filteredAndSortedProducts.slice(
+          currentLength,
+          currentLength + LOAD_MORE_THRESHOLD
+        );
+        const newProducts = [...prev, ...nextBatch];
+        
+        if (newProducts.length >= filteredAndSortedProducts.length) {
+          setHasMore(false);
+        }
+        
+        return newProducts;
+      });
+      setIsLoadingMore(false);
+    }, 500);
   };
 
   return (
@@ -285,7 +328,7 @@ function ProductsPageContent() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
                 <div>
                   <p className="text-gray-600 font-montserrat text-sm sm:text-base">
-                    Showing <span className="font-semibold text-classic-green">{paginatedProducts.length}</span> of {filteredAndSortedProducts.length} products
+                    Showing <span className="font-semibold text-classic-green">{displayedProducts.length}</span> of {filteredAndSortedProducts.length} products
                     {filteredAndSortedProducts.length !== products.length && (
                       <span className="text-gray-400"> (filtered from {products.length})</span>
                     )}
@@ -296,11 +339,6 @@ function ProductsPageContent() {
                     </p>
                   )}
                 </div>
-                {totalPages > 1 && (
-                  <p className="text-xs sm:text-sm text-gray-500 font-montserrat">
-                    Page {currentPage} of {totalPages}
-                  </p>
-                )}
               </div>
               
               {filteredAndSortedProducts.length === 0 && (
@@ -320,43 +358,45 @@ function ProductsPageContent() {
                 </div>
               )}
 
-              {/* Products Display - Using paginated products */}
+              {/* Products Display - Using displayed products for infinite scroll */}
               {viewMode === 'grid' ? (
                 <ProductGrid
-                  products={paginatedProducts}
+                  products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
               ) : (
                 <ProductListView
-                  products={paginatedProducts}
+                  products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
               )}
 
-              {/* Pagination Controls */}
-              {totalPages > 1 && (
-                <div className="mt-8 flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg border border-gray-200 hover:border-classic-green hover:text-classic-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    aria-label="Previous page"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-
-                  <span className="px-4 py-2 text-sm font-montserrat text-gray-600">
-                    {currentPage} / {totalPages}
-                  </span>
-
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border border-gray-200 hover:border-classic-green hover:text-classic-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    aria-label="Next page"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
+              {/* Load More Section */}
+              {hasMore && (
+                <div className="mt-8 flex flex-col items-center gap-4">
+                  {isLoadingMore ? (
+                    <div className="flex items-center gap-2 text-classic-green">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-classic-green"></div>
+                      <span className="text-sm font-montserrat">Loading more products...</span>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={loadMore}
+                      className="px-6 py-3 border border-classic-green text-classic-green rounded-lg font-gotham text-sm uppercase tracking-wider hover:bg-classic-green hover:text-white transition-colors"
+                    >
+                      Load More Products
+                    </button>
+                  )}
+                </div>
+              )}
+              
+              {/* Sentinel for intersection observer */}
+              <div ref={sentinelRef} className="h-10" />
+              
+              {/* End of products message */}
+              {!hasMore && displayedProducts.length > 0 && (
+                <div className="mt-8 text-center text-gray-500 font-montserrat text-sm">
+                  You've reached the end of the collection
                 </div>
               )}
             </div>

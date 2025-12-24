@@ -391,10 +391,24 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </h1>
 
               {/* Price */}
-              <div className="flex items-center gap-3">
-                <span className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green">
-                  {formatPrice(product.price, product.currency)}
-                </span>
+              <div className="flex items-center gap-3 flex-wrap">
+                {product.comparePrice ? (
+                  <>
+                    <span className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green">
+                      {formatPrice(product.price, product.currency)}
+                    </span>
+                    <span className="font-gotham text-lg md:text-xl text-gray-400 line-through">
+                      {formatPrice(product.comparePrice, product.currency)}
+                    </span>
+                    <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-600 text-xs md:text-sm font-gotham font-semibold rounded">
+                      {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
+                    </span>
+                  </>
+                ) : (
+                  <span className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green">
+                    {formatPrice(product.price, product.currency)}
+                  </span>
+                )}
               </div>
 
               {/* SKU & Stock */}
@@ -715,9 +729,25 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     <h3 className="font-playfair text-body-sm md:text-body-md text-brand-800 group-hover:text-bronze-gold transition-colors mb-1">
                       {relatedProduct.name}
                     </h3>
-                    <p className="font-gotham text-body-sm font-semibold text-classic-green">
-                      {formatPrice(relatedProduct.price, relatedProduct.currency)}
-                    </p>
+                    <div className="flex items-center gap-2 flex-wrap">
+                      {relatedProduct.comparePrice ? (
+                        <>
+                          <p className="font-gotham text-body-sm font-semibold text-classic-green">
+                            {formatPrice(relatedProduct.price, relatedProduct.currency)}
+                          </p>
+                          <p className="font-gotham text-xs text-gray-400 line-through">
+                            {formatPrice(relatedProduct.comparePrice, relatedProduct.currency)}
+                          </p>
+                          <span className="inline-flex items-center px-1.5 py-0.5 bg-red-100 text-red-600 text-[9px] font-gotham font-semibold rounded">
+                            {Math.round(((relatedProduct.comparePrice - relatedProduct.price) / relatedProduct.comparePrice) * 100)}% OFF
+                          </span>
+                        </>
+                      ) : (
+                        <p className="font-gotham text-body-sm font-semibold text-classic-green">
+                          {formatPrice(relatedProduct.price, relatedProduct.currency)}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 </Link>
               ))}

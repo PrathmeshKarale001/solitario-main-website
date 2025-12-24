@@ -13,6 +13,7 @@ export interface Product {
   inStock?: boolean; // Stock availability
   stockQuantity?: number; // Actual stock count
   variantId?: string; // Shopify variant ID for cart
+  comparePrice?: number; // Compare at price for discounts
 }
 
 // Helper function to get product images

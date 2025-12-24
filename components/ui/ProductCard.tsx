@@ -90,9 +90,25 @@ export default function ProductCard({ product, onQuickView, onAddToCart }: Produ
           </h3>
 
           {/* Price */}
-          <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
-            {formatPrice(product.price, product.currency)}
-          </p>
+          <div className="flex items-center gap-2">
+            {product.comparePrice ? (
+              <>
+                <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
+                  {formatPrice(product.price, product.currency)}
+                </p>
+                <p className="font-gotham text-[10px] sm:text-xs text-gray-400 line-through">
+                  {formatPrice(product.comparePrice, product.currency)}
+                </p>
+                <span className="inline-flex items-center px-1.5 py-0.5 bg-red-100 text-red-600 text-[8px] sm:text-[9px] font-gotham font-semibold rounded">
+                  {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
+                </span>
+              </>
+            ) : (
+              <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
+                {formatPrice(product.price, product.currency)}
+              </p>
+            )}
+          </div>
         </div>
       </motion.div>
     </Link>

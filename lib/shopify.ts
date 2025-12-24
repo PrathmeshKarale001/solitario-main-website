@@ -42,6 +42,10 @@ export interface ShopifyProduct {
           amount: string;
           currencyCode: string;
         };
+        compareAtPrice?: {
+          amount: string;
+          currencyCode: string;
+        } | null;
         selectedOptions: Array<{
           name: string;
           value: string;
@@ -256,6 +260,10 @@ export const GET_PRODUCTS_QUERY = `
                   amount
                   currencyCode
                 }
+                compareAtPrice {
+                  amount
+                  currencyCode
+                }
                 selectedOptions {
                   name
                   value
@@ -319,6 +327,10 @@ export const GET_PRODUCT_BY_HANDLE_QUERY = `
             sku
             availableForSale
             price {
+              amount
+              currencyCode
+            }
+            compareAtPrice {
               amount
               currencyCode
             }
