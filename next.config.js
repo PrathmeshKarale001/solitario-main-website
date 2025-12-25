@@ -24,7 +24,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'], // AVIF first for better compression
     minimumCacheTTL: 31536000, // Cache for 1 year
     dangerouslyAllowSVG: true,
-    contentDispositionType: 'attachment',
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   // Optimize production builds
