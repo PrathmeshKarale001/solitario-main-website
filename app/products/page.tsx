@@ -304,10 +304,16 @@ function ProductsPageContent() {
             alt="Christmas Sale - Special Offers"
             width={1200}
             height={250}
-           
+            className="w-full h-auto object-cover rounded-lg transform group-hover:scale-105 transition-transform duration-700 shadow-lg"
+            priority
           />
-        
-          
+          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 rounded-lg" />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className="text-center text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              <p className="text-lg md:text-xl font-playfair font-bold mb-2">Click to Explore Christmas Deals</p>
+              <p className="text-sm md:text-base font-montserrat">Limited Time Offers</p>
+            </div>
+          </div>
         </div>
       </section>
 
