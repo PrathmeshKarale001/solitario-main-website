@@ -300,7 +300,7 @@ function ProductsPageContent() {
       <section className="bg-white py-8">
         <div className="relative overflow-hidden max-w-6xl mx-auto px-4">
           <Image
-            src="/images/Christmas Offer.jpg"
+            src="/images/christmas-offer.jpg"
             alt="Christmas Sale - Special Offers"
             width={1200}
             height={250}
