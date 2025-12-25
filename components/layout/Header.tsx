@@ -16,7 +16,7 @@ const NAV_LINKS = [
   { href: '/products', label: 'Shop' },
   { href: '/stores', label: 'Stores' },
   { href: '/about', label: 'About' },
-];
+] as const;
 
 // Mobile menu categories for better organization - using dedicated category pages
 const MOBILE_MENU_SECTIONS = [
@@ -142,8 +142,7 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                       "text-white/90 hover:text-bronze-gold transition-colors duration-200 font-gotham text-xs uppercase tracking-[0.15em]",
-                      pathname === link.href && "text-bronze-gold",
-                      link.highlight && "text-red-300 hover:text-red-200 font-semibold"
+                      pathname === link.href && "text-bronze-gold"
                     )}
                   >
                     {link.label}
