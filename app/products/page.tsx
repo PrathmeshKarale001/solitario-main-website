@@ -299,13 +299,10 @@ function ProductsPageContent() {
       {/* Christmas Sale Banner */}
       <section className="bg-white py-8">
         <div className="relative overflow-hidden max-w-6xl mx-auto px-4">
-          <Image
+          <img
             src="/images/christmas-offer.jpg"
             alt="Christmas Sale - Special Offers"
-            width={1200}
-            height={250}
             className="w-full h-auto object-cover rounded-lg shadow-lg cursor-pointer"
-            priority
             onClick={() => router.push('/christmas-sale')}
           />
         </div>
