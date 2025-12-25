@@ -28,7 +28,7 @@ const MOBILE_MENU_SECTIONS = [
       { href: '/products/category/earrings', label: 'Earrings', icon: Gem },
       { href: '/products/category/necklaces', label: 'Necklaces', icon: Diamond },
       { href: '/products/category/pendants', label: 'Pendants', icon: Star },
-      { href: '/products/category/bracelets', label: 'Bracelets', icon: Gift },
+      { href: '/products/category/bracelets', label: 'Bracelets', icon: Hexagon },
     ],
   },
   {
@@ -142,7 +142,8 @@ export default function Header() {
                     href={link.href}
                     className={cn(
                       "text-white/90 hover:text-bronze-gold transition-colors duration-200 font-gotham text-xs uppercase tracking-[0.15em]",
-                      pathname === link.href && "text-bronze-gold"
+                      pathname === link.href && "text-bronze-gold",
+                      link.highlight && "text-red-300 hover:text-red-200 font-semibold"
                     )}
                   >
                     {link.label}
@@ -290,22 +291,24 @@ export default function Header() {
                         onClick={() => setIsMobileMenuOpen(false)}
                         className={cn(
                           "flex items-center justify-between py-3.5 px-4 rounded-xl transition-all duration-200 touch-manipulation group",
-                          isHighlight 
-                            ? "bg-bronze-gold/20 text-white border border-bronze-gold/30" 
-                            : isActive 
-                              ? "bg-white/15 text-white" 
-                              : "text-white/90 hover:bg-white/10 hover:text-white"
+                          isHighlight && link.label === 'Christmas Sale'
+                            ? "bg-gradient-to-r from-red-500/30 to-green-500/30 text-white border border-red-400/50 animate-pulse" 
+                            : isHighlight 
+                              ? "bg-bronze-gold/20 text-white border border-bronze-gold/30" 
+                              : isActive 
+                                ? "bg-white/15 text-white" 
+                                : "text-white/90 hover:bg-white/10 hover:text-white"
                         )}
                       >
                         <span className="flex items-center gap-3.5">
                           {link.icon && (
                             <span className={cn(
                               "w-8 h-8 rounded-lg flex items-center justify-center transition-colors",
-                              isHighlight ? "bg-bronze-gold/30" : "bg-white/10 group-hover:bg-white/15"
+                              isHighlight && link.label === 'Christmas Sale' ? "bg-gradient-to-r from-red-500/50 to-green-500/50" : isHighlight ? "bg-bronze-gold/30" : "bg-white/10 group-hover:bg-white/15"
                             )}>
                               <link.icon className={cn(
                                 "w-4 h-4",
-                                isHighlight ? "text-bronze-gold" : "text-white/80"
+                                isHighlight && link.label === 'Christmas Sale' ? "text-red-300" : isHighlight ? "text-bronze-gold" : "text-white/80"
                               )} />
                             </span>
                           )}

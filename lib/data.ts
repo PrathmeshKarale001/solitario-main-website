@@ -14,6 +14,13 @@ export interface Product {
   stockQuantity?: number; // Actual stock count
   variantId?: string; // Shopify variant ID for cart
   comparePrice?: number; // Compare at price for discounts
+  tags?: string[]; // Product tags for filtering (e.g., ['christmas', 'new', 'sale'])
+  isChristmasProduct?: boolean; // Specific Christmas product flag
+  collections?: Array<{ // Shopify collections the product belongs to
+    id: string;
+    title: string;
+    handle: string;
+  }>;
 }
 
 // Helper function to get product images

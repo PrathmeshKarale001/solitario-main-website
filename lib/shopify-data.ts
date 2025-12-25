@@ -40,6 +40,22 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
       return title.includes('featured') || handle.includes('featured');
     }) ?? false);
 
+  // Check if this is a Christmas product based on collections
+  const isChristmasProduct = product.collections?.edges?.some((collection: any) => {
+    const title = collection.node.title?.toLowerCase().trim() || '';
+    const handle = collection.node.handle?.toLowerCase().trim() || '';
+    return title.includes('christmas') || handle.includes('christmas') || 
+           title.includes('holiday') || handle.includes('holiday') ||
+           title.includes('festive') || handle.includes('festive');
+  }) ?? false;
+
+  // Extract collection information for the product
+  const collections = product.collections?.edges?.map((edge: any) => ({
+    id: edge.node.id,
+    title: edge.node.title,
+    handle: edge.node.handle,
+  })) || [];
+
   return {
     id: product.handle, // Use handle as a more URL-friendly ID
     name: product.title,
@@ -54,6 +70,9 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
     inStock, // Real stock status
     variantId: firstVariant?.id, // Shopify variant ID for cart
     comparePrice: compareAtPrice, // Compare at price from Shopify
+    tags: product.tags, // Include all tags for filtering
+    isChristmasProduct, // Christmas product flag
+    collections, // Include collection information
   };
 }
 

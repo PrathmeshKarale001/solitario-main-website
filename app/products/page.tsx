@@ -10,6 +10,7 @@ import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 const PRODUCTS_PER_PAGE = 12;
 const LOAD_MORE_THRESHOLD = 12;
 
@@ -32,6 +33,7 @@ const HERO_IMAGES_MOBILE = [
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const categoryParam = searchParams.get('category');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
@@ -291,6 +293,21 @@ function ProductsPageContent() {
               aria-label={`Go to slide ${index + 1}`}
             />
           ))}
+        </div>
+      </section>
+
+      {/* Christmas Sale Banner */}
+      <section className="relative cursor-pointer group bg-white py-8" onClick={() => router.push('/christmas-sale')}>
+        <div className="relative overflow-hidden max-w-6xl mx-auto px-4">
+          <Image
+            src="/images/Christmas Offer.jpg"
+            alt="Christmas Sale - Special Offers"
+            width={1200}
+            height={250}
+           
+          />
+        
+          
         </div>
       </section>
 

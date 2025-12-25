@@ -3,6 +3,39 @@
 @tailwind utilities;
 
 /* ========================================
+   CHRISTMAS THEME ANIMATIONS
+   ======================================== */
+
+@keyframes christmas-twinkle {
+  0%, 100% { opacity: 0.2; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+@keyframes christmas-glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(255, 0, 0, 0.5); }
+  50% { box-shadow: 0 0 20px rgba(255, 0, 0, 0.8), 0 0 30px rgba(0, 255, 0, 0.6); }
+}
+
+@keyframes christmas-shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+.christmas-twinkle {
+  animation: christmas-twinkle 2s ease-in-out infinite;
+}
+
+.christmas-glow {
+  animation: christmas-glow 2s ease-in-out infinite;
+}
+
+.christmas-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  background-size: 200% 100%;
+  animation: christmas-shimmer 3s infinite;
+}
+
+/* ========================================
    BRAND FONTS - @font-face declarations
    ======================================== */
 
