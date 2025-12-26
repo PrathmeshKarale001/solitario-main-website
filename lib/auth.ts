@@ -331,4 +331,4 @@ export const authOptions: NextAuthOptions = {
   }),
 };
 
-export { findOrCreateShopifyCustomer, loginShopifyCustomer };
+export { findOrCreateShopifyCustomer, loginShopifyCustomer, getShopifyAccessTokenForOAuthUser };

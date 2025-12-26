@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { shopifyStorefrontFetch } from '@/lib/shopify';
+import { findOrCreateShopifyCustomer, getShopifyAccessTokenForOAuthUser } from '@/lib/auth';
 
 // Get customer addresses
 const CUSTOMER_ADDRESSES_QUERY = `
@@ -167,10 +168,34 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const shopifyAccessToken = (session.user as any).shopifyAccessToken;
+    let shopifyAccessToken = (session.user as any).shopifyAccessToken;
+    
+    // If no Shopify access token, try to create one for Google users
+    if (!shopifyAccessToken && session.user.email) {
+      try {
+        const nameParts = session.user.name?.split(' ') || [];
+        const firstName = nameParts[0] || '';
+        const lastName = nameParts.slice(1).join(' ') || '';
+
+        // Create customer with password for OAuth users
+        const shopifyCustomer = await findOrCreateShopifyCustomer(session.user.email, firstName, lastName, true);
+        
+        if (shopifyCustomer?.storedPassword) {
+          const tokenResult = await getShopifyAccessTokenForOAuthUser(session.user.email, shopifyCustomer.storedPassword);
+          if (tokenResult) {
+            shopifyAccessToken = tokenResult.accessToken;
+            // Note: We can't update the session here, but the address will work for this request
+          }
+        }
+      } catch (error) {
+        console.error('Failed to create Shopify customer for Google user:', error);
+      }
+    }
     
     if (!shopifyAccessToken) {
-      return NextResponse.json({ error: 'No Shopify access token' }, { status: 400 });
+      return NextResponse.json({ 
+        error: 'No Shopify access token. Please sign out and sign back in with Google to complete setup.' 
+      }, { status: 400 });
     }
 
     const body = await request.json();
