@@ -284,6 +284,44 @@ export const authOptions: NextAuthOptions = {
     maxAge: 30 * 24 * 60 * 60, // 30 days
   },
   secret: process.env.NEXTAUTH_SECRET,
+  // Add domain configuration for production
+  ...(process.env.NODE_ENV === 'production' && {
+    url: 'https://thesolitario.com',
+    // Handle both www and non-www versions
+    useSecureCookies: true,
+    cookies: {
+      sessionToken: {
+        name: `next-auth.session-token`,
+        options: {
+          domain: process.env.NEXTAUTH_URL === 'https://www.thesolitario.com' ? '.thesolitario.com' : undefined,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+        },
+      },
+      callbackUrl: {
+        name: `__Secure-next-auth.callback-url`,
+        options: {
+          domain: process.env.NEXTAUTH_URL === 'https://www.thesolitario.com' ? '.thesolitario.com' : undefined,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+        },
+      },
+      csrfToken: {
+        name: `__Host-next-auth.csrf-token`,
+        options: {
+          domain: process.env.NEXTAUTH_URL === 'https://www.thesolitario.com' ? '.thesolitario.com' : undefined,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+        },
+      },
+    },
+  }),
 };
 
 export { findOrCreateShopifyCustomer, loginShopifyCustomer };
