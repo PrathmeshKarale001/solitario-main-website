@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X } from 'lucide-react';
+import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
 interface Address {
@@ -49,29 +49,59 @@ export default function AddressesPage() {
     }
   }, [status, router]);
 
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await fetch('/api/account/addresses');
+        if (response.ok) {
+          const data = await response.json();
+          setAddresses(data.addresses || []);
+        } else {
+          const errorData = await response.json();
+          if (errorData.error === 'No Shopify access token') {
+            // User logged in via Google but needs to complete Shopify profile
+            setError('Please complete your profile to manage addresses. This is a one-time setup for Google users.');
+          } else {
+            setError(errorData.error || 'Failed to fetch addresses');
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch addresses:', error);
+        setError('Failed to fetch addresses');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (status === 'authenticated') {
+      fetchAddresses();
+    }
+  }, [status]);
+
   const fetchAddresses = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/account/addresses');
-      if (res.ok) {
-        const data = await res.json();
+      const response = await fetch('/api/account/addresses');
+      if (response.ok) {
+        const data = await response.json();
         setAddresses(data.addresses || []);
       } else {
+        const errorData = await response.json();
+        if (errorData.error === 'No Shopify access token') {
+          setError('Please complete your profile to manage addresses. This is a one-time setup for Google users.');
+        } else {
+          setError(errorData.error || 'Failed to fetch addresses');
+        }
         setAddresses([]);
       }
     } catch (error) {
       console.error('Failed to fetch addresses:', error);
+      setError('Failed to fetch addresses');
       setAddresses([]);
     } finally {
       setLoading(false);
     }
   }, []);
-
-  useEffect(() => {
-    if (status === 'authenticated') {
-      fetchAddresses();
-    }
-  }, [status, fetchAddresses]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -212,13 +242,40 @@ export default function AddressesPage() {
               <motion.div
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mb-6 p-4 bg-red-50 border border-red-200 rounded-xl flex items-center gap-3"
+                className="mb-6 p-4 bg-amber-50 border border-amber-200 rounded-xl"
               >
-                <X className="w-5 h-5 text-red-500 flex-shrink-0" />
-                <p className="text-red-700 font-montserrat text-sm">{error}</p>
-                <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-amber-600 flex-shrink-0 mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-amber-800 font-montserrat text-sm font-medium mb-2">{error}</p>
+                    {error.includes('Google users') && (
+                      <div className="text-amber-700 font-montserrat text-xs">
+                        <p className="mb-2">To fix this issue:</p>
+                        <ol className="list-decimal list-inside space-y-1">
+                          <li>Sign out of your account</li>
+                          <li>Sign back in using Google</li>
+                          <li>Complete the one-time profile setup</li>
+                        </ol>
+                        <div className="mt-3 flex gap-2">
+                          <Link href="/auth/signout">
+                            <button className="px-3 py-1 bg-amber-600 text-white text-xs rounded-lg hover:bg-amber-700 transition-colors">
+                              Sign Out
+                            </button>
+                          </Link>
+                          <button 
+                            onClick={() => window.location.reload()} 
+                            className="px-3 py-1 bg-amber-100 text-amber-800 text-xs rounded-lg hover:bg-amber-200 transition-colors"
+                          >
+                            Try Again
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  <button onClick={() => setError(null)} className="text-amber-600 hover:text-amber-800">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
               </motion.div>
             )}
 
