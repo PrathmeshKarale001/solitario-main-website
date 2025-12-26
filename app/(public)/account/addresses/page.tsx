@@ -103,6 +103,18 @@ export default function AddressesPage() {
     }
   }, []);
 
+  const checkSession = async () => {
+    try {
+      const response = await fetch('/api/auth/debug');
+      const data = await response.json();
+      console.log('Session Debug:', data);
+      alert(JSON.stringify(data, null, 2));
+    } catch (error) {
+      console.error('Debug error:', error);
+      alert('Failed to check session');
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
@@ -257,6 +269,12 @@ export default function AddressesPage() {
                           <li>Complete the one-time profile setup</li>
                         </ol>
                         <div className="mt-3 flex gap-2">
+                          <button 
+                            onClick={checkSession}
+                            className="px-3 py-1 bg-blue-600 text-white text-xs rounded-lg hover:bg-blue-700 transition-colors"
+                          >
+                            Debug Session
+                          </button>
                           <Link href="/auth/signout">
                             <button className="px-3 py-1 bg-amber-600 text-white text-xs rounded-lg hover:bg-amber-700 transition-colors">
                               Sign Out
