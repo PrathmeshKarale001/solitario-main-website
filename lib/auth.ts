@@ -95,6 +95,123 @@ async function createShopifyCustomerForOAuth(email: string, firstName: string, l
   }
 }
 
+// Create Shopify customer AND get access token for Google OAuth users
+async function createShopifyCustomerWithToken(email: string, firstName: string, lastName: string) {
+  console.log('[AUTH] Creating Shopify customer with token for:', email);
+  
+  // Check if customer exists
+  const findQuery = `
+    query findCustomer($email: String!) {
+      customers(first: 1, query: $email) {
+        edges {
+          node {
+            id
+            email
+            firstName
+            lastName
+          }
+        }
+      }
+    }
+  `;
+
+  try {
+    const findResult = await shopifyAdminFetch<{
+      customers: { edges: Array<{ node: { id: string; email: string; firstName: string; lastName: string } }> };
+    }>(findQuery, { email: `email:${email}` });
+
+    if (findResult.data?.customers?.edges?.length) {
+      const customer = findResult.data.customers.edges[0].node;
+      console.log('[AUTH] Found existing customer:', customer.id);
+      
+      // Try to get token for existing customer
+      // This won't work without password, so we need to update the customer with a password
+      const password = generateSecurePassword();
+      const updateMutation = `
+        mutation customerUpdate($input: CustomerInput!, $id: ID!) {
+          customerUpdate(input: $input, id: $id) {
+            customer {
+              id
+            }
+            userErrors {
+              field
+              message
+            }
+          }
+        }
+      `;
+      
+      await shopifyAdminFetch(updateMutation, {
+        id: customer.id,
+        input: { password, passwordConfirmation: password }
+      });
+      
+      const token = await getShopifyAccessToken(email, password);
+      if (token) {
+        return { customer, token };
+      }
+    }
+
+    // Create new customer with password
+    const password = generateSecurePassword();
+    const createMutation = `
+      mutation customerCreate($input: CustomerInput!) {
+        customerCreate(input: $input) {
+          customer {
+            id
+            email
+            firstName
+            lastName
+          }
+          userErrors {
+            field
+            message
+          }
+        }
+      }
+    `;
+
+    const createResult = await shopifyAdminFetch<{
+      customerCreate: {
+        customer: { id: string; email: string; firstName: string; lastName: string } | null;
+        userErrors: Array<{ field: string; message: string }>;
+      };
+    }>(createMutation, {
+      input: {
+        email,
+        firstName: firstName || 'User',
+        lastName: lastName || '',
+        password,
+        passwordConfirmation: password,
+        emailMarketingConsent: {
+          marketingState: 'NOT_SUBSCRIBED',
+          marketingOptInLevel: 'SINGLE_OPT_IN',
+        },
+      },
+    });
+
+    if (createResult.data?.customerCreate?.userErrors?.length) {
+      console.error('[AUTH] Customer creation errors:', createResult.data.customerCreate.userErrors);
+      throw new Error(createResult.data.customerCreate.userErrors[0].message);
+    }
+
+    if (createResult.data?.customerCreate?.customer) {
+      console.log('[AUTH] Created new customer:', createResult.data.customerCreate.customer.id);
+      
+      // Get access token for the new customer
+      const token = await getShopifyAccessToken(email, password);
+      if (token) {
+        return { customer: createResult.data.customerCreate.customer, token };
+      }
+    }
+
+    throw new Error('Failed to create customer or get token');
+  } catch (error) {
+    console.error('[AUTH] Error in createShopifyCustomerWithToken:', error);
+    throw error;
+  }
+}
+
 // Get Shopify access token for customer
 async function getShopifyAccessToken(email: string, password: string) {
   console.log('[AUTH] Getting Shopify access token for:', email);
@@ -190,7 +307,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async signIn({ user, account }) {
-      // For Google sign-in, create Shopify customer
+      // For Google sign-in, create Shopify customer and get token
       if (account?.provider === 'google' && user.email) {
         console.log('[AUTH] Google sign-in detected for:', user.email);
         
@@ -199,15 +316,17 @@ export const authOptions: NextAuthOptions = {
           const firstName = nameParts[0] || 'User';
           const lastName = nameParts.slice(1).join(' ') || '';
 
-          // Create or get Shopify customer
-          const shopifyCustomer = await createShopifyCustomerForOAuth(user.email, firstName, lastName);
+          // Create customer and get access token
+          const result = await createShopifyCustomerWithToken(user.email, firstName, lastName);
           
-          if (shopifyCustomer) {
-            (user as any).shopifyCustomerId = shopifyCustomer.id;
-            console.log('[AUTH] Shopify customer ID stored:', shopifyCustomer.id);
+          if (result) {
+            (user as any).shopifyCustomerId = result.customer.id;
+            (user as any).shopifyAccessToken = result.token.accessToken;
+            (user as any).shopifyTokenExpires = result.token.expiresAt;
+            console.log('[AUTH] Shopify customer and token created:', result.customer.id);
           }
         } catch (error) {
-          console.error('[AUTH] Failed to create Shopify customer:', error);
+          console.error('[AUTH] Failed to create Shopify customer or get token:', error);
           // Don't block sign-in, but log the error
         }
       }
