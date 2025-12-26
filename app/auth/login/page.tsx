@@ -48,11 +48,6 @@ function LoginContent() {
   const handleGoogleLogin = async () => {
     try {
       console.log('Google login clicked, callbackUrl:', callbackUrl);
-      console.log('Environment check:', {
-        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? 'Set' : 'Not set',
-        nodeEnv: process.env.NODE_ENV,
-        nextAuthUrl: process.env.NEXTAUTH_URL,
-      });
       
       const result = await signIn('google', { 
         callbackUrl, 
