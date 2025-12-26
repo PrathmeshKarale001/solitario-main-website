@@ -1,11 +1,11 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
 import { Montserrat, Playfair_Display } from 'next/font/google'
+import { ClerkProvider } from '@clerk/nextjs'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
 import { CartProvider } from '@/lib/cart-context'
 import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
-import AuthProvider from '@/components/providers/AuthProvider'
 import { CartSidebar } from '@/components/cart'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
@@ -69,11 +69,11 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <GoogleAnalytics />
-        <SmoothScrollWrapper>
-          <Suspense fallback={null}>
-            <ScrollToTopOnRouteChange />
-          </Suspense>
-          <AuthProvider>
+        <ClerkProvider>
+          <SmoothScrollWrapper>
+            <Suspense fallback={null}>
+              <ScrollToTopOnRouteChange />
+            </Suspense>
             <WishlistProvider>
               <CartProvider>
                 <ShopifyCartProvider>
@@ -86,8 +86,8 @@ export default function RootLayout({
                 </ShopifyCartProvider>
               </CartProvider>
             </WishlistProvider>
-          </AuthProvider>
-        </SmoothScrollWrapper>
+          </SmoothScrollWrapper>
+        </ClerkProvider>
       </body>
     </html>
   )

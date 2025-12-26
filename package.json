@@ -21,6 +21,7 @@
     "test:all": "npm run test && npm run test:e2e"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.36.5",
     "@google/genai": "^1.31.0",
     "@heyputer/puter.js": "^2.1.10",
     "@react-three/drei": "^10.7.7",
