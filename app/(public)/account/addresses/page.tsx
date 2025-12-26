@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -23,7 +23,7 @@ interface Address {
 }
 
 export default function AddressesPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
   const [loading, setLoading] = useState(true);
@@ -44,10 +44,10 @@ export default function AddressesPage() {
   });
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account/addresses');
+    if (isLoaded && !isSignedIn) {
+      router.push('/auth/login?redirect=/account/addresses');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     const fetchAddresses = async () => {
@@ -73,10 +73,10 @@ export default function AddressesPage() {
       }
     };
     
-    if (status === 'authenticated') {
+    if (isLoaded && isSignedIn) {
       fetchAddresses();
     }
-  }, [status]);
+  }, [isLoaded, isSignedIn]);
 
   const fetchAddresses = useCallback(async () => {
     setLoading(true);
@@ -210,7 +210,7 @@ export default function AddressesPage() {
       setEditingAddress(null);
       setFormData({
         type: 'home',
-        name: session?.user?.name || '',
+        name: user?.fullName || '',
         phone: '',
         line1: '',
         line2: '',
@@ -228,7 +228,7 @@ export default function AddressesPage() {
     setEditingAddress(null);
     setFormData({
       type: 'home',
-      name: '',
+      name: user?.fullName || '',
       phone: '',
       line1: '',
       line2: '',
@@ -239,7 +239,7 @@ export default function AddressesPage() {
     });
   };
 
-  if (status === 'loading' || loading) {
+  if (!isLoaded || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bronze-gold"></div>

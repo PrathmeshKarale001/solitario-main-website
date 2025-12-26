@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -34,7 +34,7 @@ const statusConfig = {
 };
 
 export default function OrdersPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
@@ -42,10 +42,10 @@ export default function OrdersPage() {
   const [filterStatus, setFilterStatus] = useState<string>('all');
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account/orders');
+    if (isLoaded && !isSignedIn) {
+      router.push('/auth/login?redirect=/account/orders');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     // Fetch real orders from Shopify
@@ -67,10 +67,10 @@ export default function OrdersPage() {
       }
     };
     
-    if (status === 'authenticated') {
+    if (isLoaded && isSignedIn) {
       fetchOrders();
     }
-  }, [status]);
+  }, [isLoaded, isSignedIn]);
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.orderNumber.toLowerCase().includes(searchQuery.toLowerCase()) ||

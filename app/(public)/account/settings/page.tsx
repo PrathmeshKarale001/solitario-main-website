@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -21,7 +21,7 @@ interface UserProfile {
 }
 
 export default function SettingsPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -39,10 +39,27 @@ export default function SettingsPage() {
   });
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account/settings');
+    if (isLoaded && !isSignedIn) {
+      router.push('/auth/login?redirect=/account/settings');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
+
+  useEffect(() => {
+    if (isLoaded && isSignedIn && user) {
+      setProfile({
+        name: user.fullName || '',
+        email: user.primaryEmailAddress?.emailAddress || '',
+        phone: user.primaryPhoneNumber?.phoneNumber || '',
+        birthday: '',
+        notifications: {
+          email: true,
+          sms: false,
+          promotions: true,
+        },
+      });
+      setLoading(false);
+    }
+  }, [isLoaded, isSignedIn, user]);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -67,31 +84,31 @@ export default function SettingsPage() {
           });
         }
       } else {
-        // Fallback to session data
+        // Fallback to user data
         setProfile(prev => ({
           ...prev,
-          name: session?.user?.name || '',
-          email: session?.user?.email || '',
+          name: user?.fullName || '',
+          email: user?.primaryEmailAddress?.emailAddress || '',
         }));
       }
     } catch (err) {
       console.error('Failed to fetch profile:', err);
-      // Fallback to session data
+      // Fallback to user data
       setProfile(prev => ({
         ...prev,
-        name: session?.user?.name || '',
-        email: session?.user?.email || '',
+        name: user?.fullName || '',
+        email: user?.primaryEmailAddress?.emailAddress || '',
       }));
     } finally {
       setLoading(false);
     }
-  }, [session]);
+  }, [user]);
 
   useEffect(() => {
-    if (status === 'authenticated' && session?.user) {
+    if (isLoaded && isSignedIn && user) {
       fetchProfile();
     }
-  }, [status, session, fetchProfile]);
+  }, [isLoaded, isSignedIn, user, fetchProfile]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -170,9 +187,9 @@ export default function SettingsPage() {
               <div className="flex items-center gap-6">
                 <div className="relative">
                   <div className="w-24 h-24 bg-bronze-gold/10 rounded-full flex items-center justify-center overflow-hidden">
-                    {session?.user?.image ? (
+                    {user?.imageUrl ? (
                       <img
-                        src={session.user.image}
+                        src={user.imageUrl}
                         alt={profile.name}
                         className="w-full h-full object-cover"
                       />
