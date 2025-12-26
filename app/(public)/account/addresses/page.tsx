@@ -397,8 +397,14 @@ export default function AddressesPage() {
                       <input
                         type="tel"
                         required
+                        maxLength={10}
+                        pattern="[0-9]{10}"
                         value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '').slice(0, 10);
+                          setFormData({ ...formData, phone: value });
+                        }}
+                        placeholder="10-digit phone number"
                         className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
                       />
                     </div>
@@ -454,8 +460,14 @@ export default function AddressesPage() {
                       <input
                         type="text"
                         required
+                        maxLength={6}
+                        pattern="[0-9]{6}"
                         value={formData.pincode}
-                        onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                        onChange={(e) => {
+                          const value = e.target.value.replace(/\D/g, '').slice(0, 6);
+                          setFormData({ ...formData, pincode: value });
+                        }}
+                        placeholder="6-digit pincode"
                         className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
                       />
                     </div>
