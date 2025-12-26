@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { shopifyStorefrontFetch } from '@/lib/shopify';
-import { findOrCreateShopifyCustomer, getShopifyAccessTokenForOAuthUser } from '@/lib/auth';
 
 // Get customer addresses
 const CUSTOMER_ADDRESSES_QUERY = `
@@ -168,57 +167,16 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    console.log('POST addresses - Session:', {
-      email: session.user.email,
-      hasShopifyAccessToken: !!(session.user as any).shopifyAccessToken,
-    });
-
-    let shopifyAccessToken = (session.user as any).shopifyAccessToken;
-    
-    // If no Shopify access token, try to create one for Google users
-    if (!shopifyAccessToken && session.user.email) {
-      try {
-        console.log('No Shopify token, attempting to create customer for:', session.user.email);
-        const nameParts = session.user.name?.split(' ') || [];
-        const firstName = nameParts[0] || '';
-        const lastName = nameParts.slice(1).join(' ') || '';
-
-        // Create customer with password for OAuth users
-        const shopifyCustomer = await findOrCreateShopifyCustomer(session.user.email, firstName, lastName, true);
-        console.log('Shopify customer created:', shopifyCustomer?.id, 'hasPassword:', !!shopifyCustomer?.storedPassword);
-        
-        if (shopifyCustomer?.storedPassword) {
-          console.log('Attempting to get Shopify access token...');
-          const tokenResult = await getShopifyAccessTokenForOAuthUser(session.user.email, shopifyCustomer.storedPassword);
-          console.log('Token result:', tokenResult ? 'success' : 'failed');
-          
-          if (tokenResult) {
-            shopifyAccessToken = tokenResult.accessToken;
-            console.log('Shopify token generated successfully');
-            // Note: We can't update the session here, but the address will work for this request
-          } else {
-            console.log('Token generation failed - no token result');
-          }
-        } else {
-          console.log('Customer created but no stored password');
-        }
-      } catch (error) {
-        console.error('Failed to create Shopify customer for Google user:', error);
-        return NextResponse.json({ 
-          error: `Shopify customer creation failed: ${error instanceof Error ? error.message : 'Unknown error'}` 
-        }, { status: 400 });
-      }
-    }
+    const shopifyAccessToken = (session.user as any).shopifyAccessToken;
     
     if (!shopifyAccessToken) {
-      console.log('Still no Shopify token, returning error');
+      console.error('[API] No Shopify access token in session for:', session.user.email);
       return NextResponse.json({ 
-        error: 'No Shopify access token. Please sign out and sign back in with Google to complete setup.' 
+        error: 'No Shopify access token. Please sign out and sign back in.' 
       }, { status: 400 });
     }
 
     const body = await request.json();
-    console.log('Address data received:', body);
     const { name, phone, line1, line2, city, state, pincode, isDefault } = body;
 
     // Split name into first/last
