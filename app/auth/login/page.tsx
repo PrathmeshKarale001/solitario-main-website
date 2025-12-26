@@ -46,28 +46,22 @@ function LoginContent() {
   };
 
   const handleGoogleLogin = async () => {
+    setIsLoading(true);
     try {
-      console.log('Google login clicked, callbackUrl:', callbackUrl);
+      console.log('=== GOOGLE LOGIN START ===');
+      console.log('Callback URL:', callbackUrl);
       
-      const result = await signIn('google', { 
-        callbackUrl, 
-        redirect: false 
+      // Try to sign in with Google
+      await signIn('google', { 
+        callbackUrl,
+        redirect: true  // Let NextAuth handle the redirect
       });
       
-      console.log('SignIn result:', result);
-      
-      if (result?.error) {
-        console.error('Sign in error:', result.error);
-        setFormError(`Google sign in failed: ${result.error}`);
-      } else if (result?.url) {
-        window.location.href = result.url;
-      } else {
-        // If no redirect URL, check if we're already signed in
-        window.location.href = callbackUrl;
-      }
+      console.log('=== AFTER SIGNIN CALL ===');
     } catch (error) {
-      console.error('Google login error:', error);
-      setFormError('Failed to connect to Google. Please try again.');
+      console.error('=== GOOGLE LOGIN ERROR ===', error);
+      setFormError('Failed to connect to Google. Please check your internet connection.');
+      setIsLoading(false);
     }
   };
 
