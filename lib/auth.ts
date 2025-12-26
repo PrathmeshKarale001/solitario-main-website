@@ -256,6 +256,32 @@ export const authOptions: NextAuthOptions = {
   },
   secret: process.env.NEXTAUTH_SECRET,
   debug: process.env.NODE_ENV === 'development',
+  ...(process.env.NODE_ENV === 'production' && {
+    url: 'https://thesolitario.com',
+    useSecureCookies: true,
+    cookies: {
+      sessionToken: {
+        name: `next-auth.session-token`,
+        options: {
+          domain: process.env.NEXTAUTH_URL === 'https://www.thesolitario.com' ? '.thesolitario.com' : undefined,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+        },
+      },
+      csrfToken: {
+        name: `next-auth.csrf-token`,
+        options: {
+          domain: process.env.NEXTAUTH_URL === 'https://www.thesolitario.com' ? '.thesolitario.com' : undefined,
+          path: '/',
+          httpOnly: true,
+          sameSite: 'lax',
+          secure: true,
+        },
+      },
+    },
+  }),
 };
 
 export { loginShopifyCustomer };
