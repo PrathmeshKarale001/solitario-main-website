@@ -168,22 +168,30 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
+    console.log('POST addresses - Session:', {
+      email: session.user.email,
+      hasShopifyAccessToken: !!(session.user as any).shopifyAccessToken,
+    });
+
     let shopifyAccessToken = (session.user as any).shopifyAccessToken;
     
     // If no Shopify access token, try to create one for Google users
     if (!shopifyAccessToken && session.user.email) {
       try {
+        console.log('No Shopify token, attempting to create customer for:', session.user.email);
         const nameParts = session.user.name?.split(' ') || [];
         const firstName = nameParts[0] || '';
         const lastName = nameParts.slice(1).join(' ') || '';
 
         // Create customer with password for OAuth users
         const shopifyCustomer = await findOrCreateShopifyCustomer(session.user.email, firstName, lastName, true);
+        console.log('Shopify customer created:', shopifyCustomer?.id);
         
         if (shopifyCustomer?.storedPassword) {
           const tokenResult = await getShopifyAccessTokenForOAuthUser(session.user.email, shopifyCustomer.storedPassword);
           if (tokenResult) {
             shopifyAccessToken = tokenResult.accessToken;
+            console.log('Shopify token generated successfully');
             // Note: We can't update the session here, but the address will work for this request
           }
         }
@@ -193,12 +201,14 @@ export async function POST(request: NextRequest) {
     }
     
     if (!shopifyAccessToken) {
+      console.log('Still no Shopify token, returning error');
       return NextResponse.json({ 
         error: 'No Shopify access token. Please sign out and sign back in with Google to complete setup.' 
       }, { status: 400 });
     }
 
     const body = await request.json();
+    console.log('Address data received:', body);
     const { name, phone, line1, line2, city, state, pincode, isDefault } = body;
 
     // Split name into first/last

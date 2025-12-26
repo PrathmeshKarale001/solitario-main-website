@@ -121,6 +121,8 @@ export default function AddressesPage() {
     setError(null);
 
     try {
+      console.log('Submitting address data:', formData);
+      
       const res = editingAddress
         ? await fetch('/api/account/addresses', {
             method: 'PUT',
@@ -136,14 +138,21 @@ export default function AddressesPage() {
             body: JSON.stringify(formData),
           });
 
+      console.log('Response status:', res.status);
+      
       if (!res.ok) {
         const data = await res.json();
+        console.error('API Error:', data);
         throw new Error(data.error || 'Failed to save address');
       }
+
+      const responseData = await res.json();
+      console.log('Success response:', responseData);
 
       await fetchAddresses();
       closeModal();
     } catch (err) {
+      console.error('Submit error:', err);
       setError(err instanceof Error ? err.message : 'Failed to save address');
     } finally {
       setSaving(false);
