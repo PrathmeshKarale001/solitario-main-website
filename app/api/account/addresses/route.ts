@@ -185,18 +185,28 @@ export async function POST(request: NextRequest) {
 
         // Create customer with password for OAuth users
         const shopifyCustomer = await findOrCreateShopifyCustomer(session.user.email, firstName, lastName, true);
-        console.log('Shopify customer created:', shopifyCustomer?.id);
+        console.log('Shopify customer created:', shopifyCustomer?.id, 'hasPassword:', !!shopifyCustomer?.storedPassword);
         
         if (shopifyCustomer?.storedPassword) {
+          console.log('Attempting to get Shopify access token...');
           const tokenResult = await getShopifyAccessTokenForOAuthUser(session.user.email, shopifyCustomer.storedPassword);
+          console.log('Token result:', tokenResult ? 'success' : 'failed');
+          
           if (tokenResult) {
             shopifyAccessToken = tokenResult.accessToken;
             console.log('Shopify token generated successfully');
             // Note: We can't update the session here, but the address will work for this request
+          } else {
+            console.log('Token generation failed - no token result');
           }
+        } else {
+          console.log('Customer created but no stored password');
         }
       } catch (error) {
         console.error('Failed to create Shopify customer for Google user:', error);
+        return NextResponse.json({ 
+          error: `Shopify customer creation failed: ${error instanceof Error ? error.message : 'Unknown error'}` 
+        }, { status: 400 });
       }
     }
     
