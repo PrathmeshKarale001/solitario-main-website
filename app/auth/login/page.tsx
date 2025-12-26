@@ -45,8 +45,35 @@ function LoginContent() {
     }
   };
 
-  const handleGoogleLogin = () => {
-    signIn('google', { callbackUrl });
+  const handleGoogleLogin = async () => {
+    try {
+      console.log('Google login clicked, callbackUrl:', callbackUrl);
+      console.log('Environment check:', {
+        clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ? 'Set' : 'Not set',
+        nodeEnv: process.env.NODE_ENV,
+        nextAuthUrl: process.env.NEXTAUTH_URL,
+      });
+      
+      const result = await signIn('google', { 
+        callbackUrl, 
+        redirect: false 
+      });
+      
+      console.log('SignIn result:', result);
+      
+      if (result?.error) {
+        console.error('Sign in error:', result.error);
+        setFormError(`Google sign in failed: ${result.error}`);
+      } else if (result?.url) {
+        window.location.href = result.url;
+      } else {
+        // If no redirect URL, check if we're already signed in
+        window.location.href = callbackUrl;
+      }
+    } catch (error) {
+      console.error('Google login error:', error);
+      setFormError('Failed to connect to Google. Please try again.');
+    }
   };
 
   return (
