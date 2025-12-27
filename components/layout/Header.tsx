@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Menu, X, Heart, Search, ShoppingBag, User, ChevronRight, Sparkles, MapPin, Phone, Diamond, CircleDot, Gem, Star, Gift, BookOpen, Hexagon } from 'lucide-react';
@@ -66,7 +66,7 @@ export default function Header() {
   const isAdminPage = pathname?.startsWith('/admin');
   const { itemCount, toggleCart } = useCart();
   const { wishlistCount } = useWishlist();
-  const { data: session } = useSession();
+  const { isSignedIn } = useUser();
 
   useEffect(() => {
     const updateScroll = () => {
@@ -193,9 +193,9 @@ export default function Header() {
 
               {/* Account - Hidden on mobile, shown in menu */}
               <Link
-                href={session ? '/account' : '/auth/login'}
+                href={isSignedIn ? '/account' : '/auth/login'}
                 className="hidden sm:flex text-white hover:text-bronze-gold transition-colors p-2 touch-manipulation"
-                aria-label={session ? 'My Account' : 'Sign In'}
+                aria-label={isSignedIn ? 'My Account' : 'Sign In'}
               >
                 <User className="w-5 h-5" />
               </Link>
@@ -329,13 +329,13 @@ export default function Header() {
           {/* User Section at Bottom */}
           <div className="sticky bottom-0 bg-classic-green border-t border-white/10 px-4 py-4">
             <Link
-              href={session ? '/account' : '/auth/login'}
+              href={isSignedIn ? '/account' : '/auth/login'}
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-3 py-3 px-3 bg-bronze-gold/20 rounded-lg text-white touch-manipulation"
             >
               <User className="w-5 h-5" />
               <span className="font-montserrat text-sm">
-                {session ? 'My Account' : 'Sign In / Register'}
+                {isSignedIn ? 'My Account' : 'Sign In / Register'}
               </span>
             </Link>
           </div>

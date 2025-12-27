@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { isAdmin, getAdminUser, hasPermission, AdminUser, AdminRole } from './admin-auth';
 
 interface AdminContextType {
@@ -25,16 +25,16 @@ const AdminContext = createContext<AdminContextType>({
 });
 
 export function AdminProvider({ children }: { children: ReactNode }) {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const [isVerified, setIsVerified] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  const userEmail = session?.user?.email;
+  const userEmail = user?.primaryEmailAddress?.emailAddress;
   const isAdminUser = isAdmin(userEmail);
   const adminUser = getAdminUser(userEmail);
 
   useEffect(() => {
-    if (status === 'loading') return;
+    if (!isLoaded) return;
     
     // Check if already verified in this session
     const verified = sessionStorage.getItem('admin_verified');
