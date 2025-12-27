@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter, usePathname } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -25,7 +25,7 @@ import { AdminProvider, useAdmin } from '@/lib/admin-context';
 import { isAdmin } from '@/lib/admin-auth';
 
 function AdminVerification({ children }: { children: React.ReactNode }) {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const { isAdminUser, adminUser, isVerified, verifyAccess, loading } = useAdmin();
   const [pin, setPin] = useState('');
@@ -33,12 +33,12 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
   const [attempts, setAttempts] = useState(0);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/admin');
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in?redirect_url=/admin');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
-  if (status === 'loading' || loading) {
+  if (!isLoaded || loading) {
     return (
       <div className="min-h-screen bg-brand-900 flex items-center justify-center">
         <div className="text-center">
@@ -67,7 +67,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
             Please contact the administrator if you believe this is an error.
           </p>
           <p className="text-xs text-brand-400 font-montserrat mb-6">
-            Logged in as: {session?.user?.email}
+            Logged in as: {user?.primaryEmailAddress?.emailAddress}
           </p>
           <Link
             href="/"
@@ -122,10 +122,10 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
 
           <div className="bg-brand-50 rounded-xl p-4 mb-6">
             <p className="text-sm text-brand-600 font-montserrat">
-              <strong>Welcome, {adminUser?.name || session?.user?.name || 'Admin'}</strong>
+              <strong>Welcome, {adminUser?.name || user?.fullName || 'Admin'}</strong>
             </p>
             <p className="text-xs text-brand-400 font-montserrat mt-1">
-              {session?.user?.email} • {adminUser?.role?.replace('_', ' ').toUpperCase()}
+              {user?.primaryEmailAddress?.emailAddress} • {adminUser?.role?.replace('_', ' ').toUpperCase()}
             </p>
           </div>
 
