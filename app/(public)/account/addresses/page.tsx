@@ -60,13 +60,22 @@ export default function AddressesPage() {
         } else {
           // Try to parse error, but handle cases where response isn't JSON
           let errorData;
+          let responseText = '';
           try {
-            errorData = await response.json();
+            responseText = await response.text();
+            console.error('Raw response:', responseText);
+            errorData = JSON.parse(responseText);
           } catch (jsonError) {
-            errorData = { error: 'Server error occurred' };
+            console.error('Failed to parse JSON:', jsonError);
+            errorData = { 
+              error: 'Server error occurred',
+              status: response.status,
+              statusText: response.statusText,
+              rawResponse: responseText.substring(0, 200)
+            };
           }
           console.error('Addresses API error:', errorData);
-          setError(errorData.error || 'Failed to fetch addresses');
+          setError(errorData.error || `Failed to fetch addresses (${response.status})`);
         }
       } catch (error) {
         console.error('Failed to fetch addresses:', error);
