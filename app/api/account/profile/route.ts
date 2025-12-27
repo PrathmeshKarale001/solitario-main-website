@@ -1,210 +1,44 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { shopifyStorefrontFetch, shopifyAdminFetch } from '@/lib/shopify';
+import { getAuth, clerkClient } from '@clerk/nextjs/server';
 
-// Get customer profile using Storefront API
-const CUSTOMER_QUERY = `
-  query getCustomer($customerAccessToken: String!) {
-    customer(customerAccessToken: $customerAccessToken) {
-      id
-      firstName
-      lastName
-      email
-      phone
-      acceptsMarketing
-      createdAt
-      defaultAddress {
-        id
-        firstName
-        lastName
-        phone
-        address1
-        address2
-        city
-        province
-        zip
-        country
-      }
-    }
-  }
-`;
+interface UserProfile {
+  name: string;
+  email: string;
+  phone: string;
+  birthday: string;
+  notifications: {
+    email: boolean;
+    sms: boolean;
+    promotions: boolean;
+  };
+}
 
-// Update customer using Storefront API
-const CUSTOMER_UPDATE_MUTATION = `
-  mutation customerUpdate($customerAccessToken: String!, $customer: CustomerUpdateInput!) {
-    customerUpdate(customerAccessToken: $customerAccessToken, customer: $customer) {
-      customer {
-        id
-        firstName
-        lastName
-        email
-        phone
-        acceptsMarketing
-      }
-      customerUserErrors {
-        code
-        field
-        message
-      }
-    }
-  }
-`;
-
-// Admin API: Update customer (for fields not available in Storefront API)
-const ADMIN_CUSTOMER_UPDATE_MUTATION = `
-  mutation customerUpdate($input: CustomerInput!) {
-    customerUpdate(input: $input) {
-      customer {
-        id
-        email
-        firstName
-        lastName
-        phone
-        acceptsMarketing
-        metafield(namespace: "custom", key: "birthday") {
-          value
-        }
-      }
-      userErrors {
-        field
-        message
-      }
-    }
-  }
-`;
-
-// Admin API: Get customer with metafields
-const ADMIN_CUSTOMER_QUERY = `
-  query getCustomer($id: ID!) {
-    customer(id: $id) {
-      id
-      email
-      firstName
-      lastName
-      phone
-      acceptsMarketing
-      createdAt
-      metafield(namespace: "custom", key: "birthday") {
-        value
-      }
-      metafield2: metafield(namespace: "custom", key: "notification_sms") {
-        value
-      }
-      metafield3: metafield(namespace: "custom", key: "notification_promotions") {
-        value
-      }
-    }
-  }
-`;
-
+// GET - Fetch user profile from Clerk
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = getAuth(request);
     
-    if (!session?.user) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const shopifyAccessToken = (session.user as any).shopifyAccessToken;
-    const shopifyCustomerId = (session.user as any).shopifyCustomerId;
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
     
-    // Try Storefront API first if we have an access token
-    if (shopifyAccessToken) {
-      const result = await shopifyStorefrontFetch<{
-        customer: {
-          id: string;
-          firstName: string;
-          lastName: string;
-          email: string;
-          phone: string | null;
-          acceptsMarketing: boolean;
-          createdAt: string;
-          defaultAddress: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            phone: string;
-            address1: string;
-            address2: string;
-            city: string;
-            province: string;
-            zip: string;
-            country: string;
-          } | null;
-        } | null;
-      }>(CUSTOMER_QUERY, {
-        customerAccessToken: shopifyAccessToken,
-      });
+    // Get profile data from Clerk metadata
+    const profileData = user.publicMetadata.profile as UserProfile | undefined;
 
-      if (result.data?.customer) {
-        const customer = result.data.customer;
-        
-        // Try to get additional metafields from Admin API
-        let birthday = '';
-        let notificationSms = false;
-        let notificationPromotions = true;
-        
-        if (shopifyCustomerId) {
-          try {
-            const adminResult = await shopifyAdminFetch<{
-              customer: {
-                metafield: { value: string } | null;
-                metafield2: { value: string } | null;
-                metafield3: { value: string } | null;
-              } | null;
-            }>(ADMIN_CUSTOMER_QUERY, { id: shopifyCustomerId });
-            
-            if (adminResult.data?.customer) {
-              birthday = adminResult.data.customer.metafield?.value || '';
-              notificationSms = adminResult.data.customer.metafield2?.value === 'true';
-              notificationPromotions = adminResult.data.customer.metafield3?.value !== 'false';
-            }
-          } catch (error) {
-            console.error('Failed to fetch customer metafields:', error);
-          }
-        }
-        
-        return NextResponse.json({
-          profile: {
-            id: customer.id,
-            name: `${customer.firstName || ''} ${customer.lastName || ''}`.trim(),
-            firstName: customer.firstName || '',
-            lastName: customer.lastName || '',
-            email: customer.email,
-            phone: customer.phone || '',
-            birthday,
-            acceptsMarketing: customer.acceptsMarketing,
-            notifications: {
-              email: customer.acceptsMarketing,
-              sms: notificationSms,
-              promotions: notificationPromotions,
-            },
-            createdAt: customer.createdAt,
-            defaultAddress: customer.defaultAddress,
-          },
-        });
-      }
-    }
-
-    // Fallback: Return basic session data if no Shopify token
     return NextResponse.json({
       profile: {
-        id: null,
-        name: session.user.name || '',
-        firstName: session.user.name?.split(' ')[0] || '',
-        lastName: session.user.name?.split(' ').slice(1).join(' ') || '',
-        email: session.user.email || '',
-        phone: '',
-        birthday: '',
-        acceptsMarketing: false,
-        notifications: {
+        name: user.fullName || '',
+        email: user.primaryEmailAddress?.emailAddress || '',
+        phone: profileData?.phone || user.primaryPhoneNumber?.phoneNumber || '',
+        birthday: profileData?.birthday || '',
+        notifications: profileData?.notifications || {
           email: true,
           sms: false,
           promotions: true,
         },
-        createdAt: null,
-        defaultAddress: null,
       },
     });
   } catch (error) {
@@ -213,91 +47,43 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// PUT - Update user profile in Clerk
 export async function PUT(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = getAuth(request);
     
-    if (!session?.user) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const shopifyAccessToken = (session.user as any).shopifyAccessToken;
-    const shopifyCustomerId = (session.user as any).shopifyCustomerId;
-    
     const body = await request.json();
     const { name, phone, birthday, notifications } = body;
+
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
 
     // Parse name into first/last
     const nameParts = (name || '').split(' ');
     const firstName = nameParts[0] || '';
     const lastName = nameParts.slice(1).join(' ') || '';
 
-    // Update via Storefront API if we have access token
-    if (shopifyAccessToken) {
-      const result = await shopifyStorefrontFetch<{
-        customerUpdate: {
-          customer: {
-            id: string;
-            firstName: string;
-            lastName: string;
-            email: string;
-            phone: string | null;
-            acceptsMarketing: boolean;
-          } | null;
-          customerUserErrors: Array<{ code: string; field: string[]; message: string }>;
-        };
-      }>(CUSTOMER_UPDATE_MUTATION, {
-        customerAccessToken: shopifyAccessToken,
-        customer: {
-          firstName,
-          lastName,
-          phone: phone || null,
-          acceptsMarketing: notifications?.email ?? true,
-        },
-      });
-
-      if (result.data?.customerUpdate?.customerUserErrors?.length) {
-        const error = result.data.customerUpdate.customerUserErrors[0];
-        return NextResponse.json({ error: error.message }, { status: 400 });
-      }
-    }
-
-    // Update metafields via Admin API if we have customer ID
-    if (shopifyCustomerId) {
-      try {
-        await shopifyAdminFetch(ADMIN_CUSTOMER_UPDATE_MUTATION, {
-          input: {
-            id: shopifyCustomerId,
-            firstName,
-            lastName,
-            phone: phone || null,
-            acceptsMarketing: notifications?.email ?? true,
-            metafields: [
-              {
-                namespace: 'custom',
-                key: 'birthday',
-                value: birthday || '',
-                type: 'single_line_text_field',
-              },
-              {
-                namespace: 'custom',
-                key: 'notification_sms',
-                value: String(notifications?.sms ?? false),
-                type: 'single_line_text_field',
-              },
-              {
-                namespace: 'custom',
-                key: 'notification_promotions',
-                value: String(notifications?.promotions ?? true),
-                type: 'single_line_text_field',
-              },
-            ],
+    // Update Clerk user
+    await clerk.users.updateUser(userId, {
+      firstName,
+      lastName,
+      publicMetadata: {
+        ...user.publicMetadata,
+        profile: {
+          phone: phone || '',
+          birthday: birthday || '',
+          notifications: notifications || {
+            email: true,
+            sms: false,
+            promotions: true,
           },
-        });
-      } catch (error) {
-        console.error('Failed to update customer metafields:', error);
-      }
-    }
+        },
+      },
+    });
 
     return NextResponse.json({ success: true });
   } catch (error) {
