@@ -46,6 +46,7 @@
     "next-auth": "^4.24.13",
     "ogl": "^0.0.32",
     "pdf-parse": "^2.4.5",
+    "posthog-js": "^1.310.1",
     "razorpay": "^2.9.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

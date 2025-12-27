@@ -8,6 +8,7 @@ import { CartProvider } from '@/lib/cart-context'
 import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
 import { CartSidebar } from '@/components/cart'
 import { WishlistProvider } from '@/lib/wishlist-context'
+import { PostHogProvider } from '@/lib/posthog'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
@@ -70,23 +71,25 @@ export default function RootLayout({
       <body className="antialiased">
         <GoogleAnalytics />
         <ClerkProvider>
-          <SmoothScrollWrapper>
-            <Suspense fallback={null}>
-              <ScrollToTopOnRouteChange />
-            </Suspense>
-            <WishlistProvider>
-              <CartProvider>
-                <ShopifyCartProvider>
-                  <Header />
-                  <main>
-                    {children}
-                  </main>
-                  <Footer />
-                  <CartSidebar />
-                </ShopifyCartProvider>
-              </CartProvider>
-            </WishlistProvider>
-          </SmoothScrollWrapper>
+          <PostHogProvider>
+            <SmoothScrollWrapper>
+              <Suspense fallback={null}>
+                <ScrollToTopOnRouteChange />
+              </Suspense>
+              <WishlistProvider>
+                <CartProvider>
+                  <ShopifyCartProvider>
+                    <Header />
+                    <main>
+                      {children}
+                    </main>
+                    <Footer />
+                    <CartSidebar />
+                  </ShopifyCartProvider>
+                </CartProvider>
+              </WishlistProvider>
+            </SmoothScrollWrapper>
+          </PostHogProvider>
         </ClerkProvider>
       </body>
     </html>
