@@ -193,7 +193,7 @@ export default function Header() {
 
               {/* Account - Hidden on mobile, shown in menu */}
               <Link
-                href={isSignedIn ? '/account' : '/auth/login'}
+                href={isSignedIn ? '/account' : '/sign-in'}
                 className="hidden sm:flex text-white hover:text-bronze-gold transition-colors p-2 touch-manipulation"
                 aria-label={isSignedIn ? 'My Account' : 'Sign In'}
               >
@@ -329,7 +329,7 @@ export default function Header() {
           {/* User Section at Bottom */}
           <div className="sticky bottom-0 bg-classic-green border-t border-white/10 px-4 py-4">
             <Link
-              href={isSignedIn ? '/account' : '/auth/login'}
+              href={isSignedIn ? '/account' : '/sign-in'}
               onClick={() => setIsMobileMenuOpen(false)}
               className="flex items-center gap-3 py-3 px-3 bg-bronze-gold/20 rounded-lg text-white touch-manipulation"
             >

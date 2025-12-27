@@ -40,7 +40,7 @@ export default function SettingsPage() {
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push('/auth/login?redirect=/account/settings');
+      router.push('/sign-in?redirect_url=/account/settings');
     }
   }, [isLoaded, isSignedIn, router]);
 

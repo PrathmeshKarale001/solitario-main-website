@@ -45,7 +45,7 @@ export default function AddressesPage() {
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push('/auth/login?redirect=/account/addresses');
+      router.push('/sign-in?redirect_url=/account/addresses');
     }
   }, [isLoaded, isSignedIn, router]);
 

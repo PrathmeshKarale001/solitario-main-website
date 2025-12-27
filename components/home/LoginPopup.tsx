@@ -118,14 +118,14 @@ export default function LoginPopup() {
               {/* CTA Buttons */}
               <div className="space-y-3">
                 <Link
-                  href="/auth/login"
+                  href="/sign-in"
                   onClick={handleClose}
                   className="block w-full py-3 bg-classic-green text-white text-center rounded-xl font-gotham text-sm uppercase tracking-[0.15em] hover:bg-classic-green/90 transition-colors"
                 >
                   Login Now
                 </Link>
                 <Link
-                  href="/auth/signup"
+                  href="/sign-up"
                   onClick={handleClose}
                   className="block w-full py-3 bg-bronze-gold/10 text-bronze-gold text-center rounded-xl font-gotham text-sm uppercase tracking-[0.15em] hover:bg-bronze-gold/20 transition-colors"
                 >

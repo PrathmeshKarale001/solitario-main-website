@@ -43,7 +43,7 @@ export default function OrdersPage() {
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
-      router.push('/auth/login?redirect=/account/orders');
+      router.push('/sign-in?redirect_url=/account/orders');
     }
   }, [isLoaded, isSignedIn, router]);
 
