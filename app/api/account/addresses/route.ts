@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getAuth } from '@clerk/nextjs/server';
+import { getAuth, clerkClient } from '@clerk/nextjs/server';
 
 interface Address {
   id: string;
@@ -12,7 +12,7 @@ interface Address {
   isDefault: boolean;
 }
 
-// GET - Fetch user addresses
+// GET - Fetch user addresses from Clerk metadata
 export async function GET(request: NextRequest) {
   try {
     console.log('Addresses API: GET');
@@ -25,10 +25,14 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    // For now, return empty addresses
-    // TODO: Implement Clerk metadata storage
-    console.log('Addresses API: Returning empty addresses');
-    return NextResponse.json({ addresses: [] });
+    // Get addresses from Clerk metadata
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
+    const addresses = (user.publicMetadata.addresses as Address[]) || [];
+    
+    console.log('Addresses API: Found', addresses.length, 'addresses');
+    
+    return NextResponse.json({ addresses });
     
   } catch (error) {
     console.error('Addresses API ERROR:', error);
@@ -51,11 +55,135 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     console.log('POST address:', body);
 
-    // TODO: Implement actual address saving
-    return NextResponse.json({ success: true, message: 'Address saved (TODO: implement)' });
+    // Get existing addresses
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
+    const addresses = (user.publicMetadata.addresses as Address[]) || [];
+
+    // Create new address
+    const newAddress: Address = {
+      id: `addr_${Date.now()}`,
+      name: body.name,
+      line1: body.line1,
+      line2: body.line2 || '',
+      city: body.city,
+      state: body.state,
+      pincode: body.pincode,
+      isDefault: body.isDefault || addresses.length === 0,
+    };
+
+    // If this is default, unset others
+    if (newAddress.isDefault) {
+      addresses.forEach(addr => addr.isDefault = false);
+    }
+
+    addresses.push(newAddress);
+
+    // Save to Clerk metadata
+    await clerk.users.updateUser(userId, {
+      publicMetadata: {
+        ...user.publicMetadata,
+        addresses,
+      },
+    });
+
+    console.log('Saved address:', newAddress);
+
+    return NextResponse.json({ 
+      success: true, 
+      addressId: newAddress.id,
+      message: 'Address saved successfully'
+    });
     
   } catch (error) {
     console.error('POST address error:', error);
     return NextResponse.json({ error: 'Failed to save address' }, { status: 500 });
+  }
+}
+
+// PUT - Update address
+export async function PUT(request: NextRequest) {
+  try {
+    const { userId } = getAuth(request);
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const { id, ...updates } = body;
+
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
+    let addresses = (user.publicMetadata.addresses as Address[]) || [];
+
+    const index = addresses.findIndex(addr => addr.id === id);
+    if (index === -1) {
+      return NextResponse.json({ error: 'Address not found' }, { status: 404 });
+    }
+
+    // Update address
+    addresses[index] = { ...addresses[index], ...updates };
+
+    // Save to Clerk metadata
+    await clerk.users.updateUser(userId, {
+      publicMetadata: {
+        ...user.publicMetadata,
+        addresses,
+      },
+    });
+
+    console.log('Updated address:', addresses[index]);
+
+    return NextResponse.json({ success: true });
+    
+  } catch (error) {
+    console.error('PUT address error:', error);
+    return NextResponse.json({ error: 'Failed to update address' }, { status: 500 });
+  }
+}
+
+// DELETE - Remove address
+export async function DELETE(request: NextRequest) {
+  try {
+    const { userId } = getAuth(request);
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const { searchParams } = new URL(request.url);
+    const addressId = searchParams.get('id');
+
+    if (!addressId) {
+      return NextResponse.json({ error: 'Address ID required' }, { status: 400 });
+    }
+
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
+    let addresses = (user.publicMetadata.addresses as Address[]) || [];
+
+    addresses = addresses.filter(addr => addr.id !== addressId);
+
+    // If deleted address was default, set first as default
+    if (addresses.length > 0 && !addresses.some(addr => addr.isDefault)) {
+      addresses[0].isDefault = true;
+    }
+
+    // Save to Clerk metadata
+    await clerk.users.updateUser(userId, {
+      publicMetadata: {
+        ...user.publicMetadata,
+        addresses,
+      },
+    });
+
+    console.log('Deleted address:', addressId);
+
+    return NextResponse.json({ success: true });
+    
+  } catch (error) {
+    console.error('DELETE address error:', error);
+    return NextResponse.json({ error: 'Failed to delete address' }, { status: 500 });
   }
 }
