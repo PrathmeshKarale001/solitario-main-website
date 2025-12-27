@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth, clerkClient } from '@clerk/nextjs/server';
+import { syncUserWithShopify, syncAddressesToShopify } from '@/lib/shopify-sync';
 
 interface Address {
   id: string;
@@ -88,6 +89,18 @@ export async function POST(request: NextRequest) {
     });
 
     console.log('Saved address:', newAddress);
+
+    // Sync with Shopify (async, don't wait)
+    try {
+      // Ensure user has Shopify customer
+      await syncUserWithShopify(userId, user.primaryEmailAddress?.emailAddress || '', user.firstName, user.lastName);
+      
+      // Sync addresses to Shopify
+      await syncAddressesToShopify(userId, addresses);
+    } catch (shopifyError) {
+      console.error('Shopify sync failed (but saved to Clerk):', shopifyError);
+      // Don't fail the request if Shopify sync fails
+    }
 
     return NextResponse.json({ 
       success: true, 
