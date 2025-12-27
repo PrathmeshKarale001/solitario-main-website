@@ -55,15 +55,18 @@ export default function AddressesPage() {
         const response = await fetch('/api/account/addresses');
         if (response.ok) {
           const data = await response.json();
+          console.log('Addresses API response:', data); // Debug log
           setAddresses(data.addresses || []);
         } else {
-          const errorData = await response.json();
-          if (errorData.error === 'No Shopify access token') {
-            // User logged in via Google but needs to complete Shopify profile
-            setError('Please complete your profile to manage addresses. This is a one-time setup for Google users.');
-          } else {
-            setError(errorData.error || 'Failed to fetch addresses');
+          // Try to parse error, but handle cases where response isn't JSON
+          let errorData;
+          try {
+            errorData = await response.json();
+          } catch (jsonError) {
+            errorData = { error: 'Server error occurred' };
           }
+          console.error('Addresses API error:', errorData);
+          setError(errorData.error || 'Failed to fetch addresses');
         }
       } catch (error) {
         console.error('Failed to fetch addresses:', error);
