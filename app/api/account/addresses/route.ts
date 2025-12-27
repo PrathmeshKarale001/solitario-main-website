@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth, clerkClient } from '@clerk/nextjs/server';
-import { syncUserWithShopify, syncAddressesToShopify } from '@/lib/shopify-sync';
+import { syncUserWithShopify, syncAddressesToShopify, createShopifyAddress, updateShopifyAddress, deleteShopifyAddress } from '@/lib/shopify-sync';
 
 interface Address {
   id: string;
@@ -92,11 +92,9 @@ export async function POST(request: NextRequest) {
 
     // Sync with Shopify (async, don't wait)
     try {
-      // Ensure user has Shopify customer
-      await syncUserWithShopify(userId, user.primaryEmailAddress?.emailAddress || '', user.firstName, user.lastName);
-      
-      // Sync addresses to Shopify
-      await syncAddressesToShopify(userId, addresses);
+      // Create address in Shopify
+      await createShopifyAddress(userId, newAddress);
+      console.log('[Addresses API] Address synced to Shopify');
     } catch (shopifyError) {
       console.error('Shopify sync failed (but saved to Clerk):', shopifyError);
       // Don't fail the request if Shopify sync fails
@@ -148,6 +146,14 @@ export async function PUT(request: NextRequest) {
 
     console.log('Updated address:', addresses[index]);
 
+    // Sync with Shopify
+    try {
+      await updateShopifyAddress(userId, id, addresses[index]);
+      console.log('[Addresses API] Address updated in Shopify');
+    } catch (shopifyError) {
+      console.error('Shopify update failed (but saved to Clerk):', shopifyError);
+    }
+
     return NextResponse.json({ success: true });
     
   } catch (error) {
@@ -192,6 +198,14 @@ export async function DELETE(request: NextRequest) {
     });
 
     console.log('Deleted address:', addressId);
+
+    // Delete from Shopify
+    try {
+      await deleteShopifyAddress(userId, addressId);
+      console.log('[Addresses API] Address deleted from Shopify');
+    } catch (shopifyError) {
+      console.error('Shopify delete failed (but saved to Clerk):', shopifyError);
+    }
 
     return NextResponse.json({ success: true });
     
