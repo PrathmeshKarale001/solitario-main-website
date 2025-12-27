@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -29,7 +29,7 @@ const cardBrands: Record<string, { name: string; color: string }> = {
 };
 
 export default function PaymentPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const [methods, setMethods] = useState<PaymentMethod[]>([]);
   const [loading, setLoading] = useState(true);
@@ -37,10 +37,10 @@ export default function PaymentPage() {
   const [modalType, setModalType] = useState<'card' | 'upi'>('card');
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account/payment');
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in?redirect_url=/account/payment');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     try {

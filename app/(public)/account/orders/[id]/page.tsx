@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+import { useUser } from '@clerk/nextjs';
 import { useRouter, useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -90,7 +90,7 @@ const statusSteps = [
 ];
 
 export default function OrderDetailPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const params = useParams();
   const [order, setOrder] = useState<Order | null>(null);
@@ -98,10 +98,10 @@ export default function OrderDetailPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account/orders');
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in?redirect_url=/account/orders');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
     // Simulate fetching order
