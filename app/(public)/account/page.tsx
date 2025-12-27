@@ -1,6 +1,6 @@
 'use client';
 
-import { useSession, signOut } from 'next-auth/react';
+import { useUser, useClerk } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
@@ -9,23 +9,24 @@ import { User, Package, Heart, MapPin, CreditCard, LogOut, ChevronRight } from '
 import { Section, Container, Button } from '@/components/ui';
 
 export default function AccountPage() {
-  const { data: session, status } = useSession();
+  const { user, isLoaded, isSignedIn } = useUser();
+  const { signOut } = useClerk();
   const router = useRouter();
   const [orders, setOrders] = useState<any[]>([]);
   const [isLoadingOrders, setIsLoadingOrders] = useState(false);
 
   useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/login?callbackUrl=/account');
+    if (isLoaded && !isSignedIn) {
+      router.push('/sign-in?redirect_url=/account');
     }
-  }, [status, router]);
+  }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
-    if (session?.user) {
-      // Fetch orders when session is available
+    if (isLoaded && isSignedIn && user) {
+      // Fetch orders when user is available
       fetchOrders();
     }
-  }, [session]);
+  }, [isLoaded, isSignedIn, user]);
 
   const fetchOrders = async () => {
     setIsLoadingOrders(true);
@@ -40,11 +41,12 @@ export default function AccountPage() {
     }
   };
 
-  const handleSignOut = () => {
-    signOut({ callbackUrl: '/' });
+  const handleSignOut = async () => {
+    await signOut();
+    router.push('/');
   };
 
-  if (status === 'loading') {
+  if (!isLoaded) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bronze-gold"></div>
@@ -52,7 +54,7 @@ export default function AccountPage() {
     );
   }
 
-  if (!session) {
+  if (!isSignedIn || !user) {
     return null;
   }
 
@@ -78,7 +80,7 @@ export default function AccountPage() {
             >
               <h1 className="font-playfair text-display-sm text-brand-800 mb-2">My Account</h1>
               <p className="text-brand-600 font-montserrat text-body-md">
-                Welcome back, {session.user?.name || session.user?.email}
+                Welcome back, {user.fullName || user.primaryEmailAddress?.emailAddress}
               </p>
             </motion.div>
 
@@ -93,10 +95,10 @@ export default function AccountPage() {
                 <div className="bg-white rounded-brand-xl p-6 shadow-brand border border-brand-100">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-16 h-16 bg-bronze-gold/10 rounded-full flex items-center justify-center">
-                      {session.user?.image ? (
+                      {user.imageUrl ? (
                         <img
-                          src={session.user.image}
-                          alt={session.user.name || 'Profile'}
+                          src={user.imageUrl}
+                          alt={user.fullName || 'Profile'}
                           className="w-16 h-16 rounded-full object-cover"
                         />
                       ) : (
@@ -104,8 +106,8 @@ export default function AccountPage() {
                       )}
                     </div>
                     <div>
-                      <h2 className="font-playfair text-heading-md text-brand-800">{session.user?.name || 'Customer'}</h2>
-                      <p className="text-body-sm text-brand-500 font-montserrat">{session.user?.email}</p>
+                      <h2 className="font-playfair text-heading-md text-brand-800">{user.fullName || 'Customer'}</h2>
+                      <p className="text-body-sm text-brand-500 font-montserrat">{user.primaryEmailAddress?.emailAddress}</p>
                     </div>
                   </div>
 
