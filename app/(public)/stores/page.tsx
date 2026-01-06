@@ -10,6 +10,10 @@ import { NearestStore } from '@/components/stores';
 import { Container } from '@/components/ui';
 import { ALL_STORES } from '@/lib/stores-data';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function StoresPage() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isMobile, setIsMobile] = useState(false);

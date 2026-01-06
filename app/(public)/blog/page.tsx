@@ -7,6 +7,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const BLOG_POSTS = [
   {
     id: 'celebrities-lab-grown',

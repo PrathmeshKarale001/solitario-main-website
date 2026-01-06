@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { Leaf, Droplets, Wind, Recycle, Heart, Globe, TreePine, Zap } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const stats = [
   { value: '99%', label: 'Less Water Usage', icon: Droplets },
   { value: '95%', label: 'Lower Carbon Footprint', icon: Wind },

@@ -5,6 +5,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Search, Diamond, Truck, CreditCard, RotateCcw, Shield, HelpCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 interface FAQItem {
   question: string;
   answer: string;

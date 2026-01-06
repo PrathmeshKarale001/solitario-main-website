@@ -4,6 +4,10 @@ import { motion } from 'framer-motion';
 import { Shield, Lock, Eye, Database, Mail, Phone } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const sections = [
   {
     title: 'Information We Collect',

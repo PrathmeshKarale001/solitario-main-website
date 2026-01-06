@@ -14,6 +14,10 @@ import ChristmasCountdown from '@/components/ui/ChristmasCountdown';
 import Snowflakes from '@/components/ui/Snowflakes';
 import Image from 'next/image';
 import Link from 'next/link';
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const PRODUCTS_PER_PAGE = 12;
 const LOAD_MORE_THRESHOLD = 12;
 

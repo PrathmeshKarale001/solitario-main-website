@@ -5,6 +5,10 @@ import Link from 'next/link';
 import { Award, Shield, CheckCircle, FileCheck, Diamond, Star, Download, Scissors, Palette, Search, Scale } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const certifications = [
   {
     name: 'IGI Certified',

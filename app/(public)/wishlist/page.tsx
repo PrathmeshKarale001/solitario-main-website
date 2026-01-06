@@ -9,6 +9,10 @@ import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();

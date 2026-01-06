@@ -7,6 +7,10 @@ import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 // Hero images for desktop
 const HERO_IMAGES_DESKTOP = [
   { src: '/images/general/Copy of WhatsApp Image 2025-02-19 at 5.13.42 PM (1).jpeg', pos: 'object-center' },

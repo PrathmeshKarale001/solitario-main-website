@@ -7,6 +7,10 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
   ChevronLeft, 
   Package, 
   Truck, 
