@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import { WARNER_BROS_CONFIG } from '@/lib/warner-bros-config';
 import WarnerBrosClient from './WarnerBrosClient';
 import { notFound } from 'next/navigation';
+import WarnerBrosDisabled from './WarnerBrosDisabled';
 
 // Route segment config for dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -15,9 +16,9 @@ export const metadata: Metadata = {
 };
 
 export default function WarnerBrosPage() {
-  // Check if collectibles feature is enabled
+  // Check if collectibles feature is enabled at component level
   if (process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED !== 'true') {
-    notFound();
+    return <WarnerBrosDisabled />;
   }
 
   return (
