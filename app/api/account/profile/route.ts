@@ -1,5 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getAuth, clerkClient } from '@clerk/nextjs/server';
+import { shopifyAdminFetch } from '@/lib/shopify';
+
+// Shopify customer update mutation
+const CUSTOMER_UPDATE_MUTATION = `
+  mutation customerUpdate($input: CustomerInput!) {
+    customerUpdate(input: $input) {
+      customer {
+        id
+        email
+        firstName
+        lastName
+        phone
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
 
 interface UserProfile {
   name: string;
@@ -84,6 +104,30 @@ export async function PUT(request: NextRequest) {
         },
       },
     });
+
+    // Sync to Shopify if customer exists
+    const shopifyCustomerId = user.publicMetadata.shopifyCustomerId as string;
+    if (shopifyCustomerId) {
+      try {
+        const result = await shopifyAdminFetch(CUSTOMER_UPDATE_MUTATION, {
+          input: {
+            id: shopifyCustomerId,
+            firstName,
+            lastName,
+            phone: phone || '',
+          },
+        });
+
+        if (result.data?.customerUpdate?.userErrors?.length > 0) {
+          console.error('[Profile Sync] Shopify update errors:', result.data.customerUpdate.userErrors);
+        } else {
+          console.log('[Profile Sync] Successfully updated Shopify customer');
+        }
+      } catch (error) {
+        console.error('[Profile Sync] Failed to sync to Shopify:', error);
+        // Don't fail the request if Shopify sync fails
+      }
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

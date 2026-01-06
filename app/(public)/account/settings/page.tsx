@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
@@ -135,6 +137,45 @@ export default function SettingsPage() {
     }
   };
 
+  const handleProfileImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    // Validate file size (2MB max)
+    if (file.size > 2 * 1024 * 1024) {
+      setError('Image size must be less than 2MB');
+      return;
+    }
+
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      setError('Please upload a valid image file');
+      return;
+    }
+
+    try {
+      // Create a FormData object to send the file
+      const formData = new FormData();
+      formData.append('file', file);
+
+      // Upload the image to Clerk
+      const response = await fetch('/api/account/upload-avatar', {
+        method: 'POST',
+        body: formData,
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || 'Failed to upload image');
+      }
+
+      // Refresh the user data to get the new image
+      window.location.reload();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to upload image');
+    }
+  };
+
   if (status === 'loading' || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24 flex items-center justify-center">
@@ -185,21 +226,28 @@ export default function SettingsPage() {
             >
               <h2 className="font-playfair text-lg text-brand-800 mb-4">Profile Picture</h2>
               <div className="flex items-center gap-6">
-                <div className="relative">
-                  <div className="w-24 h-24 bg-bronze-gold/10 rounded-full flex items-center justify-center overflow-hidden">
-                    {user?.imageUrl ? (
-                      <img
-                        src={user.imageUrl}
-                        alt={profile.name}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <User className="w-10 h-10 text-bronze-gold" />
-                    )}
-                  </div>
-                  <button className="absolute bottom-0 right-0 w-8 h-8 bg-classic-green text-white rounded-full flex items-center justify-center shadow-lg hover:bg-classic-green/90 transition-colors">
+                <div className="relative w-24 h-24 flex-shrink-0">
+                  {user?.imageUrl ? (
+                    <img
+                      src={user.imageUrl}
+                      alt={profile.name}
+                      className="w-full h-full rounded-2xl object-cover object-center border-2 border-bronze-gold/20"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-bronze-gold/10 rounded-2xl flex items-center justify-center">
+                      <User className="w-12 h-12 text-bronze-gold" />
+                    </div>
+                  )}
+                  <label htmlFor="profile-image-upload" className="absolute bottom-0 right-0 w-8 h-8 bg-classic-green text-white rounded-full flex items-center justify-center shadow-lg hover:bg-classic-green/90 transition-colors cursor-pointer">
                     <Camera className="w-4 h-4" />
-                  </button>
+                  </label>
+                  <input
+                    id="profile-image-upload"
+                    type="file"
+                    accept="image/jpeg,image/jpg,image/png,image/gif"
+                    onChange={handleProfileImageUpload}
+                    className="hidden"
+                  />
                 </div>
                 <div>
                   <p className="font-montserrat text-brand-600 text-sm">

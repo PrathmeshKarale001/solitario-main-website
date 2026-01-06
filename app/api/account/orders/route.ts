@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
-import { shopifyStorefrontFetch } from '@/lib/shopify';
+import { getAuth, clerkClient } from '@clerk/nextjs/server';
+import { shopifyAdminFetch } from '@/lib/shopify';
 
 const CUSTOMER_ORDERS_QUERY = `
-  query getCustomerOrders($customerAccessToken: String!, $first: Int!) {
-    customer(customerAccessToken: $customerAccessToken) {
+  query getCustomerOrders($customerId: ID!, $first: Int!) {
+    customer(id: $customerId) {
       orders(first: $first, sortKey: PROCESSED_AT, reverse: true) {
         edges {
           node {
             id
+            name
             orderNumber
             processedAt
             fulfillmentStatus
             financialStatus
-            totalPrice {
+            totalPriceV2 {
               amount
               currencyCode
             }
@@ -25,8 +25,10 @@ const CUSTOMER_ORDERS_QUERY = `
                   quantity
                   variant {
                     id
-                    price {
+                    title
+                    priceV2 {
                       amount
+                      currencyCode
                     }
                     image {
                       url
@@ -35,6 +37,15 @@ const CUSTOMER_ORDERS_QUERY = `
                   }
                 }
               }
+            }
+            shippingAddress {
+              firstName
+              lastName
+              address1
+              city
+              province
+              country
+              zip
             }
           }
         }
@@ -45,88 +56,71 @@ const CUSTOMER_ORDERS_QUERY = `
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const { userId } = getAuth(request);
     
-    if (!session?.user) {
+    if (!userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const shopifyAccessToken = (session.user as any).shopifyAccessToken;
+    const clerk = await clerkClient();
+    const user = await clerk.users.getUser(userId);
     
-    if (!shopifyAccessToken) {
-      // User logged in via Google but doesn't have Shopify token
-      // Return empty orders - they haven't made purchases yet
-      return NextResponse.json({ orders: [] });
+    // Get Shopify customer ID from metadata
+    const shopifyCustomerId = user.publicMetadata.shopifyCustomerId as string;
+    
+    if (!shopifyCustomerId) {
+      return NextResponse.json({ 
+        orders: [],
+        message: 'No Shopify customer linked. Add an address to sync with Shopify.' 
+      });
     }
 
-    const result = await shopifyStorefrontFetch<{
-      customer: {
-        orders: {
-          edges: Array<{
-            node: {
-              id: string;
-              orderNumber: number;
-              processedAt: string;
-              fulfillmentStatus: string;
-              financialStatus: string;
-              totalPrice: { amount: string; currencyCode: string };
-              lineItems: {
-                edges: Array<{
-                  node: {
-                    title: string;
-                    quantity: number;
-                    variant: {
-                      id: string;
-                      price: { amount: string };
-                      image: { url: string; altText: string } | null;
-                    } | null;
-                  };
-                }>;
-              };
-            };
-          }>;
-        };
-      } | null;
-    }>(CUSTOMER_ORDERS_QUERY, {
-      customerAccessToken: shopifyAccessToken,
+    // Fetch orders from Shopify Admin API
+    const result = await shopifyAdminFetch(CUSTOMER_ORDERS_QUERY, {
+      customerId: shopifyCustomerId,
       first: 20,
     });
 
-    if (!result.data?.customer?.orders) {
-      return NextResponse.json({ orders: [] });
+    if (result.errors) {
+      throw new Error(result.errors[0].message);
     }
 
-    // Transform Shopify orders to our format
-    const orders = result.data.customer.orders.edges.map(({ node }) => {
-      // Map fulfillment status to our status
-      let status: 'processing' | 'shipped' | 'delivered' | 'cancelled' = 'processing';
-      if (node.fulfillmentStatus === 'FULFILLED') {
-        status = 'delivered';
-      } else if (node.fulfillmentStatus === 'IN_PROGRESS' || node.fulfillmentStatus === 'PARTIALLY_FULFILLED') {
-        status = 'shipped';
-      } else if (node.financialStatus === 'REFUNDED' || node.financialStatus === 'VOIDED') {
-        status = 'cancelled';
-      }
+    const orders = result.data?.customer?.orders?.edges || [];
+    
+    console.log(`[Orders API] Fetched ${orders.length} orders for user ${userId}`);
 
-      return {
-        id: node.id,
-        orderNumber: `SOL-${node.orderNumber}`,
-        date: node.processedAt,
-        status,
-        total: parseFloat(node.totalPrice.amount),
-        items: node.lineItems.edges.map(({ node: item }) => ({
-          id: item.variant?.id || '',
-          name: item.title,
-          image: item.variant?.image?.url || '/images/placeholder.png',
-          price: parseFloat(item.variant?.price?.amount || '0'),
-          quantity: item.quantity,
+    return NextResponse.json({
+      orders: orders.map((edge: any) => ({
+        id: edge.node.id,
+        name: edge.node.name,
+        orderNumber: edge.node.orderNumber,
+        date: edge.node.processedAt,
+        status: {
+          payment: edge.node.financialStatus,
+          fulfillment: edge.node.fulfillmentStatus,
+        },
+        total: {
+          amount: edge.node.totalPriceV2.amount,
+          currency: edge.node.totalPriceV2.currencyCode,
+        },
+        items: edge.node.lineItems.edges.map((item: any) => ({
+          title: item.node.title,
+          quantity: item.node.quantity,
+          variant: item.node.variant.title,
+          price: {
+            amount: item.node.variant.priceV2.amount,
+            currency: item.node.variant.priceV2.currencyCode,
+          },
+          image: item.node.variant.image?.url,
         })),
-      };
+        shippingAddress: edge.node.shippingAddress,
+      })),
     });
 
-    return NextResponse.json({ orders });
   } catch (error) {
-    console.error('Failed to fetch orders:', error);
-    return NextResponse.json({ error: 'Failed to fetch orders' }, { status: 500 });
+    console.error('[Orders API] Error:', error);
+    return NextResponse.json({ 
+      error: error instanceof Error ? error.message : 'Failed to fetch orders' 
+    }, { status: 500 });
   }
 }

@@ -5,11 +5,13 @@ import { usePathname } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import { Menu, X, Heart, Search, ShoppingBag, User, ChevronRight, Sparkles, MapPin, Phone, Diamond, CircleDot, Gem, Star, Gift, BookOpen, Hexagon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
 import SearchModal from '@/components/ui/SearchModal';
+import BatTransition from '@/components/ui/BatTransition';
 
 // Clean navigation structure - only essential links
 const NAV_LINKS = [
@@ -24,6 +26,10 @@ const MOBILE_MENU_SECTIONS = [
     title: 'Shop',
     links: [
       { href: '/products', label: 'All Products', icon: Sparkles, highlight: true },
+      ...(process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' 
+        ? [{ href: '/warner-bros', label: 'Collectibles', icon: Gift, highlight: true }]
+        : []
+      ),
       { href: '/products/category/rings', label: 'Rings', icon: CircleDot },
       { href: '/products/category/earrings', label: 'Earrings', icon: Gem },
       { href: '/products/category/necklaces', label: 'Necklaces', icon: Diamond },
@@ -52,16 +58,20 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [showBatTransition, setShowBatTransition] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
   const isHomePage = pathname === '/';
   const isProductsPage = pathname === '/products';
   const isProductDetailPage = pathname?.startsWith('/products/'); // Individual product pages
   const isStoresPage = pathname === '/stores';
+  const isWarnerBrosPage = pathname === '/warner-bros';
   const isTransparentHeroPage =
     isHomePage ||
     pathname === '/lab-grown-diamonds' ||
     pathname === '/about' ||
     pathname === '/stores' ||
+    pathname === '/warner-bros' ||
     (pathname === '/products'); // Only products listing, not product detail
   const isAdminPage = pathname?.startsWith('/admin');
   const { itemCount, toggleCart } = useCart();
@@ -99,25 +109,25 @@ export default function Header() {
   }
 
   // Fully transparent on hero pages until scroll; solid black after scroll; solid dark elsewhere
-  const headerClasses = isTransparentHeroPage
-    ? isScrolled
-      ? 'bg-[#146552] shadow-luxury'
-      : isProductsPage
-        ? 'bg-gradient-to-b from-black/70 via-black/35 to-transparent'
-        : 'bg-transparent'
-    : 'bg-[#146552] shadow-luxury';
+  // Warner Bros page gets special dark gold theme instead of green and stronger gradient on hero
+  const headerClasses = cn(
+    'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+    (isScrolled || !isTransparentHeroPage || isProductDetailPage) 
+      ? isWarnerBrosPage && isScrolled
+        ? 'bg-gradient-to-r from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_4px_20px_rgba(198,166,100,0.3)] border-b border-[#C6A664]/20' 
+        : 'bg-classic-green shadow-md'
+      : isWarnerBrosPage
+        ? 'bg-transparent bg-gradient-to-b from-black/100 via-black/60 to-transparent'
+        : 'bg-transparent bg-gradient-to-b from-black/70 to-transparent'
+  );
 
   return (
     <>
       <header
-        className={cn(
-          'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-          headerClasses,
-          isMobileMenuOpen && 'lg:block hidden'
-        )}
+        className={headerClasses}
       >
         {/* Main Header - Increased padding */}
-        <div className="px-3 sm:px-4 lg:px-8 py-2 sm:py-3 lg:py-4">
+        <div className="px-3 sm:px-4 lg:px-8 py-3 sm:py-4 lg:py-6">
           <div className="flex items-center justify-between">
             {/* Mobile: Menu Button | Desktop: Navigation */}
             <div className="flex items-center">
@@ -141,7 +151,7 @@ export default function Header() {
                     key={link.href}
                     href={link.href}
                     className={cn(
-                      "text-white/90 hover:text-bronze-gold transition-colors duration-200 font-gotham text-xs uppercase tracking-[0.15em]",
+                      "text-white/90 hover:text-bronze-gold transition-colors duration-200 font-gotham text-sm uppercase tracking-[0.15em]",
                       pathname === link.href && "text-bronze-gold"
                     )}
                   >
@@ -161,13 +171,34 @@ export default function Header() {
                 alt="Solitario"
                 width={140}
                 height={40}
-                className="w-auto brightness-0 invert h-8 sm:h-9 lg:h-10"
+                className="w-auto h-auto brightness-0 invert h-8 sm:h-9 lg:h-10"
                 priority
               />
             </Link>
 
             {/* Right Icons - Optimized touch targets for mobile */}
             <div className="flex items-center space-x-1 sm:space-x-2">
+              <BatTransition 
+                isActive={showBatTransition} 
+                onComplete={() => {
+                  setShowBatTransition(false);
+                  router.push('/warner-bros');
+                }} 
+              />
+              {/* Collectibles CTA - Warner Bros Premium Redesign */}
+              {!isWarnerBrosPage && (
+                <button
+                  onClick={() => setShowBatTransition(true)}
+                  className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#C6A664] via-[#8c7560] to-[#0a0a0a] text-white rounded-lg border border-[#C6A664]/40 shadow-[0_0_15px_rgba(198,166,100,0.3)] hover:shadow-[0_0_25px_rgba(198,166,100,0.5)] transition-all duration-500 group animate-premium-breathe relative overflow-hidden"
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000" />
+                  <Sparkles className="w-4 h-4 text-[#C6A664] group-hover:rotate-12 transition-transform" />
+                  <span className="text-[11px] font-bold uppercase tracking-[0.2em] font-gotham">
+                    Collectibles
+                  </span>
+                </button>
+              )}
+
               {/* Search - Desktop only in header, mobile in menu */}
               <button
                 onClick={() => setIsSearchOpen(true)}
@@ -249,7 +280,7 @@ export default function Header() {
                 alt="Solitario"
                 width={120}
                 height={34}
-                className="brightness-0 invert h-7 w-auto"
+                className="brightness-0 invert h-7 w-auto h-auto"
               />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -276,7 +307,7 @@ export default function Header() {
           <nav className="px-5 py-6 space-y-8">
             {MOBILE_MENU_SECTIONS.map((section) => (
               <div key={section.title}>
-                <h3 className="text-bronze-gold/80 text-[10px] font-gotham uppercase tracking-[0.2em] mb-4 px-1">
+                <h3 className="text-bronze-gold/80 text-xs font-gotham uppercase tracking-[0.2em] mb-4 px-1">
                   {section.title}
                 </h3>
                 <div className="space-y-1">
@@ -312,7 +343,7 @@ export default function Header() {
                             </span>
                           )}
                           {!link.icon && <span className="w-8" />}
-                          <span className="font-montserrat text-[15px] font-medium">{link.label}</span>
+                          <span className="font-montserrat text-base font-medium">{link.label}</span>
                         </span>
                         <ChevronRight className={cn(
                           "w-4 h-4 transition-transform group-hover:translate-x-0.5",

@@ -9,6 +9,7 @@ import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
+import { DCBannerSlider } from '@/components/home';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 const PRODUCTS_PER_PAGE = 12;
@@ -249,7 +250,7 @@ function ProductsPageContent() {
     <div>
       {/* Hero Section with Image Carousel */}
       <section className="relative min-h-[80vh] md:min-h-[91vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
-        {/* Image Background with Crossfade */}
+        {/* ... existing carousel ... */}
         <div className="absolute inset-0">
           <AnimatePresence mode="wait">
             {heroImages.map((item, index) => (
@@ -296,20 +297,23 @@ function ProductsPageContent() {
         </div>
       </section>
 
+      {/* DC COLLECTION SLIDER - FULL WIDTH */}
+      {process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' && <DCBannerSlider />}
+
       {/* Christmas Sale Banner */}
-      <section className="bg-white py-8">
-        <div className="relative overflow-hidden max-w-6xl mx-auto px-4">
+      <section className="bg-white py-4">
+        <div className="relative overflow-hidden w-full h-[130px] sm:h-[180px] lg:h-[230px] flex items-center justify-center">
           <img
             src="/images/christmas-offer.jpg"
             alt="Christmas Sale - Special Offers"
-            className="w-full h-auto object-cover rounded-lg shadow-lg cursor-pointer"
+            className="w-full h-full object-contain cursor-pointer"
             onClick={() => router.push('/christmas-sale')}
           />
         </div>
       </section>
 
       {/* Sidebar + Products Section */}
-      <Section variant="light" padding="lg" className="bg-gradient-to-b from-white via-ivory-pearl/30 to-white pb-24 lg:pb-16">
+      <Section variant="light" padding="sm" className="bg-gradient-to-b from-white via-ivory-pearl/30 to-white pb-16 lg:pb-12">
         <Container>
           <div className="flex gap-8">
             {/* Left Sidebar - Desktop Only, Fixed Position */}

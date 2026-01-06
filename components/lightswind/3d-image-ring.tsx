@@ -145,7 +145,8 @@ export function ThreeDImageRing({
   useEffect(() => {
     const handleResize = () => {
       const viewportWidth = window.innerWidth;
-      const newScale = viewportWidth <= mobileBreakpoint ? mobileScaleFactor : 1;
+      // Only apply mobile scale when strictly below the breakpoint, not at or equal to it
+      const newScale = viewportWidth < mobileBreakpoint ? mobileScaleFactor : 1;
       setCurrentScale(newScale);
     };
 
@@ -251,14 +252,24 @@ export function ThreeDImageRing({
 
   // Handle click on image (navigate if href exists and wasn't a drag)
   const handleImageClick = (imageItem: ImageItem, event: React.MouseEvent) => {
-    // Only navigate if it was a click (not a drag) and href exists
-    if (dragStartPos.current && imageItem.href) {
-      const dx = Math.abs(event.clientX - dragStartPos.current.x);
-      const dy = Math.abs(event.clientY - dragStartPos.current.y);
-      // If movement is less than 5px, consider it a click
-      if (dx < 5 && dy < 5) {
-        router.push(imageItem.href);
-      }
+    // Only navigate if href exists
+    if (!imageItem.href) return;
+    
+    // Stop event propagation to prevent container drag from interfering
+    event.stopPropagation();
+    
+    // If there was no drag (dragStartPos is null), allow navigation
+    if (!dragStartPos.current) {
+      router.push(imageItem.href);
+      return;
+    }
+    
+    // If there was a drag start, check if it was actually a click (not a drag)
+    const dx = Math.abs(event.clientX - dragStartPos.current.x);
+    const dy = Math.abs(event.clientY - dragStartPos.current.y);
+    // If movement is less than 5px, consider it a click
+    if (dx < 5 && dy < 5) {
+      router.push(imageItem.href);
     }
   };
 
@@ -408,6 +419,8 @@ const handleDragEnd = () => {
                   borderRadius: "12px",
                   outline: "none",
                   border: "none",
+                  pointerEvents: "auto",
+                  cursor: imageItem.href ? "pointer" : "default",
                 }}
                 initial="hidden"
                 animate="visible"

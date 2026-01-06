@@ -3,7 +3,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Navigation, Phone, Clock, ExternalLink, Loader2, MapPinOff, RefreshCw } from 'lucide-react';
-import { ALL_STORES, findNearestStores, formatDistance, StoreLocation } from '@/lib/stores-data';
+import { ALL_STORES, formatDistance, StoreLocation } from '@/lib/stores-data';
+import { findNearestStoresWithRadar, getUserLocation } from '@/lib/radar-client';
 
 interface NearestStoreProps {
   showTitle?: boolean;
@@ -23,10 +24,13 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
     coords: null,
     error: null,
   });
-  const [nearestStores, setNearestStores] = useState<{ store: StoreLocation; distance: number }[]>([]);
+  const [nearestStores, setNearestStores] = useState<{ store: StoreLocation; distance: number; travelTime?: string }[]>([]);
 
-  const requestLocation = () => {
+  const requestLocation = async () => {
+    console.log('🔘 Find Nearest Store button clicked');
+    
     if (!navigator.geolocation) {
+      console.error('❌ Geolocation not supported by browser');
       setLocationState({
         status: 'error',
         coords: null,
@@ -35,45 +39,54 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
       return;
     }
 
+    console.log('⏳ Setting loading state...');
     setLocationState({ status: 'loading', coords: null, error: null });
 
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const coords = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        };
-        setLocationState({ status: 'success', coords, error: null });
-        
-        // Find nearest stores
-        const nearest = findNearestStores(coords.lat, coords.lng, maxStores, ALL_STORES);
-        setNearestStores(nearest);
-      },
-      (error) => {
-        let errorMessage = 'Unable to retrieve your location';
-        let status: LocationState['status'] = 'error';
-        
-        switch (error.code) {
-          case error.PERMISSION_DENIED:
-            errorMessage = 'Location access was denied. Please enable location permissions.';
-            status = 'denied';
-            break;
-          case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Location information is unavailable.';
-            break;
-          case error.TIMEOUT:
-            errorMessage = 'Location request timed out.';
-            break;
-        }
-        
-        setLocationState({ status, coords: null, error: errorMessage });
-      },
-      {
-        enableHighAccuracy: true,
-        timeout: 10000,
-        maximumAge: 300000, // Cache for 5 minutes
+    try {
+      console.log('📡 Calling getUserLocation() from Radar client...');
+      // Use Radar API for more accurate location and distance calculations
+      const location = await getUserLocation();
+      console.log('📍 getUserLocation() returned:', location);
+      
+      if (!location) {
+        setLocationState({
+          status: 'error',
+          coords: null,
+          error: 'Unable to retrieve your location. Please try again.',
+        });
+        return;
       }
-    );
+
+      const coords = {
+        lat: location.latitude,
+        lng: location.longitude,
+      };
+      
+      console.log('✅ Location coords:', coords);
+      setLocationState({ status: 'success', coords, error: null });
+      
+      // Find nearest stores using Radar with travel time calculations
+      console.log('🔍 Finding nearest stores from', ALL_STORES.length, 'total stores...');
+      const nearest = await findNearestStoresWithRadar(ALL_STORES, maxStores);
+      console.log('✅ Found nearest stores:', nearest);
+      setNearestStores(nearest);
+      
+    } catch (error: any) {
+      console.error('❌ Error in requestLocation:', error);
+      let errorMessage = 'Unable to retrieve your location';
+      let status: LocationState['status'] = 'error';
+      
+      if (error?.message?.includes('denied') || error?.message?.includes('permission')) {
+        errorMessage = 'Location access was denied. Please enable location permissions.';
+        status = 'denied';
+        console.error('🚫 Location permission denied');
+      } else if (error?.message?.includes('timeout')) {
+        errorMessage = 'Location request timed out. Please try again.';
+        console.error('⏱️ Location request timeout');
+      }
+      
+      setLocationState({ status, coords: null, error: errorMessage });
+    }
   };
 
   // Auto-request location on mount (optional - can be triggered by button instead)
@@ -241,9 +254,17 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
                     
                     <h3 className="text-xl font-playfair text-brand-800 mb-2">{store.name}</h3>
                     
-                    <div className="flex items-center gap-2 text-classic-green font-gotham text-sm mb-4">
-                      <Navigation className="w-4 h-4" />
-                      {formatDistance(distance)} away
+                    <div className="space-y-1 mb-4">
+                      <div className="flex items-center gap-2 text-classic-green font-gotham text-sm">
+                        <Navigation className="w-4 h-4" />
+                        {formatDistance(distance)} away
+                      </div>
+                      {nearestStores[idx].travelTime && (
+                        <div className="flex items-center gap-2 text-brand-600 font-montserrat text-xs">
+                          <Clock className="w-3 h-3" />
+                          {nearestStores[idx].travelTime} by car
+                        </div>
+                      )}
                     </div>
 
                     <div className="space-y-3 mb-6">

@@ -12,4 +12,5 @@ export { default as HeadOffice } from './HeadOffice';
 export { default as ShopByCategory } from './ShopByCategory';
 export { default as ShopByCategoryOriginal } from './ShopByCategoryOriginal';
 export { default as LifestyleShowcase } from './LifestyleShowcase';
+export { default as DCBannerSlider } from './DCBannerSlider';
 

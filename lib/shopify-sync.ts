@@ -4,6 +4,22 @@
 import { clerkClient } from '@clerk/nextjs/server';
 import { shopifyAdminFetch, shopifyStorefrontFetch } from './shopify';
 
+// Search for existing customer query
+const SEARCH_CUSTOMER_QUERY = `
+  query searchCustomers($query: String!) {
+    customers(first: 1, query: $query) {
+      edges {
+        node {
+          id
+          email
+          firstName
+          lastName
+        }
+      }
+    }
+  }
+`;
+
 // Create Shopify customer mutation
 const CREATE_CUSTOMER_MUTATION = `
   mutation customerCreate($input: CustomerInput!) {
@@ -131,59 +147,54 @@ export async function syncUserWithShopify(userId: string, email: string, firstNa
     }
 
     // Create new Shopify customer
-    const password = generateSecurePassword();
-    const result = await shopifyAdminFetch(CREATE_CUSTOMER_MUTATION, {
-      input: {
-        email,
-        firstName: firstName || email.split('@')[0],
-        lastName: lastName || '',
-        password,
-        passwordConfirmation: password,
-      },
+    // First, search for existing customer
+    const searchResult = await shopifyAdminFetch(SEARCH_CUSTOMER_QUERY, {
+      query: `email:${email}`,
     });
 
-    if (result.data?.customerCreate?.userErrors?.length > 0) {
-      throw new Error(result.data.customerCreate.userErrors[0].message);
+    console.log('[Shopify Sync] Search result:', JSON.stringify(searchResult, null, 2));
+
+    const existingCustomer = searchResult.data?.customers?.edges?.[0]?.node;
+    let customerId: string;
+
+    if (existingCustomer) {
+      // Customer exists, use their ID
+      customerId = existingCustomer.id;
+      console.log('[Shopify Sync] Found existing customer:', customerId);
+    } else {
+      // Create new customer
+      const result = await shopifyAdminFetch(CREATE_CUSTOMER_MUTATION, {
+        input: {
+          email,
+          firstName: firstName || email.split('@')[0],
+          lastName: lastName || '',
+        },
+      });
+
+      console.log('[Shopify Sync] Shopify response:', JSON.stringify(result, null, 2));
+
+      if (result.data?.customerCreate?.userErrors?.length > 0) {
+        throw new Error(result.data.customerCreate.userErrors[0].message);
+      }
+
+      customerId = result.data?.customerCreate?.customer?.id;
+      if (!customerId) {
+        throw new Error('Failed to create Shopify customer');
+      }
     }
 
-    const customerId = result.data?.customerCreate?.customer?.id;
-    if (!customerId) {
-      throw new Error('Failed to create Shopify customer');
-    }
-
-    // Generate customer access token
-    const tokenResult = await shopifyStorefrontFetch(CUSTOMER_ACCESS_TOKEN_CREATE, {
-      input: {
-        email,
-        password,
-      },
-    });
-
-    if (tokenResult.data?.customerAccessTokenCreate?.customerUserErrors?.length > 0) {
-      throw new Error(tokenResult.data.customerAccessTokenCreate.customerUserErrors[0].message);
-    }
-
-    const accessToken = tokenResult.data?.customerAccessTokenCreate?.customerAccessToken?.accessToken;
-    if (!accessToken) {
-      throw new Error('Failed to generate access token');
-    }
-
-    // Store Shopify customer ID and access token in Clerk metadata
+    // For Admin API, we don't generate access tokens
+    // Store only the customer ID
     await clerk.users.updateUser(userId, {
       publicMetadata: {
         ...user.publicMetadata,
         shopifyCustomerId: customerId,
         shopifyAddressIds: {}, // Map Clerk address IDs to Shopify address IDs
       },
-      privateMetadata: {
-        ...user.privateMetadata,
-        shopifyAccessToken: accessToken,
-        shopifyPassword: password, // Store for future token refresh
-      },
     });
 
     console.log('[Shopify Sync] Created Shopify customer:', customerId);
-    return { customerId, accessToken };
+    return { customerId, accessToken: null };
 
   } catch (error) {
     console.error('[Shopify Sync] Failed:', error);

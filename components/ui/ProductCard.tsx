@@ -12,22 +12,31 @@ export interface ProductCardProps {
   product: Product;
   onQuickView?: (product: Product) => void;
   onAddToCart?: (product: Product) => void;
+  darkMode?: boolean;
 }
 
-export default function ProductCard({ product, onQuickView, onAddToCart }: ProductCardProps) {
+export default function ProductCard({ product, onQuickView, onAddToCart, darkMode = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
 
   return (
     <Link href={`/products/${product.id}`} className="block group">
       <motion.div
-        className="relative bg-white rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-gray-100 hover:border-bronze-gold/30"
+        className={cn(
+          "relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border hover:border-bronze-gold/30",
+          darkMode 
+            ? "bg-[#111] border-[#2a2a2a] hover:bg-[#161616]" 
+            : "bg-white border-gray-100"
+        )}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         whileHover={{ y: -4 }}
         transition={{ duration: 0.3 }}
       >
         {/* Compact Image Container */}
-        <div className="relative aspect-square overflow-hidden bg-gray-50">
+        <div className={cn(
+          "relative aspect-square overflow-hidden",
+          darkMode ? "bg-[#111]" : "bg-gray-50"
+        )}>
           {/* Main Image */}
           <motion.div
             className="absolute inset-0"
@@ -80,12 +89,18 @@ export default function ProductCard({ product, onQuickView, onAddToCart }: Produ
         {/* Compact Product Info */}
         <div className="p-2 sm:p-3">
           {/* Category - Hidden on mobile for space */}
-          <span className="hidden sm:block text-[8px] uppercase tracking-wider font-gotham text-bronze-gold/70 mb-1">
+          <span className={cn(
+            "hidden sm:block text-[8px] uppercase tracking-wider font-gotham mb-1",
+            darkMode ? "text-bronze-gold" : "text-bronze-gold/70"
+          )}>
             {product.category}
           </span>
 
           {/* Product Name */}
-          <h3 className="font-playfair text-xs sm:text-sm text-gray-900 line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors">
+          <h3 className={cn(
+            "font-playfair text-xs sm:text-sm line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors",
+            darkMode ? "text-gray-100" : "text-gray-900"
+          )}>
             {product.name}
           </h3>
 
@@ -93,18 +108,30 @@ export default function ProductCard({ product, onQuickView, onAddToCart }: Produ
           <div className="flex items-center gap-2">
             {product.comparePrice ? (
               <>
-                <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
+                <p className={cn(
+                  "font-gotham text-xs sm:text-sm font-semibold",
+                  darkMode ? "text-[#C6A664]" : "text-classic-green"
+                )}>
                   {formatPrice(product.price, product.currency)}
                 </p>
-                <p className="font-gotham text-[10px] sm:text-xs text-gray-400 line-through">
+                <p className={cn(
+                  "font-gotham text-[10px] sm:text-xs line-through",
+                  darkMode ? "text-gray-500" : "text-gray-400"
+                )}>
                   {formatPrice(product.comparePrice, product.currency)}
                 </p>
-                <span className="inline-flex items-center px-1.5 py-0.5 bg-red-100 text-red-600 text-[8px] sm:text-[9px] font-gotham font-semibold rounded">
+                <span className={cn(
+                  "inline-flex items-center px-1.5 py-0.5 text-[8px] sm:text-[9px] font-gotham font-semibold rounded",
+                  darkMode ? "bg-red-900/50 text-red-400" : "bg-red-100 text-red-600"
+                )}>
                   {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
                 </span>
               </>
             ) : (
-              <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
+              <p className={cn(
+                "font-gotham text-xs sm:text-sm font-semibold",
+                darkMode ? "text-[#C6A664]" : "text-classic-green"
+              )}>
                 {formatPrice(product.price, product.currency)}
               </p>
             )}

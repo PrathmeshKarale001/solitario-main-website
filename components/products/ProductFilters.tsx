@@ -37,7 +37,7 @@ export default function ProductFilters({
   onFeaturedToggle,
   productCounts = {},
 }: ProductFiltersProps) {
-  const [localPriceRange, setLocalPriceRange] = useState(priceRange);
+  const [maxPrice, setMaxPrice] = useState(priceRange[1]);
   const [expandedSections, setExpandedSections] = useState({
     sort: true,
     price: true,
@@ -49,10 +49,7 @@ export default function ProductFilters({
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const handlePriceRangeApply = () => {
-    onPriceRangeChange(localPriceRange);
-  };
-
+  
   const sortOptions = [
     { value: 'featured', label: 'Featured First' },
     { value: 'price-low', label: 'Price: Low to High' },
@@ -121,33 +118,20 @@ export default function ProductFilters({
               <input
                 type="range"
                 min="0"
-                max="500000"
-                step="10000"
-                value={localPriceRange[0]}
-                onChange={(e) => setLocalPriceRange([Number(e.target.value), localPriceRange[1]])}
+                max="200000"
+                step="5000"
+                value={maxPrice}
+                onChange={(e) => {
+                  const newMaxPrice = Number(e.target.value);
+                  setMaxPrice(newMaxPrice);
+                  onPriceRangeChange([0, newMaxPrice]);
+                }}
                 className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-classic-green"
               />
-              <input
-                type="range"
-                min="0"
-                max="500000"
-                step="10000"
-                value={localPriceRange[1]}
-                onChange={(e) => setLocalPriceRange([localPriceRange[0], Number(e.target.value)])}
-                className="w-full h-1.5 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-classic-green mt-2"
-              />
             </div>
-            <div className="flex items-center justify-between text-sm font-montserrat text-gray-700">
-              <span>₹{localPriceRange[0].toLocaleString()}</span>
-              <span>-</span>
-              <span>₹{localPriceRange[1].toLocaleString()}</span>
+            <div className="flex items-center justify-end text-sm font-montserrat text-gray-700">
+              <span>Up to ₹{maxPrice.toLocaleString()}</span>
             </div>
-            <button
-              onClick={handlePriceRangeApply}
-              className="w-full py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg font-gotham text-xs uppercase tracking-wider transition-colors"
-            >
-              Filter
-            </button>
           </div>
         )}
       </div>

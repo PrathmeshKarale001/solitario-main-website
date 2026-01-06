@@ -2,7 +2,7 @@
 
 import { useUser } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle } from 'lucide-react';
@@ -22,7 +22,7 @@ interface Address {
   isDefault: boolean;
 }
 
-export default function AddressesPage() {
+function AddressesPageContent() {
   const { user, isLoaded, isSignedIn } = useUser();
   const router = useRouter();
   const [addresses, setAddresses] = useState<Address[]>([]);
@@ -586,3 +586,12 @@ export default function AddressesPage() {
     </div>
   );
 }
+
+export default function AddressesPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24 flex items-center justify-center"><div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bronze-gold"></div></div>}>
+      <AddressesPageContent />
+    </Suspense>
+  );
+}
+

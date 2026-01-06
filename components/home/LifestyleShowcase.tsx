@@ -31,10 +31,10 @@ export default function LifestyleShowcase() {
       </div>
 
       {/* 3D Image Ring - Full Viewport Width, Reduced Vertical Space */}
-      <div className="h-[200px] md:h-[500px] lg:h-[560px] w-screen relative left-1/2 -translate-x-1/2 flex items-center justify-center overflow-visible">
+      <div className="h-[200px] md:h-[400px] lg:h-[420px] w-screen relative left-1/2 -translate-x-1/2 flex items-center justify-center overflow-visible">
         <ThreeDImageRing 
           images={CELEBRITY_IMAGES}
-          width={370}
+          width={390}
           imageDistance={570}
           perspective={2200}
           animationDuration={1.4}

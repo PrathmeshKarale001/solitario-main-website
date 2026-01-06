@@ -16,5 +16,6 @@ export { default as SplitText } from './SplitText';
 export { default as BlurText } from './BlurText';
 export { default as Particles } from './Particles';
 export { default as QuickLookModal } from './QuickLookModal';
+export { default as WarnerBrosFloatingButton } from './WarnerBrosFloatingButton';
 
 

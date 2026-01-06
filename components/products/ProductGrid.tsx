@@ -9,9 +9,10 @@ import { useCart } from '@/lib/cart-context';
 export interface ProductGridProps {
   products: Product[];
   onQuickView?: (product: Product) => void;
+  darkMode?: boolean;
 }
 
-export default function ProductGrid({ products, onQuickView }: ProductGridProps) {
+export default function ProductGrid({ products, onQuickView, darkMode = false }: ProductGridProps) {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const { addToCart: addToCartContext } = useCart();
 
@@ -44,6 +45,7 @@ export default function ProductGrid({ products, onQuickView }: ProductGridProps)
                 product={product}
                 onQuickView={handleQuickView}
                 onAddToCart={handleAddToCart}
+                darkMode={darkMode}
               />
             </motion.div>
           ))}

@@ -9,6 +9,8 @@ import Image from 'next/image';
 import { Package, ChevronLeft, Search, Filter, Eye, Truck, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+export const dynamic = 'force-dynamic';
+
 interface Order {
   id: string;
   orderNumber: string;

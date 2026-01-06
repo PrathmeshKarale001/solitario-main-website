@@ -67,20 +67,20 @@ export default function AccountPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24">
+    <div className="min-h-screen bg-gradient-to-br from-ivory-pearl via-white to-bronze-gold/5 pt-24 pb-16">
       <Section variant="light" padding="lg">
         <Container>
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             {/* Header */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="mb-8"
+              className="mb-10"
             >
-              <h1 className="font-playfair text-display-sm text-brand-800 mb-2">My Account</h1>
-              <p className="text-brand-600 font-montserrat text-body-md">
-                Welcome back, {user.fullName || user.primaryEmailAddress?.emailAddress}
+              <h1 className="font-playfair text-4xl md:text-5xl text-brand-800 mb-3">My Account</h1>
+              <p className="text-brand-600 font-montserrat text-lg">
+                Welcome back, <span className="text-bronze-gold font-semibold">{user.fullName || user.primaryEmailAddress?.emailAddress}</span>
               </p>
             </motion.div>
 
@@ -92,17 +92,19 @@ export default function AccountPage() {
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="lg:col-span-1"
               >
-                <div className="bg-white rounded-brand-xl p-6 shadow-brand border border-brand-100">
+                <div className="bg-white rounded-2xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-brand-100 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] transition-shadow duration-300">
                   <div className="flex items-center gap-4 mb-6">
-                    <div className="w-16 h-16 bg-bronze-gold/10 rounded-full flex items-center justify-center">
+                    <div className="relative w-20 h-20 flex-shrink-0">
                       {user.imageUrl ? (
                         <img
                           src={user.imageUrl}
                           alt={user.fullName || 'Profile'}
-                          className="w-16 h-16 rounded-full object-cover"
+                          className="w-full h-full rounded-xl object-cover object-center border-2 border-bronze-gold/20"
                         />
                       ) : (
-                        <User className="w-8 h-8 text-bronze-gold" />
+                        <div className="w-full h-full bg-bronze-gold/10 rounded-xl flex items-center justify-center">
+                          <User className="w-10 h-10 text-bronze-gold" />
+                        </div>
                       )}
                     </div>
                     <div>
@@ -113,7 +115,7 @@ export default function AccountPage() {
 
                   <button
                     onClick={handleSignOut}
-                    className="w-full flex items-center justify-center gap-2 text-error hover:text-error/80 py-3 border border-error/30 hover:border-error/50 rounded-brand transition-colors font-montserrat"
+                    className="w-full flex items-center justify-center gap-2 text-error hover:text-white bg-white hover:bg-error py-3.5 border-2 border-error/30 hover:border-error rounded-xl transition-all duration-300 font-montserrat font-medium shadow-sm hover:shadow-md"
                   >
                     <LogOut className="w-4 h-4" />
                     Sign Out
@@ -128,25 +130,25 @@ export default function AccountPage() {
                 transition={{ duration: 0.6, delay: 0.2 }}
                 className="lg:col-span-2"
               >
-                <div className="bg-white rounded-brand-xl shadow-brand border border-brand-100 overflow-hidden">
+                <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-brand-100 overflow-hidden">
                   {menuItems.map((item, index) => (
                     <Link
                       key={item.href}
                       href={item.href}
-                      className={`flex items-center justify-between p-5 hover:bg-brand-50 transition-colors ${
+                      className={`flex items-center justify-between p-6 hover:bg-gradient-to-r hover:from-bronze-gold/5 hover:to-transparent transition-all duration-300 group ${
                         index !== menuItems.length - 1 ? 'border-b border-brand-100' : ''
                       }`}
                     >
                       <div className="flex items-center gap-4">
-                        <div className="w-10 h-10 bg-bronze-gold/10 rounded-brand flex items-center justify-center">
-                          <item.icon className="w-5 h-5 text-bronze-gold" />
+                        <div className="w-12 h-12 bg-gradient-to-br from-bronze-gold/10 to-bronze-gold/5 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                          <item.icon className="w-6 h-6 text-bronze-gold" />
                         </div>
                         <div>
-                          <h3 className="font-gotham text-brand-800">{item.label}</h3>
+                          <h3 className="font-gotham text-brand-800 font-semibold text-lg">{item.label}</h3>
                           <p className="text-body-sm text-brand-500 font-montserrat">{item.description}</p>
                         </div>
                       </div>
-                      <ChevronRight className="w-5 h-5 text-brand-400" />
+                      <ChevronRight className="w-5 h-5 text-brand-400 group-hover:text-bronze-gold group-hover:translate-x-1 transition-all duration-300" />
                     </Link>
                   ))}
                 </div>
@@ -160,14 +162,14 @@ export default function AccountPage() {
               transition={{ duration: 0.6, delay: 0.3 }}
               className="mt-8"
             >
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="font-playfair text-heading-xl text-brand-800">Recent Orders</h2>
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-playfair text-3xl text-brand-800">Recent Orders</h2>
                 <Link href="/account/orders" className="text-teal hover:text-teal-dark font-montserrat text-body-sm transition-colors">
                   View All
                 </Link>
               </div>
 
-              <div className="bg-white rounded-brand-xl shadow-brand border border-brand-100 p-6">
+              <div className="bg-white rounded-2xl shadow-[0_8px_30px_rgba(0,0,0,0.08)] border border-brand-100 p-8">
                 {isLoadingOrders ? (
                   <div className="flex items-center justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-bronze-gold"></div>
@@ -180,7 +182,7 @@ export default function AccountPage() {
                       Start shopping to see your orders here
                     </p>
                     <Link href="/products">
-                      <Button variant="primary">Browse Collection</Button>
+                      <Button variant="primary" className="px-8 py-3 text-base">Browse Collection</Button>
                     </Link>
                   </div>
                 ) : (
