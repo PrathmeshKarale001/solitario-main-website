@@ -186,7 +186,7 @@ export default function Header() {
                 }} 
               />
               {/* Collectibles CTA - Warner Bros Premium Redesign */}
-              {!isWarnerBrosPage && (
+              {!isWarnerBrosPage && process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' && (
                 <button
                   onClick={() => setShowBatTransition(true)}
                   className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#C6A664] via-[#8c7560] to-[#0a0a0a] text-white rounded-lg border border-[#C6A664]/40 shadow-[0_0_15px_rgba(198,166,100,0.3)] hover:shadow-[0_0_25px_rgba(198,166,100,0.5)] transition-all duration-500 group animate-premium-breathe relative overflow-hidden"
