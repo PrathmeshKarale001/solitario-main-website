@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { RotateCcw, CheckCircle, XCircle, Clock, Package, CreditCard, HelpCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const returnSteps = [
   {
     step: 1,

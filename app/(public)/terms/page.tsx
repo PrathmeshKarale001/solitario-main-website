@@ -4,6 +4,9 @@ import { motion } from 'framer-motion';
 import { FileText, Mail, Phone } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 const sections = [
   {
     title: '1. Acceptance of Terms',

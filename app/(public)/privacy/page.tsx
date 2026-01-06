@@ -1,5 +1,8 @@
 'use client';
 
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
+
 export default function PrivacyPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24">
