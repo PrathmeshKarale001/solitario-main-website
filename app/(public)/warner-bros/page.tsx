@@ -3,7 +3,7 @@ import { Suspense } from 'react';
 import { WARNER_BROS_CONFIG } from '@/lib/warner-bros-config';
 import WarnerBrosClient from './WarnerBrosClient';
 import { notFound } from 'next/navigation';
-import WarnerBrosDisabled from './WarnerBrosDisabled';
+import Redirect from '@/components/ui/Redirect';
 
 // Route segment config for dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
 };
 
 export default function WarnerBrosPage() {
-  // Check if collectibles feature is enabled at component level
+  // Check if collectibles feature is enabled
   if (process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED !== 'true') {
-    return <WarnerBrosDisabled />;
+    return <Redirect to="/" />;
   }
 
   return (
