@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, Suspense, useState } from 'react';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { usePathname } from 'next/navigation';
 
-function ScrollToTopContent() {
+export default function ScrollToTopOnRouteChange() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
@@ -21,15 +20,7 @@ function ScrollToTopContent() {
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     });
-  }, [pathname, searchParams, isMounted]);
+  }, [pathname, isMounted]);
 
   return null;
-}
-
-export default function ScrollToTopOnRouteChange() {
-  return (
-    <Suspense fallback={null}>
-      <ScrollToTopContent />
-    </Suspense>
-  );
 }

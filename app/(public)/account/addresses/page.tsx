@@ -8,9 +8,6 @@ import Link from 'next/link';
 import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic';
-
 interface Address {
   id: string;
   type: 'home' | 'office' | 'other';

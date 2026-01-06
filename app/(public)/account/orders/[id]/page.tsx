@@ -7,10 +7,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { 
-
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic';
-
   ChevronLeft, 
   Package, 
   Truck, 
@@ -23,6 +19,9 @@ export const dynamic = 'force-dynamic';
   Download
 } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
+
+// Force dynamic rendering for this page
+export const dynamic = 'force-dynamic';
 
 interface OrderItem {
   id: string;
