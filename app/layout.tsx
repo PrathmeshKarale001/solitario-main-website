@@ -74,9 +74,9 @@ export default function RootLayout({
         <ClerkProvider>
           <PostHogProvider>
             <SmoothScrollWrapper>
-              {/* <Suspense fallback={null}>
+              <Suspense fallback={null}>
                 <ScrollToTopOnRouteChange />
-              </Suspense> */}
+              </Suspense>
               <WishlistProvider>
                 <CartProvider>
                   <ShopifyCartProvider>

@@ -49,7 +49,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     }
     
     setLoading(false);
-  }, [status, userEmail, isAdminUser]);
+  }, [loading, userEmail, isAdminUser]);
 
   const verifyAccess = (code: string): boolean => {
     // Simple PIN verification - in production, use proper 2FA
