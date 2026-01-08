@@ -17,7 +17,7 @@ const LOAD_MORE_THRESHOLD = 12;
 
 // Hero images - Desktop versions (new Shop images first, then existing last)
 const HERO_IMAGES_DESKTOP = [
-  { src: '/images/home-hero/newhero/ChatGPT Banner Design Dec 24 2025.png', pos: 'object-center' },
+    // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2nd.png', pos: 'object-center' },
   { src: '/images/Shop/Banner1 1.webp', pos: 'object-[50%_0%]' },
   { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
@@ -26,7 +26,7 @@ const HERO_IMAGES_DESKTOP = [
 
 // Hero images - Mobile versions
 const HERO_IMAGES_MOBILE = [
-  { src: '/images/home-hero/newhero/ChatGPT Banner Design Dec 24 2025 (1).png', pos: 'object-center' },
+  // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2ndMobile.png', pos: 'object-center' },
   { src: '/images/Shop/ShopMobile.webp', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
@@ -298,10 +298,10 @@ function ProductsPageContent() {
       </section>
 
       {/* DC COLLECTION SLIDER - FULL WIDTH */}
-      {process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' && <DCBannerSlider />}
+      {process.env.NEXT_PUBLIC_FEATURE_DC_BANNERS_ENABLED === 'true' && <DCBannerSlider />}
 
-      {/* Christmas Sale Banner */}
-      <section className="bg-white py-4">
+      {/* Christmas Sale Banner - HIDDEN */}
+      {/* <section className="bg-white py-4">
         <div className="relative overflow-hidden w-full h-[130px] sm:h-[180px] lg:h-[230px] flex items-center justify-center">
           <img
             src="/images/christmas-offer.jpg"
@@ -310,7 +310,7 @@ function ProductsPageContent() {
             onClick={() => router.push('/christmas-sale')}
           />
         </div>
-      </section>
+      </section> */}
 
       {/* Sidebar + Products Section */}
       <Section variant="light" padding="sm" className="bg-gradient-to-b from-white via-ivory-pearl/30 to-white pb-16 lg:pb-12">
@@ -576,5 +576,7 @@ export default function ProductsPage() {
     </Suspense>
   );
 }
+
+
 
 

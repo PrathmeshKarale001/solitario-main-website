@@ -69,7 +69,7 @@ export default function RootLayout({
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden">
         <GoogleAnalytics />
         <ClerkProvider>
           <PostHogProvider>

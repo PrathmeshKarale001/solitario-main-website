@@ -39,11 +39,11 @@ const HERO_MEDIA_DESKTOP = [
 ];
 
 const HERO_MEDIA_MOBILE = [
-  // {
-  //   type: 'image',
-  //   src: '/images/HOMEBanner5.jpg',
-  //   pos: 'object-center',
-  // },
+  {
+    type: 'image',
+    src: '/images/HOMEBanner5.jpg',
+    pos: 'object-center',
+  },
   // Filter out Warner Bros hero when collectibles disabled
   ...(process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' ? [{
     type: 'image',

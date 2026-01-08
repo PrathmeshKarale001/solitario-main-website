@@ -6,9 +6,12 @@ import Image from 'next/image';
 import { Container } from '@/components/ui';
 
 const DC_BANNERS = [
-  { id: 1, src: '/images/banners/dc1.jpg', alt: 'DC Collection 1' },
-  { id: 2, src: '/images/banners/dc2.jpg', alt: 'DC Collection 2' },
-  { id: 3, src: '/images/banners/dc3.jpg', alt: 'DC Collection 3' },
+  { id: 1, src: '/images/banners/dc/dc1.jpg', alt: 'DC Collection 1' },
+  { id: 2, src: '/images/banners/dc/dc2.jpg', alt: 'DC Collection 2' },
+  { id: 3, src: '/images/banners/dc/dc3.jpg', alt: 'DC Collection 3' },
+  { id: 4, src: '/images/banners/dc/dc4.jpg', alt: 'DC Collection 4' },
+  { id: 5, src: '/images/banners/dc/dc5.jpg', alt: 'DC Collection 5' },
+  { id: 6, src: '/images/banners/dc/dc6.jpg', alt: 'DC Collection 6' },
 ];
 
 export default function DCBannerSlider() {

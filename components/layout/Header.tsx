@@ -169,9 +169,9 @@ export default function Header() {
               <Image
                 src="/logo.svg"
                 alt="Solitario"
-                width={140}
-                height={40}
-                className="w-auto h-auto brightness-0 invert h-8 sm:h-9 lg:h-10"
+                width={100}
+                height={30}
+                className="w-auto brightness-0 invert h-7 sm:h-9 lg:h-11"
                 priority
               />
             </Link>
@@ -280,7 +280,7 @@ export default function Header() {
                 alt="Solitario"
                 width={120}
                 height={34}
-                className="brightness-0 invert h-7 w-auto h-auto"
+                className="brightness-0 invert h-7 w-auto"
               />
               <button
                 onClick={() => setIsMobileMenuOpen(false)}

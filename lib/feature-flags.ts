@@ -22,6 +22,11 @@ export const isRadarGeofencingEnabled = (): boolean => {
   return process.env.NEXT_PUBLIC_FEATURE_RADAR_GEOFENCING_ENABLED !== 'false';
 };
 
+export const isDCBannersEnabled = (): boolean => {
+  // DC banners can be toggled on/off
+  return process.env.NEXT_PUBLIC_FEATURE_DC_BANNERS_ENABLED === 'true';
+};
+
 // Add more feature flags here as needed
 // export const isNewFeatureEnabled = (): boolean => {
 //   return process.env.NEXT_PUBLIC_FEATURE_NEW_ENABLED === 'true';
