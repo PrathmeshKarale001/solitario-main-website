@@ -34,14 +34,21 @@ function WarnerBrosPageContent() {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const productsRef = useRef<HTMLDivElement>(null);
 
-  // Load products from API - Warner Bros collection
+  // Load products from Shopify API - Warner Bros collection with XXXX pricing
   useEffect(() => {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/products?collection=WarnerBros');
+        const response = await fetch('/api/products?collection=warnerbros');
         const data = await response.json();
-        setProducts(data.products || []);
+        
+        // Modify products to show XXXX pricing
+        const productsWithXXXX = (data.products || []).map((product: Product) => ({
+          ...product,
+          displayPrice: 'XXXX'
+        }));
+        
+        setProducts(productsWithXXXX);
       } catch (error) {
         console.error('Failed to load products:', error);
       } finally {

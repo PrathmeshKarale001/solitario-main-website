@@ -11,11 +11,10 @@
  * In production, update the environment variables in your hosting provider.
  */
 
-export const isCollectiblesEnabled = (): boolean => {
-  // Default to false for production launch
-  // Set to 'true' in development to test features
-  return process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true';
-};
+// Collectibles (Warner Bros) feature is now permanently enabled
+// export const isCollectiblesEnabled = (): boolean => {
+//   return process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true';
+// };
 
 export const isRadarGeofencingEnabled = (): boolean => {
   // Radar geofencing is ready but can be toggled if needed

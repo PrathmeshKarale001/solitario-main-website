@@ -7,13 +7,8 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { WARNER_BROS_CONFIG } from '@/lib/warner-bros-config';
 import BatTransition from './BatTransition';
-import { isCollectiblesEnabled } from '@/lib/feature-flags';
 
 export default function WarnerBrosFloatingButton() {
-  // Hide the entire component if collectibles feature is disabled
-  if (!isCollectiblesEnabled()) {
-    return null;
-  }
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [showTransition, setShowTransition] = useState(false);

@@ -106,7 +106,14 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
 
           {/* Price */}
           <div className="flex items-center gap-2">
-            {product.comparePrice ? (
+            {(product as any).displayPrice ? (
+              <p className={cn(
+                "font-gotham text-xs sm:text-sm font-semibold",
+                darkMode ? "text-[#C6A664]" : "text-classic-green"
+              )}>
+                {(product as any).displayPrice}
+              </p>
+            ) : product.comparePrice ? (
               <>
                 <p className={cn(
                   "font-gotham text-xs sm:text-sm font-semibold",

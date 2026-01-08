@@ -7,11 +7,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const HERO_MEDIA_DESKTOP = [
-  // {
-  //   type: 'image',
-  //   src: '/images/HOMEBanner5.jpg',
-  //   pos: 'object-center',
-  // },
+  {
+    type: 'image',
+    src: '/images/HomeBanner1st.jpg',
+    pos: 'object-center',
+  },
   {
     type: 'image',
     src: '/images/home-hero/newhero/1st.png',
@@ -41,15 +41,19 @@ const HERO_MEDIA_DESKTOP = [
 const HERO_MEDIA_MOBILE = [
   {
     type: 'image',
-    src: '/images/HOMEBanner5.jpg',
+    src: '/images/HomeBanner1st.jpg',
     pos: 'object-center',
   },
-  // Filter out Warner Bros hero when collectibles disabled
-  ...(process.env.NEXT_PUBLIC_FEATURE_COLLECTIBLES_ENABLED === 'true' ? [{
+  {
     type: 'image',
     src: '/images/home-hero/newhero/1stMobile.png',
     pos: 'object-center',
-  }] : []),
+  },
+  {
+    type: 'image',
+    src: '/images/HOMEBanner5.jpg',
+    pos: 'object-center',
+  },
   {
     type: 'image',
     src: '/images/Hero_Mobile/Hero%20banner%202.jpg',
