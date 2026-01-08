@@ -7,11 +7,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const HERO_MEDIA_DESKTOP = [
-  {
-    type: 'image',
-    src: '/images/HomeBanner1st.jpg',
-    pos: 'object-center',
-  },
+  // {
+  //   type: 'image',
+  //   src: '/images/HomeBanner1st.jpg',
+  //   pos: 'object-center',
+  // },
   {
     type: 'image',
     src: '/images/home-hero/newhero/1st.png',
@@ -39,11 +39,11 @@ const HERO_MEDIA_DESKTOP = [
 ];
 
 const HERO_MEDIA_MOBILE = [
-  {
-    type: 'image',
-    src: '/images/HomeBanner1st.jpg',
-    pos: 'object-center',
-  },
+  // {
+  //   type: 'image',
+  //   src: '/images/HomeBanner1st.jpg',
+  //   pos: 'object-center',
+  // },
   {
     type: 'image',
     src: '/images/home-hero/newhero/1stMobile.png',

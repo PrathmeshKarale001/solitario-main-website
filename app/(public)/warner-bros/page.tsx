@@ -16,9 +16,12 @@ export const metadata: Metadata = {
 };
 
 export default function WarnerBrosPage() {
-  return (
-    <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#C6A664]"></div></div>}>
-      <WarnerBrosClient />
-    </Suspense>
-  );
+  // Warner Bros page temporarily disabled
+  return <Redirect to="/" />;
+  
+  // return (
+  //   <Suspense fallback={<div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center"><div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#C6A664]"></div></div>}>
+  //     <WarnerBrosClient />
+  //   </Suspense>
+  // );
 }
