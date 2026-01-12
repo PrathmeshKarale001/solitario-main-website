@@ -30,7 +30,7 @@ export default function BrandStory() {
                 Solitario was born from a vision to redefine luxury for the modern era. We believe that true beauty should not come at the cost of our planet or its people.
               </p>
               <p>
-                By harnessing the power of advanced technology, we create diamonds that are physically, chemically, and optically identical to mined diamonds, yet free from the ethical and environmental concerns of traditional mining.
+                By harnessing the power of advanced technology, we create lab grown diamonds that are physically, chemically, and optically identical to mined diamonds, yet free from the ethical and environmental concerns of traditional mining.
               </p>
             </div>
             

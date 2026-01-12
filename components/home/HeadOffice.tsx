@@ -23,7 +23,7 @@ export default function HeadOffice() {
             Our <span className="text-classic-green">Head Office</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
-            Visit our headquarters in Pune and experience the world of Solitario diamonds.
+            Visit our headquarters in Pune and experience the world of Solitario lab grown diamonds.
           </p>
         </motion.div>
 

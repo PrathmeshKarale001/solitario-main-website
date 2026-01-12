@@ -321,10 +321,10 @@ export async function trackDelhiveryShipment(
   }
 }
 
-// Check pincode serviceability
+// Check pincode serviceability with ETA
 export async function checkPincodeServiceability(
   pincode: string
-): Promise<{ success: boolean; serviceable?: boolean; cod?: boolean; prepaid?: boolean; error?: string }> {
+): Promise<{ success: boolean; serviceable?: boolean; cod?: boolean; prepaid?: boolean; eta?: string; error?: string }> {
   if (!DELHIVERY_API_KEY) {
     return { success: false, error: 'Shipping service not configured' };
   }
@@ -348,11 +348,41 @@ export async function checkPincodeServiceability(
     
     if (result.delivery_codes && result.delivery_codes.length > 0) {
       const pincodeData = result.delivery_codes[0].postal_code;
+      
+      // Calculate ETA based on distance and service type
+      // For lab grown diamond jewelry, we typically use Express service
+      const currentDate = new Date();
+      let etaDays = 2; // Default 2 days for Express
+      
+      // Adjust ETA based on location (rough estimation)
+      const state = pincodeData.state_code;
+      if (['MH', 'GJ', 'MP'].includes(state)) {
+        etaDays = 1; // Same region - 1 day
+      } else if (['DL', 'UP', 'HR', 'PB', 'RJ'].includes(state)) {
+        etaDays = 2; // North India - 2 days
+      } else if (['KA', 'TN', 'AP', 'TS', 'KL'].includes(state)) {
+        etaDays = 3; // South India - 3 days
+      } else if (['WB', 'OR', 'JH', 'BR', 'AS'].includes(state)) {
+        etaDays = 3; // East India - 3 days
+      } else {
+        etaDays = 4; // Remote areas - 4 days
+      }
+      
+      const etaDate = new Date(currentDate);
+      etaDate.setDate(currentDate.getDate() + etaDays);
+      
+      const etaString = etaDate.toLocaleDateString('en-IN', {
+        weekday: 'short',
+        day: 'numeric',
+        month: 'short'
+      });
+      
       return {
         success: true,
         serviceable: true,
         cod: pincodeData.cod === 'Y',
         prepaid: pincodeData.pre_paid === 'Y',
+        eta: `Expected by ${etaString}`,
       };
     }
 

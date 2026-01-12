@@ -9,6 +9,7 @@ import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertC
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Container } from '@/components/ui';
+import ProductRecommendations from '@/components/product/ProductRecommendations';
 import Script from 'next/script';
 
 // Declare Razorpay on window
@@ -36,6 +37,7 @@ interface PincodeCheck {
   cod: boolean;
   prepaid: boolean;
   loading: boolean;
+  eta?: string;
   error?: string;
 }
 
@@ -126,6 +128,7 @@ export default function CheckoutPage() {
           serviceable: data.serviceable,
           cod: data.cod || false,
           prepaid: data.prepaid || false,
+          eta: data.eta,
           loading: false,
         });
         
@@ -523,13 +526,20 @@ export default function CheckoutPage() {
                       </div>
                       {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
                       {pincodeCheck.checked && (
-                        <div className={`flex items-center gap-1 mt-1 text-xs ${pincodeCheck.serviceable ? 'text-green-600' : 'text-red-500'}`}>
+                        <div className={`mt-1 text-xs ${pincodeCheck.serviceable ? 'text-green-600' : 'text-red-500'}`}>
                           {pincodeCheck.serviceable ? (
-                            <>
-                              <CheckCircle className="w-3 h-3" />
-                              <span>Delivery available</span>
-                              {pincodeCheck.prepaid && <span className="ml-1 text-gray-500">• Prepaid ✓</span>}
-                            </>
+                            <div className="space-y-1">
+                              <div className="flex items-center gap-1">
+                                <CheckCircle className="w-3 h-3" />
+                                <span>Delivery available</span>
+                                {pincodeCheck.prepaid && <span className="ml-1 text-gray-500">• Prepaid ✓</span>}
+                              </div>
+                              {pincodeCheck.eta && (
+                                <div className="flex items-center gap-1 text-blue-600">
+                                  <span className="font-medium">🚚 {pincodeCheck.eta}</span>
+                                </div>
+                              )}
+                            </div>
                           ) : (
                             <>
                               <AlertCircle className="w-3 h-3" />
@@ -666,6 +676,16 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Product Recommendations */}
+          <div className="mt-16">
+            <ProductRecommendations 
+              title="Products you may like"
+              limit={4}
+              maxPrice={15000}
+              className="max-w-6xl mx-auto"
+            />
           </div>
         </Container>
       </div>

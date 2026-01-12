@@ -7,6 +7,7 @@ import { ChevronLeft, Trash2, Heart, Minus, Plus } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
+import ProductRecommendations from '@/components/product/ProductRecommendations';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total } = useCart();
@@ -208,6 +209,16 @@ export default function CartPage() {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* Product Recommendations */}
+          <div className="mt-16">
+            <ProductRecommendations 
+              title="Products you may like"
+              limit={6}
+              maxPrice={15000}
+              className="max-w-6xl mx-auto"
+            />
           </div>
         </Container>
       </Section>

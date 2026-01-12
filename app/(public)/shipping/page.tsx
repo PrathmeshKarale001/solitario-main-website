@@ -10,25 +10,27 @@ export const dynamic = 'force-dynamic';
 
 const shippingOptions = [
   {
-    name: 'Standard Shipping',
-    time: '5-7 Business Days',
-    price: '₹500',
-    freeAbove: '₹50,000',
+    name: 'Domestic Shipping (India)',
+    time: '48-72 Hours (In-stock)',
+    price: 'FREE',
+    freeAbove: 'All orders',
     icon: Truck,
+    note: 'Made-to-order: Up to 25 business days'
   },
   {
-    name: 'Express Shipping',
-    time: '2-3 Business Days',
-    price: '₹1,000',
-    freeAbove: '₹1,00,000',
-    icon: Clock,
-  },
-  {
-    name: 'Same Day Delivery',
-    time: 'Within 24 Hours',
-    price: '₹2,000',
+    name: 'International Shipping',
+    time: '7-21 Business Days',
+    price: 'Calculated at checkout',
     freeAbove: null,
-    note: 'Available in select cities',
+    icon: Clock,
+    note: 'Based on weight, value, and destination'
+  },
+  {
+    name: 'Gift Packaging',
+    time: 'Included with all orders',
+    price: 'FREE',
+    freeAbove: null,
+    note: 'Personalized gift messages available',
     icon: Package,
   },
 ];
@@ -93,10 +95,10 @@ export default function ShippingPage() {
             className="text-center mb-12"
           >
             <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
-              Shipping Options
+              Shipping Services
             </h2>
             <p className="text-brand-600 font-montserrat">
-              Choose the delivery speed that works for you
+              Fast, secure, and insured delivery worldwide
             </p>
           </motion.div>
 
@@ -169,31 +171,13 @@ export default function ShippingPage() {
               <div className="space-y-6">
                 <div>
                   <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
-                    Processing Time
+                    Domestic Shipping (India)
                   </h3>
                   <p className="text-brand-600 font-montserrat text-sm">
-                    Orders are processed within 1-2 business days. Custom or made-to-order items 
-                    may take 7-14 business days to prepare before shipping.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
-                    Delivery Partners
-                  </h3>
-                  <p className="text-brand-600 font-montserrat text-sm">
-                    We partner with trusted courier services including Blue Dart, FedEx, and DTDC 
-                    to ensure safe and timely delivery of your precious jewellery.
-                  </p>
-                </div>
-
-                <div>
-                  <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
-                    Signature Required
-                  </h3>
-                  <p className="text-brand-600 font-montserrat text-sm">
-                    All deliveries require a signature upon receipt. Please ensure someone is 
-                    available to receive the package at the delivery address.
+                    <strong>Free Shipping:</strong> We offer FREE shipping on all orders within India<br/>
+                    <strong>In-stock items:</strong> 48–72 hours<br/>
+                    <strong>Made-to-order items:</strong> Up to 25 business days<br/>
+                    All orders are fully insured and handled through trusted third-party courier partners.
                   </p>
                 </div>
 
@@ -202,8 +186,30 @@ export default function ShippingPage() {
                     International Shipping
                   </h3>
                   <p className="text-brand-600 font-montserrat text-sm">
-                    We ship to select international destinations. International orders may be 
-                    subject to customs duties and taxes, which are the responsibility of the recipient.
+                    We proudly ship to selected countries abroad.<br/>
+                    <strong>Delivery Time:</strong> 7–21 business days (depending on destination and customs)<br/>
+                    <strong>Shipping Charges:</strong> Calculated at checkout based on weight, value, and destination<br/>
+                    All international shipments are fully insured. Customers are responsible for customs duties.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
+                    Packaging & Presentation
+                  </h3>
+                  <p className="text-brand-600 font-montserrat text-sm">
+                    Every item is delivered in durable, tamper-proof packaging in exclusive Solitario boxes 
+                    with all relevant certificates. Free gift packaging and personalized messages available.
+                  </p>
+                </div>
+
+                <div>
+                  <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
+                    Delivery Requirements
+                  </h3>
+                  <p className="text-brand-600 font-montserrat text-sm">
+                    All deliveries require signature upon receipt. Please ensure someone is available 
+                    to receive high-value packages and inspect immediately upon delivery.
                   </p>
                 </div>
               </div>

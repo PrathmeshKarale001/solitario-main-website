@@ -6,12 +6,12 @@ import { Plus, Minus } from 'lucide-react';
 
 const faqs = [
   {
-    question: "Are Solitario diamonds real diamonds?",
+    question: "Are Solitario lab grown diamonds real diamonds?",
     answer: "Yes, absolutely. Lab-grown diamonds are chemically, physically, and optically identical to mined diamonds. The only difference is their origin."
   },
   {
     question: "Do you provide certification?",
-    answer: "Every Solitario diamond comes with certification from leading independent gemological laboratories like IGI or GIA, guaranteeing its quality and authenticity."
+    answer: "Every Solitario lab grown diamond comes with certification from leading independent gemological laboratories like IGI or SGL, guaranteeing its quality and authenticity."
   },
   {
     question: "What is your return policy?",
@@ -19,7 +19,7 @@ const faqs = [
   },
   {
     question: "Do you offer customization?",
-    answer: "Yes, our bespoke service allows you to create a unique piece. From choosing the diamond to designing the setting, our experts guide you through every step."
+    answer: "Yes, our bespoke service allows you to create a unique piece. From choosing the lab grown diamond to designing the setting, our experts guide you through every step."
   }
 ];
 

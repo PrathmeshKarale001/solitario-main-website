@@ -54,7 +54,7 @@ export default function Footer() {
 
       {/* Main Footer Content - Uniform Layout */}
       <div className="section-container py-8 sm:py-10 md:py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-8">
           {/* Brand Section */}
           <div className="flex flex-col items-start">
             <Link href="/" className="inline-block mb-4">
@@ -183,7 +183,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/returns" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
-                  Returns
+                  Returns & Exchange
                 </Link>
               </li>
               <li>
@@ -199,6 +199,33 @@ export default function Footer() {
               <li>
                 <Link href="/certifications" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
                   Certifications
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          {/* Policies */}
+          <div className="flex flex-col items-start">
+            <h4 className="font-semibold text-base mb-4">Policies</h4>
+            <ul className="space-y-2">
+              <li>
+                <Link href="/privacy-policy" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/terms" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Terms & Conditions
+                </Link>
+              </li>
+              <li>
+                <Link href="/returns" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Return Policy
+                </Link>
+              </li>
+              <li>
+                <Link href="/shipping" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Shipping Policy
                 </Link>
               </li>
               <li>

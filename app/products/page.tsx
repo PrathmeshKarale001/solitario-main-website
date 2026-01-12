@@ -111,7 +111,29 @@ function ProductsPageContent() {
     // Sort
     switch (sortBy) {
       case 'price-low':
-        productList.sort((a, b) => a.price - b.price);
+        // Custom price range sorting: 0-15K, 15K-25K, 25K-35K, etc. with shuffled products within ranges
+        const priceRanges = [
+          { min: 0, max: 15000 },
+          { min: 15000, max: 25000 },
+          { min: 25000, max: 35000 },
+          { min: 35000, max: 50000 },
+          { min: 50000, max: 75000 },
+          { min: 75000, max: 100000 },
+          { min: 100000, max: Infinity }
+        ];
+        
+        const sortedByRanges: Product[] = [];
+        
+        priceRanges.forEach(range => {
+          const rangeProducts = productList.filter(product => 
+            product.price >= range.min && product.price < range.max
+          );
+          // Shuffle products within each range
+          const shuffledRangeProducts = rangeProducts.sort(() => Math.random() - 0.5);
+          sortedByRanges.push(...shuffledRangeProducts);
+        });
+        
+        productList = sortedByRanges;
         break;
       case 'price-high':
         productList.sort((a, b) => b.price - a.price);

@@ -28,6 +28,7 @@ export async function GET(request: NextRequest) {
       serviceable: result.serviceable,
       cod: result.cod,
       prepaid: result.prepaid,
+      eta: result.eta,
     });
   } catch (error) {
     console.error('Error checking pincode:', error);

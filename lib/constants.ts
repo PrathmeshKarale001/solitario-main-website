@@ -27,7 +27,7 @@ export const CATEGORIES = [
 
 // Hero Text Reveals
 export const HERO_TEXTS = [
-  "Sparkle endlessly with exclusive diamond designs",
+  "Sparkle endlessly with exclusive lab grown diamond designs",
   "Crafted for modern & future generations",
   "Luxury that doesn't cost the Earth"
 ] as const;
@@ -37,7 +37,7 @@ export const LAB_GROWN_BENEFITS = [
   {
     id: 'sensual',
     title: 'Sensual',
-    description: 'The same brilliance, fire, and sparkle as mined diamonds',
+    description: 'The same brilliance, fire, and sparkle as natural diamonds',
     icon: 'sparkles'
   },
   {
@@ -91,21 +91,21 @@ export const PROMISES = [
     icon: 'gem'
   },
   {
-    id: 'buyback',
-    title: 'Lifetime Buy-back',
-    description: 'Investment protection with lifetime value guarantee',
+    id: 'exchange',
+    title: '100% Lifetime Exchange',
+    description: 'Complete lifetime exchange guarantee on all purchases',
     icon: 'refresh-cw'
   },
   {
     id: 'certificate',
-    title: 'IGI Certificate',
-    description: 'Every diamond certified by International Gemological Institute',
+    title: 'IGI & SGL Certified',
+    description: 'Every lab grown diamond certified by international institutes',
     icon: 'badge-check'
   },
   {
-    id: 'hallmark',
-    title: 'Hallmarked Gold',
-    description: 'BIS certified gold ensuring purity and quality',
+    id: 'quality',
+    title: 'Premium Quality',
+    description: '14K & 18K gold, 925 sterling silver with authenticity guarantee',
     icon: 'sparkles'
   },
   {
@@ -117,7 +117,7 @@ export const PROMISES = [
   {
     id: 'ethical',
     title: 'Ethical Procedures',
-    description: '100% real diamonds, ethically sourced and conflict-free',
+    description: '100% ethical Lab Grown Diamonds, conflict-free and sustainable',
     icon: 'heart-handshake'
   },
 ] as const;

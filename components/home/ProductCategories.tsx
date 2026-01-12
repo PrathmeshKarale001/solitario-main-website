@@ -64,7 +64,7 @@ export default function ProductCategories() {
         >
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">Collections</span>
           <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Find Your Perfect Diamond
+            Find Your Perfect Lab Grown Diamond
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto font-montserrat hidden sm:block">
             The Finest Materials, Each Piece Radiates Luxury

@@ -11,48 +11,48 @@ export const dynamic = 'force-dynamic';
 const returnSteps = [
   {
     step: 1,
-    title: 'Initiate Return',
-    description: 'Log into your account and select the item you wish to return from your order history'
+    title: 'Contact Support',
+    description: 'Email paymentdesk@thesolitario.com with order number and reason for return'
   },
   {
     step: 2,
-    title: 'Pack the Item',
-    description: 'Place the item in its original packaging with all certificates and tags attached'
+    title: 'Get Approval',
+    description: 'Wait for pre-approval before sending any items back to us'
   },
   {
     step: 3,
-    title: 'Schedule Pickup',
-    description: 'Our courier partner will pick up the item from your address at no extra cost'
+    title: 'Pack Securely',
+    description: 'Include original product, invoice, certificates, ID proof, and warranty card'
   },
   {
     step: 4,
-    title: 'Receive Refund',
-    description: 'Once inspected, your refund will be processed within 5-7 business days'
+    title: 'Processing',
+    description: 'Approved returns processed within 5-7 business days after inspection'
   },
 ];
 
 const eligibleItems = [
-  'Unworn items in original condition',
-  'Items with all original tags attached',
-  'Items in original packaging',
-  'Items with original certificates',
-  'Items returned within 30 days of delivery',
+  'Exchange requests within 7 days of delivery',
+  'Items unused, unworn, and undamaged',
+  'Original condition with original packaging',
+  'Original invoice and certificates included',
+  'No signs of wear, alteration, or tampering',
 ];
 
 const nonEligibleItems = [
-  'Custom or personalized items',
-  'Items showing signs of wear',
-  'Items without original packaging',
-  'Items without certificates',
-  'Items returned after 30 days',
-  'Sale or clearance items (unless defective)',
+  'Customized, engraved, or made-to-order items',
+  'Items showing signs of wear or damage',
+  'Items without original packaging or certificates',
+  'Items returned after 7 days',
+  'Items sent without prior approval',
+  'Making charges and taxes (non-recoverable)',
 ];
 
 export default function ReturnsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white">
       {/* Hero */}
-      <section className="bg-classic-green py-16 md:py-24">
+      <section className="bg-classic-green py-12 md:py-16">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -61,17 +61,17 @@ export default function ReturnsPage() {
           >
             <RotateCcw className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
             <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
-              Returns & Exchanges
+              Returns, Exchange & Buyback
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
-              30-day hassle-free returns on all eligible items
+              7-day exchange policy with buyback options available
             </p>
           </motion.div>
         </Container>
       </section>
 
       {/* Return Policy Highlights */}
-      <Section variant="light" padding="lg">
+      <Section variant="light" padding="sm">
         <Container>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
             <motion.div
@@ -81,8 +81,8 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <Clock className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">30 Days</h3>
-              <p className="text-brand-500 font-montserrat text-sm">Return window from delivery</p>
+              <h3 className="font-playfair text-lg text-brand-800 mb-2">7 Days</h3>
+              <p className="text-brand-500 font-montserrat text-sm">Exchange window from delivery</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -92,8 +92,8 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <Package className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">Free Pickup</h3>
-              <p className="text-brand-500 font-montserrat text-sm">We'll collect from your doorstep</p>
+              <h3 className="font-playfair text-lg text-brand-800 mb-2">Pre-Approval</h3>
+              <p className="text-brand-500 font-montserrat text-sm">Contact support before returning</p>
             </motion.div>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -103,15 +103,15 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <CreditCard className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">Quick Refund</h3>
-              <p className="text-brand-500 font-montserrat text-sm">5-7 business days processing</p>
+              <h3 className="font-playfair text-lg text-brand-800 mb-2">Buyback Available</h3>
+              <p className="text-brand-500 font-montserrat text-sm">Store credit or purchase adjustment</p>
             </motion.div>
           </div>
         </Container>
       </Section>
 
       {/* Return Process */}
-      <Section variant="light" padding="lg" className="bg-brand-50">
+      <Section variant="light" padding="sm" className="bg-brand-50">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -154,7 +154,7 @@ export default function ReturnsPage() {
       </Section>
 
       {/* Eligibility */}
-      <Section variant="light" padding="lg">
+      <Section variant="light" padding="sm">
         <Container>
           <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Eligible */}
@@ -207,7 +207,7 @@ export default function ReturnsPage() {
       </Section>
 
       {/* Exchange Policy */}
-      <Section variant="light" padding="lg" className="bg-brand-50">
+      <Section variant="light" padding="sm" className="bg-brand-50">
         <Container>
           <div className="max-w-3xl mx-auto">
             <motion.div
@@ -220,46 +220,91 @@ export default function ReturnsPage() {
               
               <div className="space-y-4 text-brand-600 font-montserrat text-sm leading-relaxed">
                 <p>
-                  We offer free exchanges within 30 days of delivery. If you'd like to exchange 
-                  your item for a different size, style, or product:
+                  We offer exchanges on eligible jewellery items within <strong>7 days of delivery</strong>:
                 </p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
-                  <li>If the new item costs more, you'll pay the difference</li>
-                  <li>If the new item costs less, we'll refund the difference</li>
-                  <li>Exchange shipping is free within India</li>
-                  <li>Custom items can only be exchanged for store credit</li>
+                  <li>Item must be unused, unworn, and undamaged</li>
+                  <li>Returned in original condition with original packaging</li>
+                  <li>Original invoice and certificates must be included</li>
+                  <li>No signs of wear, alteration, damage, or tampering</li>
+                  <li>Price differences will be adjusted accordingly</li>
                 </ul>
+                <p className="font-semibold text-brand-700">
+                  Required Documentation:
+                </p>
+                <ul className="list-disc list-inside space-y-1 ml-4">
+                  <li>Original product and packaging</li>
+                  <li>Original or copy of invoice</li>
+                  <li>Product certificates (if applicable)</li>
+                  <li>Valid government ID proof</li>
+                  <li>Warranty card</li>
+                </ul>
+              </div>
+            </motion.div>
+
+            {/* Buyback Policy */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mt-8 bg-classic-green/5 rounded-2xl p-6 border border-classic-green/20"
+            >
+              <h3 className="font-playfair text-lg text-brand-800 mb-4">Buyback Policy</h3>
+              <div className="space-y-3 text-brand-600 font-montserrat text-sm">
                 <p>
-                  To initiate an exchange, please contact our customer service team or visit 
-                  any Solitario store with your original purchase receipt.
+                  We offer buyback services on jewellery purchased from Solitario:
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <p className="font-semibold text-brand-700 mb-2">Valuation Basis:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li>Current metal market value</li>
+                      <li>Gemstone valuation (if applicable)</li>
+                      <li>Company policy deductions</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <p className="font-semibold text-brand-700 mb-2">Non-Recoverable:</p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li>Making charges and craftsmanship fees</li>
+                      <li>Taxes and certification charges</li>
+                      <li>Shipping and handling costs</li>
+                    </ul>
+                  </div>
+                </div>
+                <p className="text-xs text-brand-500 mt-4">
+                  Buyback values subject to prevailing market rates. Payment as store credit or purchase adjustment.
                 </p>
               </div>
             </motion.div>
 
-            {/* Refund Information */}
+            {/* Refund Policy */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               className="mt-8 bg-bronze-gold/5 rounded-2xl p-6 border border-bronze-gold/20"
             >
-              <h3 className="font-playfair text-lg text-brand-800 mb-4">Refund Information</h3>
+              <h3 className="font-playfair text-lg text-brand-800 mb-4">Refund Policy</h3>
               <div className="space-y-3 text-brand-600 font-montserrat text-sm">
                 <p className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-classic-green flex-shrink-0 mt-0.5" />
-                  Refunds are credited to the original payment method
+                  <XCircle className="w-4 h-4 text-error flex-shrink-0 mt-0.5" />
+                  <strong>General Policy:</strong> Cash refunds are not typically offered
                 </p>
                 <p className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-classic-green flex-shrink-0 mt-0.5" />
-                  Credit card refunds may take 5-10 business days to appear
+                  Exceptional cases considered at company's sole discretion
+                </p>
+                <p className="flex items-start gap-2">
+                  <XCircle className="w-4 h-4 text-error flex-shrink-0 mt-0.5" />
+                  Shipping, handling, and certification charges non-refundable
                 </p>
                 <p className="flex items-start gap-2">
                   <CheckCircle className="w-4 h-4 text-classic-green flex-shrink-0 mt-0.5" />
-                  UPI and wallet refunds are typically instant
+                  All requests require pre-approval by customer support
                 </p>
-                <p className="flex items-start gap-2">
-                  <CheckCircle className="w-4 h-4 text-classic-green flex-shrink-0 mt-0.5" />
-                  Original shipping charges are non-refundable
+                <p className="text-xs text-brand-500 mt-4">
+                  Contact: <strong>paymentdesk@thesolitario.com</strong> with order number and reason
                 </p>
               </div>
             </motion.div>
@@ -268,7 +313,7 @@ export default function ReturnsPage() {
       </Section>
 
       {/* CTA */}
-      <Section variant="light" padding="lg">
+      <Section variant="light" padding="sm">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

@@ -10,73 +10,92 @@ export const dynamic = 'force-dynamic';
 
 const sections = [
   {
-    title: 'Information We Collect',
-    content: `We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us for support.
+    title: 'Personal Data We Collect',
+    content: `We collect information when you visit our website or make a purchase:
 
-This may include:
-• Name and contact information (email, phone number, address)
-• Payment information (processed securely through our payment partners)
-• Order history and preferences
-• Communications with our customer service team
-• Device and browser information when you visit our website`
+**Automatically Collected Information (Device Data):**
+• Browser type, IP address, time zone, and device identifiers
+• Pages viewed, referring URLs, and interaction patterns
+• Cookies, log files, web beacons, tags, and pixels
+
+**Information You Provide:**
+• Name, billing and shipping address, email, and phone number
+• Transaction details and communication records
+• Payment information (processed through secure third-party gateways)
+
+**Store Visit Data:**
+• Store visit logs and CCTV footage for security purposes
+• Feedback, survey responses, and customer support interactions`
   },
   {
     title: 'How We Use Your Information',
-    content: `We use the information we collect to:
-• Process and fulfill your orders
-• Send order confirmations and shipping updates
-• Respond to your questions and requests
+    content: `We use your personal information to:
+
+• Process and fulfill orders placed through our website
+• Send order confirmations, shipping updates, and delivery notifications
+• Provide customer support and respond to inquiries
 • Send promotional communications (with your consent)
-• Improve our website and services
-• Detect and prevent fraud
-• Comply with legal obligations`
+• Improve our website functionality and user experience
+• Detect and prevent fraudulent activities
+• Comply with legal obligations and regulatory requirements`
   },
   {
-    title: 'Information Sharing',
-    content: `We do not sell your personal information. We may share your information with:
-• Service providers who assist in our operations (shipping, payment processing)
-• Professional advisors (lawyers, accountants)
-• Law enforcement when required by law
-• Business partners with your consent
+    title: 'Information Sharing and Disclosure',
+    content: `We do not sell your personal information. We may share information with:
 
-All third parties are required to maintain the confidentiality of your information.`
+• **Service Providers:** Payment processors, shipping companies, and logistics partners
+• **Professional Advisors:** Lawyers, accountants, and consultants
+• **Law Enforcement:** When required by law or to protect our rights
+• **Business Partners:** With your explicit consent
+
+All third parties are contractually required to maintain confidentiality and use information only for specified purposes.`
   },
   {
-    title: 'Data Security',
-    content: `We implement appropriate technical and organizational measures to protect your personal information, including:
-• SSL encryption for all data transmission
-• Secure payment processing through PCI-compliant partners
-• Regular security audits and updates
-• Limited access to personal information on a need-to-know basis
-• Secure data storage with encryption at rest`
+    title: 'Data Security and Protection',
+    content: `We implement comprehensive security measures:
+
+• **Encryption:** SSL encryption for all data transmission
+• **Secure Processing:** PCI-compliant payment processing partners
+• **Access Controls:** Limited access on a need-to-know basis
+• **Regular Audits:** Security assessments and system updates
+• **Secure Storage:** Encrypted data storage with backup systems`
   },
   {
-    title: 'Your Rights',
+    title: 'Your Rights and Choices',
     content: `You have the right to:
-• Access your personal information
-• Correct inaccurate information
-• Delete your account and personal data
+
+• Access and review your personal information
+• Correct inaccurate or incomplete data
+• Request deletion of your account and personal data
 • Opt-out of marketing communications
-• Request a copy of your data
-• Lodge a complaint with a supervisory authority
+• Request a copy of your data in portable format
+• Lodge complaints with supervisory authorities
 
-To exercise these rights, please contact us at privacy@solitario.com`
+To exercise these rights, contact us at privacy@thesolitario.com`
   },
   {
-    title: 'Cookies',
+    title: 'Cookies and Tracking Technologies',
     content: `We use cookies and similar technologies to:
-• Remember your preferences
-• Analyze website traffic
-• Personalize your experience
-• Enable social media features
 
-You can control cookies through your browser settings. Note that disabling cookies may affect website functionality.`
+• Remember your preferences and shopping cart contents
+• Analyze website traffic and user behavior patterns
+• Personalize your browsing experience
+• Enable social media features and integrations
+
+You can control cookies through your browser settings. Note that disabling cookies may affect website functionality and your user experience.`
   },
   {
-    title: 'Updates to This Policy',
-    content: `We may update this Privacy Policy from time to time. We will notify you of any material changes by posting the new policy on this page and updating the "Last Updated" date.
+    title: 'Data Retention and Updates',
+    content: `**Data Retention:**
+We retain personal information as long as necessary to fulfill purposes outlined in this policy or as required by law.
 
-We encourage you to review this policy periodically for any changes.`
+**Policy Updates:**
+We may update this Privacy Policy periodically. Material changes will be communicated through:
+• Email notifications to registered users
+• Prominent notices on our website
+• Updated "Last Modified" date on this page
+
+We encourage regular review of this policy for any changes.`
   },
 ];
 

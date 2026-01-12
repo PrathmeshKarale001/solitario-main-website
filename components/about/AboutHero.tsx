@@ -48,7 +48,7 @@ export default function AboutHero() {
               fontFamily: 'var(--font-playfair), serif',
               fontWeight: 400,
               letterSpacing: '-0.02em',
-              textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6), 0 8px 32px rgba(0, 0, 0, 0.4)'
+              textShadow: '0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)'
             }}
           >
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">

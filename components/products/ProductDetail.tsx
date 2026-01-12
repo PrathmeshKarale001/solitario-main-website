@@ -28,6 +28,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
+  const [isReturnPolicyExpanded, setIsReturnPolicyExpanded] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [isLoadingRelated, setIsLoadingRelated] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -411,6 +412,24 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 )}
               </div>
 
+              {/* Specifications - Moved after discount callouts */}
+              {specifications.length > 0 && (
+                <div className="bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
+                  <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
+                    Specifications
+                  </h4>
+                  <ul className="space-y-2 text-brand-800 font-montserrat text-sm">
+                    {specifications.map((spec, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-classic-green mt-0.5">✓</span>
+                        <span className="font-medium">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
               {/* SKU & Stock */}
               <div className="flex flex-wrap items-center gap-6 text-body-sm">
                 <div>
@@ -461,40 +480,94 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </div>
                 </div>
 
-                {/* Description Text with Read More */}
+                {/* Description Dropdown */}
                 {descriptionText && (
-                  <div>
-                    <p className={`text-brand-700 leading-relaxed font-montserrat text-sm md:text-base ${!isDescriptionExpanded ? 'line-clamp-3' : ''}`}>
-                      {descriptionText}
-                    </p>
-                    {descriptionText.length > 150 && (
-                      <button
-                        onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
-                        className="text-bronze-gold text-sm font-montserrat mt-1 hover:underline"
+                  <div className="border border-gray-200 rounded-lg">
+                    <button
+                      onClick={() => setIsDescriptionExpanded(!isDescriptionExpanded)}
+                      className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+                    >
+                      <span className="font-medium text-gray-900">Description</span>
+                      <motion.div
+                        animate={{ rotate: isDescriptionExpanded ? 180 : 0 }}
+                        transition={{ duration: 0.2 }}
                       >
-                        {isDescriptionExpanded ? 'Show Less' : 'Read More'}
-                      </button>
+                        <ChevronRight className="w-5 h-5 text-gray-500" />
+                      </motion.div>
+                    </button>
+                    <AnimatePresence>
+                      {isDescriptionExpanded && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="px-4 pb-4 border-t border-gray-100">
+                            <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mt-3">
+                              {descriptionText}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )}
+
+                {/* Return Policy Dropdown */}
+                <div className="border border-gray-200 rounded-lg">
+                  <button
+                    onClick={() => setIsReturnPolicyExpanded(!isReturnPolicyExpanded)}
+                    className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+                  >
+                    <span className="font-medium text-gray-900">Return & Exchange Policy</span>
+                    <motion.div
+                      animate={{ rotate: isReturnPolicyExpanded ? 180 : 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <ChevronRight className="w-5 h-5 text-gray-500" />
+                    </motion.div>
+                  </button>
+                  <AnimatePresence>
+                    {isReturnPolicyExpanded && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-4 pb-4 border-t border-gray-100">
+                          <div className="mt-3 space-y-3 text-sm">
+                            <div>
+                              <h5 className="font-semibold text-gray-900 mb-2">7-Day Exchange Policy</h5>
+                              <p className="text-gray-700 leading-relaxed">
+                                Exchange requests must be raised within 7 days of delivery. Items must be unused, unworn, 
+                                and in original condition with all certificates and packaging.
+                              </p>
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-gray-900 mb-2">100% Lifetime Exchange</h5>
+                              <p className="text-gray-700 leading-relaxed">
+                                We offer complete lifetime exchange guarantee on all lab grown diamond purchases. 
+                                Contact us at paymentdesk@thesolitario.com for assistance.
+                              </p>
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-gray-900 mb-2">What's Not Eligible</h5>
+                              <ul className="text-gray-700 space-y-1 ml-4">
+                                <li>• Customized or engraved items</li>
+                                <li>• Items showing signs of wear</li>
+                                <li>• Items without original packaging</li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </motion.div>
                     )}
-                  </div>
-                )}
-                
-                {/* Specifications - Highlighted */}
-                {specifications.length > 0 && (
-                  <div className="mt-4 bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
-                    <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
-                      <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
-                      Specifications
-                    </h4>
-                    <ul className="space-y-2 text-brand-800 font-montserrat text-sm">
-                      {specifications.map((spec, idx) => (
-                        <li key={idx} className="flex items-start gap-2">
-                          <span className="text-classic-green mt-0.5">✓</span>
-                          <span className="font-medium">{spec}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                  </AnimatePresence>
+                </div>
 
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
