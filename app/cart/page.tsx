@@ -253,19 +253,23 @@ export default function CartPage() {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex gap-3 md:gap-6 p-4 md:p-6 bg-amber-50/30 border border-amber-200/50 border-dashed rounded-xl md:rounded-brand-xl shadow-sm"
+                      className="relative flex gap-4 md:gap-6 p-5 md:p-6 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-2xl border-2 border-amber-300/40 shadow-md overflow-hidden"
                     >
-                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-gray-100 rounded-lg md:rounded-brand-lg overflow-hidden border border-amber-100 shadow-sm animate-pulse">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-3xl"></div>
+                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 bg-white/80 rounded-xl overflow-hidden border-2 border-amber-200 shadow-sm animate-pulse">
                         <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-50"></div>
                       </div>
 
-                      <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <h3 className="font-playfair text-heading-md text-brand-800 mb-1 animate-pulse bg-gray-200 rounded w-1/2 h-6"></h3>
-                        <p className="text-body-sm text-amber-600 font-montserrat mb-3">
-                          Automatically added for buying 2+ items!
+                      <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
+                        <div className="h-6 bg-gray-200 rounded-lg w-2/3 mb-2 animate-pulse"></div>
+                        <p className="text-sm text-amber-700 font-montserrat mb-3 font-medium">
+                          🎁 Automatically added for buying 2+ items!
                         </p>
                         <div className="flex items-center gap-3">
-                          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">FREE</span>
+                          <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
+                            <Gift className="w-4 h-4" />
+                            FREE GIFT
+                          </span>
                         </div>
                       </div>
                     </motion.div>
@@ -273,34 +277,42 @@ export default function CartPage() {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
-                      className="flex gap-3 md:gap-6 p-4 md:p-6 bg-amber-50/30 border border-amber-200/50 border-dashed rounded-xl md:rounded-brand-xl shadow-sm"
+                      className="relative flex gap-4 md:gap-6 p-5 md:p-6 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-2xl border-2 border-amber-300/40 shadow-lg hover:shadow-xl transition-all overflow-hidden group"
                     >
-                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-white rounded-lg md:rounded-brand-lg overflow-hidden border border-amber-100 shadow-sm">
+                      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-3xl group-hover:bg-amber-300/30 transition-colors"></div>
+                      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-orange-200/10 rounded-full blur-3xl"></div>
+                      
+                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 bg-white rounded-xl overflow-hidden border-2 border-amber-200 shadow-md">
                         <Image
                           src={giftProduct.image}
                           alt={giftProduct.name}
                           fill
-                          className="object-contain p-3"
+                          className="object-contain p-3 group-hover:scale-110 transition-transform duration-300"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.src = 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop&q=80';
                           }}
                         />
-                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] md:text-xs px-2 py-1 font-bold uppercase tracking-wider">
+                        <div className="absolute -top-2 -right-2 bg-gradient-to-br from-amber-500 to-orange-500 text-white text-xs px-2.5 py-1 font-bold uppercase tracking-tight rounded-full shadow-lg">
                           Gift
                         </div>
                       </div>
 
-                      <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <h3 className="font-playfair text-heading-md text-brand-800 mb-1">{giftProduct.name}</h3>
-                        <p className="text-body-sm text-amber-600 font-montserrat mb-3">
+                      <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
+                        <h3 className="font-playfair text-xl md:text-2xl text-gray-800 mb-2 font-semibold">{giftProduct.name}</h3>
+                        <p className="text-sm md:text-base text-amber-700 font-montserrat mb-4 font-medium flex items-center gap-2">
+                          <Gift className="w-4 h-4" />
                           Automatically added for buying 2+ items!
                         </p>
-                        <div className="flex items-center gap-3">
-                          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">FREE</span>
-                          <span className="text-body-md text-gray-400 line-through font-gotham">
+                        <div className="flex items-center gap-3 flex-wrap">
+                          <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
+                            <Gift className="w-4 h-4" />
+                            FREE
+                          </span>
+                          <span className="text-base text-gray-500 line-through font-gotham">
                             {formatPrice(giftProduct.price)}
                           </span>
+                          <span className="text-sm text-emerald-600 font-semibold">You save {formatPrice(giftProduct.price)}!</span>
                         </div>
                       </div>
                     </motion.div>

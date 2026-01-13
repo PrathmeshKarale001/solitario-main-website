@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
@@ -410,6 +410,28 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {formatPrice(product.price, product.currency)}
                   </span>
                 )}
+              </div>
+
+              {/* Promotions Callout */}
+              <div className="space-y-3">
+                <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+                  <div className="bg-classic-green text-white p-1.5 rounded-lg">
+                    <Tag size={16} />
+                  </div>
+                  <div>
+                    <p className="font-gotham text-sm font-bold text-green-900">30% OFF - BUY 3+ ITEMS</p>
+                    <p className="text-xs text-green-800 font-montserrat">Automatic discount applied at checkout</p>
+                  </div>
+                </div>
+                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                  <div className="bg-amber-600 text-white p-1.5 rounded-lg">
+                    <Gift size={16} />
+                  </div>
+                  <div>
+                    <p className="font-gotham text-sm font-bold text-amber-900">10% OFF + FREE GIFT - BUY 2 ITEMS</p>
+                    <p className="text-xs text-amber-800 font-montserrat">Get a 10 Cent Diamond Gift for free!</p>
+                  </div>
+                </div>
               </div>
 
               {/* Specifications - Moved after discount callouts */}

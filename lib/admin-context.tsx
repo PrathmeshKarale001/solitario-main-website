@@ -8,6 +8,8 @@ interface AdminContextType {
   isAdminUser: boolean;
   adminUser: AdminUser | null;
   isVerified: boolean;
+  appliedCoupon: string | null;
+  setAppliedCoupon: (code: string | null) => void;
   verifyAccess: (code: string) => boolean;
   logout: () => void;
   hasPermission: (permission: string) => boolean;
@@ -18,6 +20,8 @@ const AdminContext = createContext<AdminContextType>({
   isAdminUser: false,
   adminUser: null,
   isVerified: false,
+  appliedCoupon: null,
+  setAppliedCoupon: () => {},
   verifyAccess: () => false,
   logout: () => {},
   hasPermission: () => false,
@@ -27,11 +31,29 @@ const AdminContext = createContext<AdminContextType>({
 export function AdminProvider({ children }: { children: ReactNode }) {
   const { user, isLoaded, isSignedIn } = useUser();
   const [isVerified, setIsVerified] = useState(false);
+  const [appliedCoupon, setAppliedCouponState] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   const userEmail = user?.primaryEmailAddress?.emailAddress;
   const isAdminUser = isAdmin(userEmail);
   const adminUser = getAdminUser(userEmail);
+
+  // Load from session storage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedCoupon = sessionStorage.getItem('applied_coupon');
+      if (savedCoupon) setAppliedCouponState(savedCoupon);
+    }
+  }, []);
+
+  const setAppliedCoupon = (code: string | null) => {
+    setAppliedCouponState(code);
+    if (code) {
+      sessionStorage.setItem('applied_coupon', code);
+    } else {
+      sessionStorage.removeItem('applied_coupon');
+    }
+  };
 
   useEffect(() => {
     if (!isLoaded) return;
@@ -79,6 +101,8 @@ export function AdminProvider({ children }: { children: ReactNode }) {
       isAdminUser,
       adminUser,
       isVerified,
+      appliedCoupon,
+      setAppliedCoupon,
       verifyAccess,
       logout,
       hasPermission: checkPermission,

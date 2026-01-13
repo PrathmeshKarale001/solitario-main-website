@@ -165,11 +165,6 @@ export default function CheckoutPage() {
 
   // Initialize Razorpay payment
   const initiatePayment = async () => {
-    console.log('Payment initiated');
-    console.log('Form errors:', formErrors);
-    console.log('Customer data:', customer);
-    console.log('Razorpay loaded:', razorpayLoaded);
-    
     if (!validateForm()) {
       setError('Please fill all required fields correctly');
       return;
@@ -244,7 +239,6 @@ export default function CheckoutPage() {
       }
 
       // Open Razorpay checkout
-      console.log('Creating Razorpay checkout with key:', process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.order.amount,

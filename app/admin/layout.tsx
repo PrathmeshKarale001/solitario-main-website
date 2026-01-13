@@ -18,7 +18,8 @@ import {
   Lock,
   AlertTriangle,
   ChevronRight,
-  ExternalLink
+  ExternalLink,
+  Tag
 } from 'lucide-react';
 import Image from 'next/image';
 import { AdminProvider, useAdmin } from '@/lib/admin-context';
@@ -186,6 +187,8 @@ function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
 
   const navItems = [
     { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/admin/promotions', icon: Tag, label: 'Promotions' },
+    { href: '/admin/access', icon: Lock, label: 'Admin Access' },
     { href: '/admin/products', icon: Package, label: 'Products' },
     { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
     { href: '/admin/customers', icon: Users, label: 'Customers' },

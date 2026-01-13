@@ -31,6 +31,7 @@ export const ADMIN_USERS: Record<string, AdminUser> = {
   'admin@solitario.com': { email: 'admin@solitario.com', role: 'super_admin', name: 'Super Admin' },
   'prathmesh@solitario.com': { email: 'prathmesh@solitario.com', role: 'super_admin', name: 'Prathmesh' },
   'prathmeshkarale@gmail.com': { email: 'prathmeshkarale@gmail.com', role: 'super_admin', name: 'Prathmesh Karale' },
+  'eodonsocial@gmail.com': { email: 'eodonsocial@gmail.com', role: 'admin', name: 'Eodon Social' },
   // Add more admin users as needed
 };
 
