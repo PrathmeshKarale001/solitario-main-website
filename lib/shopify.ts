@@ -354,6 +354,72 @@ export const GET_PRODUCT_BY_HANDLE_QUERY = `
   }
 `;
 
+export const GET_PRODUCT_BY_ID_QUERY = `
+  query getProductById($id: ID!) {
+    node(id: $id) {
+      ... on Product {
+        id
+        title
+        handle
+        description
+        descriptionHtml
+        vendor
+        productType
+        tags
+        priceRange {
+          minVariantPrice {
+            amount
+            currencyCode
+          }
+          maxVariantPrice {
+            amount
+            currencyCode
+          }
+        }
+        images(first: 10) {
+          edges {
+            node {
+              url
+              altText
+            }
+          }
+        }
+        variants(first: 20) {
+          edges {
+            node {
+              id
+              title
+              sku
+              availableForSale
+              price {
+                amount
+                currencyCode
+              }
+              compareAtPrice {
+                amount
+                currencyCode
+              }
+              selectedOptions {
+                name
+                value
+              }
+            }
+          }
+        }
+        collections(first: 10) {
+          edges {
+            node {
+              id
+              title
+              handle
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
 export const GET_COLLECTIONS_QUERY = `
   query getCollections($first: Int!) {
     collections(first: $first) {

@@ -1,4 +1,4 @@
-import { shopifyStorefrontFetch, ShopifyProduct, ShopifyCollection, GET_PRODUCTS_QUERY, GET_PRODUCT_BY_HANDLE_QUERY, GET_COLLECTIONS_QUERY, GET_COLLECTION_BY_HANDLE_QUERY } from './shopify';
+import { shopifyStorefrontFetch, GET_PRODUCTS_QUERY, GET_PRODUCT_BY_HANDLE_QUERY, GET_PRODUCT_BY_ID_QUERY, GET_COLLECTIONS_QUERY, GET_COLLECTION_BY_HANDLE_QUERY, ShopifyProduct, ShopifyCollection } from './shopify';
 import { Product } from './data';
 
 // Convert Shopify product to our local Product interface
@@ -112,6 +112,26 @@ export async function fetchShopifyProductByHandle(handle: string): Promise<Produ
     return mapShopifyProductToLocal(result.data.product);
   } catch (error) {
     console.error(`Error fetching Shopify product ${handle}:`, error);
+    return null;
+  }
+}
+
+// Fetch a single product by ID (most reliable for specific products)
+export async function fetchShopifyProductById(id: string): Promise<Product | null> {
+  try {
+    const result = await shopifyStorefrontFetch<{ node: ShopifyProduct }>(
+      GET_PRODUCT_BY_ID_QUERY,
+      { id }
+    );
+
+    if (result.errors || !result.data?.node) {
+      console.error(`Failed to fetch Shopify product by ID ${id}:`, result.errors);
+      return null;
+    }
+
+    return mapShopifyProductToLocal(result.data.node);
+  } catch (error) {
+    console.error(`Error fetching Shopify product by ID ${id}:`, error);
     return null;
   }
 }

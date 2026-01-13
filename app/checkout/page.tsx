@@ -10,6 +10,7 @@ import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
+import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
 import Script from 'next/script';
 
 // Declare Razorpay on window
@@ -68,11 +69,14 @@ export default function CheckoutPage() {
   });
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
+  const [promotionDiscount, setPromotionDiscount] = useState(0);
+  const [promotionMessages, setPromotionMessages] = useState<string[]>([]);
 
   // Shipping cost calculation
   const shipping = 0;
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
-  const grandTotal = total + shipping;
+  const discountedTotal = total - (promotionDiscount / 100);
+  const grandTotal = Math.max(0, discountedTotal + shipping);
 
   // Validate form
   const validateForm = (): boolean => {
@@ -161,6 +165,11 @@ export default function CheckoutPage() {
 
   // Initialize Razorpay payment
   const initiatePayment = async () => {
+    console.log('Payment initiated');
+    console.log('Form errors:', formErrors);
+    console.log('Customer data:', customer);
+    console.log('Razorpay loaded:', razorpayLoaded);
+    
     if (!validateForm()) {
       setError('Please fill all required fields correctly');
       return;
@@ -182,7 +191,7 @@ export default function CheckoutPage() {
     }
     
     if (!razorpayLoaded) {
-      setError('Payment gateway is loading. Please wait...');
+      setError('Payment gateway is still loading. Please wait a moment and try again.');
       return;
     }
     setIsProcessing(true);
@@ -235,6 +244,7 @@ export default function CheckoutPage() {
       }
 
       // Open Razorpay checkout
+      console.log('Creating Razorpay checkout with key:', process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID);
       const options = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
         amount: data.order.amount,
@@ -603,6 +613,18 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                   ))}
+                </div>
+
+                {/* Promotions */}
+                <div className="mb-6">
+                  <LocalCartPromotions
+                    totalItems={items.reduce((sum, item) => sum + item.quantity, 0)}
+                    subtotal={total * 100}
+                    onDiscountApplied={(discount, messages) => {
+                      setPromotionDiscount(discount);
+                      setPromotionMessages(messages);
+                    }}
+                  />
                 </div>
 
                 {/* Summary */}

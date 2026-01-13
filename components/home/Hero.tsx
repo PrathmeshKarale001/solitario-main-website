@@ -14,11 +14,6 @@ const HERO_MEDIA_DESKTOP = [
   // },
   {
     type: 'image',
-    src: '/images/home-hero/newhero/LohriPC.jpg',
-    pos: 'object-center',
-  },
-  {
-    type: 'image',
     src: '/images/home-hero/newhero/1st.png',
     pos: 'object-center',
   },
@@ -50,11 +45,6 @@ const HERO_MEDIA_MOBILE = [
   //   pos: 'object-center',
   // },
   {
-    type: 'image',
-    src: '/images/home-hero/newhero/LohriMobile.jpg',
-    pos: 'object-center',
-  },
-    {
     type: 'image',
     src: '/images/home-hero/newhero/1stMobile.png',
     pos: 'object-center',

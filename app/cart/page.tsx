@@ -3,17 +3,110 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
+import { useState, useEffect } from 'react';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, total } = useCart();
+  const { items, updateQuantity, removeFromCart, total, itemCount } = useCart();
+  const { appliedCoupon, setAppliedCoupon } = useAdmin();
+  const [couponInput, setCouponInput] = useState(appliedCoupon || '');
+  const [isValidating, setIsValidating] = useState(false);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+  const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
+  const [isGiftLoading, setIsGiftLoading] = useState(false);
+
+  // Auto-calculate gift
+  const hasGift = itemCount >= 2;
+
+  useEffect(() => {
+    async function fetchGift() {
+      if (hasGift && !giftProduct) {
+        setIsGiftLoading(true);
+        try {
+          // Fetch the gift product from our dedicated API endpoint
+          const response = await fetch('/api/products/gift');
+          if (response.ok) {
+            const data = await response.json();
+            setGiftProduct({
+              name: data.name,
+              image: data.image,
+              price: 5000
+            });
+          } else {
+            // Fallback to a high-quality static image if API fetch fails
+            setGiftProduct({
+              name: '10 Cent Diamond Gift',
+              image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
+              price: 5000
+            });
+          }
+        } catch (err) {
+          setGiftProduct({
+            name: '10 Cent Diamond Gift',
+            image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
+            price: 5000
+          });
+        } finally {
+          setIsGiftLoading(false);
+        }
+      }
+    }
+    fetchGift();
+  }, [hasGift, giftProduct]);
+
+  useEffect(() => {
+    if (appliedCoupon) {
+      validateCoupon(appliedCoupon);
+    }
+  }, [total, appliedCoupon]);
+
+  const validateCoupon = async (code: string) => {
+    setIsValidating(true);
+    setCouponError(null);
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setAppliedCoupon(code);
+        setCouponDiscount(Math.round((total * data.percentOff) / 100));
+      } else {
+        setCouponError(data.error || 'Invalid coupon');
+        setAppliedCoupon(null);
+        setCouponDiscount(0);
+      }
+    } catch (err) {
+      setCouponError('Failed to validate coupon');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (couponInput.trim()) {
+      validateCoupon(couponInput.trim().toUpperCase());
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput('');
+    setCouponDiscount(0);
+    setCouponError(null);
+  };
 
   // No additional charges
-  const grandTotal = total;
+  const grandTotal = Math.max(0, total - couponDiscount);
 
   if (items.length === 0) {
     return (
@@ -152,20 +245,134 @@ export default function CartPage() {
                   </div>
                 </motion.div>
               ))}
+
+              {/* Gift Item Display */}
+              {hasGift && (
+                <>
+                  {isGiftLoading ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex gap-3 md:gap-6 p-4 md:p-6 bg-amber-50/30 border border-amber-200/50 border-dashed rounded-xl md:rounded-brand-xl shadow-sm"
+                    >
+                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-gray-100 rounded-lg md:rounded-brand-lg overflow-hidden border border-amber-100 shadow-sm animate-pulse">
+                        <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-50"></div>
+                      </div>
+
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <h3 className="font-playfair text-heading-md text-brand-800 mb-1 animate-pulse bg-gray-200 rounded w-1/2 h-6"></h3>
+                        <p className="text-body-sm text-amber-600 font-montserrat mb-3">
+                          Automatically added for buying 2+ items!
+                        </p>
+                        <div className="flex items-center gap-3">
+                          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">FREE</span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : giftProduct ? (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="flex gap-3 md:gap-6 p-4 md:p-6 bg-amber-50/30 border border-amber-200/50 border-dashed rounded-xl md:rounded-brand-xl shadow-sm"
+                    >
+                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-white rounded-lg md:rounded-brand-lg overflow-hidden border border-amber-100 shadow-sm">
+                        <Image
+                          src={giftProduct.image}
+                          alt={giftProduct.name}
+                          fill
+                          className="object-contain p-3"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop&q=80';
+                          }}
+                        />
+                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] md:text-xs px-2 py-1 font-bold uppercase tracking-wider">
+                          Gift
+                        </div>
+                      </div>
+
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <h3 className="font-playfair text-heading-md text-brand-800 mb-1">{giftProduct.name}</h3>
+                        <p className="text-body-sm text-amber-600 font-montserrat mb-3">
+                          Automatically added for buying 2+ items!
+                        </p>
+                        <div className="flex items-center gap-3">
+                          <span className="bg-amber-100 text-amber-700 px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">FREE</span>
+                          <span className="text-body-md text-gray-400 line-through font-gotham">
+                            {formatPrice(giftProduct.price)}
+                          </span>
+                        </div>
+                      </div>
+                    </motion.div>
+                  ) : null}
+                </>
+              )}
             </div>
 
             {/* Order Summary */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 bg-brand-50 rounded-brand-xl p-6 border border-brand-200">
+              <div className="sticky top-24 bg-white rounded-brand-xl p-6 border border-brand-200 shadow-luxury">
                 <h2 className="font-playfair text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
-                <div className="space-y-3 mb-6">
+                {/* Coupon Code Section */}
+                <div className="mb-6">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Tag className="w-4 h-4 text-classic-green" />
+                    <span className="font-montserrat text-xs font-bold uppercase tracking-wider text-brand-800">Promo Code</span>
+                  </div>
+
+                  {!appliedCoupon ? (
+                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                        placeholder="ENTER CODE"
+                        className="flex-1 px-4 py-2 text-xs border border-brand-200 rounded-lg focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat uppercase"
+                        disabled={isValidating}
+                      />
+                      <button
+                        type="submit"
+                        disabled={isValidating || !couponInput.trim()}
+                        className="px-6 py-2 bg-classic-green text-white text-xs font-bold rounded-lg disabled:opacity-50 transition-colors"
+                      >
+                        {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'APPLY'}
+                      </button>
+                    </form>
+                  ) : (
+                    <div className="flex items-center justify-between bg-classic-green/5 border border-classic-green/20 rounded-lg px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <Tag className="w-4 h-4 text-classic-green" />
+                        <span className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</span>
+                      </div>
+                      <button
+                        onClick={removeCoupon}
+                        className="text-xs font-bold text-error hover:underline uppercase"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                  {couponError && <p className="text-xs text-error mt-2 ml-1">{couponError}</p>}
+                </div>
+
+                <div className="space-y-3 mb-6 pt-6 border-t border-brand-100">
                   <div className="flex items-center justify-between">
                     <span className="text-brand-600 font-montserrat">Subtotal</span>
                     <span className="font-gotham text-brand-800">
                       {formatPrice(total)}
                     </span>
                   </div>
+                  
+                  {couponDiscount > 0 && (
+                    <div className="flex items-center justify-between text-success">
+                      <span className="font-montserrat">Coupon Discount</span>
+                      <span className="font-gotham font-bold">
+                        -{formatPrice(couponDiscount)}
+                      </span>
+                    </div>
+                  )}
+
                   <div className="flex items-center justify-between">
                     <span className="text-brand-600 font-montserrat">Shipping</span>
                     <span className="font-gotham text-classic-green">FREE</span>

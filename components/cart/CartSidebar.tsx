@@ -3,12 +3,107 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, ShoppingBag, Minus, Plus, Trash2 } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2 } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
+import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
+import { useState, useEffect } from 'react';
 
 export default function CartSidebar() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
+  const { appliedCoupon, setAppliedCoupon } = useAdmin();
+  const [couponInput, setCouponInput] = useState('');
+  const [isValidating, setIsValidating] = useState(false);
+  const [couponError, setCouponError] = useState<string | null>(null);
+  const [couponDiscount, setCouponDiscount] = useState(0);
+
+  const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
+  const [isGiftLoading, setIsGiftLoading] = useState(false);
+
+  // Auto-calculate gift and coupon discounts
+  const hasGift = itemCount >= 2;
+
+  // Fetch gift product details from Shopify if not already fetched
+  useEffect(() => {
+    async function fetchGift() {
+      if (hasGift && !giftProduct) {
+        setIsGiftLoading(true);
+        try {
+          // Fetch the gift product from our dedicated API endpoint
+          const response = await fetch('/api/products/gift');
+          if (response.ok) {
+            const data = await response.json();
+            setGiftProduct({
+              name: data.name,
+              image: data.image,
+              price: 5000
+            });
+          } else {
+            // Fallback to a high-quality static image if API fetch fails
+            setGiftProduct({
+              name: '10 Cent Diamond Gift',
+              image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80', 
+              price: 5000
+            });
+          }
+        } catch (err) {
+          setGiftProduct({
+            name: '10 Cent Diamond Gift',
+            image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
+            price: 5000
+          });
+        } finally {
+          setIsGiftLoading(false);
+        }
+      }
+    }
+    fetchGift();
+  }, [hasGift, giftProduct]);
+
+  useEffect(() => {
+    if (appliedCoupon) {
+      validateCoupon(appliedCoupon);
+    }
+  }, [total, appliedCoupon]);
+
+  const validateCoupon = async (code: string) => {
+    setIsValidating(true);
+    setCouponError(null);
+    try {
+      const response = await fetch('/api/coupons/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
+      });
+      const data = await response.json();
+      if (response.ok) {
+        setAppliedCoupon(code);
+        setCouponDiscount(Math.round((total * data.percentOff) / 100));
+      } else {
+        setCouponError(data.error || 'Invalid coupon');
+        setAppliedCoupon(null);
+        setCouponDiscount(0);
+      }
+    } catch (err) {
+      setCouponError('Failed to validate coupon');
+    } finally {
+      setIsValidating(false);
+    }
+  };
+
+  const handleApplyCoupon = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (couponInput.trim()) {
+      validateCoupon(couponInput.trim().toUpperCase());
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCoupon(null);
+    setCouponInput('');
+    setCouponDiscount(0);
+    setCouponError(null);
+  };
 
   return (
     <AnimatePresence>
@@ -133,68 +228,143 @@ export default function CartSidebar() {
                       </div>
                     </div>
                   ))}
+
+                  {/* Gift Item Display */}
+                  {hasGift && (
+                    <>
+                      {isGiftLoading ? (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex gap-4 p-4 bg-amber-50/50 rounded-xl border border-amber-200/50 border-dashed"
+                        >
+                          <div className="relative w-20 h-20 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden border border-amber-100 shadow-sm animate-pulse">
+                            <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-50"></div>
+                          </div>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            <h4 className="font-playfair text-sm font-semibold text-brand-800 animate-pulse bg-gray-200 rounded w-3/4 h-4"></h4>
+                            <div className="flex items-center gap-2 mt-1">
+                              <span className="text-[10px] bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-bold uppercase">FREE</span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ) : giftProduct ? (
+                        <motion.div 
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          className="flex gap-4 p-4 bg-amber-50/50 rounded-xl border border-amber-200/50 border-dashed"
+                        >
+                          <div className="relative w-20 h-20 flex-shrink-0 bg-white rounded-lg overflow-hidden border border-amber-100 shadow-sm">
+                             <Image
+                              src={giftProduct.image}
+                              alt={giftProduct.name}
+                              fill
+                              className="object-contain p-1"
+                              onError={(e) => {
+                                // Fallback if image fails to load
+                                const target = e.target as HTMLImageElement;
+                                target.src = 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=200&h=200&fit=crop&q=80';
+                              }}
+                            />
+                            <div className="absolute top-0 right-0 bg-amber-500 text-white text-[8px] px-1.5 py-0.5 font-bold uppercase tracking-tighter">
+                              Gift
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0 flex flex-col justify-center">
+                            <h4 className="font-playfair text-sm font-semibold text-brand-800">{giftProduct.name}</h4>
+                            <div className="flex items-center gap-2 mt-1">
+                               <span className="text-[10px] bg-amber-200 text-amber-800 px-2 py-0.5 rounded-full font-bold uppercase">FREE</span>
+                               <span className="text-xs text-gray-400 line-through">
+                                  {formatPrice(giftProduct.price, '₹')}
+                               </span>
+                            </div>
+                          </div>
+                        </motion.div>
+                      ) : null}
+                    </>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Footer */}
             {items.length > 0 && (
-              <div className="border-t border-brand-200 p-6 space-y-4 bg-brand-50">
-                {/* Subtotal */}
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-brand-600 font-montserrat">Subtotal</span>
-                  <span className="font-gotham text-heading-sm font-semibold text-brand-800">
-                    {formatPrice(total, items[0].product.currency)}
-                  </span>
+              <div className="border-t border-brand-200 p-6 space-y-4 bg-white">
+                {/* Promo Code Section - Slimmer Design */}
+                <div className="border border-brand-100 rounded-xl overflow-hidden shadow-sm">
+                  {!appliedCoupon ? (
+                    <form onSubmit={handleApplyCoupon} className="flex h-10">
+                      <input
+                        type="text"
+                        value={couponInput}
+                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                        placeholder="PROMO CODE"
+                        className="flex-1 px-4 text-xs font-montserrat uppercase focus:outline-none bg-gray-50/50"
+                        disabled={isValidating}
+                      />
+                      <button
+                        type="submit"
+                        disabled={isValidating || !couponInput.trim()}
+                        className="px-6 bg-classic-green text-white text-[10px] font-bold uppercase tracking-widest transition-all hover:bg-classic-green/90 disabled:opacity-50"
+                      >
+                        {isValidating ? <Loader2 className="w-3 h-3 animate-spin" /> : 'APPLY'}
+                      </button>
+                    </form>
+                  ) : (
+                    <div className="flex items-center justify-between bg-classic-green/5 px-4 py-2.5">
+                      <div className="flex items-center gap-2">
+                         <Tag className="w-3 h-3 text-classic-green" />
+                         <span className="text-xs font-bold text-classic-green tracking-wide">{appliedCoupon}</span>
+                      </div>
+                      <button
+                        onClick={removeCoupon}
+                        className="text-[10px] font-bold text-error/70 hover:text-error uppercase tracking-tighter"
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {couponError && <p className="text-[10px] text-error px-1 font-medium">{couponError}</p>}
+
+                {/* Totals Section - Clean Grid */}
+                <div className="space-y-2 py-2">
+                  <div className="flex items-center justify-between text-xs font-montserrat text-brand-600">
+                    <span>Subtotal</span>
+                    <span>{formatPrice(total, items[0].product.currency)}</span>
+                  </div>
+                  
+                  {couponDiscount > 0 && (
+                    <div className="flex items-center justify-between text-xs font-bold text-success">
+                      <span>Discount</span>
+                      <span>-{formatPrice(couponDiscount, items[0].product.currency)}</span>
+                    </div>
+                  )}
+
+                  <div className="flex items-center justify-between pt-3 border-t border-brand-100">
+                    <span className="font-playfair text-lg text-brand-800">Total</span>
+                    <span className="font-gotham text-xl font-bold text-classic-green">
+                      {formatPrice(Math.max(0, total - couponDiscount), items[0].product.currency)}
+                    </span>
+                  </div>
                 </div>
 
-                {/* Free Delivery Notice */}
-                <p className="text-body-sm text-brand-500 font-montserrat">
-                  Free Standard Delivery (3 working days) - ₹0.00
-                </p>
-
-                {/* Total */}
-                <div className="flex items-center justify-between pt-3 border-t border-brand-300">
-                  <span className="font-playfair text-heading-sm text-brand-800">Estimated Total</span>
-                  <span className="font-gotham text-heading-lg font-bold text-classic-green">
-                    {formatPrice(total, items[0].product.currency)}
-                  </span>
-                </div>
-
-                <p className="text-body-sm text-brand-500 font-montserrat">(Prices include VAT)</p>
-
-                {/* Actions */}
-                <div className="space-y-3 pt-4">
+                {/* Minimalist Actions */}
+                <div className="grid grid-cols-2 gap-3 pt-2">
                   <Link
                     href="/cart"
                     onClick={closeCart}
-                    className="block w-full text-center bg-classic-green hover:bg-classic-green/90 text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500"
+                    className="flex items-center justify-center py-3 border border-brand-200 text-brand-600 text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-brand-50 transition-colors"
                   >
                     View Cart
                   </Link>
                   <Link
                     href="/checkout"
                     onClick={closeCart}
-                    className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500"
+                    className="flex items-center justify-center py-3 bg-bronze-gold text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-soft-bronze shadow-lg shadow-bronze-gold/20 transition-all"
                   >
-                    Proceed to Checkout
+                    Checkout
                   </Link>
-                </div>
-
-                {/* Help Links */}
-                <div className="pt-4 border-t border-brand-200">
-                  <p className="text-ui font-gotham uppercase tracking-luxury text-brand-600 mb-3">Need Help?</p>
-                  <div className="space-y-2">
-                    <Link href="/delivery" className="block text-body-sm text-brand-600 hover:text-teal transition-colors font-montserrat">
-                      Delivery & Returns
-                    </Link>
-                    <Link href="/care" className="block text-body-sm text-brand-600 hover:text-teal transition-colors font-montserrat">
-                      Gemstone Care
-                    </Link>
-                    <Link href="/privacy" className="block text-body-sm text-brand-600 hover:text-teal transition-colors font-montserrat">
-                      Privacy Policy
-                    </Link>
-                  </div>
                 </div>
               </div>
             )}
