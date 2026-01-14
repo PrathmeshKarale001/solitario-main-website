@@ -347,7 +347,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                     }
                   })()
                 : currentMedia.ctaLink}
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-3.5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -363,7 +363,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
           ) : (
             <Link
               href="/products"
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-3.5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
