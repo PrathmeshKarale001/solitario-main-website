@@ -79,19 +79,40 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
 // Fetch all products from Shopify
 export async function fetchShopifyProducts(first = 250): Promise<Product[]> {
   try {
+    console.log(`🔍 Fetching ${first} products from Shopify...`);
+    
     const result = await shopifyStorefrontFetch<{ products: { edges: Array<{ node: ShopifyProduct }> } }>(
       GET_PRODUCTS_QUERY,
-      { first }
+      { first } // Remove after and query parameters to get all products
     );
 
-    if (result.errors || !result.data?.products) {
-      console.error('Failed to fetch Shopify products:', result.errors);
+    console.log('📡 Shopify API Response:', {
+      hasErrors: !!result.errors,
+      errors: result.errors,
+      hasData: !!result.data,
+      productCount: result.data?.products?.edges?.length || 0
+    });
+
+    if (result.errors) {
+      console.error('❌ Shopify GraphQL errors:', result.errors);
       return [];
     }
 
-    return result.data.products.edges.map(edge => mapShopifyProductToLocal(edge.node));
+    if (!result.data?.products?.edges) {
+      console.error('❌ No products data in Shopify response');
+      return [];
+    }
+
+    const products = result.data.products.edges.map(edge => {
+      const mapped = mapShopifyProductToLocal(edge.node);
+      console.log(`📦 Mapped product: ${mapped.name} - ₹${mapped.price} - ${mapped.image}`);
+      return mapped;
+    });
+
+    console.log(`✅ Successfully fetched and mapped ${products.length} products from Shopify`);
+    return products;
   } catch (error) {
-    console.error('Error fetching Shopify products:', error);
+    console.error('❌ Error fetching Shopify products:', error);
     return [];
   }
 }
@@ -219,4 +240,62 @@ export async function getCollectionProducts(handle: string, useShopify = true): 
   // Fallback: filter local products by category (handle as category)
   const { PRODUCTS } = await import('./data');
   return PRODUCTS.filter(p => p.category === handle);
+}
+
+// Fetch products for recommendations using API endpoint
+export async function getRecommendationProducts({
+  currentProductId,
+  category,
+  maxPrice = 15000,
+  limit = 6,
+  useShopify = true
+}: {
+  currentProductId?: string;
+  category?: string;
+  maxPrice?: number;
+  limit?: number;
+  useShopify?: boolean;
+}): Promise<Product[]> {
+  console.log('🔍 Fetching recommendations via API endpoint...');
+  
+  try {
+    // Build query parameters
+    const params = new URLSearchParams({
+      maxPrice: maxPrice.toString(),
+      limit: limit.toString(),
+    });
+    
+    if (category) params.append('category', category);
+    if (currentProductId) params.append('currentProductId', currentProductId);
+
+    console.log('🚀 Calling /api/recommendations with params:', params.toString());
+    
+    const response = await fetch(`/api/recommendations?${params.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    if (!response.ok) {
+      console.error('❌ API Error:', response.status, response.statusText);
+      return [];
+    }
+
+    const data = await response.json();
+    
+    if (data.error) {
+      console.error('❌ API returned error:', data.error);
+      return [];
+    }
+
+    const products = data.products || [];
+    console.log(`✅ Received ${products.length} recommendations from API`);
+    console.log('🎯 Products:', products.map((p: any) => `${p.name} - ₹${p.price}`));
+    
+    return products;
+  } catch (error) {
+    console.error('❌ Error fetching recommendations:', error);
+    return [];
+  }
 }

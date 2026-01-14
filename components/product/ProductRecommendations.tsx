@@ -8,7 +8,8 @@ import { Heart, ShoppingBag } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
-import { Product, PRODUCTS } from '@/lib/data';
+import { Product } from '@/lib/data';
+import { getRecommendationProducts } from '@/lib/shopify-data';
 
 interface ProductRecommendationsProps {
   title?: string;
@@ -32,37 +33,23 @@ export default function ProductRecommendations({
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
   useEffect(() => {
-    // Filter products based on criteria
-    let filteredProducts = PRODUCTS.filter(product => {
-      // Exclude current product if specified
-      if (currentProductId && product.id === currentProductId) {
-        return false;
+    async function fetchRecommendations() {
+      try {
+        const products = await getRecommendationProducts({
+          currentProductId,
+          category,
+          maxPrice,
+          limit,
+          useShopify: true
+        });
+        setRecommendations(products);
+      } catch (error) {
+        console.error('Error fetching product recommendations:', error);
+        setRecommendations([]);
       }
-      
-      // Filter by category if specified
-      if (category && product.category !== category) {
-        return false;
-      }
-      
-      // Filter by max price if specified
-      if (maxPrice && product.price > maxPrice) {
-        return false;
-      }
-      
-      return true;
-    });
+    }
 
-    // Prioritize featured products and shuffle
-    const featuredProducts = filteredProducts.filter(p => p.featured);
-    const regularProducts = filteredProducts.filter(p => !p.featured);
-    
-    // Shuffle arrays
-    const shuffledFeatured = featuredProducts.sort(() => Math.random() - 0.5);
-    const shuffledRegular = regularProducts.sort(() => Math.random() - 0.5);
-    
-    // Combine and limit
-    const combined = [...shuffledFeatured, ...shuffledRegular].slice(0, limit);
-    setRecommendations(combined);
+    fetchRecommendations();
   }, [currentProductId, category, limit, maxPrice]);
 
   const handleAddToCart = (product: Product) => {
