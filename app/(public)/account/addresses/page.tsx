@@ -58,7 +58,6 @@ function AddressesPageContent() {
         const response = await fetch('/api/account/addresses');
         if (response.ok) {
           const data = await response.json();
-          console.log('Addresses API response:', data); // Debug log
           setAddresses(data.addresses || []);
         } else {
           // Try to parse error, but handle cases where response isn't JSON
@@ -124,8 +123,6 @@ function AddressesPageContent() {
     setError(null);
 
     try {
-      console.log('Submitting address data:', formData);
-      
       const res = editingAddress
         ? await fetch('/api/account/addresses', {
             method: 'PUT',
@@ -141,7 +138,6 @@ function AddressesPageContent() {
             body: JSON.stringify(formData),
           });
 
-      console.log('Response status:', res.status);
       
       if (!res.ok) {
         const data = await res.json();
@@ -150,7 +146,6 @@ function AddressesPageContent() {
       }
 
       const responseData = await res.json();
-      console.log('Success response:', responseData);
 
       await fetchAddresses();
       closeModal();

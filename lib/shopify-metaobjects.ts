@@ -1,9 +1,9 @@
 import { shopifyStorefrontFetch } from './shopify';
 
-// GraphQL query to fetch metaobjects
-const GET_METAOBJECTS_QUERY = `
-  query getMetaobjects($type: String!, $first: Int!) {
-    metaobjects(type: $type, first: $first) {
+// GraphQL query to fetch metaobjects by type
+const GET_METAOBJECTS_BY_TYPE_QUERY = `
+  query getMetaobjectsByType($type: MetaobjectType!, $first: Int!) {
+    metaobjects(type: $type, first: $first, reverse: true) {
       edges {
         node {
           id
@@ -58,6 +58,114 @@ const GET_METAOBJECT_BY_HANDLE_QUERY = `
   }
 `;
 
+
+// GraphQL query to fetch metaobjects by type
+const GET_METAOBJECTS_QUERY = `
+  query getMetaobjectsByType($type: MetaobjectType!, $first: Int!) {
+    metaobjects(type: $type, first: $first, reverse: true) {
+      edges {
+        node {
+          id
+          handle
+          type
+          fields {
+            key
+            value
+            type
+            reference {
+              ... on MediaImage {
+                image {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+            }
+          }
+          updatedAt
+        }
+      }
+    }
+  }
+`;
+
+// GraphQL query to fetch home heroes
+const GET_HOME_HEROES_QUERY = `
+  query getHomeHeroes($first: Int!) {
+    metaobjects(type: "home_hero", first: $first, reverse: true) {
+      edges {
+        node {
+          id
+          handle
+          type
+          fields {
+            key
+            value
+            type
+            reference {
+              ... on MediaImage {
+                image {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+              ... on Video {
+                sources {
+                  url
+                  mimeType
+                  format
+                }
+              }
+            }
+          }
+          updatedAt
+        }
+      }
+    }
+  }
+`;
+
+// GraphQL query to fetch shop heroes
+const GET_SHOP_HEROES_QUERY = `
+  query getShopHeroes($first: Int!) {
+    metaobjects(type: "shop_hero", first: $first, reverse: true) {
+      edges {
+        node {
+          id
+          handle
+          type
+          fields {
+            key
+            value
+            type
+            reference {
+              ... on MediaImage {
+                image {
+                  url
+                  altText
+                  width
+                  height
+                }
+              }
+              ... on Video {
+                sources {
+                  url
+                  mimeType
+                  format
+                }
+              }
+            }
+          }
+          updatedAt
+        }
+      }
+    }
+  }
+`;
+
 // Types for our dynamic content
 export interface DynamicImage {
   url: string;
@@ -66,16 +174,35 @@ export interface DynamicImage {
   height?: number;
 }
 
-export interface HeroSection {
+export interface HomeHeroSection {
   id: string;
   handle: string;
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
   description?: string;
   backgroundImage: DynamicImage;
+  backgroundVideo?: string;
+  mediaType: 'image' | 'video';
   ctaText?: string;
   ctaLink?: string;
   isActive: boolean;
+  displayOrder?: number;
+  updatedAt: string;
+}
+
+export interface ShopHeroSection {
+  id: string;
+  handle: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  backgroundImage: DynamicImage;
+  backgroundVideo?: string;
+  mediaType: 'image' | 'video';
+  ctaText?: string;
+  ctaLink?: string;
+  isActive: boolean;
+  displayOrder?: number;
   updatedAt: string;
 }
 
@@ -126,6 +253,10 @@ function parseMetaobjectFields(fields: any[]): Record<string, any> {
             width: reference.image.width,
             height: reference.image.height
           };
+        } else if (reference?.sources) {
+          // Video reference
+          const mp4Source = reference.sources.find((s: any) => s.format === 'mp4' || s.mimeType === 'video/mp4');
+          parsed[key] = mp4Source ? mp4Source.url : reference.sources[0]?.url;
         }
         break;
       case 'boolean':
@@ -147,9 +278,8 @@ function parseMetaobjectFields(fields: any[]): Record<string, any> {
 }
 
 // Fetch hero sections
-export async function getHeroSections(): Promise<HeroSection[]> {
+export async function getHeroSections(): Promise<any[]> {
   try {
-    console.log('🎯 Fetching hero sections from Shopify...');
     
     const result = await shopifyStorefrontFetch(GET_METAOBJECTS_QUERY, {
       type: 'hero_section',
@@ -179,7 +309,6 @@ export async function getHeroSections(): Promise<HeroSection[]> {
       };
     });
 
-    console.log(`✅ Found ${heroSections.length} hero sections`);
     return heroSections.filter(hero => hero.isActive);
     
   } catch (error) {
@@ -191,7 +320,6 @@ export async function getHeroSections(): Promise<HeroSection[]> {
 // Fetch observatory events
 export async function getObservatoryEvents(): Promise<ObservatoryEvent[]> {
   try {
-    console.log('🔭 Fetching observatory events from Shopify...');
     
     const result = await shopifyStorefrontFetch(GET_METAOBJECTS_QUERY, {
       type: 'observatory_event',
@@ -228,7 +356,6 @@ export async function getObservatoryEvents(): Promise<ObservatoryEvent[]> {
       .filter(event => event.isActive)
       .sort((a, b) => b.priority - a.priority);
 
-    console.log(`✅ Found ${activeEvents.length} active observatory events`);
     return activeEvents;
     
   } catch (error) {
@@ -240,7 +367,6 @@ export async function getObservatoryEvents(): Promise<ObservatoryEvent[]> {
 // Fetch dynamic banners
 export async function getDynamicBanners(): Promise<DynamicBanner[]> {
   try {
-    console.log('🎨 Fetching dynamic banners from Shopify...');
     
     const result = await shopifyStorefrontFetch(GET_METAOBJECTS_QUERY, {
       type: 'dynamic_banner',
@@ -278,7 +404,6 @@ export async function getDynamicBanners(): Promise<DynamicBanner[]> {
       .filter(banner => banner.isActive)
       .sort((a, b) => a.displayOrder - b.displayOrder);
 
-    console.log(`✅ Found ${activeBanners.length} active dynamic banners`);
     return activeBanners;
     
   } catch (error) {
@@ -287,47 +412,6 @@ export async function getDynamicBanners(): Promise<DynamicBanner[]> {
   }
 }
 
-// Get specific hero section by handle
-export async function getHeroSectionByHandle(handle: string): Promise<HeroSection | null> {
-  try {
-    console.log(`🎯 Fetching hero section: ${handle}`);
-    
-    const result = await shopifyStorefrontFetch(GET_METAOBJECT_BY_HANDLE_QUERY, {
-      handle: {
-        type: 'hero_section',
-        handle: handle
-      }
-    });
-
-    if (result.errors || !result.data?.metaobject) {
-      console.error(`❌ Failed to fetch hero section ${handle}:`, result.errors);
-      return null;
-    }
-
-    const node = result.data.metaobject;
-    const fields = parseMetaobjectFields(node.fields);
-    
-    const heroSection: HeroSection = {
-      id: node.id,
-      handle: node.handle,
-      title: fields.title || '',
-      subtitle: fields.subtitle || '',
-      description: fields.description || '',
-      backgroundImage: fields.background_image || { url: '', altText: '' },
-      ctaText: fields.cta_text || '',
-      ctaLink: fields.cta_link || '',
-      isActive: fields.is_active || false,
-      updatedAt: node.updatedAt
-    };
-
-    console.log(`✅ Found hero section: ${heroSection.title}`);
-    return heroSection.isActive ? heroSection : null;
-    
-  } catch (error) {
-    console.error(`❌ Error fetching hero section ${handle}:`, error);
-    return null;
-  }
-}
 
 // Get current observatory event (active and within date range)
 export async function getCurrentObservatoryEvent(): Promise<ObservatoryEvent | null> {
@@ -345,11 +429,6 @@ export async function getCurrentObservatoryEvent(): Promise<ObservatoryEvent | n
       return now >= startDate && now <= endDate;
     });
     
-    if (currentEvent) {
-      console.log(`🔭 Current observatory event: ${currentEvent.title}`);
-    } else {
-      console.log('🔭 No current observatory event');
-    }
     
     return currentEvent || null;
     
@@ -384,11 +463,99 @@ export async function getAlternatingBanners(): Promise<DynamicBanner[]> {
       }
     });
     
-    console.log(`🎨 Found ${availableBanners.length} banners for today`);
     return availableBanners;
     
   } catch (error) {
     console.error('❌ Error getting alternating banners:', error);
+    return [];
+  }
+}
+
+// Get Home Hero sections
+export async function getHomeHeroSections(): Promise<HomeHeroSection[]> {
+  try {
+    const result = await shopifyStorefrontFetch(GET_HOME_HEROES_QUERY, {
+      first: 10
+    });
+
+    if (result.errors || !result.data?.metaobjects?.edges) {
+      console.error('❌ Failed to fetch home hero sections:', result.errors);
+      return [];
+    }
+
+    const homeHeroes = result.data.metaobjects.edges
+      .map(edge => {
+        const node = edge.node;
+        const fields = parseMetaobjectFields(node.fields);
+        
+        return {
+          id: node.id,
+          handle: node.handle,
+          title: fields['title'],
+          subtitle: fields['subtitle'],
+          description: fields['description'],
+          backgroundImage: fields['background_image'] || { url: '', altText: '' },
+          backgroundVideo: fields['background_video'],
+          mediaType: fields['media_type']?.toLowerCase() || 'image',
+          ctaText: fields['cta_text'],
+          ctaLink: fields['cta_link'],
+          isActive: fields['is_active'] || false,
+          displayOrder: fields['display_order'] || 0,
+          updatedAt: node.updatedAt
+        };
+      })
+      .filter(hero => hero.isActive)
+      .sort((a, b) => a.displayOrder - b.displayOrder);
+
+    return homeHeroes;
+    
+  } catch (error) {
+    console.error('❌ Error fetching home hero sections:', error);
+    return [];
+  }
+}
+
+// Get Shop Hero sections
+export async function getShopHeroSections(): Promise<ShopHeroSection[]> {
+  try {
+    
+    const result = await shopifyStorefrontFetch(GET_SHOP_HEROES_QUERY, {
+      first: 10
+    });
+
+    if (result.errors || !result.data?.metaobjects?.edges) {
+      console.error('❌ Failed to fetch shop hero sections:', result.errors);
+      return [];
+    }
+
+    const shopHeroes = result.data.metaobjects.edges
+      .map(edge => {
+        const node = edge.node;
+        const fields = parseMetaobjectFields(node.fields);
+        
+        return {
+          id: node.id,
+          handle: node.handle,
+          title: fields['title'],
+          subtitle: fields['subtitle'],
+          description: fields['description'],
+          backgroundImage: fields['background_image'] || { url: '', altText: '' },
+          backgroundVideo: fields['background_video'],
+          mediaType: fields['media_type']?.toLowerCase() || 'image',
+          ctaText: fields['cta_text'],
+          ctaLink: fields['cta_link'],
+          isActive: fields['is_active'] || false,
+          displayOrder: fields['display_order'] || 0,
+          updatedAt: node.updatedAt
+        };
+      })
+      .filter(hero => hero.isActive)
+      .sort((a, b) => a.displayOrder - b.displayOrder);
+
+    return shopHeroes;
+    
+  } catch (error) {
+    console.error('❌ Error fetching shop hero sections:', error);
     return [];
   }
 }

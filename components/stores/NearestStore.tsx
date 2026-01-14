@@ -27,10 +27,7 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
   const [nearestStores, setNearestStores] = useState<{ store: StoreLocation; distance: number; travelTime?: string }[]>([]);
 
   const requestLocation = async () => {
-    console.log('🔘 Find Nearest Store button clicked');
-    
     if (!navigator.geolocation) {
-      console.error('❌ Geolocation not supported by browser');
       setLocationState({
         status: 'error',
         coords: null,
@@ -39,14 +36,10 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
       return;
     }
 
-    console.log('⏳ Setting loading state...');
     setLocationState({ status: 'loading', coords: null, error: null });
 
     try {
-      console.log('📡 Calling getUserLocation() from Radar client...');
-      // Use Radar API for more accurate location and distance calculations
       const location = await getUserLocation();
-      console.log('📍 getUserLocation() returned:', location);
       
       if (!location) {
         setLocationState({
@@ -62,27 +55,21 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
         lng: location.longitude,
       };
       
-      console.log('✅ Location coords:', coords);
       setLocationState({ status: 'success', coords, error: null });
       
       // Find nearest stores using Radar with travel time calculations
-      console.log('🔍 Finding nearest stores from', ALL_STORES.length, 'total stores...');
       const nearest = await findNearestStoresWithRadar(ALL_STORES, maxStores);
-      console.log('✅ Found nearest stores:', nearest);
       setNearestStores(nearest);
       
     } catch (error: any) {
-      console.error('❌ Error in requestLocation:', error);
       let errorMessage = 'Unable to retrieve your location';
       let status: LocationState['status'] = 'error';
       
       if (error?.message?.includes('denied') || error?.message?.includes('permission')) {
         errorMessage = 'Location access was denied. Please enable location permissions.';
         status = 'denied';
-        console.error('🚫 Location permission denied');
       } else if (error?.message?.includes('timeout')) {
         errorMessage = 'Location request timed out. Please try again.';
-        console.error('⏱️ Location request timeout');
       }
       
       setLocationState({ status, coords: null, error: errorMessage });

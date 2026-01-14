@@ -5,19 +5,24 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { HeroSection, ObservatoryEvent } from '@/lib/shopify-metaobjects';
+import { HomeHeroSection } from '@/lib/shopify-metaobjects';
 
 interface DynamicHeroProps {
   fallbackMedia?: Array<{
     type: 'image' | 'video';
     src: string;
     pos?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    ctaText?: string;
+    ctaLink?: string;
   }>;
 }
 
 export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
-  const [heroSections, setHeroSections] = useState<HeroSection[]>([]);
-  const [observatoryEvent, setObservatoryEvent] = useState<ObservatoryEvent | null>(null);
+  
+  const [heroSections, setHeroSections] = useState<HomeHeroSection[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -25,22 +30,121 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Default fallback media
+  // Default fallback media - using your original hero content
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
       src: '/images/home-hero/newhero/LohriPC.jpg',
       pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
     },
     {
       type: 'image' as const,
       src: '/images/home-hero/newhero/1st.png',
       pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
     },
     {
       type: 'image' as const,
       src: '/images/HERO BANNER 2.webp',
       pos: 'object-[50%_20%]',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/hero-banner-3.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/HERO BANNER 4.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'video' as const,
+      src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    }
+  ];
+
+  // Mobile fallback media
+  const defaultFallbackMediaMobile = [
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/newhero/LohriMobile.jpg',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/newhero/1stMobile.png',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/HOMEBanner5.jpg',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Hero_Mobile/Hero%20banner%202.jpg',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/newhero/3rdMobile.png',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Explore Collection',
+      ctaLink: '/products'
     }
   ];
 
@@ -48,45 +152,29 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
-
-  // Fetch dynamic content
-  useEffect(() => {
+    
+    // Fetch dynamic content
     async function fetchDynamicContent() {
       try {
-        console.log('🎯 Fetching dynamic hero content...');
-        
-        // Fetch hero sections and current observatory event
-        const [heroResponse, observatoryResponse] = await Promise.all([
-          fetch('/api/dynamic-content?type=hero'),
-          fetch('/api/dynamic-content?type=observatory&handle=current')
-        ]);
+        const heroResponse = await fetch('/api/dynamic-content?type=home-hero');
 
         if (heroResponse.ok) {
           const heroData = await heroResponse.json();
           if (heroData.success && heroData.data?.length > 0) {
-            console.log(`✅ Found ${heroData.data.length} hero sections`);
             setHeroSections(heroData.data);
           }
         }
 
-        if (observatoryResponse.ok) {
-          const observatoryData = await observatoryResponse.json();
-          if (observatoryData.success && observatoryData.data) {
-            console.log(`🔭 Found current observatory event: ${observatoryData.data.title}`);
-            setObservatoryEvent(observatoryData.data);
-          }
-        }
-
       } catch (error) {
-        console.error('❌ Error fetching dynamic content:', error);
+        // Silent error handling
       } finally {
         setLoading(false);
       }
     }
 
     fetchDynamicContent();
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Define media type with optional content fields
@@ -102,10 +190,13 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   };
 
   // Determine which media to use
-  const mediaToUse: MediaItem[] = heroSections.length > 0 
+  // Combine Shopify content with static fallback content
+  const shopifyMedia: MediaItem[] = heroSections.length > 0 
     ? heroSections.map(hero => ({
-        type: 'image' as const,
-        src: hero.backgroundImage.url,
+        type: hero.mediaType || 'image',
+        src: hero.mediaType === 'video' && hero.backgroundVideo 
+          ? hero.backgroundVideo 
+          : hero.backgroundImage.url,
         pos: 'object-center',
         title: hero.title,
         subtitle: hero.subtitle,
@@ -113,7 +204,12 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
         ctaText: hero.ctaText,
         ctaLink: hero.ctaLink
       }))
-    : (fallbackMedia || defaultFallbackMedia);
+    : [];
+
+  const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
+  
+  // Show Shopify content first, then static content
+  const mediaToUse = shopifyMedia.length > 0 ? [...shopifyMedia, ...staticMedia] : staticMedia;
 
   // Handle media transition
   const handleMediaEnded = () => {
@@ -167,26 +263,10 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
 
   // Get current media content
   const currentMedia = mediaToUse[currentIndex];
-  const hasCustomContent = currentMedia && currentMedia.title;
+  const hasCustomCTA = currentMedia && currentMedia.ctaText && currentMedia.ctaLink;
 
   return (
     <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-screen flex flex-col overflow-hidden bg-black">
-      {/* Observatory Event Banner */}
-      {observatoryEvent && (
-        <div className="absolute top-0 left-0 right-0 z-30 bg-gradient-to-r from-amber-600 to-orange-600 text-white py-2 px-4">
-          <div className="container mx-auto text-center">
-            <p className="text-sm md:text-base font-medium">
-              🔭 {observatoryEvent.title} - {observatoryEvent.description}
-              {observatoryEvent.ctaLink && (
-                <Link href={observatoryEvent.ctaLink} className="ml-2 underline hover:no-underline">
-                  {observatoryEvent.ctaText || 'Learn More'}
-                </Link>
-              )}
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Loading State */}
       {loading && (
         <div className="absolute inset-0 z-20 bg-black flex items-center justify-center">
@@ -221,7 +301,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
             ) : (
               <Image
                 src={media.src}
-                alt={hasCustomContent ? currentMedia.title || 'Solitario Jewelry' : 'Solitario Jewelry'}
+                alt="Solitario Jewelry"
                 fill
                 priority={index === 0}
                 quality={index === 0 ? 90 : 75}
@@ -235,59 +315,41 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
         ))}
       </div>
 
-      {/* Dynamic Content Overlay */}
-      {hasCustomContent && currentMedia.title && (
-        <div className="absolute inset-0 z-10 flex items-center justify-center">
-          <motion.div
-            key={currentIndex}
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center text-white max-w-4xl mx-auto px-6"
-          >
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-gotham font-light mb-4 tracking-wide">
-              {currentMedia.title}
-            </h1>
-            {currentMedia.subtitle && (
-              <h2 className="text-xl md:text-2xl lg:text-3xl font-light mb-6 opacity-90">
-                {currentMedia.subtitle}
-              </h2>
-            )}
-            {currentMedia.description && (
-              <p className="text-lg md:text-xl mb-8 opacity-80 max-w-2xl mx-auto">
-                {currentMedia.description}
-              </p>
-            )}
-            {currentMedia.ctaText && currentMedia.ctaLink && (
-              <Link
-                href={currentMedia.ctaLink}
-                className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(20px) saturate(180%)',
-                  WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-                  border: '1px solid rgba(255, 255, 255, 0.15)',
-                  boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-                }}
-              >
-                <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-                <span className="relative z-10">{currentMedia.ctaText}</span>
-                <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
-              </Link>
-            )}
-          </motion.div>
-        </div>
-      )}
-
-      {/* Default CTA (when no custom content) */}
-      {!hasCustomContent && (
-        <div className="absolute inset-0 z-10 flex items-end justify-center pb-20 md:pb-24">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.5 }}
-            className="text-center"
-          >
+      {/* CTA - Always at bottom like original Hero */}
+      <div className="absolute inset-0 z-10 flex items-end justify-center pb-20 md:pb-24">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="text-center"
+        >
+          {(hasCustomCTA && currentMedia.ctaText && currentMedia.ctaLink) ? (
+            <Link
+              href={typeof currentMedia.ctaLink === 'string' && (currentMedia.ctaLink.startsWith('{') || currentMedia.ctaLink.startsWith('['))
+                ? (() => {
+                    try {
+                      const parsed = JSON.parse(currentMedia.ctaLink);
+                      return parsed.url || parsed.link || currentMedia.ctaLink;
+                    } catch (e) {
+                      return currentMedia.ctaLink;
+                    }
+                  })()
+                : currentMedia.ctaLink}
+              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <span className="relative z-10">{currentMedia.ctaText}</span>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+            </Link>
+          ) : (
             <Link
               href="/products"
               className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
@@ -303,9 +365,9 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
               <span className="relative z-10">Explore Collection</span>
               <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
             </Link>
-          </motion.div>
-        </div>
-      )}
+          )}
+        </motion.div>
+      </div>
 
       {/* Media indicators */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">

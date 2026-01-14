@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { 
+  getHomeHeroSections, 
+  getShopHeroSections, 
   getHeroSections, 
-  getHeroSectionByHandle, 
   getObservatoryEvents, 
   getCurrentObservatoryEvent,
   getDynamicBanners,
@@ -12,55 +13,45 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const type = searchParams.get('type');
-    const handle = searchParams.get('handle');
-
-    console.log('🎨 Dynamic content API called:', { type, handle });
 
     switch (type) {
+      case 'home-hero':
+        // Get all home heroes
+        const homeHeroSections = await getHomeHeroSections();
+        return NextResponse.json({ 
+          success: true,
+          data: homeHeroSections 
+        });
+
+      case 'shop-hero':
+        // Get all shop heroes
+        const shopHeroSections = await getShopHeroSections();
+        return NextResponse.json({ 
+          success: true,
+          data: shopHeroSections 
+        });
+
       case 'hero':
-        if (handle) {
-          const heroSection = await getHeroSectionByHandle(handle);
-          return NextResponse.json({ 
-            success: true,
-            data: heroSection 
-          });
-        } else {
-          const heroSections = await getHeroSections();
-          return NextResponse.json({ 
-            success: true,
-            data: heroSections 
-          });
-        }
+        // Legacy support for old hero system
+        const legacyHeroSections = await getHeroSections();
+        return NextResponse.json({ 
+          success: true,
+          data: legacyHeroSections 
+        });
 
       case 'observatory':
-        if (handle === 'current') {
-          const currentEvent = await getCurrentObservatoryEvent();
-          return NextResponse.json({ 
-            success: true,
-            data: currentEvent 
-          });
-        } else {
-          const events = await getObservatoryEvents();
-          return NextResponse.json({ 
-            success: true,
-            data: events 
-          });
-        }
+        const currentEvent = await getCurrentObservatoryEvent();
+        return NextResponse.json({ 
+          success: true,
+          data: currentEvent 
+        });
 
       case 'banners':
-        if (handle === 'alternating') {
-          const banners = await getAlternatingBanners();
-          return NextResponse.json({ 
-            success: true,
-            data: banners 
-          });
-        } else {
-          const banners = await getDynamicBanners();
-          return NextResponse.json({ 
-            success: true,
-            data: banners 
-          });
-        }
+        const banners = await getAlternatingBanners();
+        return NextResponse.json({ 
+          success: true,
+          data: banners 
+        });
 
       case 'all':
         // Get all dynamic content for dashboard

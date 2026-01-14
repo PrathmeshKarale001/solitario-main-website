@@ -1,0 +1,297 @@
+'use client';
+
+import { useState, useEffect, useRef } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
+import Link from 'next/link';
+import Image from 'next/image';
+import { ShopHeroSection } from '@/lib/shopify-metaobjects';
+
+interface DynamicShopHeroProps {
+  fallbackMedia?: Array<{
+    type: 'image' | 'video';
+    src: string;
+    pos?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    ctaText?: string;
+    ctaLink?: string;
+  }>;
+}
+
+export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps) {
+  
+  const [heroSections, setHeroSections] = useState<ShopHeroSection[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
+  const sectionRef = useRef<HTMLElement>(null);
+
+  // Default fallback media - using your original shop hero content
+  const defaultFallbackMedia = [
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/newhero/2nd.png',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Shop/Banner1 1.webp',
+      pos: 'object-[50%_0%]',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Shop/2.webp',
+      pos: 'object-[50%_20%]',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Shop/3.webp',
+      pos: 'object-[50%_25%]',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    }
+  ];
+
+  // Mobile fallback media
+  const defaultFallbackMediaMobile = [
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/newhero/2ndMobile.png',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    }
+  ];
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    // Fetch shop hero content
+    async function fetchShopHeroContent() {
+      try {
+        const heroResponse = await fetch('/api/dynamic-content?type=shop-hero');
+
+        if (heroResponse.ok) {
+          const heroData = await heroResponse.json();
+          if (heroData.success && heroData.data?.length > 0) {
+            setHeroSections(heroData.data);
+          }
+        }
+
+      } catch (error) {
+        // Silent error handling
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchShopHeroContent();
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Define media type with optional content fields
+  type MediaItem = {
+    type: 'image' | 'video';
+    src: string;
+    pos?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    ctaText?: string;
+    ctaLink?: string;
+  };
+
+  // Determine which media to use
+  // Combine Shopify content with static fallback content
+  const shopifyMedia: MediaItem[] = heroSections.length > 0 
+    ? heroSections.map(hero => ({
+        type: hero.mediaType || 'image',
+        src: hero.mediaType === 'video' && hero.backgroundVideo 
+          ? hero.backgroundVideo 
+          : hero.backgroundImage.url,
+        pos: 'object-center',
+        title: hero.title,
+        subtitle: hero.subtitle,
+        description: hero.description,
+        ctaText: hero.ctaText,
+        ctaLink: hero.ctaLink
+      }))
+    : [];
+
+  const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
+  
+  // Show Shopify content first, then static content
+  const mediaToUse = shopifyMedia.length > 0 ? [...shopifyMedia, ...staticMedia] : staticMedia;
+
+  // Handle media transition
+  const handleMediaEnded = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentIndex((prev) => (prev + 1) % mediaToUse.length);
+      setIsTransitioning(false);
+    }, 300);
+  };
+
+  // Auto-advance for images only
+  useEffect(() => {
+    if (mediaToUse[currentIndex]?.type === 'image') {
+      const timer = setTimeout(() => {
+        handleMediaEnded();
+      }, 5000); // Change image every 5 seconds
+      return () => clearTimeout(timer);
+    }
+  }, [currentIndex, mediaToUse]);
+
+  // Reset index when media changes
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [isMobile, heroSections]);
+
+  // Get current media content
+  const currentMedia = mediaToUse[currentIndex];
+  const hasCustomCTA = currentMedia && currentMedia.ctaText && currentMedia.ctaLink;
+
+  return (
+    <section ref={sectionRef} className="relative min-h-[60vh] md:min-h-[80vh] flex flex-col overflow-hidden bg-black">
+      {/* Video/Image Background */}
+      <div className="absolute inset-0 z-0">
+        {mediaToUse.map((media, index) => (
+          <motion.div
+            key={index}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: index === currentIndex && !isTransitioning ? 1 : 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0"
+            style={{ pointerEvents: index === currentIndex ? 'auto' : 'none' }}
+          >
+            {media.type === 'video' ? (
+              <video
+                ref={(el) => { videoRefs.current[index] = el; }}
+                src={media.src}
+                muted
+                playsInline
+                preload="auto"
+                onEnded={handleMediaEnded}
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+            ) : (
+              <Image
+                src={media.src}
+                alt="Solitario Jewelry Shop"
+                fill
+                priority={index === 0}
+                quality={index === 0 ? 90 : 75}
+                sizes="100vw"
+                className={`object-cover ${media.pos ?? 'object-center'}`}
+              />
+            )}
+            {/* Dark overlay for better CTA visibility */}
+            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+          </motion.div>
+        ))}
+      </div>
+
+      {/* CTA - Always at bottom like original */}
+      <div className="absolute inset-0 z-10 flex items-end justify-center pb-16 md:pb-20">
+        <motion.div
+          key={currentIndex}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.5 }}
+          className="text-center"
+        >
+          {(hasCustomCTA && currentMedia.ctaText && currentMedia.ctaLink) ? (
+            <Link
+              href={typeof currentMedia.ctaLink === 'string' && (currentMedia.ctaLink.startsWith('{') || currentMedia.ctaLink.startsWith('['))
+                ? (() => {
+                    try {
+                      const parsed = JSON.parse(currentMedia.ctaLink);
+                      return parsed.url || parsed.link || currentMedia.ctaLink;
+                    } catch (e) {
+                      return currentMedia.ctaLink;
+                    }
+                  })()
+                : currentMedia.ctaLink}
+              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <span className="relative z-10">{currentMedia.ctaText}</span>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+            </Link>
+          ) : (
+            <Link
+              href="#products"
+              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              style={{
+                background: 'rgba(255, 255, 255, 0.08)',
+                backdropFilter: 'blur(20px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.15)',
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <span className="relative z-10">Shop Collection</span>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+            </Link>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Media indicators */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {mediaToUse.map((_, index) => (
+          <button
+            key={index}
+            onClick={() => {
+              setIsTransitioning(true);
+              setTimeout(() => {
+                setCurrentIndex(index);
+                setIsTransitioning(false);
+              }, 300);
+            }}
+            className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              index === currentIndex ? 'bg-white w-8' : 'bg-white/50 hover:bg-white/75'
+            }`}
+            aria-label={`Go to slide ${index + 1}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}

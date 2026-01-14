@@ -10,6 +10,7 @@ import ProductGrid from '@/components/products/ProductGrid';
 import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
 import { DCBannerSlider } from '@/components/home';
+import DynamicShopHero from '@/components/products/DynamicShopHero';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 const PRODUCTS_PER_PAGE = 12;
@@ -270,54 +271,8 @@ function ProductsPageContent() {
 
   return (
     <div>
-      {/* Hero Section with Image Carousel */}
-      <section className="relative min-h-[80vh] md:min-h-[91vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
-        {/* ... existing carousel ... */}
-        <div className="absolute inset-0">
-          <AnimatePresence mode="wait">
-            {heroImages.map((item, index) => (
-              index === currentImageIndex % heroImages.length && (
-                <motion.div
-                  key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 1.2, ease: 'easeInOut' }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={item.src}
-                    alt={`Products hero ${index + 1}`}
-                    fill
-                    className={`object-cover ${item.pos}`}
-                    priority={index === 0} // Always prioritize first image for LCP
-                    quality={index === 0 ? 90 : 75}
-                    sizes="100vw"
-                  />
-                </motion.div>
-              )
-            ))}
-          </AnimatePresence>
-        </div>
-        
-        {/* Bottom Gradient Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent z-[1]" style={{ height: '15%', bottom: 0, top: 'auto' }} />
-        {/* Image Indicators */}
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-          {heroImages.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setCurrentImageIndex(index)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                index === currentImageIndex % heroImages.length
-                  ? 'w-8 bg-classic-green'
-                  : 'w-2 bg-classic-green/30 hover:bg-classic-green/50'
-              }`}
-              aria-label={`Go to slide ${index + 1}`}
-            />
-          ))}
-        </div>
-      </section>
+      {/* Dynamic Shop Hero */}
+      <DynamicShopHero />
 
       {/* DC COLLECTION SLIDER - FULL WIDTH */}
       {process.env.NEXT_PUBLIC_FEATURE_DC_BANNERS_ENABLED === 'true' && <DCBannerSlider />}

@@ -6,6 +6,7 @@ import {
   LifestyleShowcase,
   // PromoBanner1, // Disabled
 } from '@/components/home';
+import DynamicHero from '@/components/home/DynamicHero';
 import { Promise } from '@/components/about';
 import LoginPopup from '@/components/home/LoginPopup';
 
@@ -59,8 +60,8 @@ export default function Home() {
       {/* Marketing Login Popup for first-time visitors */}
       <LoginPopup />
       
-      {/* 1. HERO - First impression with CTA */}
-      <Hero />
+      {/* 1. DYNAMIC HERO - First impression with CTA */}
+      <DynamicHero />
       
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
