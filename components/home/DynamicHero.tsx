@@ -192,18 +192,29 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   // Determine which media to use
   // Combine Shopify content with static fallback content
   const shopifyMedia: MediaItem[] = heroSections.length > 0 
-    ? heroSections.map(hero => ({
-        type: hero.mediaType || 'image',
-        src: hero.mediaType === 'video' && hero.backgroundVideo 
-          ? hero.backgroundVideo 
-          : hero.backgroundImage.url,
-        pos: 'object-center',
-        title: hero.title,
-        subtitle: hero.subtitle,
-        description: hero.description,
-        ctaText: hero.ctaText,
-        ctaLink: hero.ctaLink
-      }))
+    ? heroSections.map(hero => {
+        // Use mobile-specific media if on mobile and available
+        const backgroundImage = isMobile && hero.mobileBackgroundImage?.url 
+          ? hero.mobileBackgroundImage.url 
+          : hero.backgroundImage.url;
+        
+        const backgroundVideo = isMobile && hero.mobileBackgroundVideo 
+          ? hero.mobileBackgroundVideo 
+          : hero.backgroundVideo;
+        
+        return {
+          type: hero.mediaType || 'image',
+          src: hero.mediaType === 'video' && backgroundVideo 
+            ? backgroundVideo 
+            : backgroundImage,
+          pos: 'object-center',
+          title: hero.title,
+          subtitle: hero.subtitle,
+          description: hero.description,
+          ctaText: hero.ctaText,
+          ctaLink: hero.ctaLink
+        };
+      })
     : [];
 
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
