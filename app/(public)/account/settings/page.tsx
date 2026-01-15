@@ -393,35 +393,6 @@ export default function SettingsPage() {
               </div>
             </motion.div>
 
-            {/* Security */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 mb-6"
-            >
-              <h2 className="font-playfair text-lg text-brand-800 mb-4 flex items-center gap-2">
-                <Shield className="w-5 h-5 text-bronze-gold" />
-                Security
-              </h2>
-              <div className="space-y-3">
-                <button className="w-full flex items-center justify-between p-4 border border-brand-200 rounded-xl hover:border-classic-green hover:bg-classic-green/5 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-5 h-5 text-brand-500" />
-                    <span className="font-montserrat text-brand-700">Change Password</span>
-                  </div>
-                  <ChevronLeft className="w-5 h-5 text-brand-400 rotate-180" />
-                </button>
-                <button className="w-full flex items-center justify-between p-4 border border-brand-200 rounded-xl hover:border-classic-green hover:bg-classic-green/5 transition-colors">
-                  <div className="flex items-center gap-3">
-                    <Shield className="w-5 h-5 text-brand-500" />
-                    <span className="font-montserrat text-brand-700">Two-Factor Authentication</span>
-                  </div>
-                  <span className="text-xs font-montserrat text-brand-400">Not enabled</span>
-                </button>
-              </div>
-            </motion.div>
-
             {/* Save Button */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}

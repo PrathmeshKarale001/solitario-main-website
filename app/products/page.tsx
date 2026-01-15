@@ -43,7 +43,7 @@ function ProductsPageContent() {
   const productsRef = useRef<HTMLDivElement>(null);
   
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
-  const [sortBy, setSortBy] = useState('featured');
+  const [sortBy, setSortBy] = useState('relevance');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
@@ -82,6 +82,9 @@ function ProductsPageContent() {
   const filteredAndSortedProducts: Product[] = useMemo(() => {
     let productList = [...products];
 
+    // ALWAYS filter out gift products (SKU: GIFT) - they should never appear in listings
+    productList = productList.filter(product => product.sku !== 'GIFT');
+
     // Category filter (case-insensitive)
     if (activeCategory !== 'all') {
       productList = productList.filter(product =>
@@ -111,8 +114,8 @@ function ProductsPageContent() {
 
     // Sort
     switch (sortBy) {
-      case 'price-low':
-        // Custom price range sorting: 0-15K, 15K-25K, 25K-35K, etc. with shuffled products within ranges
+      case 'relevance':
+        // Price-tiered shuffling: 0-15K, 15K-25K, 25K-35K, etc. with consistent shuffle using product ID as seed
         const priceRanges = [
           { min: 0, max: 15000 },
           { min: 15000, max: 25000 },
@@ -129,14 +132,23 @@ function ProductsPageContent() {
           const rangeProducts = productList.filter(product => 
             product.price >= range.min && product.price < range.max
           );
-          // Shuffle products within each range
-          const shuffledRangeProducts = rangeProducts.sort(() => Math.random() - 0.5);
+          // Consistent shuffle using product ID hash - same order for all users
+          const shuffledRangeProducts = rangeProducts.sort((a, b) => {
+            const hashA = a.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            const hashB = b.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
+            return hashA - hashB;
+          });
           sortedByRanges.push(...shuffledRangeProducts);
         });
         
         productList = sortedByRanges;
         break;
+      case 'price-low':
+        // Simple ascending price sort
+        productList.sort((a, b) => a.price - b.price);
+        break;
       case 'price-high':
+        // Simple descending price sort
         productList.sort((a, b) => b.price - a.price);
         break;
       case 'name-asc':
@@ -147,6 +159,7 @@ function ProductsPageContent() {
         break;
       case 'featured':
       default:
+        // Featured products first, then regular products
         productList.sort((a, b) => {
           if (a.featured && !b.featured) return -1;
           if (!a.featured && b.featured) return 1;

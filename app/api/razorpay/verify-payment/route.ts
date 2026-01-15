@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
 import crypto from 'crypto';
 import logger from '@/lib/logger';
+import { sendOrderConfirmationEmail } from '@/lib/email';
+import { clerkClient } from '@clerk/nextjs/server';
 
 // Track verified payments to prevent replay attacks
 const verifiedPayments = new Set<string>();
@@ -85,13 +87,33 @@ export async function POST(request: NextRequest) {
     // Generate order ID for internal tracking
     const orderId = `SOL${Date.now().toString(36).toUpperCase()}`;
     
+    // Get Clerk user ID from request headers if available
+    const clerkUserId = request.headers.get('x-clerk-user-id');
+    
     // Step 1: Create order in Shopify for inventory management
     let shopifyOrderId = null;
     let shopifyOrderName = null;
+    let shopifyCustomerId = null;
     try {
       const shopifyResult = await createShopifyOrder(orderData, razorpay_payment_id, orderId);
       shopifyOrderId = shopifyResult.id;
       shopifyOrderName = shopifyResult.name;
+      shopifyCustomerId = shopifyResult.customerId;
+      
+      // Link Shopify customer to Clerk user if available
+      if (clerkUserId && shopifyCustomerId) {
+        try {
+          const clerk = await clerkClient();
+          await clerk.users.updateUserMetadata(clerkUserId, {
+            publicMetadata: {
+              shopifyCustomerId: shopifyCustomerId,
+            },
+          });
+          logger.log('Linked Shopify customer to Clerk user:', { clerkUserId, shopifyCustomerId });
+        } catch (linkError) {
+          logger.error('Failed to link Shopify customer to Clerk user:', linkError);
+        }
+      }
     } catch (shopifyError) {
       logger.error('Failed to create Shopify order:', shopifyError);
       // Don't fail the payment - just log the error
@@ -119,6 +141,32 @@ export async function POST(request: NextRequest) {
       paidAt: new Date().toISOString(),
     };
 
+    // Step 3: Send order confirmation emails
+    try {
+      await sendOrderConfirmationEmail({
+        orderId,
+        customerName: orderData.customer.name,
+        customerEmail: orderData.customer.email,
+        items: orderData.items.map((item: CartItemForOrder) => ({
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price,
+          image: item.image,
+        })),
+        subtotal: orderData.subtotal,
+        shipping: orderData.shipping,
+        tax: orderData.tax,
+        total: orderData.total,
+        shippingAddress: orderData.customer.address,
+        paymentId: razorpay_payment_id,
+        orderDate: new Date().toISOString(),
+      });
+      logger.log('Order confirmation emails sent successfully');
+    } catch (emailError) {
+      logger.error('Failed to send order confirmation emails:', emailError);
+      // Don't fail the order - emails are not critical
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Payment verified successfully',
@@ -138,7 +186,7 @@ async function createShopifyOrder(
   orderData: any, 
   paymentId: string, 
   internalOrderId: string
-): Promise<{ id: string; name: string }> {
+): Promise<{ id: string; name: string; customerId?: string }> {
   const shopifyDomain = process.env.SHOPIFY_STORE_DOMAIN;
   const adminToken = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
   
@@ -154,10 +202,34 @@ async function createShopifyOrder(
     name: item.name,
   }));
 
+  // First, try to find or create customer
+  let customerId = null;
+  try {
+    const customerResponse = await fetch(
+      `https://${shopifyDomain}.myshopify.com/admin/api/2024-01/customers/search.json?query=email:${orderData.customer.email}`,
+      {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Shopify-Access-Token': adminToken,
+        },
+      }
+    );
+    
+    if (customerResponse.ok) {
+      const customerData = await customerResponse.json();
+      if (customerData.customers && customerData.customers.length > 0) {
+        customerId = customerData.customers[0].id;
+      }
+    }
+  } catch (error) {
+    logger.error('Failed to search for customer:', error);
+  }
+
   const shopifyOrder = {
     order: {
       line_items: lineItems,
-      customer: {
+      customer: customerId ? { id: customerId } : {
         first_name: orderData.customer.name.split(' ')[0],
         last_name: orderData.customer.name.split(' ').slice(1).join(' ') || '',
         email: orderData.customer.email,
@@ -206,7 +278,11 @@ async function createShopifyOrder(
   }
 
   const data = await response.json();
-  return { id: data.order.id, name: data.order.name };
+  return { 
+    id: data.order.id, 
+    name: data.order.name,
+    customerId: data.order.customer?.id || customerId
+  };
 }
 
 // Note: Delhivery tracking is now handled via Shopify-Delhivery integration

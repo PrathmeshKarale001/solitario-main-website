@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, ArrowRight } from 'lucide-react';
+import { Eye, Heart } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice, cn } from '@/lib/utils';
+import { useWishlist } from '@/lib/wishlist-context';
 
 export interface ProductCardProps {
   product: Product;
@@ -17,6 +18,22 @@ export interface ProductCardProps {
 
 export default function ProductCard({ product, onQuickView, onAddToCart, darkMode = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const [isInWishlist, setIsInWishlist] = useState(false);
+
+  useEffect(() => {
+    setIsInWishlist(wishlist.some(item => item.id === product.id));
+  }, [wishlist, product.id]);
+
+  const handleWishlistToggle = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (isInWishlist) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
 
   return (
     <Link href={`/products/${product.id}`} className="block group">
@@ -60,6 +77,21 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
               </span>
             </div>
           )}
+
+          {/* Wishlist Heart Icon */}
+          <motion.button
+            onClick={handleWishlistToggle}
+            className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 p-1.5 sm:p-2 bg-white/90 hover:bg-white rounded-full shadow-sm"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <Heart
+              className={cn(
+                "w-3 h-3 sm:w-4 sm:h-4 transition-colors",
+                isInWishlist ? "fill-red-500 text-red-500" : "text-gray-600"
+              )}
+            />
+          </motion.button>
 
           {/* Quick View Button - Desktop only */}
           <motion.div

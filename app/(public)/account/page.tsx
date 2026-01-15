@@ -62,7 +62,6 @@ export default function AccountPage() {
     { icon: Package, label: 'My Orders', href: '/account/orders', description: 'View and track your orders' },
     { icon: Heart, label: 'Wishlist', href: '/account/wishlist', description: 'Your saved items' },
     { icon: MapPin, label: 'Addresses', href: '/account/addresses', description: 'Manage delivery addresses' },
-    { icon: CreditCard, label: 'Payment Methods', href: '/account/payment', description: 'Saved payment options' },
     { icon: User, label: 'Profile Settings', href: '/account/settings', description: 'Update your information' },
   ];
 

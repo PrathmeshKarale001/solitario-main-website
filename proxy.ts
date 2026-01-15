@@ -2,10 +2,19 @@ import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
 const isProtectedRoute = createRouteMatcher([
   '/account(.*)',
-  '/admin(.*)',
 ]);
 
+const isAdminRoute = createRouteMatcher(['/admin(.*)']);
+
 export default clerkMiddleware(async (auth, req) => {
+  // Block all admin routes - show access restricted
+  if (isAdminRoute(req)) {
+    // Let the admin page handle the blocking logic
+    // This preserves the original admin code but prevents access
+    return;
+  }
+  
+  // Protect account routes
   if (isProtectedRoute(req)) {
     await auth.protect();
   }

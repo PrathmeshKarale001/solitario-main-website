@@ -8,20 +8,52 @@ import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@clerk/nextjs';
 
 export default function CartSidebar() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
-  const { appliedCoupon, setAppliedCoupon } = useAdmin();
+  const { userId } = useAuth();
+  const [appliedCoupon, setAppliedCouponState] = useState<string>('');
   const [couponInput, setCouponInput] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [showApplied, setShowApplied] = useState(false);
+
+  // Load coupon from localStorage on mount
+  useEffect(() => {
+    const savedCoupon = localStorage.getItem('applied_coupon');
+    if (savedCoupon) {
+      setAppliedCouponState(savedCoupon);
+      setShowApplied(true);
+      setCouponInput(savedCoupon);
+    }
+  }, []);
+
+  // Helper to set coupon with localStorage persistence
+  const setAppliedCoupon = (code: string) => {
+    setAppliedCouponState(code);
+    if (code) {
+      localStorage.setItem('applied_coupon', code);
+    } else {
+      localStorage.removeItem('applied_coupon');
+    }
+  };
 
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
+  
+  // Promotion pricing state
+  const [promotionPricing, setPromotionPricing] = useState<{
+    subtotal: number;
+    discounts: Array<{ type: string; percent: number; amount: number; description: string }>;
+    total: number;
+    messages: string[];
+  } | null>(null);
+  const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  // Auto-calculate gift and coupon discounts
-  const hasGift = itemCount >= 2;
+  // Auto-calculate gift - only for exactly 2 items, not 3+
+  const hasGift = itemCount === 2;
 
   // Fetch gift product details from Shopify if not already fetched
   useEffect(() => {
@@ -60,25 +92,93 @@ export default function CartSidebar() {
     fetchGift();
   }, [hasGift, giftProduct]);
 
-  useEffect(() => {
-    if (appliedCoupon) {
-      validateCoupon(appliedCoupon);
+  // Fetch promotion pricing
+  const fetchPromotionPricing = async () => {
+    if (items.length === 0) {
+      setPromotionPricing(null);
+      return;
     }
-  }, [total, appliedCoupon]);
+
+    setIsPricingLoading(true);
+    try {
+      const response = await fetch('/api/pricing/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartLines: items.map(item => ({
+            merchandise: {
+              price: {
+                amount: item.product.price.toString(),
+                currencyCode: item.product.currency || 'INR'
+              }
+            },
+            quantity: item.quantity
+          })),
+          clerkUserId: userId,
+          couponCode: appliedCoupon || undefined,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setPromotionPricing(data.pricing);
+      } else {
+        console.error('Failed to fetch pricing:', data.error);
+        setPromotionPricing(null);
+      }
+    } catch (error) {
+      console.error('Error fetching pricing:', error);
+      setPromotionPricing(null);
+    } finally {
+      setIsPricingLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPromotionPricing();
+  }, [items, appliedCoupon, userId]);
+
+
 
   const validateCoupon = async (code: string) => {
     setIsValidating(true);
     setCouponError(null);
+    
     try {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
+        body: JSON.stringify({ 
+          couponCode: code, 
+          subtotal: total * 100,
+          cartId: localStorage.getItem('shopify-cart-id')
+        }),
       });
       const data = await response.json();
+      
       if (response.ok) {
+        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+        
+        // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
+        if (totalItems >= 2) {
+          setCouponError("Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).");
+          setAppliedCoupon(null);
+          setCouponDiscount(0);
+          setIsValidating(false);
+          return;
+        }
+        
+        // Set coupon as applied
         setAppliedCoupon(code);
-        setCouponDiscount(Math.round((total * data.percentOff) / 100));
+        setShowApplied(true);
+        
+        if (data.percentOff) {
+          const discount = Math.round((total * data.percentOff) / 100);
+          setCouponDiscount(discount);
+        }
+        
+        // Refresh pricing with the applied coupon
+        await fetchPromotionPricing();
       } else {
         setCouponError(data.error || 'Invalid coupon');
         setAppliedCoupon(null);
@@ -99,10 +199,12 @@ export default function CartSidebar() {
   };
 
   const removeCoupon = () => {
-    setAppliedCoupon(null);
+    setAppliedCoupon('');
+    setShowApplied(false);
     setCouponInput('');
     setCouponDiscount(0);
     setCouponError(null);
+    localStorage.removeItem('applied_coupon');
   };
 
   return (
@@ -229,66 +331,34 @@ export default function CartSidebar() {
                     </div>
                   ))}
 
-                  {/* Gift Item Display */}
+                  {/* Gift Item Display - Clean, Minimal Design */}
                   {hasGift && (
-                    <>
+                    <div className="flex gap-4 pb-6 border-b border-brand-200 last:border-0 relative">
                       {isGiftLoading ? (
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3 }}
-                          className="relative flex gap-3 p-3 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-300/40 shadow-sm overflow-hidden"
-                        >
-                          <div className="absolute top-0 right-0 w-20 h-20 bg-amber-200/20 rounded-full blur-2xl"></div>
-                          <div className="relative w-16 h-16 flex-shrink-0 bg-white/80 rounded-lg overflow-hidden border border-amber-200 animate-pulse">
-                            <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-50"></div>
-                          </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
-                            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2 animate-pulse"></div>
-                            <span className="inline-flex items-center gap-1 text-[10px] bg-amber-400 text-white px-2.5 py-1 rounded-full font-bold uppercase tracking-wide w-fit shadow-sm">
-                              <Gift className="w-3 h-3" />
-                              FREE GIFT
-                            </span>
-                          </div>
-                        </motion.div>
+                        <div className="w-24 h-24 flex-shrink-0 bg-brand-50 rounded-brand border border-brand-200 animate-pulse" />
                       ) : giftProduct ? (
-                        <motion.div 
-                          initial={{ opacity: 0, scale: 0.95 }}
-                          animate={{ opacity: 1, scale: 1 }}
-                          transition={{ duration: 0.3 }}
-                          className="relative flex gap-3 p-3 bg-gradient-to-br from-amber-50 to-orange-50 rounded-xl border-2 border-amber-300/40 shadow-md hover:shadow-lg transition-shadow overflow-hidden group"
-                        >
-                          <div className="absolute top-0 right-0 w-20 h-20 bg-amber-200/20 rounded-full blur-2xl group-hover:bg-amber-300/30 transition-colors"></div>
-                          <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg overflow-hidden border-2 border-amber-200 shadow-sm">
-                             <Image
+                        <>
+                          <div className="relative w-24 h-24 flex-shrink-0 bg-brand-50 rounded-brand overflow-hidden border border-brand-200">
+                            <Image
                               src={giftProduct.image}
                               alt={giftProduct.name}
                               fill
-                              className="object-contain p-1.5 group-hover:scale-110 transition-transform duration-300"
-                              onError={(e) => {
-                                const target = e.target as HTMLImageElement;
-                                target.src = 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=200&h=200&fit=crop&q=80';
-                              }}
+                              className="object-contain p-2"
                             />
-                            <div className="absolute -top-1 -right-1 bg-gradient-to-br from-amber-500 to-orange-500 text-white text-[8px] px-1.5 py-0.5 font-bold uppercase tracking-tight rounded-full shadow-md">
+                            <div className="absolute top-0 right-0 bg-amber-500 text-white text-[8px] px-1.5 py-0.5 font-bold uppercase rounded-bl-lg">
                               Gift
                             </div>
                           </div>
-                          <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
-                            <h4 className="font-playfair text-sm font-semibold text-gray-800 mb-1 line-clamp-1">{giftProduct.name}</h4>
-                            <div className="flex items-center gap-2">
-                               <span className="inline-flex items-center gap-1 text-[10px] bg-gradient-to-r from-amber-400 to-orange-400 text-white px-2.5 py-1 rounded-full font-bold uppercase tracking-wide shadow-sm">
-                                  <Gift className="w-3 h-3" />
-                                  FREE
-                               </span>
-                               <span className="text-xs text-gray-500 line-through">
-                                  {formatPrice(giftProduct.price, '₹')}
-                               </span>
+                          <div className="flex-1 flex flex-col justify-center">
+                            <div className="flex items-center gap-2 mb-1">
+                              <Gift size={14} className="text-amber-500" />
+                              <h4 className="font-playfair text-body-md text-brand-800">{giftProduct.name}</h4>
                             </div>
+                            <span className="text-[10px] font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 w-fit">Free Gift</span>
                           </div>
-                        </motion.div>
+                        </>
                       ) : null}
-                    </>
+                    </div>
                   )}
                 </div>
               )}
@@ -297,9 +367,43 @@ export default function CartSidebar() {
             {/* Footer */}
             {items.length > 0 && (
               <div className="border-t border-brand-200 p-6 space-y-4 bg-gradient-to-b from-white to-gray-50/30">
+                {/* Active Offers */}
+                <div className="space-y-1.5">
+                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-1.5 rounded-lg text-[11px]">
+                    <Tag size={12} className="flex-shrink-0" />
+                    <span className="font-gotham font-semibold">BUY 3+ → 30% OFF</span>
+                  </div>
+                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-[11px]">
+                    <Gift size={12} className="flex-shrink-0" />
+                    <span className="font-gotham font-semibold">BUY 2 → 10% OFF + FREE GIFT</span>
+                  </div>
+                </div>
+
                 {/* Promo Code Section - Enhanced Design */}
                 <div className="relative">
-                  {!appliedCoupon ? (
+                  {showApplied && appliedCoupon ? (
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="flex items-center justify-between p-3 bg-gradient-to-r from-classic-green/10 to-emerald-50 border-2 border-classic-green/30 rounded-xl shadow-sm"
+                    >
+                      <div className="flex items-center gap-2.5">
+                         <div className="p-1.5 bg-classic-green/20 rounded-lg">
+                           <Tag className="w-3.5 h-3.5 text-classic-green" />
+                         </div>
+                         <div>
+                           <p className="text-[10px] text-gray-600 uppercase tracking-wide font-medium">Promo Applied</p>
+                           <p className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</p>
+                         </div>
+                      </div>
+                      <button
+                        onClick={removeCoupon}
+                        className="text-xs font-semibold text-red-600 hover:text-red-700 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
+                      >
+                        Remove
+                      </button>
+                    </motion.div>
+                  ) : (
                     <form onSubmit={handleApplyCoupon} className="relative">
                       <div className="flex items-center gap-2 p-3 border-2 border-brand-200 rounded-xl bg-white shadow-sm hover:border-classic-green/40 focus-within:border-classic-green focus-within:ring-2 focus-within:ring-classic-green/20 transition-all">
                         <Tag className="w-4 h-4 text-brand-400 flex-shrink-0" />
@@ -336,52 +440,69 @@ export default function CartSidebar() {
                         </motion.p>
                       )}
                     </form>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="flex items-center justify-between p-3 bg-gradient-to-r from-classic-green/10 to-emerald-50 border-2 border-classic-green/30 rounded-xl shadow-sm"
-                    >
-                      <div className="flex items-center gap-2.5">
-                         <div className="p-1.5 bg-classic-green/20 rounded-lg">
-                           <Tag className="w-3.5 h-3.5 text-classic-green" />
-                         </div>
-                         <div>
-                           <p className="text-[10px] text-gray-600 uppercase tracking-wide font-medium">Promo Applied</p>
-                           <p className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</p>
-                         </div>
-                      </div>
-                      <button
-                        onClick={removeCoupon}
-                        className="text-xs font-semibold text-red-600 hover:text-red-700 px-3 py-1.5 rounded-lg hover:bg-red-50 transition-colors"
-                      >
-                        Remove
-                      </button>
-                    </motion.div>
                   )}
                 </div>
-                {couponError && <p className="text-[10px] text-error px-1 font-medium">{couponError}</p>}
+
+                {/* Promotion Messages */}
+                {promotionPricing?.messages && promotionPricing.messages.length > 0 && (
+                  <div className="space-y-1.5 mb-3">
+                    {promotionPricing.messages.map((message, index) => (
+                      <div key={index} className="text-xs text-classic-green font-montserrat bg-classic-green/5 px-2 py-1 rounded">
+                        {message}
+                      </div>
+                    ))}
+                  </div>
+                )}
 
                 {/* Totals Section - Clean Grid */}
                 <div className="space-y-2 py-2">
-                  <div className="flex items-center justify-between text-xs font-montserrat text-brand-600">
-                    <span>Subtotal</span>
-                    <span>{formatPrice(total, items[0].product.currency)}</span>
-                  </div>
-                  
-                  {couponDiscount > 0 && (
-                    <div className="flex items-center justify-between text-xs font-bold text-success">
-                      <span>Discount</span>
-                      <span>-{formatPrice(couponDiscount, items[0].product.currency)}</span>
+                  {isPricingLoading ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 className="w-4 h-4 animate-spin text-brand-400" />
                     </div>
-                  )}
+                  ) : promotionPricing ? (
+                    <>
+                      <div className="flex items-center justify-between text-xs font-montserrat text-brand-600">
+                        <span>Subtotal</span>
+                        <span>{formatPrice(promotionPricing.subtotal, items[0].product.currency)}</span>
+                      </div>
+                      
+                      {promotionPricing.discounts.map((discount, index) => (
+                        <div key={index} className="flex items-center justify-between text-xs font-bold text-classic-green">
+                          <span>{discount.description}</span>
+                          <span>-{formatPrice(discount.amount, items[0].product.currency)}</span>
+                        </div>
+                      ))}
 
-                  <div className="flex items-center justify-between pt-3 border-t border-brand-100">
-                    <span className="font-playfair text-lg text-brand-800">Total</span>
-                    <span className="font-gotham text-xl font-bold text-classic-green">
-                      {formatPrice(Math.max(0, total - couponDiscount), items[0].product.currency)}
-                    </span>
-                  </div>
+                      <div className="flex items-center justify-between pt-3 border-t border-brand-100">
+                        <span className="font-playfair text-lg text-brand-800">Total</span>
+                        <span className="font-gotham text-xl font-bold text-classic-green">
+                          {formatPrice(promotionPricing.total, items[0].product.currency)}
+                        </span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between text-xs font-montserrat text-brand-600">
+                        <span>Subtotal</span>
+                        <span>{formatPrice(total, items[0].product.currency)}</span>
+                      </div>
+                      
+                      {couponDiscount > 0 && (
+                        <div className="flex items-center justify-between text-xs font-bold text-success">
+                          <span>Discount</span>
+                          <span>-{formatPrice(couponDiscount, items[0].product.currency)}</span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between pt-3 border-t border-brand-100">
+                        <span className="font-playfair text-lg text-brand-800">Total</span>
+                        <span className="font-gotham text-xl font-bold text-classic-green">
+                          {formatPrice(Math.max(0, total - couponDiscount), items[0].product.currency)}
+                        </span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 {/* Minimalist Actions */}

@@ -7,7 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 export function formatPrice(price: number, currency: string = '₹'): string {
   // Ensure INR is converted to ₹ symbol
   const symbol = currency === 'INR' ? '₹' : currency;
-  return `${symbol}${price.toLocaleString('en-IN')}`;
+  // Round to nearest integer to remove decimal values
+  const roundedPrice = Math.round(price);
+  return `${symbol}${roundedPrice.toLocaleString('en-IN')}`;
 }
 
 export function slugify(text: string): string {

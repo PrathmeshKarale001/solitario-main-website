@@ -67,13 +67,14 @@ export async function calculatePromotions(
   let loyaltyCouponApplied = false;
   let cartRuleApplied: 'BUY2' | 'BUY3' | null = null;
 
+  // First purchase discount only for logged-in users
   const isFirstPurchase =
     input.clerkUserId && OrderRepository.countPaidOrdersByClerkUserId(input.clerkUserId) === 0;
 
-  const validCoupon = input.couponCode
-    ? await validateCoupon(input.couponCode, input.clerkUserId)
-    : null;
+  // Loyalty coupons removed - only Shopify discount codes supported via API
+  const validCoupon = null;
 
+  // Apply cart-based rules (BUY2, BUY3)
   if (totalItems >= 3) {
     cartRuleApplied = 'BUY3';
     const discountAmount = Math.round((subtotal * config.buy3_percent) / 100);
@@ -84,6 +85,7 @@ export async function calculatePromotions(
       description: `${config.buy3_percent}% off for buying 3+ items`,
     });
     messages.push(`🎉 ${config.buy3_percent}% discount applied for 3+ items!`);
+    // No gift for 3+ items, only discount as requested
   } else if (totalItems === 2) {
     cartRuleApplied = 'BUY2';
     const discountAmount = Math.round((subtotal * config.buy2_percent) / 100);
@@ -103,11 +105,12 @@ export async function calculatePromotions(
         unit_price: 0,
         is_gift: true,
       });
-      messages.push(`✨ Free ${config.gift_product_name} added to your cart!`);
+      // Removed redundant generic gift message
     }
   }
 
-  if (isFirstPurchase && !cartRuleApplied && config.stacking_first_purchase) {
+  // Apply first purchase discount (can stack with cart rules if enabled)
+  if (isFirstPurchase && config.stacking_first_purchase) {
     firstPurchaseApplied = true;
     const discountAmount = Math.round((subtotal * config.first_purchase_percent) / 100);
     discounts.push({
@@ -118,6 +121,7 @@ export async function calculatePromotions(
     });
     messages.push(`🌟 Welcome! ${config.first_purchase_percent}% off your first order!`);
   } else if (isFirstPurchase && !cartRuleApplied && !config.stacking_first_purchase) {
+    // Only apply if no cart rule and stacking is disabled
     firstPurchaseApplied = true;
     const discountAmount = Math.round((subtotal * config.first_purchase_percent) / 100);
     discounts.push({
@@ -129,23 +133,7 @@ export async function calculatePromotions(
     messages.push(`🌟 Welcome! ${config.first_purchase_percent}% off your first order!`);
   }
 
-  if (validCoupon) {
-    if (discounts.length > 0) {
-      errors.push("This coupon can't be combined with other offers.");
-    } else {
-      loyaltyCouponApplied = true;
-      const discountAmount = Math.round((subtotal * validCoupon.percent_off) / 100);
-      discounts.push({
-        type: 'LOYALTY_COUPON',
-        percent: validCoupon.percent_off,
-        amount: discountAmount,
-        description: `Loyalty coupon: ${validCoupon.percent_off}% off`,
-      });
-      messages.push(`💎 Loyalty coupon applied: ${validCoupon.percent_off}% off!`);
-    }
-  } else if (input.couponCode) {
-    errors.push('Invalid or expired coupon code.');
-  }
+  // Loyalty coupon system removed - coupons now handled via Shopify discount codes only
 
   const totalDiscount = discounts.reduce((sum, d) => sum + d.amount, 0);
   const total = Math.max(0, subtotal - totalDiscount);
@@ -189,25 +177,7 @@ function getNoPromoResult(cartLines: CartLine[]): PromoEngineOutput {
   };
 }
 
-async function validateCoupon(
-  code: string,
-  clerkUserId?: string
-): Promise<{ percent_off: number } | null> {
-  const coupon = CouponRepository.findByCode(code);
-  if (!coupon) return null;
-
-  if (coupon.status !== 'ACTIVE') return null;
-
-  if (new Date(coupon.expires_at) < new Date()) {
-    return null;
-  }
-
-  if (clerkUserId && coupon.clerk_user_id !== clerkUserId) {
-    return null;
-  }
-
-  return { percent_off: coupon.percent_off };
-}
+// Loyalty coupon validation removed - coupons handled via Shopify API in /api/coupons/validate endpoint
 
 export function rupeesToPaise(rupees: number): number {
   return Math.round(rupees);

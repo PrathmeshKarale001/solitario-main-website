@@ -10,19 +10,51 @@ import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { useState, useEffect } from 'react';
+import { useAuth } from '@clerk/nextjs';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount } = useCart();
-  const { appliedCoupon, setAppliedCoupon } = useAdmin();
-  const [couponInput, setCouponInput] = useState(appliedCoupon || '');
+  const { userId } = useAuth();
+  const [appliedCoupon, setAppliedCouponState] = useState<string>('');
+  const [couponInput, setCouponInput] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
+  const [showApplied, setShowApplied] = useState(false);
+
+  // Load coupon from localStorage on mount
+  useEffect(() => {
+    const savedCoupon = localStorage.getItem('applied_coupon');
+    if (savedCoupon) {
+      setAppliedCouponState(savedCoupon);
+      setShowApplied(true);
+      setCouponInput(savedCoupon);
+    }
+  }, []);
+
+  // Helper to set coupon with localStorage persistence
+  const setAppliedCoupon = (code: string) => {
+    setAppliedCouponState(code);
+    if (code) {
+      localStorage.setItem('applied_coupon', code);
+    } else {
+      localStorage.removeItem('applied_coupon');
+    }
+  };
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
+  
+  // Promotion pricing state
+  const [promotionPricing, setPromotionPricing] = useState<{
+    subtotal: number;
+    discounts: Array<{ type: string; percent: number; amount: number; description: string }>;
+    total: number;
+    messages: string[];
+  } | null>(null);
+  const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  // Auto-calculate gift
-  const hasGift = itemCount >= 2;
+  // Auto-calculate gift - only for exactly 2 items, not 3+
+  const hasGift = itemCount === 2;
 
   useEffect(() => {
     async function fetchGift() {
@@ -60,15 +92,57 @@ export default function CartPage() {
     fetchGift();
   }, [hasGift, giftProduct]);
 
-  useEffect(() => {
-    if (appliedCoupon) {
-      validateCoupon(appliedCoupon);
+  // Fetch promotion pricing
+  const fetchPromotionPricing = async () => {
+    if (items.length === 0) {
+      setPromotionPricing(null);
+      return;
     }
-  }, [total, appliedCoupon]);
+
+    setIsPricingLoading(true);
+    try {
+      const response = await fetch('/api/pricing/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cartLines: items.map(item => ({
+            merchandise: {
+              price: {
+                amount: item.product.price.toString(),
+                currencyCode: item.product.currency || 'INR'
+              }
+            },
+            quantity: item.quantity
+          })),
+          clerkUserId: userId,
+          couponCode: appliedCoupon || undefined,
+        }),
+      });
+
+      const data = await response.json();
+      if (response.ok) {
+        setPromotionPricing(data.pricing);
+      } else {
+        console.error('Failed to fetch pricing:', data.error);
+        setPromotionPricing(null);
+      }
+    } catch (error) {
+      console.error('Error fetching pricing:', error);
+      setPromotionPricing(null);
+    } finally {
+      setIsPricingLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPromotionPricing();
+  }, [items, appliedCoupon, userId]);
+
 
   const validateCoupon = async (code: string) => {
     setIsValidating(true);
     setCouponError(null);
+    
     try {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
@@ -76,8 +150,22 @@ export default function CartPage() {
         body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
       });
       const data = await response.json();
+      
       if (response.ok) {
+        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
+        
+        // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
+        if (totalItems >= 2) {
+          setCouponError("Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).");
+          setAppliedCoupon(null);
+          setCouponDiscount(0);
+          setIsValidating(false);
+          return;
+        }
+        
+        // Set coupon as applied
         setAppliedCoupon(code);
+        setShowApplied(true);
         setCouponDiscount(Math.round((total * data.percentOff) / 100));
       } else {
         setCouponError(data.error || 'Invalid coupon');
@@ -99,10 +187,12 @@ export default function CartPage() {
   };
 
   const removeCoupon = () => {
-    setAppliedCoupon(null);
+    setAppliedCoupon('');
+    setShowApplied(false);
     setCouponInput('');
     setCouponDiscount(0);
     setCouponError(null);
+    localStorage.removeItem('applied_coupon');
   };
 
   // No additional charges
@@ -246,78 +336,36 @@ export default function CartPage() {
                 </motion.div>
               ))}
 
-              {/* Gift Item Display */}
+              {/* Gift Item Display - Clean, Minimal Design */}
               {hasGift && (
-                <>
+                <div className="flex gap-3 md:gap-6 p-4 md:p-6 bg-white border border-brand-200 rounded-xl md:rounded-brand-xl relative transition-all duration-300">
                   {isGiftLoading ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="relative flex gap-4 md:gap-6 p-5 md:p-6 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-2xl border-2 border-amber-300/40 shadow-md overflow-hidden"
-                    >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-3xl"></div>
-                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 bg-white/80 rounded-xl overflow-hidden border-2 border-amber-200 shadow-sm animate-pulse">
-                        <div className="absolute inset-0 bg-gradient-to-br from-amber-100 to-amber-50"></div>
-                      </div>
-
-                      <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
-                        <div className="h-6 bg-gray-200 rounded-lg w-2/3 mb-2 animate-pulse"></div>
-                        <p className="text-sm text-amber-700 font-montserrat mb-3 font-medium">
-                          🎁 Automatically added for buying 2+ items!
-                        </p>
-                        <div className="flex items-center gap-3">
-                          <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
-                            <Gift className="w-4 h-4" />
-                            FREE GIFT
-                          </span>
-                        </div>
-                      </div>
-                    </motion.div>
+                    <div className="w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-brand-50 rounded-lg md:rounded-brand-lg border border-brand-200 animate-pulse" />
                   ) : giftProduct ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="relative flex gap-4 md:gap-6 p-5 md:p-6 bg-gradient-to-br from-amber-50 via-orange-50 to-amber-50 rounded-2xl border-2 border-amber-300/40 shadow-lg hover:shadow-xl transition-all overflow-hidden group"
-                    >
-                      <div className="absolute top-0 right-0 w-32 h-32 bg-amber-200/20 rounded-full blur-3xl group-hover:bg-amber-300/30 transition-colors"></div>
-                      <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-orange-200/10 rounded-full blur-3xl"></div>
-                      
-                      <div className="relative w-24 h-24 md:w-32 md:h-32 flex-shrink-0 bg-white rounded-xl overflow-hidden border-2 border-amber-200 shadow-md">
+                    <>
+                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-brand-50 rounded-lg md:rounded-brand-lg overflow-hidden border border-brand-200">
                         <Image
                           src={giftProduct.image}
                           alt={giftProduct.name}
                           fill
-                          className="object-contain p-3 group-hover:scale-110 transition-transform duration-300"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=400&fit=crop&q=80';
-                          }}
+                          className="object-contain p-3"
                         />
-                        <div className="absolute -top-2 -right-2 bg-gradient-to-br from-amber-500 to-orange-500 text-white text-xs px-2.5 py-1 font-bold uppercase tracking-tight rounded-full shadow-lg">
+                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] px-2 py-1 font-bold uppercase rounded-bl-xl">
                           Gift
                         </div>
                       </div>
-
-                      <div className="flex-1 min-w-0 flex flex-col justify-center relative z-10">
-                        <h3 className="font-playfair text-xl md:text-2xl text-gray-800 mb-2 font-semibold">{giftProduct.name}</h3>
-                        <p className="text-sm md:text-base text-amber-700 font-montserrat mb-4 font-medium flex items-center gap-2">
-                          <Gift className="w-4 h-4" />
-                          Automatically added for buying 2+ items!
-                        </p>
-                        <div className="flex items-center gap-3 flex-wrap">
-                          <span className="inline-flex items-center gap-1.5 bg-gradient-to-r from-amber-400 to-orange-400 text-white px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wide shadow-md">
-                            <Gift className="w-4 h-4" />
-                            FREE
-                          </span>
-                          <span className="text-base text-gray-500 line-through font-gotham">
-                            {formatPrice(giftProduct.price)}
-                          </span>
-                          <span className="text-sm text-emerald-600 font-semibold">You save {formatPrice(giftProduct.price)}!</span>
+                      <div className="flex-1 min-w-0 flex flex-col justify-center">
+                        <div className="flex items-center gap-2 mb-2">
+                          <Gift size={18} className="text-amber-500 shrink-0" />
+                          <h3 className="font-playfair text-heading-md text-brand-800">{giftProduct.name}</h3>
+                        </div>
+                        <div className="flex items-center gap-3">
+                          <span className="text-body-sm font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Free Gift</span>
                         </div>
                       </div>
-                    </motion.div>
+                    </>
                   ) : null}
-                </>
+                </div>
               )}
             </div>
 
@@ -326,6 +374,18 @@ export default function CartPage() {
               <div className="sticky top-24 bg-white rounded-brand-xl p-6 border border-brand-200 shadow-luxury">
                 <h2 className="font-playfair text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
+                {/* Active Offers */}
+                <div className="space-y-2 mb-6">
+                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-2 rounded-lg text-xs">
+                    <Tag size={14} className="flex-shrink-0" />
+                    <span className="font-gotham font-semibold">BUY 3+ → 30% OFF</span>
+                  </div>
+                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-2 rounded-lg text-xs">
+                    <Gift size={14} className="flex-shrink-0" />
+                    <span className="font-gotham font-semibold">BUY 2 → 10% OFF + FREE GIFT</span>
+                  </div>
+                </div>
+
                 {/* Coupon Code Section */}
                 <div className="mb-6">
                   <div className="flex items-center gap-2 mb-3">
@@ -333,7 +393,7 @@ export default function CartPage() {
                     <span className="font-montserrat text-xs font-bold uppercase tracking-wider text-brand-800">Promo Code</span>
                   </div>
 
-                  {!appliedCoupon ? (
+                  {!(showApplied && appliedCoupon) ? (
                     <form onSubmit={handleApplyCoupon} className="flex gap-2">
                       <input
                         type="text"
@@ -368,33 +428,76 @@ export default function CartPage() {
                   {couponError && <p className="text-xs text-error mt-2 ml-1">{couponError}</p>}
                 </div>
 
-                <div className="space-y-3 mb-6 pt-6 border-t border-brand-100">
-                  <div className="flex items-center justify-between">
-                    <span className="text-brand-600 font-montserrat">Subtotal</span>
-                    <span className="font-gotham text-brand-800">
-                      {formatPrice(total)}
-                    </span>
+                {/* Promotion Messages */}
+                {promotionPricing?.messages && promotionPricing.messages.length > 0 && (
+                  <div className="space-y-2 mb-4">
+                    {promotionPricing.messages.map((message, index) => (
+                      <div key={index} className="flex items-start gap-2 bg-classic-green/10 border border-classic-green/30 rounded-lg p-3">
+                        <span className="text-classic-green text-sm">✨</span>
+                        <p className="text-sm font-montserrat text-classic-green">{message}</p>
+                      </div>
+                    ))}
                   </div>
-                  
-                  {couponDiscount > 0 && (
-                    <div className="flex items-center justify-between text-success">
-                      <span className="font-montserrat">Coupon Discount</span>
-                      <span className="font-gotham font-bold">
-                        -{formatPrice(couponDiscount)}
-                      </span>
-                    </div>
-                  )}
+                )}
 
-                  <div className="flex items-center justify-between">
-                    <span className="text-brand-600 font-montserrat">Shipping</span>
-                    <span className="font-gotham text-classic-green">FREE</span>
-                  </div>
+                <div className="space-y-3 mb-6 pt-6 border-t border-brand-100">
+                  {isPricingLoading ? (
+                    <div className="flex items-center justify-center py-4">
+                      <Loader2 className="w-5 h-5 animate-spin text-brand-400" />
+                    </div>
+                  ) : promotionPricing ? (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand-600 font-montserrat">Subtotal</span>
+                        <span className="font-gotham text-brand-800">
+                          {formatPrice(promotionPricing.subtotal)}
+                        </span>
+                      </div>
+                      
+                      {promotionPricing.discounts.map((discount, index) => (
+                        <div key={index} className="flex items-center justify-between text-classic-green">
+                          <span className="font-montserrat">{discount.description}</span>
+                          <span className="font-gotham font-bold">
+                            -{formatPrice(discount.amount)}
+                          </span>
+                        </div>
+                      ))}
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand-600 font-montserrat">Shipping</span>
+                        <span className="font-gotham text-classic-green">FREE</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand-600 font-montserrat">Subtotal</span>
+                        <span className="font-gotham text-brand-800">
+                          {formatPrice(total)}
+                        </span>
+                      </div>
+                      
+                      {couponDiscount > 0 && (
+                        <div className="flex items-center justify-between text-success">
+                          <span className="font-montserrat">Coupon Discount</span>
+                          <span className="font-gotham font-bold">
+                            -{formatPrice(couponDiscount)}
+                          </span>
+                        </div>
+                      )}
+
+                      <div className="flex items-center justify-between">
+                        <span className="text-brand-600 font-montserrat">Shipping</span>
+                        <span className="font-gotham text-classic-green">FREE</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
                   <span className="font-playfair text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
-                    {formatPrice(grandTotal)}
+                    {formatPrice(promotionPricing ? promotionPricing.total : grandTotal)}
                   </span>
                 </div>
                 <p className="text-body-sm text-brand-500 font-montserrat mb-6">(Prices include GST)</p>

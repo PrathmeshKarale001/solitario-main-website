@@ -191,6 +191,9 @@ export async function shopifyAdminFetch<T = any>(
   query: string,
   variables?: Record<string, any>
 ): Promise<{ data?: T; errors?: any[] }> {
+  const SHOPIFY_DOMAIN = process.env.SHOPIFY_STORE_DOMAIN;
+  const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
+
   if (!SHOPIFY_DOMAIN || !ADMIN_TOKEN) {
     throw new Error('Shopify Admin API not configured');
   }
@@ -212,10 +215,165 @@ export async function shopifyAdminFetch<T = any>(
   }
 
   const json = await response.json();
-  if (json.errors) {
-  }
   return json;
 }
+
+/**
+ * Validate a discount code using Shopify Admin API
+ */
+export async function validateShopifyDiscountCode(code: string) {
+  const query = `
+    query getDiscountCode($code: String!) {
+      codeDiscountNodeByCode(code: $code) {
+        id
+        codeDiscount {
+          ... on DiscountCodeBasic {
+            title
+            status
+            startsAt
+            endsAt
+            usageLimit
+            asyncUsageCount
+            customerGets {
+              value {
+                ... on DiscountPercentage {
+                  percentage
+                }
+                ... on DiscountAmount {
+                  amount {
+                    amount
+                    currencyCode
+                  }
+                }
+              }
+            }
+            customerSelection {
+              ... on DiscountCustomerAll {
+                allCustomers
+              }
+            }
+          }
+          ... on DiscountCodeBxgy {
+            title
+            status
+            startsAt
+            endsAt
+            usageLimit
+            asyncUsageCount
+          }
+          ... on DiscountCodeFreeShipping {
+            title
+            status
+            startsAt
+            endsAt
+            usageLimit
+            asyncUsageCount
+          }
+        }
+      }
+    }
+  `;
+  
+  const response = await shopifyAdminFetch(query, { code });
+  return response.data?.codeDiscountNodeByCode;
+}
+
+/**
+ * Create a Shopify discount code using Admin API
+ */
+export async function createShopifyDiscountCode(
+  title: string,
+  code: string,
+  percentOff: number,
+  endsAt: Date,
+  usageLimit: number = 1
+) {
+  const mutation = `
+    mutation discountCodeBasicCreate($basicCodeDiscount: DiscountCodeBasicInput!) {
+      discountCodeBasicCreate(basicCodeDiscount: $basicCodeDiscount) {
+        codeDiscountNode {
+          id
+          codeDiscount {
+            ... on DiscountCodeBasic {
+              codes(first: 1) {
+                nodes {
+                  code
+                }
+              }
+            }
+          }
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const variables = {
+    basicCodeDiscount: {
+      title,
+      code,
+      startsAt: new Date().toISOString(),
+      endsAt: endsAt.toISOString(),
+      usageLimit,
+      customerGets: {
+        value: {
+          percentage: percentOff / 100
+        },
+        items: {
+          all: true
+        }
+      },
+      customerSelection: {
+        all: true
+      }
+    }
+  };
+
+  return shopifyAdminFetch(mutation, variables);
+}
+
+/**
+ * Validate a discount code against a Shopify Cart
+ */
+export async function validateShopifyDiscount(cartId: string, discountCode: string) {
+  const response = await shopifyStorefrontFetch(CART_DISCOUNT_CODES_UPDATE_MUTATION, {
+    cartId,
+    discountCodes: [discountCode]
+  });
+
+  if (response.errors) {
+    return { valid: false, message: response.errors[0].message };
+  }
+
+  const cart = response.data?.cartDiscountCodesUpdate?.cart;
+  const codes = cart?.discountCodes || [];
+  const appliedCode = codes.find((c: any) => c.code.toUpperCase() === discountCode.toUpperCase());
+
+  return {
+    valid: !!appliedCode?.applicable,
+    cart
+  };
+}
+
+/**
+ * Apply a discount code to a Shopify Cart
+ */
+export async function applyDiscountCode(cartId: string, discountCode: string) {
+  const response = await shopifyStorefrontFetch(CART_DISCOUNT_CODES_UPDATE_MUTATION, {
+    cartId,
+    discountCodes: [discountCode]
+  });
+
+  if (response.errors) {
+    throw new Error(response.errors[0].message);
+  }
+
+  return response.data?.cartDiscountCodesUpdate?.cart;
+}
+
 
 // Common queries
 export const GET_PRODUCTS_QUERY = `
@@ -231,6 +389,13 @@ export const GET_PRODUCTS_QUERY = `
           vendor
           productType
           tags
+          sku: variants(first: 1) {
+            edges {
+              node {
+                sku
+              }
+            }
+          }
           priceRange {
             minVariantPrice {
               amount
@@ -496,6 +661,10 @@ export const GET_CART_QUERY = `
     cart(id: $cartId) {
       id
       checkoutUrl
+      discountCodes {
+        code
+        applicable
+      }
       lines(first: 50) {
         edges {
           node {
@@ -533,6 +702,12 @@ export const GET_CART_QUERY = `
                 currencyCode
               }
             }
+            discountAllocations {
+              discountedAmount {
+                amount
+                currencyCode
+              }
+            }
           }
         }
       }
@@ -558,7 +733,34 @@ export const GET_CART_QUERY = `
   }
 `;
 
-// Cart mutations
+export const CART_DISCOUNT_CODES_UPDATE_MUTATION = `
+  mutation cartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]) {
+    cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
+      cart {
+        id
+        discountCodes {
+          code
+          applicable
+        }
+        estimatedCost {
+          totalAmount {
+            amount
+            currencyCode
+          }
+          subtotalAmount {
+            amount
+            currencyCode
+          }
+        }
+      }
+      userErrors {
+        field
+        message
+      }
+    }
+  }
+`;
+
 export const CART_CREATE_MUTATION = `
   mutation cartCreate($input: CartInput!) {
     cartCreate(input: $input) {
@@ -972,7 +1174,7 @@ export async function getRelatedProducts(category: string, currentProductId: str
           variantId: variant?.id,
         };
       })
-      .filter((product: any) => product.id !== currentProductId) // Exclude current product
+      .filter((product: any) => product.id !== currentProductId && product.sku !== 'GIFT') // Exclude current product and gift product
       .slice(0, limit); // Limit to requested number
 
     return products;

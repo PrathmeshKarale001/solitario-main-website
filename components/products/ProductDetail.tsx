@@ -412,25 +412,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 )}
               </div>
 
-              {/* Promotions Callout */}
-              <div className="space-y-3">
-                <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
-                  <div className="bg-classic-green text-white p-1.5 rounded-lg">
-                    <Tag size={16} />
-                  </div>
-                  <div>
-                    <p className="font-gotham text-sm font-bold text-green-900">30% OFF - BUY 3+ ITEMS</p>
-                    <p className="text-xs text-green-800 font-montserrat">Automatic discount applied at checkout</p>
-                  </div>
+              {/* Promotions Callout - Single Line Design */}
+              <div className="space-y-2">
+                <div className="offer-banner flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-3 rounded-lg shadow-sm">
+                  <Tag size={16} className="flex-shrink-0" />
+                  <span className="font-gotham text-sm font-semibold tracking-wide">BUY 3+ ITEMS → GET 30% OFF</span>
                 </div>
-                <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
-                  <div className="bg-amber-600 text-white p-1.5 rounded-lg">
-                    <Gift size={16} />
-                  </div>
-                  <div>
-                    <p className="font-gotham text-sm font-bold text-amber-900">10% OFF + FREE GIFT - BUY 2 ITEMS</p>
-                    <p className="text-xs text-amber-800 font-montserrat">Get a 10 Cent Diamond Gift for free!</p>
-                  </div>
+                <div className="offer-banner flex items-center gap-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-3 rounded-lg shadow-sm">
+                  <Gift size={16} className="flex-shrink-0" />
+                  <span className="font-gotham text-sm font-semibold tracking-wide">BUY 2 ITEMS → 10% OFF + FREE GIFT</span>
                 </div>
               </div>
 

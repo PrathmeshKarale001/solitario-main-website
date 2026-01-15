@@ -142,10 +142,10 @@ export default function StoresPage() {
             {ALL_STORES.map((store, idx) => (
               <motion.div
                 key={store.id}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: idx * 0.05 }}
+                viewport={{ once: true, amount: 0.3 }}
+                transition={{ duration: 0.4, delay: idx * 0.02 }}
                 className="rounded-2xl bg-white border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-6 transition-all duration-500"
               >
                 <h3 className="text-xl font-playfair text-brand-800 mb-4">{store.name}</h3>

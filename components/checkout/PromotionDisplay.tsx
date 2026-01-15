@@ -201,6 +201,36 @@ export function PromotionDisplay({ cartId, onPricingUpdate }: PromotionDisplayPr
         </div>
       )}
 
+      {/* Active Discounts - Highlighted */}
+      {pricing.discounts.length > 0 && (
+        <div className="bg-gradient-to-br from-classic-green/10 to-classic-green/5 border border-classic-green/30 rounded-brand-lg p-4">
+          <div className="flex items-center gap-2 mb-3">
+            <Sparkles className="w-5 h-5 text-classic-green" />
+            <h4 className="font-playfair text-heading-sm text-brand-800">Active Offers</h4>
+          </div>
+          <div className="space-y-2">
+            {pricing.discounts.map((discount, index) => (
+              <div key={index} className="flex items-center justify-between bg-white/60 rounded-lg p-2">
+                <div className="flex-1">
+                  <p className="text-body-sm font-gotham text-brand-800 font-semibold">
+                    {discount.type === 'FIRST_PURCHASE' && '🌟 First Purchase'}
+                    {discount.type === 'LOYALTY_COUPON' && '💎 Loyalty Coupon'}
+                    {discount.type === 'BUY2' && '🎁 Buy 2 Items'}
+                    {discount.type === 'BUY3' && '🎉 Buy 3+ Items'}
+                  </p>
+                  <p className="text-xs text-brand-600 font-montserrat">
+                    {discount.description}
+                  </p>
+                </div>
+                <span className="font-gotham text-body-md font-bold text-classic-green">
+                  -{discount.percent}%
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
       {/* Pricing Summary */}
       <div className="space-y-2 pt-4 border-t border-brand-200">
         <div className="flex items-center justify-between">

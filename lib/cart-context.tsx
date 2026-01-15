@@ -28,27 +28,33 @@ const CartContext = createContext<CartContextType | undefined>(undefined);
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [items, setItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
 
   // Load cart from localStorage on mount
   useEffect(() => {
+    setIsMounted(true);
     const savedCart = localStorage.getItem('solitario-cart');
     if (savedCart) {
       try {
-        setItems(JSON.parse(savedCart));
+        const parsedCart = JSON.parse(savedCart);
+        setItems(parsedCart);
       } catch (error) {
         console.error('Error loading cart:', error);
+        localStorage.removeItem('solitario-cart');
       }
     }
   }, []);
 
-  // Save cart to localStorage whenever it changes
+  // Save cart to localStorage whenever it changes (only after mount)
   useEffect(() => {
+    if (!isMounted) return;
+    
     if (items.length > 0) {
       localStorage.setItem('solitario-cart', JSON.stringify(items));
     } else {
       localStorage.removeItem('solitario-cart');
     }
-  }, [items]);
+  }, [items, isMounted]);
 
   const addToCart = (product: Product, quantity = 1, size?: string) => {
     setItems((prevItems) => {

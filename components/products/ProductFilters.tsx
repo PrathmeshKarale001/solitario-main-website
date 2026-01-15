@@ -51,6 +51,7 @@ export default function ProductFilters({
 
   
   const sortOptions = [
+    { value: 'relevance', label: 'Relevance' },
     { value: 'featured', label: 'Featured First' },
     { value: 'price-low', label: 'Price: Low to High' },
     { value: 'price-high', label: 'Price: High to Low' },

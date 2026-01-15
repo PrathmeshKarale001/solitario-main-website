@@ -12,6 +12,9 @@ export async function GET(req: NextRequest) {
 
     let products = await getProducts();
 
+    // ALWAYS filter out gift products (SKU: GIFT) - they should never appear in listings
+    products = products.filter((p) => p.sku !== 'GIFT');
+
     // If collection is specified, filter products by collection handle
     if (collection) {
       products = products.filter((product) => 

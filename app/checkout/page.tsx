@@ -5,7 +5,8 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck } from 'lucide-react';
+import { useUser } from '@clerk/nextjs';
+import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Container } from '@/components/ui';
@@ -45,6 +46,7 @@ interface PincodeCheck {
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCart();
+  const { user } = useUser();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
@@ -71,6 +73,34 @@ export default function CheckoutPage() {
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
   const [promotionDiscount, setPromotionDiscount] = useState(0);
   const [promotionMessages, setPromotionMessages] = useState<string[]>([]);
+  const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
+  const [isGiftLoading, setIsGiftLoading] = useState(false);
+  // Gift only for exactly 2 items, not 3+
+  const hasGift = items.reduce((sum, item) => sum + item.quantity, 0) === 2;
+
+  useEffect(() => {
+    async function fetchGift() {
+      if (hasGift && !giftProduct) {
+        setIsGiftLoading(true);
+        try {
+          const response = await fetch('/api/products/gift');
+          if (response.ok) {
+            const data = await response.json();
+            setGiftProduct({
+              name: data.name,
+              image: data.image,
+              price: 5000
+            });
+          }
+        } catch (err) {
+          console.error('Error fetching gift:', err);
+        } finally {
+          setIsGiftLoading(false);
+        }
+      }
+    }
+    fetchGift();
+  }, [hasGift, giftProduct]);
 
   // Shipping cost calculation
   const shipping = 0;
@@ -263,7 +293,10 @@ export default function CheckoutPage() {
           try {
             const verifyResponse = await fetch('/api/razorpay/verify-payment', {
               method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
+              headers: { 
+                'Content-Type': 'application/json',
+                ...(user?.id ? { 'x-clerk-user-id': user.id } : {})
+              },
               body: JSON.stringify({
                 razorpay_order_id: response.razorpay_order_id,
                 razorpay_payment_id: response.razorpay_payment_id,
@@ -582,9 +615,9 @@ export default function CheckoutPage() {
                 <h2 className="font-playfair text-xl text-gray-900 mb-6">Order Summary</h2>
 
                 {/* Cart Items */}
-                <div className="space-y-4 mb-6 max-h-[300px] overflow-y-auto">
+                <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
                   {items.map((item) => (
-                    <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-3">
+                    <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
                       <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
                         <Image
                           src={item.product.image}
@@ -597,16 +630,49 @@ export default function CheckoutPage() {
                         <p className="font-medium text-sm text-gray-900 line-clamp-2 mb-1">
                           {item.product.name}
                         </p>
-                        <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                        {item.selectedSize && (
-                          <p className="text-xs text-gray-500">Size: {item.selectedSize}</p>
-                        )}
-                        <p className="font-semibold text-sm text-classic-green mt-1">
-                          {formatPrice(item.product.price * item.quantity, item.product.currency)}
-                        </p>
+                        <div className="flex items-center justify-between">
+                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                          <p className="font-semibold text-sm text-classic-green">
+                            {formatPrice(item.product.price * item.quantity, item.product.currency)}
+                          </p>
+                        </div>
                       </div>
                     </div>
                   ))}
+
+                  {/* Gift Item Display - Clean, Minimal Design */}
+                  {hasGift && (
+                    <div className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0 relative">
+                      {isGiftLoading ? (
+                        <div className="w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg border border-gray-200 animate-pulse" />
+                      ) : giftProduct ? (
+                        <>
+                          <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                            <Image
+                              src={giftProduct.image}
+                              alt={giftProduct.name}
+                              fill
+                              className="object-contain p-2"
+                            />
+                            <div className="absolute top-0 right-0 bg-amber-500 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">
+                              Gift
+                            </div>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-1.5 mb-1">
+                              <Gift size={12} className="text-amber-500 shrink-0" />
+                              <p className="font-medium text-sm text-gray-900 line-clamp-1">
+                                {giftProduct.name}
+                              </p>
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-[9px] font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-1.5 py-0.5 rounded-full border border-amber-100">FREE GIFT</span>
+                            </div>
+                          </div>
+                        </>
+                      ) : null}
+                    </div>
+                  )}
                 </div>
 
                 {/* Promotions */}
@@ -616,9 +682,26 @@ export default function CheckoutPage() {
                     subtotal={total * 100}
                     onDiscountApplied={(discount, messages) => {
                       setPromotionDiscount(discount);
-                      setPromotionMessages(messages);
+                      const filteredMessages = messages.filter(msg => !msg.toLowerCase().includes('free gift'));
+                      setPromotionMessages(filteredMessages);
                     }}
                   />
+                  {promotionMessages.length > 0 && (
+                    <div className="mt-4 space-y-2">
+                      {promotionMessages.map((msg, idx) => (
+                        <div key={idx} className="flex items-center gap-2 bg-green-50 text-green-700 px-3 py-2 rounded-lg text-xs border border-green-100">
+                          <CheckCircle size={14} className="shrink-0" />
+                          <span>{msg}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {hasGift && (
+                    <div className="mt-4 flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-2 rounded-lg text-xs border border-amber-100">
+                      <Gift size={14} className="shrink-0" />
+                      <span>Free gift {giftProduct?.name ? `(${giftProduct.name})` : ''} included with your order</span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Summary */}
@@ -629,6 +712,14 @@ export default function CheckoutPage() {
                       {formatPrice(total, '₹')}
                     </span>
                   </div>
+                  {promotionDiscount > 0 && (
+                    <div className="flex items-center justify-between text-green-600">
+                      <span className="font-medium">Discount</span>
+                      <span className="font-medium">
+                        -{formatPrice(promotionDiscount / 100, '₹')}
+                      </span>
+                    </div>
+                  )}
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium text-gray-900">

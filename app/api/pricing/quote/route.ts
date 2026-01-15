@@ -8,51 +8,59 @@ export async function POST(request: NextRequest) {
   try {
     const { userId } = getAuth(request);
     const body = await request.json();
-    const { cartId, couponCode } = body;
+    const { cartId, cartLines, couponCode, clerkUserId } = body;
 
-    if (!cartId) {
+    let finalCartLines: CartLine[] = [];
+
+    // Option 1: Use provided cartLines directly
+    if (cartLines && Array.isArray(cartLines)) {
+      finalCartLines = cartLines;
+    }
+    // Option 2: Fetch from Shopify cart using cartId (fallback)
+    else if (cartId) {
+      const cart = await getCart(cartId);
+      if (!cart) {
+        return NextResponse.json(
+          { error: 'Cart not found' },
+          { status: 404 }
+        );
+      }
+
+      finalCartLines = cart.lines.edges.map(edge => ({
+        id: edge.node.id,
+        quantity: edge.node.quantity,
+        merchandise: {
+          id: edge.node.merchandise.id,
+          title: edge.node.merchandise.title,
+          price: {
+            amount: edge.node.cost.amountPerQuantity.amount,
+            currencyCode: edge.node.cost.amountPerQuantity.currencyCode,
+          },
+        },
+      }));
+    } else {
       return NextResponse.json(
-        { error: 'Cart ID is required' },
+        { error: 'Either cartLines or cartId is required' },
         { status: 400 }
       );
     }
 
-    const cart = await getCart(cartId);
-    if (!cart) {
-      return NextResponse.json(
-        { error: 'Cart not found' },
-        { status: 404 }
-      );
-    }
-
-    const cartLines: CartLine[] = cart.lines.edges.map(edge => ({
-      id: edge.node.id,
-      quantity: edge.node.quantity,
-      merchandise: {
-        id: edge.node.merchandise.id,
-        title: edge.node.merchandise.title,
-        price: {
-          amount: edge.node.cost.amountPerQuantity.amount,
-          currencyCode: edge.node.cost.amountPerQuantity.currencyCode,
-        },
-      },
-    }));
-
     const promoResult = await calculatePromotions({
-      clerkUserId: userId || undefined,
-      cartLines,
+      clerkUserId: clerkUserId || userId || undefined,
+      cartLines: finalCartLines,
       couponCode: couponCode || undefined,
     });
 
+    // promoResult values are in cents (subtotal, amount, total)
     return NextResponse.json({
       success: true,
       pricing: {
-        subtotal: promoResult.subtotal / 100,
+        subtotal: Math.round(promoResult.subtotal / 100),
         discounts: promoResult.discounts.map(d => ({
           ...d,
-          amount: d.amount / 100,
+          amount: Math.round(d.amount / 100),
         })),
-        total: promoResult.total / 100,
+        total: Math.round(promoResult.total / 100),
         currency: 'INR',
       },
       giftLines: promoResult.giftLines,

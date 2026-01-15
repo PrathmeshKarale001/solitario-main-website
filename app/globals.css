@@ -39,6 +39,21 @@ img, video, iframe {
   100% { background-position: 200% center; }
 }
 
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+@keyframes offer-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.85; }
+}
+
+@keyframes offer-shine {
+  0% { left: -100%; }
+  50%, 100% { left: 100%; }
+}
+
 .christmas-twinkle {
   animation: christmas-twinkle 2s ease-in-out infinite;
 }
@@ -51,6 +66,27 @@ img, video, iframe {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
   background-size: 200% 100%;
   animation: christmas-shimmer 3s infinite;
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+}
+
+.offer-banner {
+  position: relative;
+  overflow: hidden;
+  animation: offer-pulse 3s ease-in-out infinite;
+}
+
+.offer-banner::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: offer-shine 3s ease-in-out infinite;
 }
 
 /* ========================================

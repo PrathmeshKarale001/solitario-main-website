@@ -12,21 +12,35 @@ interface LocalCartPromotionsProps {
 }
 
 export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }: LocalCartPromotionsProps) {
-  const { appliedCoupon, setAppliedCoupon } = useAdmin();
-  const [couponCode, setCouponCode] = useState(appliedCoupon || '');
+  const [appliedCoupon, setAppliedCouponState] = useState<string>('');
+  const [couponCode, setCouponCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [discount, setDiscount] = useState(0);
   const [messages, setMessages] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [showGift, setShowGift] = useState(false);
 
-  // Sync from global state if it changes externally
+  // Load coupon from localStorage on mount and validate it
   useEffect(() => {
-    if (appliedCoupon) {
-      setCouponCode(appliedCoupon);
-      handleApplyCoupon(appliedCoupon);
+    const savedCoupon = localStorage.getItem('applied_coupon');
+    if (savedCoupon) {
+      setAppliedCouponState(savedCoupon);
+      setCouponCode(savedCoupon);
+      // Validate the saved coupon to apply discount
+      handleApplyCoupon(savedCoupon);
     }
-  }, [appliedCoupon]);
+  }, []);
+
+  // Helper to set coupon with localStorage persistence
+  const setAppliedCoupon = (code: string | null) => {
+    const codeStr = code || '';
+    setAppliedCouponState(codeStr);
+    if (codeStr) {
+      localStorage.setItem('applied_coupon', codeStr);
+    } else {
+      localStorage.removeItem('applied_coupon');
+    }
+  };
 
   // Calculate automatic promotions based on cart
   useEffect(() => {
@@ -48,7 +62,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
     else if (totalItems === 2) {
       calculatedDiscount = Math.round(subtotal * 0.10);
       newMessages.push('🎁 10% discount applied for buying 2 items!');
-      newMessages.push('✨ Free 10 Cent Diamond Gift will be added to your order!');
+      newMessages.push('✨ Free gift will be added to your order!');
       setShowGift(true);
     }
 
@@ -81,26 +95,28 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
       if (!response.ok) {
         setErrors([data.error || 'Invalid coupon code']);
-        if (!codeOverride) setAppliedCoupon(null);
+        if (!codeOverride) setAppliedCoupon('');
         return;
       }
 
+      // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
       if (totalItems >= 2) {
-        setErrors(["This coupon can't be combined with other offers."]);
-        if (!codeOverride) setAppliedCoupon(null);
+        setErrors(["Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers)."]);
+        if (!codeOverride) setAppliedCoupon('');
         return;
       }
 
       setAppliedCoupon(codeToApply.trim().toUpperCase());
       const couponDiscount = Math.round(subtotal * (data.percentOff / 100));
+      
       setDiscount(couponDiscount);
-      setMessages([`✨ ${data.percentOff}% loyalty discount applied!`]);
-
+      const discountMsg = `✨ ${data.percentOff}% Discount Applied!`;
+      setMessages([discountMsg]);
+      
       if (onDiscountApplied) {
-        onDiscountApplied(couponDiscount, [`${data.percentOff}% loyalty discount applied`]);
+        onDiscountApplied(couponDiscount, [discountMsg]);
       }
     } catch (error) {
-      console.error('Failed to validate coupon:', error);
       setErrors(['Failed to validate coupon. Please try again.']);
     } finally {
       setIsLoading(false);
@@ -109,8 +125,9 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
   const handleRemoveCoupon = () => {
     setCouponCode('');
-    setAppliedCoupon(null);
+    setAppliedCoupon('');
     setErrors([]);
+    localStorage.removeItem('applied_coupon');
     calculateAutomaticPromotions();
   };
 
@@ -129,13 +146,13 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
               type="text"
               value={couponCode}
               onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-              placeholder="Enter coupon code"
+              placeholder="Enter promo code"
               className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green"
-              disabled={isLoading || totalItems >= 2}
+              disabled={isLoading}
             />
             <button
               onClick={() => handleApplyCoupon()}
-              disabled={isLoading || !couponCode.trim() || totalItems >= 2}
+              disabled={isLoading || !couponCode.trim()}
               className="px-4 py-2 bg-classic-green hover:bg-classic-green/90 text-white text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apply'}
@@ -158,7 +175,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
         {totalItems >= 2 && !appliedCoupon && (
           <p className="text-xs text-gray-500 mt-2">
-            Coupons cannot be combined with cart discounts
+            Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).
           </p>
         )}
       </div>
@@ -194,14 +211,11 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
       {/* Gift Notice */}
       {showGift && (
-        <div className="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-lg p-4">
-          <div className="flex items-center gap-2 mb-1">
-            <Gift className="w-5 h-5 text-amber-600" />
-            <h4 className="font-medium text-amber-900">Free Gift Included!</h4>
+        <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+          <div className="flex items-center gap-2">
+            <Gift className="w-4 h-4 text-amber-600" />
+            <p className="text-sm font-medium text-amber-900">Free gift included with your order</p>
           </div>
-          <p className="text-sm text-amber-800">
-            10 Cent Diamond will be added to your order
-          </p>
         </div>
       )}
 
