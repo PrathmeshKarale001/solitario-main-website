@@ -301,9 +301,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Product Main Section */}
       <Section variant="light" padding="lg">
         <Container>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-12 lg:gap-16">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
             {/* Product Images */}
-            <div className="space-y-3 md:space-y-4">
+            <div className="space-y-2 md:space-y-3">
               {/* Main Image with Hover Zoom */}
               <div
                 ref={imageRef}

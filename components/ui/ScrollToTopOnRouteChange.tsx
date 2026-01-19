@@ -14,12 +14,26 @@ export default function ScrollToTopOnRouteChange() {
   useEffect(() => {
     if (!isMounted) return;
     
-    // Defer to the next frame so layout is painted before scrolling.
+    // Immediate scroll to top
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
+    
+    // Also scroll after next paint to ensure it works
     requestAnimationFrame(() => {
-      window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      window.scrollTo(0, 0);
       document.documentElement.scrollTop = 0;
       document.body.scrollTop = 0;
     });
+    
+    // Final fallback after a short delay
+    const timeout = setTimeout(() => {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }, 10);
+    
+    return () => clearTimeout(timeout);
   }, [pathname, isMounted]);
 
   return null;
