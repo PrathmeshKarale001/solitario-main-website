@@ -52,7 +52,7 @@ const REQUIREMENTS = [
   'Minimum investment capacity of ₹1 Crore',
   'Retail space of 500-1000 sq ft in premium location',
   'Passion for luxury retail and customer service',
-  'Commitment to brand values and sustainability',
+  'Commitment to brand values and excellence',
   'Prior retail or business experience preferred',
 ];
 
@@ -181,7 +181,7 @@ export default function FranchisePage() {
               transition={{ duration: 0.8, delay: 1 }}
               className="mt-6 text-sm md:text-base lg:text-lg text-white/80 font-montserrat max-w-2xl mx-auto"
             >
-              Join the revolution in sustainable luxury. Partner with Solitario and bring lab-grown diamonds to your city.
+              Join the revolution in modern luxury. Partner with Solitario and bring lab-grown diamonds to your city.
             </motion.p>
 
             <motion.div
@@ -215,7 +215,7 @@ export default function FranchisePage() {
               Why Partner With <span className="text-classic-green">Solitario</span>?
             </h2>
             <p className="text-brand-700 font-montserrat max-w-2xl mx-auto">
-              Be part of the fastest-growing segment in the jewelry industry with a brand that stands for innovation, sustainability, and luxury.
+              Be part of the fastest-growing segment in the jewelry industry with a brand that stands for innovation, quality, and luxury.
             </p>
           </motion.div>
 

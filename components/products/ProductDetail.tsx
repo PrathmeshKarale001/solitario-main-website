@@ -462,7 +462,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
 
               {/* Quantity & Actions */}
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <div>
                   <label className="block text-body-sm font-gotham text-brand-700 mb-2">Quantity</label>
                   <div className="flex items-center gap-4">

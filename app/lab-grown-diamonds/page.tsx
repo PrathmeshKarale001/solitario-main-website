@@ -212,10 +212,10 @@ export default function LabGrownDiamondsPage() {
               For centuries, the pursuit of natural diamonds has cast a looming shadow on our planet. Beneath their sparkling allure lay tales of environmental degradation, exploitation, and blood-stained histories.
             </p>
             <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
-              Welcome to the world of lab-grown diamonds — a triumph of science, ethics, and responsibility. These ethically nurtured wonders are cultivated in controlled lab environments, channeling the genius of human innovation to recreate nature's dazzling brilliance.
+              Welcome to the world of lab-grown diamonds — a triumph of science and innovation. These magnificent wonders are cultivated in controlled lab environments, channeling the genius of human innovation to recreate nature's dazzling brilliance.
             </p>
             <p className="text-base md:text-lg text-brand-800 leading-relaxed font-montserrat font-medium">
-              As eco-conscious consumers increasingly opt for these sustainable gems, a new age of elegance dawns — a luxury that doesn't cost the Earth.
+              As modern consumers increasingly opt for these exceptional gems, a new age of elegance dawns — affordable luxury without compromise.
             </p>
           </motion.div>
         </div>
@@ -235,7 +235,7 @@ export default function LabGrownDiamondsPage() {
                 Born From <span className="text-classic-green">Vision</span>
               </h2>
               <p className="text-base md:text-lg text-brand-700 mb-8 leading-relaxed font-montserrat">
-                Solitario was born from the vision to meet the desires of modern, consciously-minded customers seeking sustainable luxury. We believe in leaving a positive footprint for the next generation.
+                Solitario was born from the vision to meet the desires of modern customers seeking exceptional luxury. We believe in creating timeless pieces that bring joy for generations to come.
               </p>
 
               {/* Vision Card */}
@@ -270,7 +270,7 @@ export default function LabGrownDiamondsPage() {
                   <div>
                     <h3 className="text-xl font-playfair text-brand-800 mb-2">Our Mission</h3>
                     <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
-                      We pioneer sustainable jewelry for a future built on unwavering ethics. Our mission is to craft adornments that enhance beauty without exploitation.
+                      We pioneer innovative jewelry for a future built on quality and craftsmanship. Our mission is to craft adornments that enhance beauty with exceptional value.
                     </p>
                   </div>
                 </div>
@@ -356,8 +356,8 @@ export default function LabGrownDiamondsPage() {
                 </div>
                 <div className="rounded-xl bg-brand-50 border border-brand-200 p-4">
                   <Leaf className="w-8 h-8 text-classic-green mb-3" />
-                  <h4 className="text-lg font-playfair text-brand-800 mb-1">Eco-Friendly</h4>
-                  <p className="text-brand-600 text-sm font-montserrat">Minimal environmental impact</p>
+                  <h4 className="text-lg font-playfair text-brand-800 mb-1">Lab-Created</h4>
+                  <p className="text-brand-600 text-sm font-montserrat">Advanced technology & precision</p>
                 </div>
               </div>
             </motion.div>

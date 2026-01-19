@@ -39,9 +39,9 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'Solitario - Lab Grown Diamond Jewellery | Sustainable Luxury',
-  description: 'India\'s most loved new-age diamond jewellery brand. Discover timeless, sustainable luxury with lab-grown diamonds. Crafted for modern and future generations.',
-  keywords: ['lab grown diamonds', 'sustainable jewellery', 'diamond rings', 'luxury jewellery', 'ethical diamonds', 'Solitario'],
+  title: 'Solitario - Lab Grown Diamond Jewellery | Modern Luxury',
+  description: 'India\'s most loved new-age diamond jewellery brand. Discover timeless, modern luxury with lab-grown diamonds. Crafted for modern and future generations.',
+  keywords: ['lab grown diamonds', 'diamond jewellery', 'diamond rings', 'luxury jewellery', 'lab created diamonds', 'Solitario'],
   authors: [{ name: 'Solitario' }],
   icons: {
     icon: '/solitariofavicon.svg',
@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: 'Solitario - Lab Grown Diamond Jewellery',
-    description: 'Luxury that doesn\'t cost the Earth. Discover our collection of ethically crafted lab-grown diamond jewellery.',
+    description: 'Discover our collection of exquisitely crafted lab-grown diamond jewellery. Modern luxury, timeless elegance.',
     url: 'https://thesolitario.com',
     siteName: 'Solitario',
     locale: 'en_IN',
