@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import { Analytics } from '@vercel/analytics/next'
 import { Montserrat, Playfair_Display } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import Header from '@/components/layout/Header'
@@ -93,6 +94,7 @@ export default function RootLayout({
             </SmoothScrollWrapper>
           </PostHogProvider>
         </ClerkProvider>
+        <Analytics />
       </body>
     </html>
   )
