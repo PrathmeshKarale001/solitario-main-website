@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuth, clerkClient } from '@clerk/nextjs/server';
 import { shopifyAdminFetch } from '@/lib/shopify';
 
+export const dynamic = 'force-dynamic';
+
 // Shopify customer update mutation
 const CUSTOMER_UPDATE_MUTATION = `
   mutation customerUpdate($input: CustomerInput!) {

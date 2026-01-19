@@ -3,6 +3,8 @@ import { getAuth } from '@clerk/nextjs/server';
 import { CouponRepository } from '@/lib/db/storage';
 import logger from '@/lib/logger';
 
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     const { userId } = getAuth(request);
