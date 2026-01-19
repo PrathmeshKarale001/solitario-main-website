@@ -6,7 +6,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, ShoppingBag } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
-import { formatPrice } from '@/lib/utils';
+import { formatPrice } from '@/lib';
 import { PRODUCTS, Product } from '@/lib/data';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
