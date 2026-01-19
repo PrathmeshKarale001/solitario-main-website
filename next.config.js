@@ -48,10 +48,6 @@ const nextConfig = {
   compress: true,
   // Production optimizations
   poweredByHeader: false,
-  // Disable ESLint in production to avoid build failures
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
 }
 
 module.exports = nextConfig
