@@ -14,6 +14,7 @@ import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
 import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css'
 
 // Playfair Display for headings - elegant serif font
@@ -93,6 +94,7 @@ export default function RootLayout({
             </SmoothScrollWrapper>
           </PostHogProvider>
         </ClerkProvider>
+        <Analytics />
       </body>
     </html>
   )
