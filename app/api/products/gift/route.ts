@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { shopifyStorefrontFetch, GET_PRODUCT_BY_ID_QUERY } from '@/lib/shopify';
 
+export const dynamic = 'force-dynamic';
+
 // The Shopify Product ID for the 10 Cent Diamond Gift
 const GIFT_PRODUCT_ID = 'gid://shopify/Product/10264124457235';
 

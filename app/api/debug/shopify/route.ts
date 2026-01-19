@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server';
 import { getAuth, clerkClient } from '@clerk/nextjs/server';
 import { shopifyAdminFetch } from '@/lib/shopify';
 
+export const dynamic = 'force-dynamic';
+
 // Get all customers query
 const GET_CUSTOMERS_QUERY = `
   query getCustomers($first: Int!) {
