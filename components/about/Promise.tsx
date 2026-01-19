@@ -6,7 +6,6 @@ import {
   RefreshCw, 
   BadgeCheck, 
   Sparkles, 
-  WandSparkles,
   HeartHandshake
 } from 'lucide-react';
 import { PROMISES } from '@/lib/constants';
@@ -17,7 +16,7 @@ const iconMap = {
   'refresh-cw': RefreshCw,
   'badge-check': BadgeCheck,
   sparkles: Sparkles,
-  'wand-sparkles': WandSparkles,
+  'wand-sparkles': Sparkles,
   'heart-handshake': HeartHandshake,
 };
 
