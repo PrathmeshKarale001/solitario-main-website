@@ -12,11 +12,7 @@ const HERO_MEDIA_DESKTOP = [
   //   src: '/images/HomeBanner1st.jpg',
   //   pos: 'object-center',
   // },
-  {
-    type: 'image',
-    src: '/images/home-hero/newhero/LohriPC.jpg',
-    pos: 'object-center',
-  },
+
   {
     type: 'image',
     src: '/images/home-hero/newhero/1st.png',
@@ -49,11 +45,7 @@ const HERO_MEDIA_MOBILE = [
   //   src: '/images/HomeBanner1st.jpg',
   //   pos: 'object-center',
   // },
-  {
-    type: 'image',
-    src: '/images/home-hero/newhero/LohriMobile.jpg',
-    pos: 'object-center',
-  },
+
     {
     type: 'image',
     src: '/images/home-hero/newhero/1stMobile.png',

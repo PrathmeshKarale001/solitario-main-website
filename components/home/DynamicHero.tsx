@@ -34,16 +34,6 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
-      src: '/images/home-hero/newhero/LohriPC.jpg',
-      pos: 'object-center',
-      title: '',
-      subtitle: '',
-      description: '',
-      ctaText: 'Explore Collection',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
       src: '/images/home-hero/newhero/1st.png',
       pos: 'object-center',
       title: '',
@@ -96,16 +86,6 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
 
   // Mobile fallback media
   const defaultFallbackMediaMobile = [
-    {
-      type: 'image' as const,
-      src: '/images/home-hero/newhero/LohriMobile.jpg',
-      pos: 'object-center',
-      title: '',
-      subtitle: '',
-      description: '',
-      ctaText: 'Explore Collection',
-      ctaLink: '/products'
-    },
     {
       type: 'image' as const,
       src: '/images/home-hero/newhero/1stMobile.png',

@@ -299,7 +299,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </section>
 
       {/* Product Main Section */}
-      <Section variant="light" padding="lg">
+      <Section variant="light" padding="sm">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
             {/* Product Images */}
@@ -462,7 +462,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
 
               {/* Quantity & Actions */}
-              <div className="space-y-3">
+              <div className="space-y-4">
                 <div>
                   <label className="block text-body-sm font-gotham text-brand-700 mb-2">Quantity</label>
                   <div className="flex items-center gap-4">

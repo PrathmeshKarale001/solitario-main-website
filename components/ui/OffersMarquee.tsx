@@ -41,10 +41,10 @@ export default function OffersMarquee({ offers = defaultOffers }: { offers?: Off
   const duplicatedOffers = [...offers, ...offers, ...offers];
 
   return (
-    <div className="relative w-full bg-gradient-to-r from-orange-500 via-orange-600 to-orange-500 text-white overflow-hidden h-9 flex items-center border-y border-orange-400/30">
+    <div className="relative w-full bg-gradient-to-r from-classic-green via-teal to-classic-green text-white overflow-hidden h-9 flex items-center border-y border-teal/30">
       {/* Gradient overlays for fade effect */}
-      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-orange-600 to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-orange-600 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-classic-green to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-classic-green to-transparent z-10 pointer-events-none" />
       
       {/* Marquee content */}
       <div
@@ -64,7 +64,7 @@ export default function OffersMarquee({ offers = defaultOffers }: { offers?: Off
               {offer.text}
             </span>
             {index < duplicatedOffers.length - 1 && (
-              <span className="text-orange-200 mx-2">•</span>
+              <span className="text-ivory-pearl/60 mx-2">•</span>
             )}
           </div>
         ))}
