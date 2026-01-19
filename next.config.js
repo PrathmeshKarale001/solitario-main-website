@@ -23,7 +23,6 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     formats: ['image/avif', 'image/webp'], // AVIF first for better compression
     minimumCacheTTL: 31536000, // Cache for 1 year
-    qualities: [75, 90], // Added quality 90 to fix warning
     dangerouslyAllowSVG: true,
     contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },

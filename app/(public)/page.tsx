@@ -9,6 +9,7 @@ import {
 import DynamicHero from '@/components/home/DynamicHero';
 import { Promise } from '@/components/about';
 import LoginPopup from '@/components/home/LoginPopup';
+import OffersMarquee from '@/components/ui/OffersMarquee';
 
 // Lazy load below-fold components for better performance and reduced initial bundle
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
@@ -62,6 +63,9 @@ export default function Home() {
       
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
+      
+      {/* 1a. OFFERS MARQUEE - Continuous offers display */}
+      <OffersMarquee />
       
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
