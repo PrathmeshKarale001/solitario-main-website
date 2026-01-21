@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import { Suspense } from 'react'
+import Script from 'next/script'
 import { Montserrat, Playfair_Display } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import Header from '@/components/layout/Header'
@@ -71,6 +72,20 @@ export default function RootLayout({
         <WebsiteJsonLd />
       </head>
       <body className="antialiased overflow-x-hidden">
+        {/* Google Ads Conversion Tracking */}
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=AW-17875605995"
+          strategy="afterInteractive"
+        />
+        <Script id="google-ads-init" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'AW-17875605995');
+          `}
+        </Script>
+        
         <GoogleAnalytics />
         <ClerkProvider>
           <PostHogProvider>
