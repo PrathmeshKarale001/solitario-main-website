@@ -100,16 +100,41 @@ export async function POST(request: NextRequest) {
       shopifyOrderName = shopifyResult.name;
       shopifyCustomerId = shopifyResult.customerId;
       
-      // Link Shopify customer to Clerk user if available
-      if (clerkUserId && shopifyCustomerId) {
+      // Link Shopify customer to Clerk user
+      if (shopifyCustomerId) {
         try {
           const clerk = await clerkClient();
-          await clerk.users.updateUserMetadata(clerkUserId, {
-            publicMetadata: {
-              shopifyCustomerId: shopifyCustomerId,
-            },
-          });
-          logger.log('Linked Shopify customer to Clerk user:', { clerkUserId, shopifyCustomerId });
+          
+          // If Clerk user ID is provided, link directly
+          if (clerkUserId) {
+            await clerk.users.updateUserMetadata(clerkUserId, {
+              publicMetadata: {
+                shopifyCustomerId: shopifyCustomerId,
+              },
+            });
+            logger.log('Linked Shopify customer to Clerk user via header:', { clerkUserId, shopifyCustomerId });
+          } else {
+            // Fallback: Find Clerk user by email and link
+            const orderEmail = orderData.customer.email;
+            if (orderEmail) {
+              const users = await clerk.users.getUserList({ emailAddress: [orderEmail] });
+              if (users.data.length > 0) {
+                const foundUser = users.data[0];
+                await clerk.users.updateUserMetadata(foundUser.id, {
+                  publicMetadata: {
+                    shopifyCustomerId: shopifyCustomerId,
+                  },
+                });
+                logger.log('Linked Shopify customer to Clerk user via email:', { 
+                  clerkUserId: foundUser.id, 
+                  email: orderEmail,
+                  shopifyCustomerId 
+                });
+              } else {
+                logger.log('No Clerk user found for email:', orderEmail);
+              }
+            }
+          }
         } catch (linkError) {
           logger.error('Failed to link Shopify customer to Clerk user:', linkError);
         }
