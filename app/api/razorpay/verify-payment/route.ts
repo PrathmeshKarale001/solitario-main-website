@@ -94,11 +94,14 @@ export async function POST(request: NextRequest) {
     let shopifyOrderId = null;
     let shopifyOrderName = null;
     let shopifyCustomerId = null;
+    let shopifyError = null;
     try {
+      logger.log('Creating Shopify order for payment:', razorpay_payment_id);
       const shopifyResult = await createShopifyOrder(orderData, razorpay_payment_id, orderId);
       shopifyOrderId = shopifyResult.id;
       shopifyOrderName = shopifyResult.name;
       shopifyCustomerId = shopifyResult.customerId;
+      logger.log('Shopify order created successfully:', { shopifyOrderId, shopifyOrderName });
       
       // Link Shopify customer to Clerk user
       if (shopifyCustomerId) {
@@ -139,8 +142,10 @@ export async function POST(request: NextRequest) {
           logger.error('Failed to link Shopify customer to Clerk user:', linkError);
         }
       }
-    } catch (shopifyError) {
-      logger.error('Failed to create Shopify order:', shopifyError);
+    } catch (error) {
+      shopifyError = error instanceof Error ? error.message : 'Unknown error';
+      logger.error('Failed to create Shopify order:', error);
+      logger.error('Order data that failed:', JSON.stringify(orderData, null, 2));
       // Don't fail the payment - just log the error
     }
 
@@ -196,6 +201,10 @@ export async function POST(request: NextRequest) {
       success: true,
       message: 'Payment verified successfully',
       order: confirmedOrder,
+      ...(shopifyError ? { 
+        warning: 'Order created but Shopify sync failed',
+        shopifyError 
+      } : {}),
     });
   } catch (error) {
     logger.error('Error verifying payment:', error);
