@@ -98,10 +98,8 @@ export async function GET(request: NextRequest) {
 
       if (result.errors) {
         console.error(`[Orders API] Shopify GraphQL errors:`, result.errors);
-        throw new Error(result.errors[0].message);
-      }
-
-      if (!result.data?.customer) {
+        // Don't throw, fall back to email search instead
+      } else if (!result.data?.customer) {
         console.error(`[Orders API] No customer found for ID: ${shopifyCustomerId}`);
         // Customer ID might be invalid, fall back to email search
         console.log(`[Orders API] Falling back to email search for: ${userEmail}`);
