@@ -91,6 +91,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   };
 
   const handleBuyNow = () => {
+    // Clear cart and add only this product for direct checkout
+    localStorage.removeItem('cart');
     addToCartContext(product, quantity);
     router.push('/checkout');
   };
@@ -436,43 +438,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </div>
               </div>
 
-              {/* Specifications - Moved after discount callouts */}
-              {specifications.length > 0 && (
-                <div className="bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
-                  <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
-                    <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
-                    Specifications
-                  </h4>
-                  <ul className="space-y-2 text-brand-800 font-montserrat text-sm">
-                    {specifications.map((spec, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <span className="text-classic-green mt-0.5">✓</span>
-                        <span className="font-medium">{spec}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-
-              {/* SKU & Stock */}
-              <div className="flex flex-wrap items-center gap-6 text-body-sm">
-                <div>
-                  <span className="text-brand-600 font-montserrat">SKU: </span>
-                  <span className="font-gotham text-brand-800">{sku}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {inStock ? (
-                    <>
-                      <Check className="w-4 h-4 text-success" />
-                      <span className="text-success font-montserrat">Available In Stock</span>
-                    </>
-                  ) : (
-                    <span className="text-error font-montserrat">Out of Stock</span>
-                  )}
-                </div>
-              </div>
-
-              {/* Pincode Checker - Amazon/Flipkart Style */}
+              {/* Pincode Checker - Amazon/Flipkart Style - Moved up */}
               <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-3">
                   <MapPin className="w-4 h-4 text-classic-green" />
@@ -549,7 +515,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 )}
               </div>
 
-              {/* Trust Badges - Industry Standard */}
+              {/* Trust Badges - Industry Standard - Moved up */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                   <Truck className="w-5 h-5 text-classic-green mb-1" />
@@ -566,6 +532,42 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                   <Award className="w-5 h-5 text-classic-green mb-1" />
                   <span className="text-xs font-medium text-gray-900 text-center">Lifetime Warranty</span>
+                </div>
+              </div>
+
+              {/* Specifications - Moved after trust badges */}
+              {specifications.length > 0 && (
+                <div className="bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
+                  <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
+                    <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
+                    Specifications
+                  </h4>
+                  <ul className="space-y-2 text-brand-800 font-montserrat text-sm">
+                    {specifications.map((spec, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <span className="text-classic-green mt-0.5">✓</span>
+                        <span className="font-medium">{spec}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* SKU & Stock */}
+              <div className="flex flex-wrap items-center gap-6 text-body-sm">
+                <div>
+                  <span className="text-brand-600 font-montserrat">SKU: </span>
+                  <span className="font-gotham text-brand-800">{sku}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  {inStock ? (
+                    <>
+                      <Check className="w-4 h-4 text-success" />
+                      <span className="text-success font-montserrat">Available In Stock</span>
+                    </>
+                  ) : (
+                    <span className="text-error font-montserrat">Out of Stock</span>
+                  )}
                 </div>
               </div>
 
