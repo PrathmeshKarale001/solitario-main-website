@@ -389,6 +389,103 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </button>
                 ))}
               </div>
+
+              {/* Pincode Checker - Moved to left column under images */}
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
+                <div className="flex items-center gap-2 mb-3">
+                  <MapPin className="w-4 h-4 text-classic-green" />
+                  <span className="font-medium text-gray-900 text-sm">Check Delivery Availability</span>
+                </div>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={pincode}
+                    onChange={(e) => {
+                      setPincode(e.target.value.replace(/\D/g, '').slice(0, 6));
+                      setPincodeResult(null);
+                    }}
+                    placeholder="Enter PIN code"
+                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green text-sm"
+                    maxLength={6}
+                  />
+                  <button
+                    onClick={async () => {
+                      if (pincode.length !== 6) return;
+                      setPincodeChecking(true);
+                      try {
+                        const res = await fetch('/api/shipping/check-pincode', {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ pincode }),
+                        });
+                        const data = await res.json();
+                        setPincodeResult({
+                          serviceable: data.serviceable,
+                          eta: data.eta,
+                          cod: data.cod,
+                        });
+                      } catch {
+                        setPincodeResult({ serviceable: false });
+                      } finally {
+                        setPincodeChecking(false);
+                      }
+                    }}
+                    disabled={pincode.length !== 6 || pincodeChecking}
+                    className="px-5 py-2.5 bg-classic-green text-white text-sm font-medium rounded-lg hover:bg-classic-green/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
+                  >
+                    {pincodeChecking ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Check'}
+                  </button>
+                </div>
+                {pincodeResult && (
+                  <div className={`mt-3 p-3 rounded-lg ${pincodeResult.serviceable ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
+                    {pincodeResult.serviceable ? (
+                      <div className="space-y-1">
+                        <div className="flex items-center gap-2 text-green-700">
+                          <Check className="w-4 h-4" />
+                          <span className="font-medium text-sm">Delivery available to {pincode}</span>
+                        </div>
+                        {pincodeResult.eta && (
+                          <div className="flex items-center gap-2 text-green-600 text-sm">
+                            <Truck className="w-4 h-4" />
+                            <span>Expected delivery: {pincodeResult.eta}</span>
+                          </div>
+                        )}
+                        {pincodeResult.cod && (
+                          <div className="flex items-center gap-2 text-green-600 text-sm">
+                            <BadgeCheck className="w-4 h-4" />
+                            <span>Cash on Delivery available</span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-2 text-red-700">
+                        <X className="w-4 h-4" />
+                        <span className="font-medium text-sm">Delivery not available to this pincode</span>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* Trust Badges - Moved to left column */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <Truck className="w-5 h-5 text-classic-green mb-1" />
+                  <span className="text-xs font-medium text-gray-900 text-center">Free Delivery</span>
+                </div>
+                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <RotateCcw className="w-5 h-5 text-classic-green mb-1" />
+                  <span className="text-xs font-medium text-gray-900 text-center">Easy Returns</span>
+                </div>
+                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <ShieldCheck className="w-5 h-5 text-classic-green mb-1" />
+                  <span className="text-xs font-medium text-gray-900 text-center">Certified</span>
+                </div>
+                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                  <Award className="w-5 h-5 text-classic-green mb-1" />
+                  <span className="text-xs font-medium text-gray-900 text-center">Lifetime Warranty</span>
+                </div>
+              </div>
             </div>
 
             {/* Product Info */}
@@ -471,103 +568,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   ) : (
                     <span className="text-error font-montserrat">Out of Stock</span>
                   )}
-                </div>
-              </div>
-
-              {/* Pincode Checker - Amazon/Flipkart Style - Moved below specifications */}
-              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-3">
-                  <MapPin className="w-4 h-4 text-classic-green" />
-                  <span className="font-medium text-gray-900 text-sm">Check Delivery Availability</span>
-                </div>
-                <div className="flex gap-2">
-                  <input
-                    type="text"
-                    value={pincode}
-                    onChange={(e) => {
-                      setPincode(e.target.value.replace(/\D/g, '').slice(0, 6));
-                      setPincodeResult(null);
-                    }}
-                    placeholder="Enter PIN code"
-                    className="flex-1 px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green text-sm"
-                    maxLength={6}
-                  />
-                  <button
-                    onClick={async () => {
-                      if (pincode.length !== 6) return;
-                      setPincodeChecking(true);
-                      try {
-                        const res = await fetch('/api/shipping/check-pincode', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ pincode }),
-                        });
-                        const data = await res.json();
-                        setPincodeResult({
-                          serviceable: data.serviceable,
-                          eta: data.eta,
-                          cod: data.cod,
-                        });
-                      } catch {
-                        setPincodeResult({ serviceable: false });
-                      } finally {
-                        setPincodeChecking(false);
-                      }
-                    }}
-                    disabled={pincode.length !== 6 || pincodeChecking}
-                    className="px-5 py-2.5 bg-classic-green text-white text-sm font-medium rounded-lg hover:bg-classic-green/90 disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors"
-                  >
-                    {pincodeChecking ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Check'}
-                  </button>
-                </div>
-                {pincodeResult && (
-                  <div className={`mt-3 p-3 rounded-lg ${pincodeResult.serviceable ? 'bg-green-50 border border-green-200' : 'bg-red-50 border border-red-200'}`}>
-                    {pincodeResult.serviceable ? (
-                      <div className="space-y-1">
-                        <div className="flex items-center gap-2 text-green-700">
-                          <Check className="w-4 h-4" />
-                          <span className="font-medium text-sm">Delivery available to {pincode}</span>
-                        </div>
-                        {pincodeResult.eta && (
-                          <div className="flex items-center gap-2 text-green-600 text-sm">
-                            <Truck className="w-4 h-4" />
-                            <span>Expected delivery: {pincodeResult.eta}</span>
-                          </div>
-                        )}
-                        {pincodeResult.cod && (
-                          <div className="flex items-center gap-2 text-green-600 text-sm">
-                            <BadgeCheck className="w-4 h-4" />
-                            <span>Cash on Delivery available</span>
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-2 text-red-700">
-                        <X className="w-4 h-4" />
-                        <span className="font-medium text-sm">Delivery not available to this pincode</span>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-
-              {/* Trust Badges - Industry Standard - Moved below delivery checker */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                  <Truck className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Free Delivery</span>
-                </div>
-                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                  <RotateCcw className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Easy Returns</span>
-                </div>
-                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                  <ShieldCheck className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Certified</span>
-                </div>
-                <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
-                  <Award className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Lifetime Warranty</span>
                 </div>
               </div>
 

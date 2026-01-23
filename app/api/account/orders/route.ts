@@ -175,7 +175,11 @@ export async function GET(request: NextRequest) {
       );
 
       if (customerSearchResult.errors) {
-        throw new Error(customerSearchResult.errors[0].message);
+        console.error('[Orders API] Email search errors:', customerSearchResult.errors);
+        return NextResponse.json({ 
+          orders: [],
+          message: 'Failed to fetch orders. Please try again later.' 
+        });
       }
 
       const customerEdges = customerSearchResult.data?.customers?.edges || [];
