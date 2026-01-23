@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2 } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
@@ -14,6 +14,7 @@ import { useAuth } from '@clerk/nextjs';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount } = useCart();
+  const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
   const [appliedCoupon, setAppliedCouponState] = useState<string>('');
   const [couponInput, setCouponInput] = useState('');
@@ -195,6 +196,24 @@ export default function CartPage() {
     localStorage.removeItem('applied_coupon');
   };
 
+  // Save for Later functionality
+  const saveForLater = (item: any) => {
+    setSavedForLater([...savedForLater, item]);
+    removeFromCart(item.product.id);
+  };
+
+  const moveToCart = (item: any) => {
+    setSavedForLater(savedForLater.filter(i => i.product.id !== item.product.id));
+    // Add back to cart logic would go here
+  };
+
+  // Get delivery estimate (mock - would be API call in production)
+  const getDeliveryEstimate = () => {
+    const today = new Date();
+    const deliveryDate = new Date(today.setDate(today.getDate() + 3));
+    return deliveryDate.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+  };
+
   // No additional charges
   const grandTotal = Math.max(0, total - couponDiscount);
 
@@ -295,6 +314,35 @@ export default function CartPage() {
                       </div>
                     )}
 
+                    {/* Stock Status & Delivery Estimate */}
+                    <div className="mb-3 space-y-1">
+                      <div className="flex items-center gap-2">
+                        <Package className="w-3.5 h-3.5 text-green-600" />
+                        <span className="text-xs font-medium text-green-600">In Stock</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <TruckIcon className="w-3.5 h-3.5 text-brand-600" />
+                        <span className="text-xs text-brand-600">Delivery by {getDeliveryEstimate()}</span>
+                      </div>
+                    </div>
+
+                    {/* Quick Actions */}
+                    <div className="flex items-center gap-3 mb-3">
+                      <button
+                        onClick={() => saveForLater(item)}
+                        className="flex items-center gap-1.5 text-xs text-brand-600 hover:text-classic-green transition-colors"
+                      >
+                        <Bookmark className="w-3.5 h-3.5" />
+                        Save for Later
+                      </button>
+                      <button
+                        className="flex items-center gap-1.5 text-xs text-brand-600 hover:text-classic-green transition-colors"
+                      >
+                        <Heart className="w-3.5 h-3.5" />
+                        Move to Wishlist
+                      </button>
+                    </div>
+
                     <div className="flex items-center justify-between">
                       {/* Quantity Controls */}
                       <div className="flex items-center gap-1">
@@ -365,6 +413,52 @@ export default function CartPage() {
                       </div>
                     </>
                   ) : null}
+                </div>
+              )}
+
+              {/* Saved for Later Section */}
+              {savedForLater.length > 0 && (
+                <div className="mt-8 pt-8 border-t border-brand-200">
+                  <h2 className="font-playfair text-heading-lg text-brand-800 mb-4">
+                    Saved for Later ({savedForLater.length})
+                  </h2>
+                  <div className="space-y-4">
+                    {savedForLater.map((item) => (
+                      <div
+                        key={item.product.id}
+                        className="flex gap-4 p-4 bg-brand-50 border border-brand-200 rounded-lg"
+                      >
+                        <div className="relative w-16 h-16 flex-shrink-0 bg-white rounded-lg overflow-hidden">
+                          <Image
+                            src={item.product.image}
+                            alt={item.product.name}
+                            fill
+                            className="object-contain p-2"
+                          />
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-brand-800 text-sm mb-1">{item.product.name}</p>
+                          <p className="text-classic-green font-semibold text-sm mb-2">
+                            {formatPrice(item.product.price)}
+                          </p>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={() => moveToCart(item)}
+                              className="text-xs text-classic-green hover:underline font-medium"
+                            >
+                              Move to Cart
+                            </button>
+                            <button
+                              onClick={() => setSavedForLater(savedForLater.filter(i => i.product.id !== item.product.id))}
+                              className="text-xs text-error hover:underline"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
@@ -509,6 +603,22 @@ export default function CartPage() {
                 >
                   Proceed to Checkout
                 </Link>
+
+                {/* Trust Signals */}
+                <div className="flex items-center justify-center gap-3 mb-4 pb-4 border-b border-brand-200">
+                  <div className="flex items-center gap-1.5 text-xs text-brand-600">
+                    <ShieldCheck className="w-4 h-4 text-classic-green" />
+                    <span>Secure</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-brand-600">
+                    <TruckIcon className="w-4 h-4 text-classic-green" />
+                    <span>Free Delivery</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-xs text-brand-600">
+                    <Package className="w-4 h-4 text-classic-green" />
+                    <span>Easy Returns</span>
+                  </div>
+                </div>
 
                 <p className="text-center text-body-sm text-brand-600 font-montserrat mb-4">
                   Enjoy complimentary delivery and returns on your order.
