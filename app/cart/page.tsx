@@ -9,11 +9,13 @@ import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
+import { useWishlist } from '@/lib/wishlist-context';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, total, itemCount } = useCart();
+  const { items, updateQuantity, removeFromCart, total, itemCount, addToCart } = useCart();
+  const { addToWishlist } = useWishlist();
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
   const [appliedCoupon, setAppliedCouponState] = useState<string>('');
@@ -204,7 +206,12 @@ export default function CartPage() {
 
   const moveToCart = (item: any) => {
     setSavedForLater(savedForLater.filter(i => i.product.id !== item.product.id));
-    // Add back to cart logic would go here
+    addToCart(item.product, item.quantity || 1, item.selectedSize);
+  };
+
+  const moveToWishlist = (item: any) => {
+    addToWishlist(item.product);
+    removeFromCart(item.product.id);
   };
 
   // Get delivery estimate (mock - would be API call in production)
@@ -336,6 +343,7 @@ export default function CartPage() {
                         Save for Later
                       </button>
                       <button
+                        onClick={() => moveToWishlist(item)}
                         className="flex items-center gap-1.5 text-xs text-brand-600 hover:text-classic-green transition-colors"
                       >
                         <Heart className="w-3.5 h-3.5" />
