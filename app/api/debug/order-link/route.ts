@@ -13,7 +13,8 @@ export async function GET(request: NextRequest) {
     }
 
     const { searchParams } = new URL(request.url);
-    const orderName = searchParams.get('orderName'); // e.g., SOLMKQZWQ0R
+    const orderName = searchParams.get('orderName'); // e.g., SOLMKQZWQ0R or #1030
+    const orderNumber = searchParams.get('orderNumber'); // e.g., 1030
 
     const clerk = await clerkClient();
     const user = await clerk.users.getUser(userId);
@@ -21,15 +22,18 @@ export async function GET(request: NextRequest) {
     const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress;
     const shopifyCustomerId = user.publicMetadata.shopifyCustomerId as string;
 
-    // Search for the order by name
+    // Search for the order by name or number
+    const searchQuery = orderNumber ? `name:#${orderNumber}` : orderName?.startsWith('#') ? `name:${orderName}` : `name:#${orderName}`;
+    
     const orderSearchResult = await shopifyAdminFetch(
       `query searchOrder($query: String!) {
-        orders(first: 1, query: $query) {
+        orders(first: 5, query: $query) {
           edges {
             node {
               id
               name
               email
+              note
               customer {
                 id
                 email
@@ -43,7 +47,7 @@ export async function GET(request: NextRequest) {
           }
         }
       }`,
-      { query: `name:${orderName}` }
+      { query: searchQuery }
     );
 
     const orderEdges = orderSearchResult.data?.orders?.edges || [];
@@ -82,6 +86,7 @@ export async function GET(request: NextRequest) {
           id: order.id,
           name: order.name,
           email: order.email,
+          note: order.note,
           customerId: order.customer?.id,
           customerEmail: order.customer?.email,
           customerName: `${order.customer?.firstName || ''} ${order.customer?.lastName || ''}`.trim(),
@@ -89,6 +94,7 @@ export async function GET(request: NextRequest) {
           financialStatus: order.financialStatus,
           fulfillmentStatus: order.fulfillmentStatus,
         } : null,
+        searchQuery,
         customerByEmail: customerByEmail ? {
           id: customerByEmail.id,
           email: customerByEmail.email,
