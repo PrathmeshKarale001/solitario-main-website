@@ -43,13 +43,27 @@ interface PincodeCheck {
   error?: string;
 }
 
+interface SavedAddress {
+  id: string;
+  name: string;
+  line1: string;
+  line2?: string;
+  city: string;
+  state: string;
+  pincode: string;
+  isDefault: boolean;
+}
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, total, clearCart } = useCart();
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
+  const [savedAddresses, setSavedAddresses] = useState<SavedAddress[]>([]);
+  const [selectedAddressId, setSelectedAddressId] = useState<string>('');
+  const [loadingAddresses, setLoadingAddresses] = useState(false);
   const [pincodeCheck, setPincodeCheck] = useState<PincodeCheck>({
     checked: false,
     serviceable: false,
@@ -77,6 +91,70 @@ export default function CheckoutPage() {
   const [isGiftLoading, setIsGiftLoading] = useState(false);
   // Gift only for exactly 2 items, not 3+
   const hasGift = items.reduce((sum, item) => sum + item.quantity, 0) === 2;
+
+  // Auto-fill user info and load saved addresses
+  useEffect(() => {
+    if (isLoaded && user) {
+      // Auto-fill email and phone from Clerk user data
+      const userEmail = user.emailAddresses.find(e => e.id === user.primaryEmailAddressId)?.emailAddress || '';
+      const userPhone = user.phoneNumbers.find(p => p.id === user.primaryPhoneNumberId)?.phoneNumber || '';
+      const firstName = user.firstName || '';
+      const lastName = user.lastName || '';
+      
+      setCustomer(prev => ({
+        ...prev,
+        firstName: prev.firstName || firstName,
+        lastName: prev.lastName || lastName,
+        email: prev.email || userEmail,
+        phone: prev.phone || userPhone.replace(/\D/g, ''),
+      }));
+
+      // Load saved addresses
+      loadSavedAddresses();
+    }
+  }, [isLoaded, user]);
+
+  // Load saved addresses from API
+  const loadSavedAddresses = async () => {
+    setLoadingAddresses(true);
+    try {
+      const response = await fetch('/api/account/addresses');
+      if (response.ok) {
+        const data = await response.json();
+        setSavedAddresses(data.addresses || []);
+        
+        // Auto-select default address if exists
+        const defaultAddr = data.addresses?.find((addr: SavedAddress) => addr.isDefault);
+        if (defaultAddr) {
+          selectSavedAddress(defaultAddr);
+        }
+      }
+    } catch (err) {
+      console.error('Failed to load addresses:', err);
+    } finally {
+      setLoadingAddresses(false);
+    }
+  };
+
+  // Select a saved address
+  const selectSavedAddress = (address: SavedAddress) => {
+    setSelectedAddressId(address.id);
+    const nameParts = address.name.split(' ');
+    setCustomer(prev => ({
+      ...prev,
+      firstName: nameParts[0] || prev.firstName,
+      lastName: nameParts.slice(1).join(' ') || prev.lastName,
+      address1: address.line1,
+      address2: address.line2 || '',
+      city: address.city,
+      state: address.state,
+      pincode: address.pincode,
+    }));
+    // Auto-check pincode for selected address
+    if (address.pincode.length === 6) {
+      checkPincode(address.pincode);
+    }
+  };
 
   useEffect(() => {
     async function fetchGift() {
@@ -485,6 +563,58 @@ export default function CheckoutPage() {
               {/* Shipping Address */}
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
                 <h2 className="font-playfair text-xl text-gray-900 mb-6">Shipping Address</h2>
+                
+                {/* Saved Addresses Selection */}
+                {user && savedAddresses.length > 0 && (
+                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Select a saved address
+                    </label>
+                    <div className="space-y-2">
+                      {savedAddresses.map((address) => (
+                        <button
+                          key={address.id}
+                          type="button"
+                          onClick={() => selectSavedAddress(address)}
+                          className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
+                            selectedAddressId === address.id
+                              ? 'border-classic-green bg-classic-green/5'
+                              : 'border-gray-200 hover:border-gray-300 bg-white'
+                          }`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <p className="font-medium text-gray-900">{address.name}</p>
+                              <p className="text-sm text-gray-600 mt-1">
+                                {address.line1}
+                                {address.line2 && `, ${address.line2}`}
+                              </p>
+                              <p className="text-sm text-gray-600">
+                                {address.city}, {address.state} - {address.pincode}
+                              </p>
+                            </div>
+                            {address.isDefault && (
+                              <span className="ml-2 px-2 py-1 bg-classic-green/10 text-classic-green text-xs font-medium rounded">
+                                Default
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                    <p className="text-xs text-gray-500 mt-3">
+                      Or enter a new address below
+                    </p>
+                  </div>
+                )}
+
+                {loadingAddresses && (
+                  <div className="mb-6 p-4 bg-gray-50 rounded-lg flex items-center justify-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
+                    <span className="text-sm text-gray-600">Loading saved addresses...</span>
+                  </div>
+                )}
+                
                 <div className="space-y-4">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1 *</label>
