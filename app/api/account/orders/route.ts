@@ -80,24 +80,42 @@ export async function GET(request: NextRequest) {
     // Get Shopify customer ID from metadata
     const shopifyCustomerId = user.publicMetadata.shopifyCustomerId as string;
     
+    console.log(`[Orders API] User ${userId} has shopifyCustomerId:`, shopifyCustomerId);
+    
     let orders = [];
+    let customerIdWorked = false;
     
     if (shopifyCustomerId) {
       // Fetch orders using customer ID (preferred method)
+      console.log(`[Orders API] Fetching orders for customer ID: ${shopifyCustomerId}`);
+      
       const result = await shopifyAdminFetch(CUSTOMER_ORDERS_QUERY, {
         customerId: shopifyCustomerId,
         first: 20,
       });
 
+      console.log(`[Orders API] Shopify response:`, JSON.stringify(result, null, 2));
+
       if (result.errors) {
+        console.error(`[Orders API] Shopify GraphQL errors:`, result.errors);
         throw new Error(result.errors[0].message);
       }
 
-      orders = result.data?.customer?.orders?.edges || [];
-      console.log(`[Orders API] Fetched ${orders.length} orders by customer ID for user ${userId}`);
-    } else {
+      if (!result.data?.customer) {
+        console.error(`[Orders API] No customer found for ID: ${shopifyCustomerId}`);
+        // Customer ID might be invalid, fall back to email search
+        console.log(`[Orders API] Falling back to email search for: ${userEmail}`);
+      } else {
+        orders = result.data?.customer?.orders?.edges || [];
+        customerIdWorked = true;
+        console.log(`[Orders API] Fetched ${orders.length} orders by customer ID for user ${userId}`);
+      }
+    }
+    
+    // If no orders found with customer ID or no customer ID exists, search by email
+    if (!customerIdWorked) {
       // Fallback: Search for customer by email and fetch their orders
-      console.log(`[Orders API] No Shopify customer ID found, searching by email: ${userEmail}`);
+      console.log(`[Orders API] Searching by email: ${userEmail}`);
       
       const customerSearchResult = await shopifyAdminFetch(
         `query searchCustomer($query: String!) {
