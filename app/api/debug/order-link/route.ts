@@ -33,7 +33,12 @@ export async function GET(request: NextRequest) {
               customer {
                 id
                 email
+                firstName
+                lastName
               }
+              createdAt
+              financialStatus
+              fulfillmentStatus
             }
           }
         }
@@ -43,6 +48,29 @@ export async function GET(request: NextRequest) {
 
     const orderEdges = orderSearchResult.data?.orders?.edges || [];
     const order = orderEdges.length > 0 ? orderEdges[0].node : null;
+
+    // Also search for customer by email to see if they exist
+    let customerByEmail = null;
+    if (userEmail) {
+      const customerSearchResult = await shopifyAdminFetch(
+        `query searchCustomer($query: String!) {
+          customers(first: 1, query: $query) {
+            edges {
+              node {
+                id
+                email
+                firstName
+                lastName
+                ordersCount
+              }
+            }
+          }
+        }`,
+        { query: `email:${userEmail}` }
+      );
+      const customerEdges = customerSearchResult.data?.customers?.edges || [];
+      customerByEmail = customerEdges.length > 0 ? customerEdges[0].node : null;
+    }
 
     return NextResponse.json({
       debug: {
@@ -56,19 +84,31 @@ export async function GET(request: NextRequest) {
           email: order.email,
           customerId: order.customer?.id,
           customerEmail: order.customer?.email,
+          customerName: `${order.customer?.firstName || ''} ${order.customer?.lastName || ''}`.trim(),
+          createdAt: order.createdAt,
+          financialStatus: order.financialStatus,
+          fulfillmentStatus: order.fulfillmentStatus,
+        } : null,
+        customerByEmail: customerByEmail ? {
+          id: customerByEmail.id,
+          email: customerByEmail.email,
+          name: `${customerByEmail.firstName || ''} ${customerByEmail.lastName || ''}`.trim(),
+          ordersCount: customerByEmail.ordersCount,
         } : null,
         emailMatch: order?.customer?.email === userEmail,
         customerIdMatch: order?.customer?.id === shopifyCustomerId,
       },
       recommendation: !order 
-        ? 'Order not found in Shopify'
+        ? 'Order not found in Shopify. Check if order was created successfully.'
+        : !order.customer
+        ? 'Order exists but has no customer linked. This is the problem!'
         : order.customer?.email !== userEmail
         ? `Email mismatch: Order email is ${order.customer?.email}, but your Clerk email is ${userEmail}`
         : !shopifyCustomerId
-        ? 'Shopify customer ID not linked to your Clerk account. Will link now...'
+        ? 'Shopify customer ID not linked to your Clerk account. Need to link it.'
         : order.customer?.id !== shopifyCustomerId
-        ? `Customer ID mismatch: Order customer is ${order.customer?.id}, but your metadata has ${shopifyCustomerId}`
-        : 'Everything looks correct. Order should appear.',
+        ? `Customer ID mismatch: Order customer is ${order.customer?.id}, but your metadata has ${shopifyCustomerId}. Need to update metadata.`
+        : 'Everything looks correct. Order should appear in your list.',
     });
 
   } catch (error) {
