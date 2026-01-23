@@ -89,6 +89,7 @@ export default function CheckoutPage() {
   const [promotionMessages, setPromotionMessages] = useState<string[]>([]);
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
+  const [showNewAddressForm, setShowNewAddressForm] = useState(false);
   // Gift only for exactly 2 items, not 3+
   const hasGift = items.reduce((sum, item) => sum + item.quantity, 0) === 2;
 
@@ -106,11 +107,14 @@ export default function CheckoutPage() {
         firstName: prev.firstName || firstName,
         lastName: prev.lastName || lastName,
         email: prev.email || userEmail,
-        phone: prev.phone || userPhone.replace(/\D/g, ''),
+        phone: prev.phone || userPhone.replace(/\D/g, '').slice(-10),
       }));
 
       // Load saved addresses
       loadSavedAddresses();
+    } else if (isLoaded && !user) {
+      // Guest checkout - show new address form by default
+      setShowNewAddressForm(true);
     }
   }, [isLoaded, user]);
 
@@ -121,16 +125,30 @@ export default function CheckoutPage() {
       const response = await fetch('/api/account/addresses');
       if (response.ok) {
         const data = await response.json();
-        setSavedAddresses(data.addresses || []);
+        const addresses = data.addresses || [];
+        setSavedAddresses(addresses);
         
-        // Auto-select default address if exists
-        const defaultAddr = data.addresses?.find((addr: SavedAddress) => addr.isDefault);
-        if (defaultAddr) {
-          selectSavedAddress(defaultAddr);
+        if (addresses.length > 0) {
+          // Auto-select default address if exists
+          const defaultAddr = addresses.find((addr: SavedAddress) => addr.isDefault);
+          if (defaultAddr) {
+            selectSavedAddress(defaultAddr);
+          } else {
+            // Select first address if no default
+            selectSavedAddress(addresses[0]);
+          }
+          setShowNewAddressForm(false);
+        } else {
+          // No saved addresses, show new address form
+          setShowNewAddressForm(true);
         }
+      } else {
+        console.error('Failed to fetch addresses:', response.status);
+        setShowNewAddressForm(true);
       }
     } catch (err) {
       console.error('Failed to load addresses:', err);
+      setShowNewAddressForm(true);
     } finally {
       setLoadingAddresses(false);
     }
@@ -139,6 +157,7 @@ export default function CheckoutPage() {
   // Select a saved address
   const selectSavedAddress = (address: SavedAddress) => {
     setSelectedAddressId(address.id);
+    setShowNewAddressForm(false);
     const nameParts = address.name.split(' ');
     setCustomer(prev => ({
       ...prev,
@@ -150,10 +169,34 @@ export default function CheckoutPage() {
       state: address.state,
       pincode: address.pincode,
     }));
+    // Clear form errors
+    setFormErrors({});
     // Auto-check pincode for selected address
     if (address.pincode.length === 6) {
       checkPincode(address.pincode);
     }
+  };
+
+  // Switch to new address form
+  const handleAddNewAddress = () => {
+    setSelectedAddressId('');
+    setShowNewAddressForm(true);
+    // Clear address fields but keep contact info
+    setCustomer(prev => ({
+      ...prev,
+      address1: '',
+      address2: '',
+      city: '',
+      state: '',
+      pincode: '',
+    }));
+    setPincodeCheck({
+      checked: false,
+      serviceable: false,
+      cod: false,
+      prepaid: false,
+      loading: false,
+    });
   };
 
   useEffect(() => {
@@ -564,59 +607,83 @@ export default function CheckoutPage() {
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
                 <h2 className="font-playfair text-xl text-gray-900 mb-6">Shipping Address</h2>
                 
-                {/* Saved Addresses Selection */}
-                {user && savedAddresses.length > 0 && (
-                  <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      Select a saved address
-                    </label>
-                    <div className="space-y-2">
-                      {savedAddresses.map((address) => (
-                        <button
-                          key={address.id}
-                          type="button"
-                          onClick={() => selectSavedAddress(address)}
-                          className={`w-full text-left p-3 rounded-lg border-2 transition-all ${
-                            selectedAddressId === address.id
+                {loadingAddresses ? (
+                  <div className="p-8 flex items-center justify-center gap-3">
+                    <Loader2 className="w-5 h-5 animate-spin text-classic-green" />
+                    <span className="text-gray-600">Loading your addresses...</span>
+                  </div>
+                ) : (
+                  <>
+                    {/* Saved Addresses - Amazon Style with Radio Buttons */}
+                    {user && savedAddresses.length > 0 && (
+                      <div className="mb-6">
+                        <h3 className="text-sm font-semibold text-gray-900 mb-4">Your Addresses</h3>
+                        <div className="space-y-3">
+                          {savedAddresses.map((address) => (
+                            <label
+                              key={address.id}
+                              className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${
+                                selectedAddressId === address.id && !showNewAddressForm
+                                  ? 'border-classic-green bg-classic-green/5'
+                                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                              }`}
+                            >
+                              <div className="flex items-start gap-3">
+                                <input
+                                  type="radio"
+                                  name="address"
+                                  checked={selectedAddressId === address.id && !showNewAddressForm}
+                                  onChange={() => selectSavedAddress(address)}
+                                  className="mt-1 w-4 h-4 text-classic-green focus:ring-classic-green"
+                                />
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <span className="font-semibold text-gray-900">{address.name}</span>
+                                    {address.isDefault && (
+                                      <span className="px-2 py-0.5 bg-classic-green/10 text-classic-green text-xs font-medium rounded">
+                                        Default
+                                      </span>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-gray-700">
+                                    {address.line1}
+                                    {address.line2 && `, ${address.line2}`}
+                                  </p>
+                                  <p className="text-sm text-gray-700">
+                                    {address.city}, {address.state} - {address.pincode}
+                                  </p>
+                                </div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+                        
+                        {/* Add New Address Option */}
+                        <label
+                          className={`block p-4 rounded-lg border-2 cursor-pointer transition-all mt-3 ${
+                            showNewAddressForm
                               ? 'border-classic-green bg-classic-green/5'
                               : 'border-gray-200 hover:border-gray-300 bg-white'
                           }`}
                         >
-                          <div className="flex items-start justify-between">
-                            <div className="flex-1">
-                              <p className="font-medium text-gray-900">{address.name}</p>
-                              <p className="text-sm text-gray-600 mt-1">
-                                {address.line1}
-                                {address.line2 && `, ${address.line2}`}
-                              </p>
-                              <p className="text-sm text-gray-600">
-                                {address.city}, {address.state} - {address.pincode}
-                              </p>
-                            </div>
-                            {address.isDefault && (
-                              <span className="ml-2 px-2 py-1 bg-classic-green/10 text-classic-green text-xs font-medium rounded">
-                                Default
-                              </span>
-                            )}
+                          <div className="flex items-center gap-3">
+                            <input
+                              type="radio"
+                              name="address"
+                              checked={showNewAddressForm}
+                              onChange={handleAddNewAddress}
+                              className="w-4 h-4 text-classic-green focus:ring-classic-green"
+                            />
+                            <span className="font-medium text-gray-900">+ Add a new address</span>
                           </div>
-                        </button>
-                      ))}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-3">
-                      Or enter a new address below
-                    </p>
-                  </div>
-                )}
+                        </label>
+                      </div>
+                    )}
 
-                {loadingAddresses && (
-                  <div className="mb-6 p-4 bg-gray-50 rounded-lg flex items-center justify-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin text-gray-500" />
-                    <span className="text-sm text-gray-600">Loading saved addresses...</span>
-                  </div>
-                )}
-                
-                <div className="space-y-4">
-                  <div>
+                    {/* New Address Form - Only show when selected or no saved addresses */}
+                    {showNewAddressForm && (
+                      <div className="space-y-4 pt-4 border-t border-gray-200">
+                        <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1 *</label>
                     <input
                       type="text"
@@ -717,7 +784,10 @@ export default function CheckoutPage() {
                       )}
                     </div>
                   </div>
-                </div>
+                      </div>
+                    )}
+                  </>
+                )}
               </div>
 
               {/* Payment Info */}
