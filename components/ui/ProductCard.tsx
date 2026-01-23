@@ -70,7 +70,7 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
           </motion.div>
 
           {/* Product Badges - Industry Standard */}
-          <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col gap-1">
+          <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-20 flex flex-col gap-1">
             {/* Bestseller Badge */}
             {product.featured && (
               <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full shadow-sm">
@@ -97,7 +97,7 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
           {/* Wishlist Heart Icon */}
           <motion.button
             onClick={handleWishlistToggle}
-            className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-10 p-1.5 sm:p-2 bg-white/90 hover:bg-white rounded-full shadow-sm"
+            className="absolute top-1.5 right-1.5 sm:top-2 sm:right-2 z-20 p-1.5 sm:p-2 bg-white/90 hover:bg-white rounded-full shadow-sm"
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
           >
