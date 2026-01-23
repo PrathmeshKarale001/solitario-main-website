@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Package, ChevronLeft, Search, Filter, Eye, Truck, CheckCircle, Clock, XCircle } from 'lucide-react';
+import { Package, ChevronLeft, Search, Filter, Eye, Truck, CheckCircle, Clock, XCircle, Download, RotateCcw, MapPin } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
 
 export const dynamic = 'force-dynamic';
@@ -220,19 +220,72 @@ export default function OrdersPage() {
                         ))}
                       </div>
 
+                      {/* Order Tracking Timeline - Amazon/Flipkart Style */}
+                      {order.status !== 'cancelled' && (
+                        <div className="px-4 py-3 border-t border-brand-100">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center flex-1">
+                              {/* Step 1: Order Placed */}
+                              <div className="flex flex-col items-center">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${['processing', 'shipped', 'delivered'].includes(order.status) ? 'bg-classic-green text-white' : 'bg-gray-200 text-gray-400'}`}>
+                                  <CheckCircle className="w-4 h-4" />
+                                </div>
+                                <span className="text-xs mt-1 text-gray-600">Ordered</span>
+                              </div>
+                              <div className={`flex-1 h-1 mx-2 ${['shipped', 'delivered'].includes(order.status) ? 'bg-classic-green' : 'bg-gray-200'}`} />
+                              {/* Step 2: Shipped */}
+                              <div className="flex flex-col items-center">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${['shipped', 'delivered'].includes(order.status) ? 'bg-classic-green text-white' : 'bg-gray-200 text-gray-400'}`}>
+                                  <Truck className="w-4 h-4" />
+                                </div>
+                                <span className="text-xs mt-1 text-gray-600">Shipped</span>
+                              </div>
+                              <div className={`flex-1 h-1 mx-2 ${order.status === 'delivered' ? 'bg-classic-green' : 'bg-gray-200'}`} />
+                              {/* Step 3: Delivered */}
+                              <div className="flex flex-col items-center">
+                                <div className={`w-6 h-6 rounded-full flex items-center justify-center ${order.status === 'delivered' ? 'bg-classic-green text-white' : 'bg-gray-200 text-gray-400'}`}>
+                                  <MapPin className="w-4 h-4" />
+                                </div>
+                                <span className="text-xs mt-1 text-gray-600">Delivered</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
                       {/* Order Footer */}
-                      <div className="flex items-center justify-between p-4 border-t border-brand-100 bg-brand-50/30">
+                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-t border-brand-100 bg-brand-50/30 gap-3">
                         <div>
                           <p className="text-sm text-brand-500 font-montserrat">Total</p>
                           <p className="font-gotham text-lg text-brand-800">{formatPrice(order.total)}</p>
                         </div>
-                        <Link
-                          href={`/account/orders/${order.id}`}
-                          className="inline-flex items-center gap-2 px-4 py-2 bg-classic-green/10 text-classic-green rounded-lg hover:bg-classic-green/20 transition-colors font-montserrat text-sm"
-                        >
-                          <Eye className="w-4 h-4" />
-                          View Details
-                        </Link>
+                        <div className="flex flex-wrap items-center gap-2">
+                          {/* Download Invoice */}
+                          <button
+                            onClick={() => window.open(`/api/account/orders/${order.id}/invoice`, '_blank')}
+                            className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-montserrat text-sm"
+                          >
+                            <Download className="w-4 h-4" />
+                            Invoice
+                          </button>
+                          {/* Return/Exchange - Only for delivered orders */}
+                          {order.status === 'delivered' && (
+                            <button
+                              onClick={() => alert('Return/Exchange request initiated. Our team will contact you shortly.')}
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-amber-100 text-amber-700 rounded-lg hover:bg-amber-200 transition-colors font-montserrat text-sm"
+                            >
+                              <RotateCcw className="w-4 h-4" />
+                              Return
+                            </button>
+                          )}
+                          <Link
+                            href={`/account/orders/${order.id}`}
+                            className="inline-flex items-center gap-2 px-4 py-2 bg-classic-green/10 text-classic-green rounded-lg hover:bg-classic-green/20 transition-colors font-montserrat text-sm"
+                          >
+                            <Eye className="w-4 h-4" />
+                            View Details
+                          </Link>
+                        </div>
                       </div>
                     </motion.div>
                   );

@@ -3,7 +3,8 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Trash2, ArrowRight } from 'lucide-react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck } from 'lucide-react';
+import { useState } from 'react';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
@@ -16,9 +17,34 @@ export const dynamic = 'force-dynamic';
 export default function WishlistPage() {
   const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
   const { addToCart } = useCart();
+  const [shareLink, setShareLink] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   const handleAddToCart = (product: any) => {
     addToCart(product, 1);
+  };
+
+  const handleAddAllToCart = () => {
+    wishlist.forEach(product => {
+      addToCart(product, 1);
+    });
+  };
+
+  const handleShareWishlist = () => {
+    const url = typeof window !== 'undefined' ? window.location.href : '';
+    setShareLink(url);
+    setShowShareModal(true);
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(shareLink);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch (err) {
+      console.error('Failed to copy:', err);
+    }
   };
 
   return (
@@ -36,13 +62,29 @@ export default function WishlistPage() {
               </p>
             </div>
             {wishlist.length > 0 && (
-              <button
-                onClick={clearWishlist}
-                className="mt-4 md:mt-0 text-sm text-brand-500 hover:text-error transition-colors font-montserrat flex items-center gap-2"
-              >
-                <Trash2 className="w-4 h-4" />
-                Clear Wishlist
-              </button>
+              <div className="flex flex-wrap items-center gap-3 mt-4 md:mt-0">
+                <button
+                  onClick={handleAddAllToCart}
+                  className="flex items-center gap-2 px-4 py-2 bg-classic-green text-white rounded-lg hover:bg-classic-green/90 transition-colors text-sm font-medium"
+                >
+                  <ShoppingCart className="w-4 h-4" />
+                  Add All to Cart
+                </button>
+                <button
+                  onClick={handleShareWishlist}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium"
+                >
+                  <Share2 className="w-4 h-4" />
+                  Share
+                </button>
+                <button
+                  onClick={clearWishlist}
+                  className="text-sm text-brand-500 hover:text-error transition-colors font-montserrat flex items-center gap-2"
+                >
+                  <Trash2 className="w-4 h-4" />
+                  Clear All
+                </button>
+              </div>
             )}
           </div>
 
@@ -95,6 +137,14 @@ export default function WishlistPage() {
                           Featured
                         </div>
                       )}
+                      {/* Stock Status Badge */}
+                      <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${product.inStock !== false ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                        {product.inStock !== false ? (
+                          <><Check className="w-3 h-3" /> In Stock</>
+                        ) : (
+                          <><AlertTriangle className="w-3 h-3" /> Out of Stock</>
+                        )}
+                      </div>
                     </div>
                   </Link>
 
@@ -145,6 +195,43 @@ export default function WishlistPage() {
                 Continue Shopping
                 <ArrowRight className="w-4 h-4" />
               </Link>
+            </div>
+          )}
+
+          {/* Share Modal */}
+          {showShareModal && (
+            <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl"
+              >
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-playfair text-xl text-gray-900">Share Wishlist</h3>
+                  <button
+                    onClick={() => setShowShareModal(false)}
+                    className="text-gray-400 hover:text-gray-600"
+                  >
+                    ×
+                  </button>
+                </div>
+                <p className="text-sm text-gray-600 mb-4">Share your wishlist with friends and family!</p>
+                <div className="flex gap-2">
+                  <input
+                    type="text"
+                    value={shareLink}
+                    readOnly
+                    className="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm bg-gray-50"
+                  />
+                  <button
+                    onClick={copyToClipboard}
+                    className="px-4 py-2 bg-classic-green text-white rounded-lg hover:bg-classic-green/90 transition-colors flex items-center gap-2"
+                  >
+                    {copied ? <CheckCheck className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                    {copied ? 'Copied!' : 'Copy'}
+                  </button>
+                </div>
+              </motion.div>
             </div>
           )}
         </Container>

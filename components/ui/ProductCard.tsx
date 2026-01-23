@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, Heart } from 'lucide-react';
+import { Eye, Heart, Flame, Sparkles, Clock } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice, cn } from '@/lib/utils';
 import { useWishlist } from '@/lib/wishlist-context';
@@ -69,14 +69,30 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
             />
           </motion.div>
 
-          {/* Featured Badge - Compact */}
-          {product.featured && (
-            <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10">
-              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-bronze-gold text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full">
-                Featured
+          {/* Product Badges - Industry Standard */}
+          <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 z-10 flex flex-col gap-1">
+            {/* Bestseller Badge */}
+            {product.featured && (
+              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-orange-500 to-red-500 text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full shadow-sm">
+                <Flame className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                Bestseller
               </span>
-            </div>
-          )}
+            )}
+            {/* New Arrival Badge - Show for products created in last 30 days */}
+            {(product as any).createdAt && new Date((product as any).createdAt) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) && !product.featured && (
+              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full shadow-sm">
+                <Sparkles className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                New
+              </span>
+            )}
+            {/* Limited Stock Badge */}
+            {product.inStock && (product as any).quantity && (product as any).quantity <= 5 && (product as any).quantity > 0 && (
+              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-amber-500 to-yellow-500 text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full shadow-sm">
+                <Clock className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                Only {(product as any).quantity} left
+              </span>
+            )}
+          </div>
 
           {/* Wishlist Heart Icon */}
           <motion.button

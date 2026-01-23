@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift } from 'lucide-react';
+import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Container } from '@/components/ui';
@@ -31,6 +31,8 @@ interface CustomerForm {
   city: string;
   state: string;
   pincode: string;
+  deliveryInstructions?: string;
+  alternativePhone?: string;
 }
 
 interface PincodeCheck {
@@ -82,6 +84,8 @@ export default function CheckoutPage() {
     city: '',
     state: '',
     pincode: '',
+    deliveryInstructions: '',
+    alternativePhone: '',
   });
 
   const [formErrors, setFormErrors] = useState<Partial<CustomerForm>>({});
@@ -506,13 +510,43 @@ export default function CheckoutPage() {
         <Container className="py-8">
           {/* Header */}
           <div className="mb-8">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-gray-600 hover:text-classic-green transition-colors font-montserrat mb-6"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Continue Shopping
-            </Link>
+            <div className="flex items-center justify-between mb-6">
+              <Link
+                href="/products"
+                className="inline-flex items-center gap-2 text-gray-600 hover:text-classic-green transition-colors font-montserrat"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Continue Shopping
+              </Link>
+              <Link
+                href="/cart"
+                className="inline-flex items-center gap-2 text-classic-green hover:text-classic-green/80 transition-colors font-montserrat"
+              >
+                <Edit className="w-4 h-4" />
+                Edit Cart
+              </Link>
+            </div>
+            
+            {/* Progress Indicator */}
+            <div className="mb-8">
+              <div className="flex items-center justify-center space-x-4 md:space-x-8">
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-classic-green text-white rounded-full flex items-center justify-center text-sm font-semibold">1</div>
+                  <span className="ml-2 text-sm font-medium text-gray-900 hidden md:inline">Address</span>
+                </div>
+                <div className="flex-1 h-0.5 bg-gray-300 max-w-[60px] md:max-w-[100px]"></div>
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-semibold">2</div>
+                  <span className="ml-2 text-sm font-medium text-gray-500 hidden md:inline">Review</span>
+                </div>
+                <div className="flex-1 h-0.5 bg-gray-300 max-w-[60px] md:max-w-[100px]"></div>
+                <div className="flex items-center">
+                  <div className="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-semibold">3</div>
+                  <span className="ml-2 text-sm font-medium text-gray-500 hidden md:inline">Payment</span>
+                </div>
+              </div>
+            </div>
+            
             <h1 className="font-playfair text-3xl md:text-4xl text-gray-900">Secure Checkout</h1>
           </div>
 
@@ -782,6 +816,38 @@ export default function CheckoutPage() {
                           )}
                         </div>
                       )}
+                    </div>
+                  </div>
+                  
+                  {/* Delivery Instructions */}
+                  <div className="mt-4 pt-4 border-t border-gray-200">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <MessageSquare className="w-4 h-4 inline mr-2" />
+                      Delivery Instructions (Optional)
+                    </label>
+                    <textarea
+                      value={customer.deliveryInstructions || ''}
+                      onChange={(e) => handleInputChange('deliveryInstructions', e.target.value)}
+                      placeholder="E.g., Leave at door, Call before delivery, Landmark details..."
+                      rows={2}
+                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all resize-none"
+                    />
+                  </div>
+
+                  {/* Alternative Phone */}
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Alternative Phone Number (Optional)
+                    </label>
+                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-classic-green/30 focus-within:border-classic-green transition-all">
+                      <span className="px-3 py-3 bg-gray-50 text-gray-500 border-r border-gray-200 font-montserrat text-sm">+91</span>
+                      <input
+                        type="tel"
+                        value={customer.alternativePhone || ''}
+                        onChange={(e) => handleInputChange('alternativePhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                        placeholder="Backup contact number"
+                        className="flex-1 px-4 py-3 focus:outline-none font-montserrat text-gray-800 placeholder:text-gray-400"
+                      />
                     </div>
                   </div>
                       </div>
