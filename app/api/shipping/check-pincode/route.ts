@@ -40,3 +40,39 @@ export async function GET(request: NextRequest) {
     );
   }
 }
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json();
+    const { pincode } = body;
+
+    if (!pincode || !/^\d{6}$/.test(pincode)) {
+      return NextResponse.json(
+        { error: 'Valid 6-digit pincode is required' },
+        { status: 400 }
+      );
+    }
+
+    const result = await checkPincodeServiceability(pincode);
+
+    if (!result.success) {
+      return NextResponse.json(
+        { serviceable: false },
+        { status: 200 }
+      );
+    }
+
+    return NextResponse.json({
+      serviceable: result.serviceable,
+      cod: result.cod,
+      prepaid: result.prepaid,
+      eta: result.eta,
+    });
+  } catch (error) {
+    console.error('Error checking pincode:', error);
+    return NextResponse.json(
+      { serviceable: false },
+      { status: 200 }
+    );
+  }
+}
