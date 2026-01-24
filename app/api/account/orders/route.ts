@@ -34,6 +34,12 @@ const CUSTOMER_ORDERS_QUERY = `
                       url
                       altText
                     }
+                    product {
+                      featuredImage {
+                        url
+                        altText
+                      }
+                    }
                   }
                 }
               }
@@ -147,6 +153,12 @@ export async function GET(request: NextRequest) {
                                 url
                                 altText
                               }
+                              product {
+                                featuredImage {
+                                  url
+                                  altText
+                                }
+                              }
                             }
                           }
                         }
@@ -228,7 +240,7 @@ export async function GET(request: NextRequest) {
           name: item.node.title,
           quantity: item.node.quantity,
           price: parseFloat(item.node.variant?.price || '0'),
-          image: item.node.variant?.image?.url || '',
+          image: item.node.variant?.image?.url || item.node.variant?.product?.featuredImage?.url || '',
         })),
         shippingAddress: edge.node.shippingAddress,
       })),
