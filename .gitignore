@@ -53,3 +53,6 @@ public/product-hero-assets/*.mov
 
 # Accidental large image set (do not commit)
 public/images/Size 4_3/
+
+# Sentry Config File
+.env.sentry-build-plugin
