@@ -14,25 +14,27 @@ export function initializeRadar(): boolean {
     return true;
   }
 
+  // In Next.js, NEXT_PUBLIC_ variables are embedded at build time
   const publishableKey = process.env.NEXT_PUBLIC_RADAR_PUBLISHABLE_KEY;
 
   if (!publishableKey) {
-    console.error('❌ Radar API key not found!');
-    console.error('Please add NEXT_PUBLIC_RADAR_PUBLISHABLE_KEY to your .env.local file');
-    console.error('Then restart the dev server with: npm run dev');
+    console.warn('⚠️ Radar API key not configured');
+    console.warn('Set NEXT_PUBLIC_RADAR_PUBLISHABLE_KEY in environment variables');
+    console.warn('Store locator will use basic geolocation without Radar features');
+    // Don't return false - allow basic geolocation to work
     return false;
   }
 
   try {
-    console.log('✅ Radar API key found, initializing SDK...');
+    console.log('✅ Initializing Radar SDK...');
     Radar.initialize(publishableKey, {
-      logLevel: 'info',
+      logLevel: 'warn', // Reduce console noise
       cacheLocationMinutes: 5,
       locationTimeout: 30000,
       desiredAccuracy: 'high',
     });
     isInitialized = true;
-    console.log('✅ Radar SDK initialized successfully');
+    console.log('✅ Radar SDK initialized');
     return true;
   } catch (error) {
     console.error('❌ Failed to initialize Radar SDK:', error);
@@ -41,9 +43,10 @@ export function initializeRadar(): boolean {
 }
 
 export async function getUserLocation(): Promise<RadarLocation | null> {
-  if (!initializeRadar()) {
-    console.error('❌ Cannot get location: Radar SDK not initialized');
-    return null;
+  const radarInitialized = initializeRadar();
+  
+  if (!radarInitialized) {
+    console.log('📍 Using basic geolocation (Radar SDK not available)');
   }
 
   try {
@@ -75,15 +78,17 @@ export async function getUserLocation(): Promise<RadarLocation | null> {
 
     console.log('✅ Location retrieved:', location);
     
-    // Track this location with Radar for geofencing events (optional)
-    try {
-      await Radar.trackOnce({
-        latitude: location.latitude,
-        longitude: location.longitude,
-      });
-      console.log('📍 Location tracked with Radar');
-    } catch (trackError) {
-      console.warn('⚠️ Could not track with Radar (non-critical):', trackError);
+    // Track this location with Radar for geofencing events (optional, only if Radar is initialized)
+    if (radarInitialized) {
+      try {
+        await Radar.trackOnce({
+          latitude: location.latitude,
+          longitude: location.longitude,
+        });
+        console.log('📍 Location tracked with Radar');
+      } catch (trackError) {
+        console.warn('⚠️ Could not track with Radar (non-critical):', trackError);
+      }
     }
 
     return location;
@@ -91,12 +96,15 @@ export async function getUserLocation(): Promise<RadarLocation | null> {
     console.error('❌ Error getting user location:', error);
     if (error?.message?.includes('denied') || error?.code === 1) {
       console.error('💡 User denied location permissions. Please allow location access in your browser.');
+      throw new Error('Location permission denied');
     } else if (error?.message?.includes('timeout') || error?.code === 3) {
       console.error('💡 Location request timed out. Please try again.');
+      throw new Error('Location request timeout');
     } else if (error?.code === 2) {
       console.error('💡 Location unavailable. Please check your device settings.');
+      throw new Error('Location unavailable');
     }
-    return null;
+    throw error;
   }
 }
 
