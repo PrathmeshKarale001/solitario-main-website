@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { Product } from './data';
+import { toast } from '@/components/providers/Toaster';
 
 interface WishlistContextType {
   wishlist: Product[];
@@ -50,14 +51,28 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {
       if (prev.some((p) => p.id === product.id)) {
-        return prev; // Already in wishlist
+        toast('Already in wishlist', {
+          description: product.name,
+        });
+        return prev;
       }
+      toast.success('Added to wishlist!', {
+        description: product.name,
+      });
       return [...prev, product];
     });
   };
 
   const removeFromWishlist = (productId: string) => {
-    setWishlist((prev) => prev.filter((p) => p.id !== productId));
+    setWishlist((prev) => {
+      const product = prev.find((p) => p.id === productId);
+      if (product) {
+        toast.success('Removed from wishlist', {
+          description: product.name,
+        });
+      }
+      return prev.filter((p) => p.id !== productId);
+    });
   };
 
   const isInWishlist = (productId: string) => {
@@ -65,6 +80,9 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const clearWishlist = () => {
+    if (wishlist.length > 0) {
+      toast.success('Wishlist cleared');
+    }
     setWishlist([]);
   };
 

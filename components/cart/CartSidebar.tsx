@@ -9,8 +9,9 @@ import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { CartErrorBoundary } from '@/components/ui/ErrorBoundary';
 
-export default function CartSidebar() {
+function CartSidebarContent() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
   const { userId } = useAuth();
   const [appliedCoupon, setAppliedCouponState] = useState<string>('');
@@ -531,3 +532,10 @@ export default function CartSidebar() {
   );
 }
 
+export default function CartSidebar() {
+  return (
+    <CartErrorBoundary>
+      <CartSidebarContent />
+    </CartErrorBoundary>
+  );
+}

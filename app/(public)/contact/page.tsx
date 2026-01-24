@@ -1,5 +1,6 @@
-import { Section, Container, Button } from '@/components/ui';
+import { Section, Container } from '@/components/ui';
 import { Mail, Phone, MapPin } from 'lucide-react';
+import ContactForm from '@/components/forms/ContactForm';
 
 export default function ContactPage() {
   return (
@@ -19,47 +20,10 @@ export default function ContactPage() {
       <Section variant="light" padding="md">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-            {/* Contact Form */}
+            {/* Contact Form with Zod Validation */}
             <div>
               <h2 className="heading-md mb-6">Send Us a Message</h2>
-              <form className="space-y-6">
-                <div>
-                  <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-2">
-                    Name
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bronze-gold"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                    Email
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bronze-gold"
-                    required
-                  />
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    rows={6}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-bronze-gold"
-                    required
-                  />
-                </div>
-                <Button type="submit" variant="primary" size="lg" className="w-full">
-                  Send Message
-                </Button>
-              </form>
+              <ContactForm />
             </div>
 
             {/* Contact Information */}

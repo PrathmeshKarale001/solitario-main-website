@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import ProductDetail from '@/components/products/ProductDetail';
 import { ProductSchema } from '@/components/seo/JsonLd';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
+import { ProductErrorBoundary } from '@/components/ui/ErrorBoundary';
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -38,7 +39,9 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <div className="container mx-auto px-4 py-4">
         <Breadcrumbs items={breadcrumbs} />
       </div>
-      <ProductDetail product={product} />
+      <ProductErrorBoundary>
+        <ProductDetail product={product} />
+      </ProductErrorBoundary>
     </div>
   );
 }

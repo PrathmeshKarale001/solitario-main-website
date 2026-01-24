@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { Product } from './data';
+import { toast } from '@/components/providers/Toaster';
 
 export interface CartItem {
   product: Product;
@@ -65,16 +66,30 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (existingItemIndex > -1) {
         const newItems = [...prevItems];
         newItems[existingItemIndex].quantity += quantity;
+        toast.success('Cart updated!', {
+          description: `${product.name} quantity increased`,
+        });
         return newItems;
       }
 
+      toast.success('Added to cart!', {
+        description: product.name,
+      });
       return [...prevItems, { product, quantity, selectedSize: size }];
     });
     setIsCartOpen(true);
   };
 
   const removeFromCart = (productId: string) => {
-    setItems((prevItems) => prevItems.filter((item) => item.product.id !== productId));
+    setItems((prevItems) => {
+      const item = prevItems.find((i) => i.product.id === productId);
+      if (item) {
+        toast.success('Removed from cart', {
+          description: item.product.name,
+        });
+      }
+      return prevItems.filter((item) => item.product.id !== productId);
+    });
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -91,6 +106,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearCart = () => {
+    if (items.length > 0) {
+      toast.success('Cart cleared');
+    }
     setItems([]);
   };
 
