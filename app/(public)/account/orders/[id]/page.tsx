@@ -107,13 +107,27 @@ export default function OrderDetailPage() {
   }, [isLoaded, isSignedIn, router]);
 
   useEffect(() => {
-    // Simulate fetching order
-    const timer = setTimeout(() => {
-      setOrder(mockOrder);
-      setLoading(false);
-    }, 500);
-    return () => clearTimeout(timer);
-  }, [params.id]);
+    const fetchOrder = async () => {
+      try {
+        const response = await fetch('/api/account/orders');
+        if (response.ok) {
+          const data = await response.json();
+          const foundOrder = data.orders?.find((o: any) => o.id === params.id);
+          if (foundOrder) {
+            setOrder(foundOrder);
+          }
+        }
+      } catch (error) {
+        console.error('Failed to fetch order:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    if (isLoaded && isSignedIn && params.id) {
+      fetchOrder();
+    }
+  }, [params.id, isLoaded, isSignedIn]);
 
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(price);

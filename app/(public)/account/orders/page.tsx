@@ -202,12 +202,19 @@ export default function OrdersPage() {
                         {order.items.map((item) => (
                           <div key={item.id} className="flex items-center gap-4">
                             <div className="w-20 h-20 relative rounded-xl overflow-hidden bg-brand-50 flex-shrink-0">
-                              <Image
-                                src={item.image}
-                                alt={item.name}
-                                fill
-                                className="object-cover"
-                              />
+                              {item.image ? (
+                                <Image
+                                  src={item.image}
+                                  alt={item.name}
+                                  fill
+                                  className="object-cover"
+                                  unoptimized
+                                />
+                              ) : (
+                                <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                                  <Package className="w-8 h-8 text-gray-400" />
+                                </div>
+                              )}
                             </div>
                             <div className="flex-1 min-w-0">
                               <h3 className="font-playfair text-brand-800 truncate">{item.name}</h3>
