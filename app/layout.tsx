@@ -102,7 +102,7 @@ export default function RootLayout({
                 <CartProvider>
                   <ShopifyCartProvider>
                     <Header />
-                    <main>
+                    <main id="main-content">
                       {children}
                     </main>
                     <Footer />

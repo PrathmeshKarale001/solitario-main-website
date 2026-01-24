@@ -1,43 +1,28 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getRazorpayInstance, generateReceiptId, rupeesToPaise, CartItemForOrder, CustomerDetails } from '@/lib/razorpay';
 import logger from '@/lib/logger';
-
-// Rate limiting: Simple in-memory store (use Redis in production for multi-instance)
-const orderAttempts = new Map<string, { count: number; lastAttempt: number }>();
-const RATE_LIMIT_WINDOW = 60000; // 1 minute
-const MAX_ATTEMPTS = 5; // Max 5 orders per minute per IP
-
-function checkRateLimit(ip: string): boolean {
-  const now = Date.now();
-  const record = orderAttempts.get(ip);
-  
-  if (!record || now - record.lastAttempt > RATE_LIMIT_WINDOW) {
-    orderAttempts.set(ip, { count: 1, lastAttempt: now });
-    return true;
-  }
-  
-  if (record.count >= MAX_ATTEMPTS) {
-    return false;
-  }
-  
-  record.count++;
-  record.lastAttempt = now;
-  return true;
-}
+import { getClientIdentifier, paymentRateLimiter } from '@/lib/rate-limit';
+import { sanitizeEmail, sanitizePhone, sanitizePincode } from '@/lib/sanitize';
 
 export async function POST(request: NextRequest) {
   try {
-    // Rate limiting check
-    const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'unknown';
-    if (!checkRateLimit(ip)) {
+    // Rate limiting
+    const identifier = getClientIdentifier(request);
+    const rateLimit = paymentRateLimiter.check(identifier);
+    
+    if (!rateLimit.success) {
+      logger.warn(`Rate limit exceeded for order creation: ${identifier}`);
       return NextResponse.json(
-        { error: 'Too many requests. Please wait a moment before trying again.' },
-        { status: 429 }
+        { error: 'Too many order attempts. Please wait a moment before trying again.' },
+        { 
+          status: 429,
+          headers: paymentRateLimiter.getHeaders(rateLimit)
+        }
       );
     }
 
     const body = await request.json();
-    const { items, customer, subtotal, shipping, tax, total } = body as {
+    let { items, customer, subtotal, shipping, tax, total } = body as {
       items: CartItemForOrder[];
       customer: CustomerDetails;
       subtotal: number;
@@ -45,6 +30,15 @@ export async function POST(request: NextRequest) {
       tax: number;
       total: number;
     };
+    
+    // Sanitize customer inputs
+    if (customer) {
+      customer.email = sanitizeEmail(customer.email);
+      customer.phone = sanitizePhone(customer.phone);
+      if (customer.address?.pincode) {
+        customer.address.pincode = sanitizePincode(customer.address.pincode);
+      }
+    }
 
     // Validate required fields
     if (!items || items.length === 0) {

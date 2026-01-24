@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, Search, Diamond, Truck, CreditCard, RotateCcw, Shield, HelpCircle } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
+import { FAQSchema } from '@/components/seo/JsonLd';
 
 
 // Force dynamic rendering for this page
@@ -164,8 +165,17 @@ export default function FAQPage() {
     ? filteredCategories 
     : faqCategories.filter(c => c.id === activeCategory);
 
+  // Prepare FAQ items for schema
+  const allFAQItems = faqCategories.flatMap(category => 
+    category.faqs.map(faq => ({
+      question: faq.question,
+      answer: faq.answer
+    }))
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-20">
+      <FAQSchema items={allFAQItems} />
       {/* Hero */}
       <section className="bg-classic-green py-16 md:py-24">
         <Container>
