@@ -349,27 +349,99 @@ export async function checkPincodeServiceability(
     if (result.delivery_codes && result.delivery_codes.length > 0) {
       const pincodeData = result.delivery_codes[0].postal_code;
       
-      // Calculate ETA based on distance and service type
-      // For lab grown diamond jewelry, we typically use Express service
+      // Calculate realistic ETA based on location and logistics
+      // Includes: Order processing (1-2 days) + Transit time + Buffer
       const currentDate = new Date();
-      let etaDays = 2; // Default 2 days for Express
-      
-      // Adjust ETA based on location (rough estimation)
       const state = pincodeData.state_code;
-      if (['MH', 'GJ', 'MP'].includes(state)) {
-        etaDays = 1; // Same region - 1 day
-      } else if (['DL', 'UP', 'HR', 'PB', 'RJ'].includes(state)) {
-        etaDays = 2; // North India - 2 days
-      } else if (['KA', 'TN', 'AP', 'TS', 'KL'].includes(state)) {
-        etaDays = 3; // South India - 3 days
-      } else if (['WB', 'OR', 'JH', 'BR', 'AS'].includes(state)) {
-        etaDays = 3; // East India - 3 days
-      } else {
-        etaDays = 4; // Remote areas - 4 days
+      const city = pincodeData.city?.toUpperCase() || '';
+      
+      // Processing time: 1-2 business days for order preparation and AWB approval
+      const processingDays = 2;
+      
+      // Transit time based on actual logistics reality
+      let transitDays = 3; // Default
+      
+      // Pune Metro Area (Same city/nearby) - 2-3 days total
+      if (['411001', '411002', '411003', '411004', '411005', '411006', '411007', '411008', '411009', 
+           '411011', '411012', '411013', '411014', '411015', '411016', '411017', '411018', '411019',
+           '411020', '411021', '411022', '411023', '411024', '411025', '411026', '411027', '411028',
+           '411029', '411030', '411031', '411032', '411033', '411034', '411035', '411036', '411037',
+           '411038', '411039', '411040', '411041', '411042', '411043', '411044', '411045', '411046',
+           '411047', '411048', '411051', '411052', '411057', '411058', '411060', '411061', '411062'].includes(pincode)) {
+        transitDays = 1; // Local Pune - 1 day transit
+      }
+      // Mumbai Metro (Major hub, well connected) - 3-4 days
+      else if (city.includes('MUMBAI') || ['400001', '400002', '400003', '400004', '400005', '400006', '400007', '400008', '400009', '400010',
+                '400011', '400012', '400013', '400014', '400015', '400016', '400017', '400018', '400019', '400020',
+                '400021', '400022', '400023', '400024', '400025', '400026', '400027', '400028', '400029', '400030',
+                '400031', '400034', '400035', '400036', '400037', '400038', '400039', '400042', '400043', '400049',
+                '400050', '400051', '400052', '400053', '400054', '400055', '400056', '400057', '400058', '400059',
+                '400060', '400061', '400062', '400063', '400064', '400065', '400066', '400067', '400068', '400069',
+                '400070', '400071', '400072', '400074', '400075', '400076', '400077', '400078', '400079', '400080',
+                '400081', '400082', '400083', '400084', '400085', '400086', '400087', '400088', '400089', '400090',
+                '400091', '400092', '400093', '400094', '400095', '400096', '400097', '400098', '400099', '400101',
+                '400102', '400103', '400104', '400105', '400106', '400107', '400108', '400109', '400110'].includes(pincode)) {
+        transitDays = 2; // Mumbai - 2 days transit
+      }
+      // Major Maharashtra cities (Nashik, Nagpur, Aurangabad) - 4-5 days
+      else if (state === 'MH' && (city.includes('NASHIK') || city.includes('NAGPUR') || city.includes('AURANGABAD'))) {
+        transitDays = 3; // Major MH cities - 3 days transit
+      }
+      // Rest of Maharashtra (Amravati, Kolhapur, etc.) - 5-6 days
+      else if (state === 'MH') {
+        transitDays = 4; // Other MH cities - 4 days transit
+      }
+      // Gujarat (Ahmedabad, Surat, Vadodara) - 4-5 days
+      else if (state === 'GJ') {
+        transitDays = 3; // Gujarat - 3 days transit
+      }
+      // Madhya Pradesh (Indore, Bhopal) - 5-6 days
+      else if (state === 'MP') {
+        transitDays = 4; // MP - 4 days transit
+      }
+      // Delhi NCR (Major hub) - 4-5 days
+      else if (['DL', 'HR'].includes(state) && (city.includes('DELHI') || city.includes('GURGAON') || city.includes('NOIDA') || city.includes('FARIDABAD'))) {
+        transitDays = 3; // Delhi NCR - 3 days transit
+      }
+      // North India (UP, Punjab, Rajasthan, Haryana) - 5-7 days
+      else if (['UP', 'PB', 'RJ', 'HR'].includes(state)) {
+        transitDays = 5; // North India - 5 days transit
+      }
+      // South India metros (Bangalore, Chennai, Hyderabad) - 5-6 days
+      else if (['KA', 'TN', 'TS'].includes(state) && (city.includes('BENGALURU') || city.includes('BANGALORE') || 
+                city.includes('CHENNAI') || city.includes('HYDERABAD'))) {
+        transitDays = 4; // South metros - 4 days transit
+      }
+      // Rest of South India (Kerala, AP, TN interior) - 6-8 days
+      else if (['KA', 'TN', 'AP', 'TS', 'KL'].includes(state)) {
+        transitDays = 6; // South India - 6 days transit
+      }
+      // East India (Kolkata, Bhubaneswar) - 6-8 days
+      else if (['WB', 'OR'].includes(state) && (city.includes('KOLKATA') || city.includes('BHUBANESWAR'))) {
+        transitDays = 5; // East metros - 5 days transit
+      }
+      // Rest of East India (Bihar, Jharkhand, Assam) - 7-10 days
+      else if (['WB', 'OR', 'JH', 'BR', 'AS'].includes(state)) {
+        transitDays = 7; // East India - 7 days transit
+      }
+      // Remote areas (NE states, J&K, HP, Uttarakhand) - 8-12 days
+      else {
+        transitDays = 9; // Remote areas - 9 days transit
       }
       
+      // Total ETA = Processing + Transit
+      const totalDays = processingDays + transitDays;
+      
+      // Calculate delivery date (skip Sundays)
       const etaDate = new Date(currentDate);
-      etaDate.setDate(currentDate.getDate() + etaDays);
+      let daysAdded = 0;
+      while (daysAdded < totalDays) {
+        etaDate.setDate(etaDate.getDate() + 1);
+        // Skip Sundays (day 0)
+        if (etaDate.getDay() !== 0) {
+          daysAdded++;
+        }
+      }
       
       const etaString = etaDate.toLocaleDateString('en-IN', {
         weekday: 'short',
