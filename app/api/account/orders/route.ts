@@ -206,29 +206,29 @@ export async function GET(request: NextRequest) {
       }
     }
 
+    // Map Shopify fulfillment status to frontend status
+    const mapStatus = (fulfillmentStatus: string): 'processing' | 'shipped' | 'delivered' | 'cancelled' => {
+      const status = fulfillmentStatus?.toUpperCase() || 'UNFULFILLED';
+      if (status === 'FULFILLED') return 'delivered';
+      if (status === 'PARTIALLY_FULFILLED' || status === 'IN_TRANSIT') return 'shipped';
+      if (status === 'RESTOCKED' || status === 'CANCELLED') return 'cancelled';
+      return 'processing';
+    };
+
     return NextResponse.json({
       orders: orders.map((edge: any) => ({
         id: edge.node.id,
         name: edge.node.name,
         orderNumber: edge.node.name.replace('#', ''),
         date: edge.node.processedAt,
-        status: {
-          payment: edge.node.displayFinancialStatus,
-          fulfillment: edge.node.displayFulfillmentStatus,
-        },
-        total: {
-          amount: edge.node.totalPriceSet?.shopMoney?.amount || '0',
-          currency: edge.node.totalPriceSet?.shopMoney?.currencyCode || 'INR',
-        },
+        status: mapStatus(edge.node.displayFulfillmentStatus),
+        total: parseFloat(edge.node.totalPriceSet?.shopMoney?.amount || '0'),
         items: edge.node.lineItems.edges.map((item: any) => ({
-          title: item.node.title,
+          id: item.node.variant?.id || item.node.title,
+          name: item.node.title,
           quantity: item.node.quantity,
-          variant: item.node.variant?.title || '',
-          price: {
-            amount: item.node.variant?.price || '0',
-            currency: edge.node.totalPriceSet?.shopMoney?.currencyCode || 'INR',
-          },
-          image: item.node.variant?.image?.url,
+          price: parseFloat(item.node.variant?.price || '0'),
+          image: item.node.variant?.image?.url || '',
         })),
         shippingAddress: edge.node.shippingAddress,
       })),
