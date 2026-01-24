@@ -21,6 +21,24 @@ const CUSTOMER_ORDERS_QUERY = `
                 currencyCode
               }
             }
+            subtotalPriceSet {
+              shopMoney {
+                amount
+                currencyCode
+              }
+            }
+            totalShippingPriceSet {
+              shopMoney {
+                amount
+                currencyCode
+              }
+            }
+            totalTaxSet {
+              shopMoney {
+                amount
+                currencyCode
+              }
+            }
             lineItems(first: 10) {
               edges {
                 node {
@@ -140,6 +158,24 @@ export async function GET(request: NextRequest) {
                           currencyCode
                         }
                       }
+                      subtotalPriceSet {
+                        shopMoney {
+                          amount
+                          currencyCode
+                        }
+                      }
+                      totalShippingPriceSet {
+                        shopMoney {
+                          amount
+                          currencyCode
+                        }
+                      }
+                      totalTaxSet {
+                        shopMoney {
+                          amount
+                          currencyCode
+                        }
+                      }
                       lineItems(first: 10) {
                         edges {
                           node {
@@ -235,6 +271,9 @@ export async function GET(request: NextRequest) {
         date: edge.node.processedAt,
         status: mapStatus(edge.node.displayFulfillmentStatus),
         total: parseFloat(edge.node.totalPriceSet?.shopMoney?.amount || '0'),
+        subtotal: parseFloat(edge.node.subtotalPriceSet?.shopMoney?.amount || '0'),
+        shipping: parseFloat(edge.node.totalShippingPriceSet?.shopMoney?.amount || '0'),
+        tax: parseFloat(edge.node.totalTaxSet?.shopMoney?.amount || '0'),
         items: edge.node.lineItems.edges.map((item: any) => ({
           id: item.node.variant?.id || item.node.title,
           name: item.node.title,

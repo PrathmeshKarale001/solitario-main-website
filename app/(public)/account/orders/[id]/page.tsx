@@ -200,7 +200,10 @@ export default function OrderDetailPage() {
                 </h1>
                 <p className="text-brand-500 font-montserrat">Placed on {formatDate(order.date)}</p>
               </div>
-              <button className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-brand-100 text-brand-700 rounded-lg hover:bg-brand-200 transition-colors font-montserrat text-sm">
+              <button 
+                onClick={() => window.open(`/api/account/orders/${encodeURIComponent(order.id)}/invoice`, '_blank')}
+                className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-brand-100 text-brand-700 rounded-lg hover:bg-brand-200 transition-colors font-montserrat text-sm"
+              >
                 <Download className="w-4 h-4" />
                 Download Invoice
               </button>
