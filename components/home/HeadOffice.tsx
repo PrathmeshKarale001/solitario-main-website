@@ -34,7 +34,7 @@ export default function HeadOffice() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-200 h-[300px] sm:h-[350px] md:h-[400px] lg:h-full lg:min-h-[400px] shadow-brand"
+            className="rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-200 shadow-brand h-full min-h-[400px]"
           >
             <iframe
               src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"

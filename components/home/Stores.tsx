@@ -71,15 +71,12 @@ export default function Stores() {
         {/* Store Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
           {FEATURED_STORES.map((store, idx) => (
-            <motion.a
+            <motion.div
               key={store.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: idx * 0.1 }}
-              href={store.mapLink}
-              target="_blank"
-              rel="noopener noreferrer"
               className="group relative rounded-2xl sm:rounded-3xl overflow-hidden block"
             >
               {/* Image */}
@@ -108,7 +105,7 @@ export default function Stores() {
                   {store.location}
                 </div>
               </div>
-            </motion.a>
+            </motion.div>
           ))}
         </div>
 
