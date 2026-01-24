@@ -70,6 +70,41 @@ const QuickViewPreview = forwardRef<HTMLDivElement, QuickViewPreviewProps>(({
     }
   }, [isVisible, position]);
 
+  // Track Quick View with GTM and Meta Pixel
+  useEffect(() => {
+    if (isVisible && product) {
+      // Google Tag Manager tracking
+      if (typeof window !== 'undefined' && (window as any).dataLayer) {
+        (window as any).dataLayer.push({
+          event: 'view_item',
+          ecommerce: {
+            items: [{
+              item_id: product.id,
+              item_name: product.name,
+              item_category: product.category,
+              price: product.price,
+              currency: product.currency || 'INR',
+            }]
+          },
+          event_category: 'Quick View',
+          event_label: product.name,
+        });
+      }
+
+      // Meta Pixel tracking
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'ViewContent', {
+          content_ids: [product.id],
+          content_name: product.name,
+          content_category: product.category,
+          content_type: 'product',
+          value: product.price,
+          currency: product.currency || 'INR',
+        });
+      }
+    }
+  }, [isVisible, product]);
+
   if (!isVisible) return null;
 
   return (
@@ -162,6 +197,33 @@ const QuickViewPreview = forwardRef<HTMLDivElement, QuickViewPreviewProps>(({
               {onAddToCart && (
                 <button
                   onClick={() => {
+                    // Track Add to Cart event
+                    if (typeof window !== 'undefined' && (window as any).dataLayer) {
+                      (window as any).dataLayer.push({
+                        event: 'add_to_cart',
+                        ecommerce: {
+                          items: [{
+                            item_id: product.id,
+                            item_name: product.name,
+                            item_category: product.category,
+                            price: product.price,
+                            currency: product.currency || 'INR',
+                            quantity: 1,
+                          }]
+                        },
+                        event_category: 'Quick View Add to Cart',
+                        event_label: product.name,
+                      });
+                    }
+                    if (typeof window !== 'undefined' && (window as any).fbq) {
+                      (window as any).fbq('track', 'AddToCart', {
+                        content_ids: [product.id],
+                        content_name: product.name,
+                        content_type: 'product',
+                        value: product.price,
+                        currency: product.currency || 'INR',
+                      });
+                    }
                     onAddToCart(product);
                     onClose();
                   }}

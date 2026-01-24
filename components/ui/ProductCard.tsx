@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, Heart, Flame, Sparkles, Clock } from 'lucide-react';
+import { Eye, Heart, Flame, Sparkles, Clock, ShoppingCart } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice, cn } from '@/lib/utils';
 import { useWishlist } from '@/lib/wishlist-context';
+import { useCart } from '@/lib/cart-context';
 
 export interface ProductCardProps {
   product: Product;
@@ -19,7 +20,9 @@ export interface ProductCardProps {
 export default function ProductCard({ product, onQuickView, onAddToCart, darkMode = false }: ProductCardProps) {
   const [isHovered, setIsHovered] = useState(false);
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
+  const { addToCart } = useCart();
   const [isInWishlist, setIsInWishlist] = useState(false);
+  const [isAdding, setIsAdding] = useState(false);
 
   useEffect(() => {
     setIsInWishlist(wishlist.some(item => item.id === product.id));
@@ -33,6 +36,14 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
     } else {
       addToWishlist(product);
     }
+  };
+
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsAdding(true);
+    addToCart(product, 1);
+    setTimeout(() => setIsAdding(false), 1000);
   };
 
   return (
@@ -153,7 +164,7 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
           </h3>
 
           {/* Price */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 mb-2">
             {(product as any).displayPrice ? (
               <p className={cn(
                 "font-gotham text-xs sm:text-sm font-semibold",
@@ -191,6 +202,24 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
               </p>
             )}
           </div>
+
+          {/* Inline Add to Cart Button */}
+          <motion.button
+            onClick={handleAddToCart}
+            disabled={!product.inStock || isAdding}
+            className={cn(
+              "w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-gotham font-semibold uppercase tracking-wider transition-all",
+              product.inStock
+                ? "bg-classic-green text-white hover:bg-classic-green/90 active:scale-95"
+                : "bg-gray-200 text-gray-500 cursor-not-allowed",
+              isAdding && "bg-classic-green/70"
+            )}
+            whileHover={product.inStock ? { scale: 1.02 } : {}}
+            whileTap={product.inStock ? { scale: 0.98 } : {}}
+          >
+            <ShoppingCart className="w-3.5 h-3.5" />
+            {isAdding ? 'Added!' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
+          </motion.button>
         </div>
       </motion.div>
     </Link>

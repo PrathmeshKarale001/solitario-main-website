@@ -10,6 +10,8 @@ import DynamicHero from '@/components/home/DynamicHero';
 import { Promise } from '@/components/about';
 import LoginPopup from '@/components/home/LoginPopup';
 import OffersMarquee from '@/components/ui/OffersMarquee';
+import CategorySelector from '@/components/home/CategorySelector';
+import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
 // Lazy load below-fold components for better performance and reduced initial bundle
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
@@ -64,7 +66,10 @@ export default function Home() {
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
       
-      {/* 1a. OFFERS MARQUEE - Continuous offers display */}
+      {/* 1a. CATEGORY SELECTOR - Segment-based navigation for instant product discovery */}
+      <CategorySelector />
+      
+      {/* 1b. OFFERS MARQUEE - Continuous offers display */}
       <OffersMarquee />
       
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
@@ -83,6 +88,9 @@ export default function Home() {
       
       {/* 5. PROMISE - Brand values (kept high for trust) */}
       <Promise />
+      
+      {/* 5a. UNIFIED OFFERS - Consistent offer messaging across funnel */}
+      <UnifiedOfferBanner variant="homepage" />
       
       {/* 6. QUICK NAVIGATION - Easy access to key pages */}
       <section className="relative bg-[#FAF5EF] pt-4 sm:pt-5 md:pt-4">
