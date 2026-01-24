@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { verifyPaymentSignature, PaymentVerification, CustomerDetails, CartItemForOrder } from '@/lib/razorpay';
 import crypto from 'crypto';
 import logger from '@/lib/logger';
+import { getClientIdentifier, paymentRateLimiter } from '@/lib/rate-limit';
 import { sendOrderConfirmationEmail } from '@/lib/email';
 import { clerkClient } from '@clerk/nextjs/server';
 
@@ -20,6 +21,21 @@ setInterval(() => {
 
 export async function POST(request: NextRequest) {
   try {
+    // Rate limiting - prevent payment verification abuse
+    const identifier = getClientIdentifier(request);
+    const rateLimit = paymentRateLimiter.check(identifier);
+    
+    if (!rateLimit.success) {
+      logger.warn(`Rate limit exceeded for payment verification: ${identifier}`);
+      return NextResponse.json(
+        { error: 'Too many payment verification attempts. Please try again later.' },
+        { 
+          status: 429,
+          headers: paymentRateLimiter.getHeaders(rateLimit)
+        }
+      );
+    }
+    
     const body = await request.json();
     const { 
       razorpay_order_id, 

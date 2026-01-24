@@ -19,7 +19,7 @@ import {
   Download
 } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
-import TrackingTimeline from '@/components/orders/TrackingTimeline';
+import { LazyTrackingTimeline } from '@/components/lazy';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -292,7 +292,7 @@ export default function OrderDetailPage() {
 
             {/* Real-time Delhivery Tracking */}
             {order.trackingNumber && (
-              <TrackingTimeline 
+              <LazyTrackingTimeline 
                 waybill={order.trackingNumber} 
                 orderStatus={order.status}
               />

@@ -16,6 +16,9 @@ import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonL
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
 import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
 import { Analytics } from '@vercel/analytics/next';
+import { QueryProvider } from '@/lib/query-client';
+import { Toaster } from '@/components/providers/Toaster';
+import { SkipLinks } from '@/components/ui/SkipLink';
 import './globals.css'
 
 // Playfair Display for headings - elegant serif font
@@ -72,6 +75,7 @@ export default function RootLayout({
         <WebsiteJsonLd />
       </head>
       <body className="antialiased overflow-x-hidden">
+        <SkipLinks />
         {/* Google Ads Conversion Tracking */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17875605995"
@@ -88,7 +92,8 @@ export default function RootLayout({
         
         <GoogleAnalytics />
         <ClerkProvider>
-          <PostHogProvider>
+          <QueryProvider>
+            <PostHogProvider>
             <SmoothScrollWrapper>
               <Suspense fallback={null}>
                 <ScrollToTopOnRouteChange />
@@ -107,8 +112,10 @@ export default function RootLayout({
                 </CartProvider>
               </WishlistProvider>
             </SmoothScrollWrapper>
-          </PostHogProvider>
+            </PostHogProvider>
+          </QueryProvider>
         </ClerkProvider>
+        <Toaster />
         <Analytics />
       </body>
     </html>

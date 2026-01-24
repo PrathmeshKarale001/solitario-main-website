@@ -6,7 +6,7 @@ import { ArrowRight, MapPin, Phone, Clock, Globe, ExternalLink } from 'lucide-re
 import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
-import { NearestStore } from '@/components/stores';
+import { LazyNearestStore } from '@/components/lazy';
 import { Container } from '@/components/ui';
 import { ALL_STORES } from '@/lib/stores-data';
 
@@ -118,7 +118,7 @@ export default function StoresPage() {
       </section>
 
       {/* Nearest Store Section */}
-      <NearestStore showTitle={true} maxStores={3} />
+      <LazyNearestStore showTitle={true} maxStores={3} />
 
       {/* All Stores */}
       <section className="py-24 bg-brand-100">
