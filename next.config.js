@@ -30,7 +30,12 @@ const nextConfig = {
   productionBrowserSourceMaps: false,
   // Enable React strict mode for better development
   reactStrictMode: true,
-  // Security headers
+  // Experimental features - Audit Recommendation 5.3
+  experimental: {
+    // View Transitions API for smooth page transitions
+    viewTransition: true,
+  },
+  // Security headers - Audit Recommendation 4.1
   async headers() {
     return [
       {
@@ -38,8 +43,29 @@ const nextConfig = {
         headers: [
           { key: 'X-Frame-Options', value: 'DENY' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'origin-when-cross-origin' },
+          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
+          { key: 'X-DNS-Prefetch-Control', value: 'on' },
+          { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
+          // Content Security Policy - Audit Recommendation 4.1
+          { 
+            key: 'Content-Security-Policy', 
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.vercel-scripts.com https://*.posthog.com https://*.sentry.io",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "connect-src 'self' https://*.shopify.com https://*.razorpay.com https://*.clerk.accounts.dev https://*.posthog.com https://*.sentry.io https://*.vercel-insights.com https://api.radar.io https://track.delhivery.com",
+              "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev",
+              "object-src 'none'",
+              "base-uri 'self'",
+              "form-action 'self'",
+              "frame-ancestors 'none'",
+              "upgrade-insecure-requests",
+            ].join('; ')
+          },
         ],
       },
     ];
@@ -48,11 +74,43 @@ const nextConfig = {
   compress: true,
   // Production optimizations
   poweredByHeader: false,
+  // Webpack optimizations - Audit Recommendation 6.2
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // Vendor splitting for better caching
+      config.optimization.splitChunks = {
+        ...config.optimization.splitChunks,
+        cacheGroups: {
+          ...config.optimization.splitChunks?.cacheGroups,
+          // Separate vendor chunks
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            chunks: 'all',
+            priority: 10,
+          },
+          // Separate framer-motion (large library)
+          framer: {
+            test: /[\\/]node_modules[\\/]framer-motion[\\/]/,
+            name: 'framer-motion',
+            chunks: 'all',
+            priority: 20,
+          },
+          // Separate maplibre (heavy mapping library)
+          maplibre: {
+            test: /[\\/]node_modules[\\/]maplibre-gl[\\/]/,
+            name: 'maplibre',
+            chunks: 'all',
+            priority: 20,
+          },
+        },
+      };
+    }
+    return config;
+  },
 }
 
 module.exports = nextConfig
-
-
 
 
 // Injected content via Sentry wizard below

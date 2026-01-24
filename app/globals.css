@@ -564,3 +564,68 @@ img, video, iframe {
 .touch-manipulation {
   touch-action: manipulation;
 }
+
+/* ========================================
+   ACCESSIBILITY - FOCUS VISIBLE STYLES
+   Audit Recommendation: 8.2
+   ======================================== */
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--classic-green, #1B4D3E);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Remove default focus for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Enhanced focus for interactive elements */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[role="button"]:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--classic-green, #1B4D3E);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(27, 77, 62, 0.2);
+}
+
+/* Focus styles for cards and clickable containers */
+.focus-ring:focus-visible {
+  outline: 2px solid var(--classic-green, #1B4D3E);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(27, 77, 62, 0.15);
+}
+
+/* Skip link styles (visible on focus) */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 0;
+  padding: 1rem;
+  background: var(--classic-green, #1B4D3E);
+  color: white;
+  z-index: 9999;
+  transition: top 0.2s;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* Reduced motion preference */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

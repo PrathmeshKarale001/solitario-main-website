@@ -151,8 +151,8 @@ const ADMIN_TOKEN = process.env.SHOPIFY_ADMIN_ACCESS_TOKEN;
 
 // Shopify config validation happens at runtime, not module load
 
-const STOREFRONT_API_VERSION = '2024-01';
-const ADMIN_API_VERSION = '2024-01';
+const STOREFRONT_API_VERSION = '2025-01';
+const ADMIN_API_VERSION = '2025-01';
 
 // Storefront API GraphQL client
 export async function shopifyStorefrontFetch<T = any>(
