@@ -34,14 +34,13 @@ export async function POST(request: NextRequest) {
     
     if (!validation.success) {
       return NextResponse.json(
-        { error: validation.error },
+        { error: (validation as { success: false; error: string }).error },
         { status: 400 }
       );
     }
 
     // Extract validated data
-    const contactData = validation.data;
-    const { name, email, phone, subject, message } = contactData;
+    const { name, email, phone, subject, message } = validation.data;
 
     // TODO: Send email using Resend or save to database
     logger.info('Contact form submission:', { name, email, subject });
