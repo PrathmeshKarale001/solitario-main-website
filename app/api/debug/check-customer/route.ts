@@ -24,19 +24,20 @@ export async function POST(request: NextRequest) {
               firstName
               lastName
               createdAt
-              ordersCount
+              numberOfOrders
               orders(first: 50, sortKey: PROCESSED_AT, reverse: true) {
                 edges {
                   node {
                     id
                     name
-                    orderNumber
                     processedAt
-                    financialStatus
-                    fulfillmentStatus
-                    totalPriceV2 {
-                      amount
-                      currencyCode
+                    displayFinancialStatus
+                    displayFulfillmentStatus
+                    totalPriceSet {
+                      shopMoney {
+                        amount
+                        currencyCode
+                      }
                     }
                     customer {
                       id
@@ -83,16 +84,15 @@ export async function POST(request: NextRequest) {
         firstName: customer.firstName,
         lastName: customer.lastName,
         createdAt: customer.createdAt,
-        ordersCount: customer.ordersCount,
+        numberOfOrders: customer.numberOfOrders,
       },
       orders: orders.map((edge: any) => ({
         id: edge.node.id,
         name: edge.node.name,
-        orderNumber: edge.node.orderNumber,
         processedAt: edge.node.processedAt,
-        financialStatus: edge.node.financialStatus,
-        fulfillmentStatus: edge.node.fulfillmentStatus,
-        total: edge.node.totalPriceV2,
+        financialStatus: edge.node.displayFinancialStatus,
+        fulfillmentStatus: edge.node.displayFulfillmentStatus,
+        total: edge.node.totalPriceSet?.shopMoney || { amount: '0', currencyCode: 'INR' },
         customerEmail: edge.node.customer?.email,
       })),
       totalOrders: orders.length,
