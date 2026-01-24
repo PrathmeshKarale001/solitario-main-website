@@ -269,7 +269,7 @@ export default function OrdersPage() {
                         <div className="flex flex-wrap items-center gap-2">
                           {/* Download Invoice */}
                           <button
-                            onClick={() => window.open(`/api/account/orders/${order.id}/invoice`, '_blank')}
+                            onClick={() => window.open(`/api/account/orders/${encodeURIComponent(order.id)}/invoice`, '_blank')}
                             className="inline-flex items-center gap-2 px-3 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-montserrat text-sm"
                           >
                             <Download className="w-4 h-4" />
@@ -286,7 +286,7 @@ export default function OrdersPage() {
                             </button>
                           )}
                           <Link
-                            href={`/account/orders/${order.id}`}
+                            href={`/account/orders/${encodeURIComponent(order.id)}`}
                             className="inline-flex items-center gap-2 px-4 py-2 bg-classic-green/10 text-classic-green rounded-lg hover:bg-classic-green/20 transition-colors font-montserrat text-sm"
                           >
                             <Eye className="w-4 h-4" />

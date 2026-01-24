@@ -112,7 +112,9 @@ export default function OrderDetailPage() {
         const response = await fetch('/api/account/orders');
         if (response.ok) {
           const data = await response.json();
-          const foundOrder = data.orders?.find((o: any) => o.id === params.id);
+          // Decode the URL-encoded order ID
+          const decodedId = decodeURIComponent(params.id as string);
+          const foundOrder = data.orders?.find((o: any) => o.id === decodedId);
           if (foundOrder) {
             setOrder(foundOrder);
           }
