@@ -12,13 +12,14 @@ const CUSTOMER_ORDERS_QUERY = `
           node {
             id
             name
-            orderNumber
             processedAt
-            fulfillmentStatus
-            financialStatus
-            totalPriceV2 {
-              amount
-              currencyCode
+            displayFulfillmentStatus
+            displayFinancialStatus
+            totalPriceSet {
+              shopMoney {
+                amount
+                currencyCode
+              }
             }
             lineItems(first: 10) {
               edges {
@@ -28,10 +29,7 @@ const CUSTOMER_ORDERS_QUERY = `
                   variant {
                     id
                     title
-                    priceV2 {
-                      amount
-                      currencyCode
-                    }
+                    price
                     image {
                       url
                       altText
@@ -127,13 +125,14 @@ export async function GET(request: NextRequest) {
                     node {
                       id
                       name
-                      orderNumber
                       processedAt
-                      fulfillmentStatus
-                      financialStatus
-                      totalPriceV2 {
-                        amount
-                        currencyCode
+                      displayFulfillmentStatus
+                      displayFinancialStatus
+                      totalPriceSet {
+                        shopMoney {
+                          amount
+                          currencyCode
+                        }
                       }
                       lineItems(first: 10) {
                         edges {
@@ -143,10 +142,7 @@ export async function GET(request: NextRequest) {
                             variant {
                               id
                               title
-                              priceV2 {
-                                amount
-                                currencyCode
-                              }
+                              price
                               image {
                                 url
                                 altText
@@ -214,25 +210,25 @@ export async function GET(request: NextRequest) {
       orders: orders.map((edge: any) => ({
         id: edge.node.id,
         name: edge.node.name,
-        orderNumber: edge.node.orderNumber,
+        orderNumber: edge.node.name.replace('#', ''),
         date: edge.node.processedAt,
         status: {
-          payment: edge.node.financialStatus,
-          fulfillment: edge.node.fulfillmentStatus,
+          payment: edge.node.displayFinancialStatus,
+          fulfillment: edge.node.displayFulfillmentStatus,
         },
         total: {
-          amount: edge.node.totalPriceV2.amount,
-          currency: edge.node.totalPriceV2.currencyCode,
+          amount: edge.node.totalPriceSet?.shopMoney?.amount || '0',
+          currency: edge.node.totalPriceSet?.shopMoney?.currencyCode || 'INR',
         },
         items: edge.node.lineItems.edges.map((item: any) => ({
           title: item.node.title,
           quantity: item.node.quantity,
-          variant: item.node.variant.title,
+          variant: item.node.variant?.title || '',
           price: {
-            amount: item.node.variant.priceV2.amount,
-            currency: item.node.variant.priceV2.currencyCode,
+            amount: item.node.variant?.price || '0',
+            currency: edge.node.totalPriceSet?.shopMoney?.currencyCode || 'INR',
           },
-          image: item.node.variant.image?.url,
+          image: item.node.variant?.image?.url,
         })),
         shippingAddress: edge.node.shippingAddress,
       })),
