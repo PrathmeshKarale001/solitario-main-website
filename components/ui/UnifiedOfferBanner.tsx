@@ -19,7 +19,7 @@ const offers: Offer[] = [
   },
   {
     icon: <Shield className="w-5 h-5" />,
-    title: 'Lifetime Warranty',
+    title: 'Lifetime Exchange',
     description: 'On all lab-grown diamonds',
   },
   {
@@ -41,7 +41,7 @@ interface UnifiedOfferBannerProps {
 
 export default function UnifiedOfferBanner({ variant = 'homepage', className = '' }: UnifiedOfferBannerProps) {
   return (
-    <div className={`bg-gradient-to-r from-ivory-pearl to-white py-6 ${className}`}>
+    <div className={`bg-ivory-pearl py-6 my-4 ${className}`}>
       <div className="container mx-auto px-4">
         {variant === 'checkout' && (
           <h3 className="text-center text-lg font-playfair font-semibold text-brand-900 mb-4">
@@ -53,7 +53,7 @@ export default function UnifiedOfferBanner({ variant = 'homepage', className = '
           {offers.map((offer, index) => (
             <div
               key={index}
-              className="flex flex-col items-center text-center p-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+              className="flex flex-col items-center text-center p-4 bg-white/80 backdrop-blur-sm rounded-lg shadow-sm hover:shadow-md transition-shadow"
             >
               <div className="w-12 h-12 bg-classic-green/10 rounded-full flex items-center justify-center mb-3 text-classic-green">
                 {offer.icon}

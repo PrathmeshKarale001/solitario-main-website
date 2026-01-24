@@ -4,11 +4,13 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, ShoppingCart, Heart } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
 import { Section, Container } from '@/components/ui';
 import { formatPrice } from '@/lib/utils';
 import { Product } from '@/lib/data';
+import { useCart } from '@/lib/cart-context';
+import { useWishlist } from '@/lib/wishlist-context';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
 
@@ -16,6 +18,8 @@ export default function ProductCategories() {
   const [activeCategory, setActiveCategory] = useState<string>('all');
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const { addToCart } = useCart();
+  const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -90,11 +94,12 @@ export default function ProductCategories() {
           </div>
         </div>
 
-        {/* Compact Product Grid - 2 columns on mobile */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6 mb-6 sm:mb-10">
+        {/* Simple, Beautiful Product Grid */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-10">
           {filteredProducts.map((product, index) => {
             const categoryLabel =
               CATEGORIES.find((c) => c.slug === product.category)?.label || product.category;
+            const isInWishlist = wishlist.some(item => item.id === product.id);
 
             return (
               <motion.div
@@ -103,41 +108,74 @@ export default function ProductCategories() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.3, delay: index * 0.05 }}
+                className="group"
               >
-                <Link
-                  href={`/products/${product.id}`}
-                  className="group block"
-                >
-                  {/* Compact Card */}
-                  <div className="relative bg-white rounded-lg sm:rounded-xl overflow-hidden border border-gray-100 hover:border-bronze-gold/30 transition-all">
-                    {/* Compact Image */}
-                    <div className="relative aspect-square bg-gray-50 overflow-hidden">
+                {/* Simple Card with Clean Design */}
+                <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-classic-green/30 hover:shadow-lg transition-all duration-300">
+                  {/* Image Container */}
+                  <Link href={`/products/${product.id}`} className="block">
+                    <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-white overflow-hidden">
                       <Image
                         src={product.image}
                         alt={product.name}
                         fill
-                        className="object-contain p-2 sm:p-4 group-hover:scale-105 transition-transform duration-300"
-                        sizes="(max-width: 640px) 45vw, (max-width: 1024px) 25vw, 20vw"
+                        className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
+                        sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                       />
-                      {/* Category Badge - Smaller */}
-                      <div className="absolute top-1.5 left-1.5 sm:top-2 sm:left-2 bg-white/90 px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-full">
-                        <span className="text-[8px] sm:text-[10px] uppercase tracking-wider font-gotham text-gray-500">
+                      
+                      {/* Category Badge */}
+                      <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
+                        <span className="text-[10px] uppercase tracking-wider font-gotham text-gray-600">
                           {categoryLabel}
                         </span>
                       </div>
+                      
+                      {/* Wishlist Button */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (isInWishlist) {
+                            removeFromWishlist(product.id);
+                          } else {
+                            addToWishlist(product);
+                          }
+                        }}
+                        className="absolute top-3 right-3 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                      >
+                        <Heart
+                          className={`w-4 h-4 transition-colors ${
+                            isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                          }`}
+                        />
+                      </button>
                     </div>
-                    
-                    {/* Compact Info */}
-                    <div className="p-2 sm:p-3">
-                      <h3 className="font-playfair text-xs sm:text-sm text-gray-900 line-clamp-1 mb-0.5 sm:mb-1">
+                  </Link>
+                  
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <Link href={`/products/${product.id}`}>
+                      <h3 className="font-playfair text-sm sm:text-base text-gray-900 line-clamp-2 mb-2 group-hover:text-classic-green transition-colors">
                         {product.name}
                       </h3>
-                      <p className="font-gotham text-xs sm:text-sm font-semibold text-classic-green">
-                        {formatPrice(product.price, product.currency)}
-                      </p>
-                    </div>
+                    </Link>
+                    <p className="font-gotham text-base sm:text-lg font-semibold text-classic-green mb-3">
+                      {formatPrice(product.price, product.currency)}
+                    </p>
+                    
+                    {/* Add to Cart Button */}
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addToCart(product, 1);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 bg-classic-green text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider hover:bg-classic-green/90 transition-all active:scale-95"
+                    >
+                      <ShoppingCart className="w-4 h-4" />
+                      Add to Cart
+                    </button>
                   </div>
-                </Link>
+                </div>
               </motion.div>
             );
           })}

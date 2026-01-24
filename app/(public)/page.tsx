@@ -10,7 +10,6 @@ import DynamicHero from '@/components/home/DynamicHero';
 import { Promise } from '@/components/about';
 import LoginPopup from '@/components/home/LoginPopup';
 import OffersMarquee from '@/components/ui/OffersMarquee';
-import CategorySelector from '@/components/home/CategorySelector';
 import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
 // Lazy load below-fold components for better performance and reduced initial bundle
@@ -66,10 +65,7 @@ export default function Home() {
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
       
-      {/* 1a. CATEGORY SELECTOR - Segment-based navigation for instant product discovery */}
-      <CategorySelector />
-      
-      {/* 1b. OFFERS MARQUEE - Continuous offers display */}
+      {/* 1a. OFFERS MARQUEE - Continuous offers display */}
       <OffersMarquee />
       
       {/* 2. SHOP BY CATEGORY - Immediate product access */}

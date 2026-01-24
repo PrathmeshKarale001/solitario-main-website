@@ -58,7 +58,7 @@ const nextConfig = {
               "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com",
               "font-src 'self' https://fonts.gstatic.com",
               "connect-src 'self' https://*.shopify.com https://*.razorpay.com https://*.clerk.accounts.dev https://*.posthog.com https://*.sentry.io https://*.vercel-insights.com https://api.radar.io https://track.delhivery.com",
-              "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev",
+              "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://www.google.com",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
