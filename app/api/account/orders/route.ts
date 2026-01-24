@@ -39,6 +39,14 @@ const CUSTOMER_ORDERS_QUERY = `
                 currencyCode
               }
             }
+            fulfillments {
+              trackingInfo {
+                number
+                url
+                company
+              }
+              status
+            }
             lineItems(first: 10) {
               edges {
                 node {
@@ -176,6 +184,14 @@ export async function GET(request: NextRequest) {
                           currencyCode
                         }
                       }
+                      fulfillments {
+                        trackingInfo {
+                          number
+                          url
+                          company
+                        }
+                        status
+                      }
                       lineItems(first: 10) {
                         edges {
                           node {
@@ -274,6 +290,11 @@ export async function GET(request: NextRequest) {
         subtotal: parseFloat(edge.node.subtotalPriceSet?.shopMoney?.amount || '0'),
         shipping: parseFloat(edge.node.totalShippingPriceSet?.shopMoney?.amount || '0'),
         tax: parseFloat(edge.node.totalTaxSet?.shopMoney?.amount || '0'),
+        // Extract tracking information from fulfillments (Delhivery waybill)
+        trackingNumber: edge.node.fulfillments?.[0]?.trackingInfo?.[0]?.number || null,
+        trackingUrl: edge.node.fulfillments?.[0]?.trackingInfo?.[0]?.url || null,
+        trackingCompany: edge.node.fulfillments?.[0]?.trackingInfo?.[0]?.company || null,
+        fulfillmentStatus: edge.node.fulfillments?.[0]?.status || null,
         items: edge.node.lineItems.edges.map((item: any) => ({
           id: item.node.variant?.id || item.node.title,
           name: item.node.title,

@@ -19,6 +19,7 @@ import {
   Download
 } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
+import TrackingTimeline from '@/components/orders/TrackingTimeline';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -43,14 +44,22 @@ interface Order {
   tax: number;
   items: OrderItem[];
   shippingAddress: {
-    name: string;
-    phone: string;
-    address: string;
-    city: string;
-    state: string;
-    pincode: string;
+    firstName?: string;
+    lastName?: string;
+    address1?: string;
+    city?: string;
+    province?: string;
+    zip?: string;
+    name?: string;
+    phone?: string;
+    address?: string;
+    state?: string;
+    pincode?: string;
   };
   trackingNumber?: string;
+  trackingUrl?: string;
+  trackingCompany?: string;
+  fulfillmentStatus?: string;
   estimatedDelivery?: string;
 }
 
@@ -279,6 +288,14 @@ export default function OrderDetailPage() {
                   </div>
                 )}
               </motion.div>
+            )}
+
+            {/* Real-time Delhivery Tracking */}
+            {order.trackingNumber && (
+              <TrackingTimeline 
+                waybill={order.trackingNumber} 
+                orderStatus={order.status}
+              />
             )}
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
