@@ -27,25 +27,27 @@ export default function HeadOffice() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 items-stretch">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
           {/* Map */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-200 shadow-brand h-full min-h-[400px]"
+            className="rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-200 shadow-brand"
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Solitario Head Office Location"
-            />
+            <div className="w-full h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px]">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Solitario Head Office Location"
+              />
+            </div>
           </motion.div>
 
           {/* Office Details */}
@@ -54,7 +56,7 @@ export default function HeadOffice() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="rounded-2xl sm:rounded-3xl bg-white border border-brand-200 p-6 sm:p-8 flex flex-col justify-center shadow-brand"
+            className="rounded-2xl sm:rounded-3xl bg-white border border-brand-200 p-6 sm:p-8 flex flex-col justify-center shadow-brand h-[400px] sm:h-[450px] md:h-[500px] lg:h-[550px]"
           >
             <h3 className="text-xl sm:text-2xl md:text-3xl font-playfair text-brand-800 mb-6 sm:mb-8">
               Solitario Lab Grown <span className="text-classic-green">Pvt. Ltd.</span>
