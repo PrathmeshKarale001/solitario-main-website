@@ -155,11 +155,11 @@ export default function ProductCategories() {
                   {/* Product Info */}
                   <div className="p-4">
                     <Link href={`/products/${product.id}`}>
-                      <h3 className="font-playfair text-sm sm:text-base text-gray-900 line-clamp-2 mb-2 group-hover:text-classic-green transition-colors">
+                      <h3 className="font-playfair text-sm sm:text-base text-gray-900 line-clamp-1 mb-2 group-hover:text-classic-green transition-colors min-h-[1.5rem]">
                         {product.name}
                       </h3>
                     </Link>
-                    <p className="font-gotham text-base sm:text-lg font-semibold text-classic-green mb-3">
+                    <p className="font-gotham text-base sm:text-lg font-semibold text-classic-green mb-3 min-h-[1.75rem]">
                       {formatPrice(product.price, product.currency)}
                     </p>
                     

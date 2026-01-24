@@ -21,7 +21,6 @@ export const CATEGORIES = [
   { id: 'rings', label: 'Rings', slug: 'rings' },
   { id: 'earrings', label: 'Earrings', slug: 'earrings' },
   { id: 'necklaces', label: 'Necklaces', slug: 'necklaces' },
-  { id: 'pendants', label: 'Pendants', slug: 'pendants' },
   { id: 'bracelets', label: 'Bracelets', slug: 'bracelets' },
 ] as const;
 
