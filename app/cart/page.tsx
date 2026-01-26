@@ -12,6 +12,7 @@ import ProductRecommendations from '@/components/product/ProductRecommendations'
 import { useWishlist } from '@/lib/wishlist-context';
 import { useState, useEffect } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { trackBeginCheckout } from '@/lib/gtm-conversions';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount, addToCart } = useCart();
@@ -607,6 +608,9 @@ export default function CartPage() {
                 {/* Checkout Button */}
                 <Link
                   href="/checkout"
+                  onClick={(e) => {
+                    trackBeginCheckout();
+                  }}
                   className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
                 >
                   Proceed to Checkout

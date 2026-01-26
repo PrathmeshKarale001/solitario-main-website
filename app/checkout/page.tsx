@@ -13,6 +13,7 @@ import { Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
 import Script from 'next/script';
+import { trackPaymentInitiate } from '@/lib/gtm-conversions';
 
 // Declare Razorpay on window
 declare global {
@@ -344,6 +345,12 @@ export default function CheckoutPage() {
       setError('Payment gateway is still loading. Please wait a moment and try again.');
       return;
     }
+    
+    // Track Payment Initiate conversion
+    // Convert grandTotal from paise to rupees for GTM (e.g., 1099900 paise = 10999 rupees)
+    const orderValueInRupees = grandTotal / 100;
+    trackPaymentInitiate(orderValueInRupees);
+    
     setIsProcessing(true);
     setError(null);
 
@@ -446,7 +453,9 @@ export default function CheckoutPage() {
               const waybillParam = verifyData.order.delhiveryWaybill 
                 ? `&waybill=${verifyData.order.delhiveryWaybill}` 
                 : '';
-              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}${waybillParam}`);
+              // Pass order value in rupees for GTM tracking (grandTotal is in paise, divide by 100)
+              const orderValueInRupees = grandTotal / 100;
+              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}&value=${orderValueInRupees}${waybillParam}`);
             } else {
               throw new Error(verifyData.error || 'Payment verification failed');
             }

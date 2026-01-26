@@ -26,6 +26,11 @@ export const isDCBannersEnabled = (): boolean => {
   return process.env.NEXT_PUBLIC_FEATURE_DC_BANNERS_ENABLED === 'true';
 };
 
+export const isMCPEnabled = (): boolean => {
+  // MCP (Model Context Protocol) feature - disabled by default for production
+  return process.env.NEXT_PUBLIC_FEATURE_MCP_ENABLED === 'true';
+};
+
 // Add more feature flags here as needed
 // export const isNewFeatureEnabled = (): boolean => {
 //   return process.env.NEXT_PUBLIC_FEATURE_NEW_ENABLED === 'true';

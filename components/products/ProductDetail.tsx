@@ -11,6 +11,7 @@ import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import { useCart } from '@/lib/cart-context';
 import { NearestStore } from '@/components/stores';
+import { trackPageView, trackAddToCart } from '@/lib/gtm-conversions';
 
 interface ProductDetailProps {
   product: Product;
@@ -53,6 +54,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
     setIsWishlisted(isInWishlist);
+    
+    // Track page view conversion
+    trackPageView();
   }, [product.id]);
 
   // Fetch related products from Shopify
@@ -88,12 +92,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleAddToCart = () => {
     addToCartContext(product, quantity);
+    // Track Add to Cart conversion
+    trackAddToCart();
   };
 
   const handleBuyNow = () => {
     // Clear cart and add only this product for direct checkout
     localStorage.removeItem('cart');
     addToCartContext(product, quantity);
+    // Track Add to Cart conversion (Buy Now also counts as Add to Cart)
+    trackAddToCart();
     router.push('/checkout');
   };
 

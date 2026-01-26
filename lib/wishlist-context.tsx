@@ -50,29 +50,40 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
 
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {
+      // Check if already in wishlist
       if (prev.some((p) => p.id === product.id)) {
-        toast('Already in wishlist', {
-          description: product.name,
-        });
         return prev;
       }
+      return [...prev, product];
+    });
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    const isAlreadyInWishlist = wishlist.some((p) => p.id === product.id);
+    if (isAlreadyInWishlist) {
+      toast('Already in wishlist', {
+        description: product.name,
+      });
+    } else {
       toast.success('Added to wishlist!', {
         description: product.name,
       });
-      return [...prev, product];
-    });
+    }
   };
 
   const removeFromWishlist = (productId: string) => {
+    // Get product name before removing
+    const product = wishlist.find((p) => p.id === productId);
+    
     setWishlist((prev) => {
-      const product = prev.find((p) => p.id === productId);
-      if (product) {
-        toast.success('Removed from wishlist', {
-          description: product.name,
-        });
-      }
       return prev.filter((p) => p.id !== productId);
     });
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    if (product) {
+      toast.success('Removed from wishlist', {
+        description: product.name,
+      });
+    }
   };
 
   const isInWishlist = (productId: string) => {
@@ -80,10 +91,13 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   };
 
   const clearWishlist = () => {
-    if (wishlist.length > 0) {
+    const hasItems = wishlist.length > 0;
+    setWishlist([]);
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    if (hasItems) {
       toast.success('Wishlist cleared');
     }
-    setWishlist([]);
   };
 
   return (

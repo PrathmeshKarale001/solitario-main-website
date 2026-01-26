@@ -58,38 +58,53 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   }, [items, isMounted]);
 
   const addToCart = (product: Product, quantity = 1, size?: string) => {
+    // Check if item already exists before updating state
+    const existingItemIndex = items.findIndex(
+      (item) => item.product.id === product.id && item.selectedSize === size
+    );
+    
     setItems((prevItems) => {
-      const existingItemIndex = prevItems.findIndex(
+      const existingIndex = prevItems.findIndex(
         (item) => item.product.id === product.id && item.selectedSize === size
       );
 
-      if (existingItemIndex > -1) {
+      if (existingIndex > -1) {
         const newItems = [...prevItems];
-        newItems[existingItemIndex].quantity += quantity;
-        toast.success('Cart updated!', {
-          description: `${product.name} quantity increased`,
-        });
+        newItems[existingIndex].quantity += quantity;
         return newItems;
       }
 
+      return [...prevItems, { product, quantity, selectedSize: size }];
+    });
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    if (existingItemIndex > -1) {
+      toast.success('Cart updated!', {
+        description: `${product.name} quantity increased`,
+      });
+    } else {
       toast.success('Added to cart!', {
         description: product.name,
       });
-      return [...prevItems, { product, quantity, selectedSize: size }];
-    });
+    }
+    
     setIsCartOpen(true);
   };
 
   const removeFromCart = (productId: string) => {
+    // Get item name before removing
+    const item = items.find((i) => i.product.id === productId);
+    
     setItems((prevItems) => {
-      const item = prevItems.find((i) => i.product.id === productId);
-      if (item) {
-        toast.success('Removed from cart', {
-          description: item.product.name,
-        });
-      }
       return prevItems.filter((item) => item.product.id !== productId);
     });
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    if (item) {
+      toast.success('Removed from cart', {
+        description: item.product.name,
+      });
+    }
   };
 
   const updateQuantity = (productId: string, quantity: number) => {
@@ -106,10 +121,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const clearCart = () => {
-    if (items.length > 0) {
+    const hasItems = items.length > 0;
+    setItems([]);
+    
+    // Show toast outside of state setter to avoid duplicate calls
+    if (hasItems) {
       toast.success('Cart cleared');
     }
-    setItems([]);
   };
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);

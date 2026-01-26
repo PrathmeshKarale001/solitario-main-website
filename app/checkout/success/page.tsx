@@ -7,12 +7,14 @@ import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Package, Truck, Mail, Phone, ArrowRight, Download, Share2, Copy, Check } from 'lucide-react';
 import { Container } from '@/components/ui';
 import confetti from 'canvas-confetti';
+import { trackPaymentComplete } from '@/lib/gtm-conversions';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const paymentId = searchParams.get('paymentId');
   const waybill = searchParams.get('waybill');
+  const orderValue = searchParams.get('value');
   const [copied, setCopied] = useState(false);
 
   // Trigger confetti on mount
@@ -50,6 +52,18 @@ function SuccessContent() {
 
     return () => clearInterval(interval);
   }, []);
+
+  // Track Payment Complete conversion
+  useEffect(() => {
+    if (orderId && orderValue) {
+      const value = parseFloat(orderValue);
+      const transactionId = orderId || paymentId || '';
+      
+      if (!isNaN(value) && transactionId) {
+        trackPaymentComplete(value, transactionId);
+      }
+    }
+  }, [orderId, orderValue, paymentId]);
 
   const copyOrderId = () => {
     if (orderId) {
