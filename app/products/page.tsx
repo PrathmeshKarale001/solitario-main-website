@@ -39,6 +39,7 @@ function ProductsPageContent() {
   const categoryParam = searchParams.get('category');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const imageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   
@@ -58,8 +59,15 @@ function ProductsPageContent() {
   const [showMobileSort, setShowMobileSort] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Load initial products - using simple fetch (React Query had loading issues)
+  // Mount check to prevent SSR issues
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Load initial products - only after mount to avoid SSR issues
+  useEffect(() => {
+    if (!mounted) return;
+    
     const loadProducts = async () => {
       try {
         setLoading(true);
@@ -89,7 +97,7 @@ function ProductsPageContent() {
       }
     };
     loadProducts();
-  }, []);
+  }, [mounted]);
 
   // Get current hero images based on viewport
   const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
@@ -238,16 +246,18 @@ function ProductsPageContent() {
     }
   }, [categoryParam]);
 
-  // Detect mobile viewport
+  // Detect mobile viewport - only after mount
   useEffect(() => {
+    if (!mounted) return;
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [mounted]);
 
-  // Start cycling images
+  // Start cycling images - only after mount
   useEffect(() => {
+    if (!mounted) return;
     const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
     imageIntervalRef.current = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -256,12 +266,13 @@ function ProductsPageContent() {
     return () => {
       if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
     };
-  }, [isMobile]);
+  }, [isMobile, mounted]);
 
   // Reset index when viewport changes
   useEffect(() => {
+    if (!mounted) return;
     setCurrentImageIndex(0);
-  }, [isMobile]);
+  }, [isMobile, mounted]);
 
 
   // Calculate category counts for sidebar
@@ -297,6 +308,18 @@ function ProductsPageContent() {
       setIsLoadingMore(false);
     }, 500);
   };
+
+  // Show simple loading screen until mounted (prevents SSR render issues)
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-classic-green"></div>
+          <p className="text-gray-600 font-montserrat">Loading shop...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
