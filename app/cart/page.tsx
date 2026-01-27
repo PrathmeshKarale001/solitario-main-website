@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
@@ -15,7 +15,7 @@ import { useAuth } from '@clerk/nextjs';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, total, itemCount, addToCart } = useCart();
+  const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
   const { addToWishlist } = useWishlist();
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
@@ -25,6 +25,11 @@ export default function CartPage() {
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [showApplied, setShowApplied] = useState(false);
+
+  // Refresh prices on mount to ensure we have the latest from Shopify
+  useEffect(() => {
+    refreshPrices();
+  }, [refreshPrices]);
 
   // Load coupon from localStorage on mount
   useEffect(() => {
@@ -262,10 +267,23 @@ export default function CartPage() {
               <ChevronLeft className="w-4 h-4" />
               Continue Browsing
             </Link>
-            <h1 className="font-playfair text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
-            <p className="text-brand-600 font-montserrat text-body-md">
-              {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h1 className="font-playfair text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
+                <p className="text-brand-600 font-montserrat text-body-md">
+                  {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+                </p>
+              </div>
+              <button
+                onClick={() => refreshPrices()}
+                disabled={isRefreshing}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
+                title="Refresh prices from Shopify"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Refreshing...' : 'Refresh Prices'}
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">

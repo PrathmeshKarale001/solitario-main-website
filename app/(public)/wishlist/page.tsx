@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck } from 'lucide-react';
-import { useState } from 'react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
@@ -15,11 +15,16 @@ import { Section, Container } from '@/components/ui';
 export const dynamic = 'force-dynamic';
 
 export default function WishlistPage() {
-  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+  const { wishlist, removeFromWishlist, clearWishlist, refreshPrices, isRefreshing } = useWishlist();
   const { addToCart } = useCart();
   const [shareLink, setShareLink] = useState('');
   const [copied, setCopied] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+
+  // Refresh prices when page loads
+  useEffect(() => {
+    refreshPrices();
+  }, [refreshPrices]);
 
   const handleAddToCart = (product: any) => {
     addToCart(product, 1);
@@ -69,6 +74,15 @@ export default function WishlistPage() {
                 >
                   <ShoppingCart className="w-4 h-4" />
                   Add All to Cart
+                </button>
+                <button
+                  onClick={() => refreshPrices()}
+                  disabled={isRefreshing}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
+                  title="Refresh prices from Shopify"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  {isRefreshing ? 'Refreshing...' : 'Refresh Prices'}
                 </button>
                 <button
                   onClick={handleShareWishlist}

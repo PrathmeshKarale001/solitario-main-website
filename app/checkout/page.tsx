@@ -14,6 +14,7 @@ import ProductRecommendations from '@/components/product/ProductRecommendations'
 import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
 import Script from 'next/script';
 import { trackPaymentInitiate } from '@/lib/gtm-conversions';
+import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 
 // Declare Razorpay on window
 declare global {
@@ -95,6 +96,9 @@ export default function CheckoutPage() {
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
+  
+  // PIN code auto-fill hook
+  const { lookup: lookupPincode, loading: pincodeAutoFillLoading } = usePincodeLookup();
   // Gift only for exactly 2 items, not 3+
   const hasGift = items.reduce((sum, item) => sum + item.quantity, 0) === 2;
 
@@ -255,7 +259,7 @@ export default function CheckoutPage() {
   };
 
   // Handle input change
-  const handleInputChange = (field: keyof CustomerForm, value: string) => {
+  const handleInputChange = async (field: keyof CustomerForm, value: string) => {
     setCustomer(prev => ({ ...prev, [field]: value }));
     if (formErrors[field]) {
       setFormErrors(prev => ({ ...prev, [field]: undefined }));
@@ -269,6 +273,24 @@ export default function CheckoutPage() {
         prepaid: false,
         loading: false,
       });
+      
+      // Auto-fill city and state when 6-digit PIN code is entered
+      if (/^\d{6}$/.test(value)) {
+        const result = await lookupPincode(value);
+        if (result.success && result.city && result.state) {
+          setCustomer(prev => ({
+            ...prev,
+            city: result.city || prev.city,
+            state: result.state || prev.state,
+          }));
+          // Clear city/state errors if they were set
+          setFormErrors(prev => ({ 
+            ...prev, 
+            city: undefined, 
+            state: undefined 
+          }));
+        }
+      }
     }
   };
 
@@ -750,34 +772,14 @@ export default function CheckoutPage() {
                     />
                   </div>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">City *</label>
-                      <input
-                        type="text"
-                        value={customer.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        placeholder="Mumbai"
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.city ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
-                      />
-                      {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">State *</label>
-                      <input
-                        type="text"
-                        value={customer.state}
-                        onChange={(e) => handleInputChange('state', e.target.value)}
-                        placeholder="Maharashtra"
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.state ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
-                      />
-                      {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">PIN Code *</label>
+                    {/* PIN Code - First for auto-fill flow */}
+                    <div className="sm:order-3">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        PIN Code *
+                        {pincodeAutoFillLoading && (
+                          <span className="ml-2 text-xs text-classic-green font-normal">Auto-filling...</span>
+                        )}
+                      </label>
                       <div className="relative">
                         <input
                           type="text"
@@ -791,10 +793,10 @@ export default function CheckoutPage() {
                         <button
                           type="button"
                           onClick={() => checkPincode(customer.pincode)}
-                          disabled={customer.pincode.length !== 6 || pincodeCheck.loading}
+                          disabled={customer.pincode.length !== 6 || pincodeCheck.loading || pincodeAutoFillLoading}
                           className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs font-medium bg-gray-100 hover:bg-gray-200 disabled:bg-gray-50 disabled:text-gray-400 text-gray-700 rounded-md transition-colors flex items-center justify-center min-w-[60px]"
                         >
-                          {pincodeCheck.loading ? (
+                          {pincodeCheck.loading || pincodeAutoFillLoading ? (
                             <Loader2 className="w-3 h-3 animate-spin" />
                           ) : (
                             'Check'
@@ -825,6 +827,44 @@ export default function CheckoutPage() {
                           )}
                         </div>
                       )}
+                    </div>
+                    {/* City - Auto-filled from PIN code */}
+                    <div className="sm:order-1">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        City *
+                        {pincodeAutoFillLoading && (
+                          <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
+                        )}
+                      </label>
+                      <input
+                        type="text"
+                        value={customer.city}
+                        onChange={(e) => handleInputChange('city', e.target.value)}
+                        placeholder="Enter PIN code to auto-fill"
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
+                          formErrors.city ? 'border-red-300 bg-red-50' : customer.city && customer.pincode.length === 6 ? 'border-green-200 bg-green-50/50' : 'border-gray-200'
+                        }`}
+                      />
+                      {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
+                    </div>
+                    {/* State - Auto-filled from PIN code */}
+                    <div className="sm:order-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        State *
+                        {pincodeAutoFillLoading && (
+                          <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
+                        )}
+                      </label>
+                      <input
+                        type="text"
+                        value={customer.state}
+                        onChange={(e) => handleInputChange('state', e.target.value)}
+                        placeholder="Enter PIN code to auto-fill"
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
+                          formErrors.state ? 'border-red-300 bg-red-50' : customer.state && customer.pincode.length === 6 ? 'border-green-200 bg-green-50/50' : 'border-gray-200'
+                        }`}
+                      />
+                      {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
                     </div>
                   </div>
                   

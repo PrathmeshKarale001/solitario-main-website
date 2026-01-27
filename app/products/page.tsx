@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, X, AlertCircle } from 'lucide-react';
 import { Product } from '@/lib/data';
 import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
@@ -13,6 +13,7 @@ import { DCBannerSlider } from '@/components/home';
 import DynamicShopHero from '@/components/products/DynamicShopHero';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { useProducts } from '@/hooks/useProducts';
 const PRODUCTS_PER_PAGE = 12;
 const LOAD_MORE_THRESHOLD = 12;
 
@@ -49,8 +50,6 @@ function ProductsPageContent() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -58,22 +57,15 @@ function ProductsPageContent() {
   const [showMobileSort, setShowMobileSort] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Load initial products
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/products');
-        const data = await response.json();
-        setProducts(data.products || []);
-      } catch (error) {
-        console.error('Failed to load products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    loadProducts();
-  }, []);
+  // Use React Query to fetch products with automatic caching and state management
+  const {
+    data: products = [],
+    isLoading: loading,
+    error,
+    isFetching,
+    isError,
+    refetch,
+  } = useProducts();
 
   // Get current hero images based on viewport
   const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
@@ -332,24 +324,67 @@ function ProductsPageContent() {
               ref={productsRef}
               className="flex-1 min-w-0"
             >
-              {/* Results Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
-                <div>
-                  <p className="text-gray-600 font-montserrat text-sm sm:text-base">
-                    Showing <span className="font-semibold text-classic-green">{displayedProducts.length}</span> of {filteredAndSortedProducts.length} products
-                    {filteredAndSortedProducts.length !== products.length && (
-                      <span className="text-gray-400"> (filtered from {products.length})</span>
-                    )}
-                  </p>
-                  {searchQuery && (
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Results for "<span className="font-semibold">{searchQuery}</span>"
+              {/* Results Header - Only show when data is loaded */}
+              {!loading && !isError && (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+                  <div>
+                    <p className="text-gray-600 font-montserrat text-sm sm:text-base">
+                      Showing <span className="font-semibold text-classic-green">{displayedProducts.length}</span> of {filteredAndSortedProducts.length} products
+                      {filteredAndSortedProducts.length !== products.length && (
+                        <span className="text-gray-400"> (filtered from {products.length})</span>
+                      )}
+                      {isFetching && !loading && (
+                        <span className="ml-2 text-xs text-gray-400">(refreshing...)</span>
+                      )}
                     </p>
-                  )}
+                    {searchQuery && (
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                        Results for "<span className="font-semibold">{searchQuery}</span>"
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
               
-              {filteredAndSortedProducts.length === 0 && (
+              {/* Error State */}
+              {isError && (
+                <div className="flex items-center justify-center py-24">
+                  <div className="flex flex-col items-center gap-4 max-w-md text-center">
+                    <AlertCircle className="w-12 h-12 text-red-500" />
+                    <div>
+                      <p className="text-lg font-semibold text-gray-900 font-montserrat mb-2">
+                        Failed to load products
+                      </p>
+                      <p className="text-gray-600 font-montserrat text-sm">
+                        {error instanceof Error ? error.message : 'An unexpected error occurred'}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => refetch()}
+                      className="mt-4 px-6 py-2 bg-classic-green text-white rounded-lg font-gotham text-sm uppercase tracking-wider hover:bg-classic-green/90 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      disabled={isFetching}
+                    >
+                      {isFetching ? 'Retrying...' : 'Retry'}
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {/* Loading State */}
+              {loading && !isError && (
+                <div className="flex items-center justify-center py-24">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-classic-green"></div>
+                    <p className="text-gray-600 font-montserrat">Loading products...</p>
+                    {isFetching && !loading && (
+                      <p className="text-xs text-gray-400 font-montserrat">Refreshing...</p>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* No Products Message - Only show when not loading and no error */}
+              {!loading && !isError && filteredAndSortedProducts.length === 0 && (
                 <div className="text-center py-12">
                   <p className="text-lg text-gray-500 font-montserrat">No products match your filters.</p>
                   <button
@@ -367,17 +402,17 @@ function ProductsPageContent() {
               )}
 
               {/* Products Display - Using displayed products for infinite scroll */}
-              {viewMode === 'grid' ? (
+              {!loading && viewMode === 'grid' ? (
                 <ProductGrid
                   products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
-              ) : (
+              ) : !loading ? (
                 <ProductListView
                   products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
-              )}
+              ) : null}
 
               {/* Load More Section */}
               {hasMore && (

@@ -263,9 +263,9 @@ export const ALL_STORES: StoreLocation[] = [
     mapLink: 'https://maps.google.com/?q=18.56441659,73.77736116',
   },
   {
-    id: 'baner-highstreet-nibm',
-    name: 'Baner Highstreet NIBM',
-    address: 'Shop Bearing Unit No. S-71, on Plaza Floor, Tribecca High Street, NIBM Road',
+    id: 'tribeca',
+    name: 'Tribeca',
+    address: 'Plaza floor, Tribeca High Street, Shop Bearing Unit No, S-71, NIBM Rd, Pune, Maharashtra 411048',
     city: 'Pune',
     country: 'India',
     region: 'India',
@@ -273,7 +273,7 @@ export const ALL_STORES: StoreLocation[] = [
     hours: '10:00 AM - 11:00 PM',
     lat: 18.4768105,
     lng: 73.90834184,
-    mapLink: 'https://maps.google.com/?q=18.4768105,73.90834184',
+    mapLink: 'https://share.google/LgL5ylj3i6aA3l32T',
   },
   {
     id: 'south-city-mall-kolkata',

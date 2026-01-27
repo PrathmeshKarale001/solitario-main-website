@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, getCollectionProducts } from '@/lib/shopify-data';
 
-export const dynamic = 'force-dynamic';
+// Cache products for 5 minutes to improve performance
+export const revalidate = 300; // 5 minutes
 
 export async function GET(req: NextRequest) {
   try {
@@ -36,7 +37,15 @@ export async function GET(req: NextRequest) {
       products = products.slice(0, limit);
     }
 
-    return NextResponse.json({ products });
+    // Add cache headers for client-side caching
+    return NextResponse.json(
+      { products },
+      {
+        headers: {
+          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+        },
+      }
+    );
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(

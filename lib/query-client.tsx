@@ -65,6 +65,12 @@ export { getQueryClient };
 export const queryKeys = {
   // Products
   products: ['products'] as const,
+  productsWithFilters: (filters: {
+    category?: string;
+    collection?: string;
+    exclude?: string;
+    limit?: number;
+  }) => ['products', filters] as const,
   product: (handle: string) => ['product', handle] as const,
   productById: (id: string) => ['product', 'id', id] as const,
   relatedProducts: (category: string, productId: string) => ['products', 'related', category, productId] as const,

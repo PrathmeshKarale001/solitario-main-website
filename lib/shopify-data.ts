@@ -105,7 +105,7 @@ export async function fetchShopifyProducts(first = 250): Promise<Product[]> {
 
     const products = result.data.products.edges.map(edge => {
       const mapped = mapShopifyProductToLocal(edge.node);
-      console.log(`📦 Mapped product: ${mapped.name} - ₹${mapped.price} - ${mapped.image}`);
+      // Removed per-product logging to improve performance
       return mapped;
     });
 

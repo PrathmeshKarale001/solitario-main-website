@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle } from 'lucide-react';
+import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle, Loader2 } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
+import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -45,6 +46,27 @@ function AddressesPageContent() {
     pincode: '',
     isDefault: false,
   });
+  
+  // PIN code auto-fill hook
+  const { lookup: lookupPincode, loading: pincodeAutoFillLoading } = usePincodeLookup();
+  
+  // Handle PIN code change with auto-fill
+  const handlePincodeChange = async (value: string) => {
+    const cleanValue = value.replace(/\D/g, '').slice(0, 6);
+    setFormData({ ...formData, pincode: cleanValue });
+    
+    // Auto-fill city and state when 6-digit PIN code is entered
+    if (/^\d{6}$/.test(cleanValue)) {
+      const result = await lookupPincode(cleanValue);
+      if (result.success && result.city && result.state) {
+        setFormData(prev => ({
+          ...prev,
+          city: result.city || prev.city,
+          state: result.state || prev.state,
+        }));
+      }
+    }
+  };
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -509,42 +531,61 @@ function AddressesPageContent() {
                     />
                   </div>
 
-                  {/* City, State, Pincode */}
+                  {/* Pincode, City, State - PIN code first for auto-fill */}
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">City</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">State</label>
-                      <input
-                        type="text"
-                        required
-                        value={formData.state}
-                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                        className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">Pincode</label>
+                      <label className="block text-sm font-montserrat text-brand-600 mb-1">
+                        Pincode
+                        {pincodeAutoFillLoading && (
+                          <Loader2 className="inline w-3 h-3 ml-1 animate-spin text-classic-green" />
+                        )}
+                      </label>
                       <input
                         type="text"
                         required
                         maxLength={6}
                         pattern="[0-9]{6}"
                         value={formData.pincode}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                          setFormData({ ...formData, pincode: value });
-                        }}
-                        placeholder="6-digit pincode"
+                        onChange={(e) => handlePincodeChange(e.target.value)}
+                        placeholder="6-digit PIN"
                         className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
+                      />
+                      <p className="text-[10px] text-brand-400 mt-1">Enter PIN to auto-fill city/state</p>
+                    </div>
+                    <div>
+                      <label className="block text-sm font-montserrat text-brand-600 mb-1">
+                        City
+                        {pincodeAutoFillLoading && (
+                          <Loader2 className="inline w-3 h-3 ml-1 animate-spin text-classic-green" />
+                        )}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.city}
+                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                        placeholder="Auto-filled"
+                        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat transition-colors ${
+                          formData.city && formData.pincode?.length === 6 ? 'border-classic-green/30 bg-classic-green/5' : 'border-brand-200'
+                        }`}
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-montserrat text-brand-600 mb-1">
+                        State
+                        {pincodeAutoFillLoading && (
+                          <Loader2 className="inline w-3 h-3 ml-1 animate-spin text-classic-green" />
+                        )}
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.state}
+                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                        placeholder="Auto-filled"
+                        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat transition-colors ${
+                          formData.state && formData.pincode?.length === 6 ? 'border-classic-green/30 bg-classic-green/5' : 'border-brand-200'
+                        }`}
                       />
                     </div>
                   </div>
