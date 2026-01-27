@@ -96,11 +96,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               .map(stored => {
                 const product = freshProducts.find(p => p.id === stored.productId);
                 if (!product) return null;
-                return {
+                const cartItem: CartItem = {
                   product,
                   quantity: stored.quantity,
                   selectedSize: stored.selectedSize,
                 };
+                return cartItem;
               })
               .filter((item): item is CartItem => item !== null);
             
@@ -129,11 +130,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
               console.warn(`Product ${stored.productId} not found, removing from cart`);
               return null;
             }
-            return {
+            const cartItem: CartItem = {
               product,
               quantity: stored.quantity,
               selectedSize: stored.selectedSize,
             };
+            return cartItem;
           })
           .filter((item): item is CartItem => item !== null);
 
