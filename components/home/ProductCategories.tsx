@@ -38,17 +38,22 @@ export default function ProductCategories() {
   }, []);
 
   const filteredProducts: Product[] = (() => {
+    // Filter products by price range (10K-30K)
+    const priceFilteredProducts = allProducts.filter(
+      (product) => product.price >= 10000 && product.price <= 30000
+    );
+
     if (activeCategory === 'all') {
       return categories
         .map((cat) =>
-          allProducts.find(
+          priceFilteredProducts.find(
             (product) => product.category?.toLowerCase() === cat.slug.toLowerCase()
           )
         )
         .filter(Boolean)
         .slice(0, 4) as Product[];
     }
-    return allProducts
+    return priceFilteredProducts
       .filter(
         (product) => product.category?.toLowerCase() === activeCategory.toLowerCase()
       )

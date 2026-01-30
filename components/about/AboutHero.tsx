@@ -19,12 +19,24 @@ export default function AboutHero() {
 
   return (
     <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-classic-green via-classic-green/90 to-classic-green">
-      {/* Plain dark green gradient backdrop */}
+      {/* Video Background */}
       <motion.div
-        className="absolute inset-0 z-0 bg-gradient-to-b from-classic-green via-classic-green/95 to-classic-green"
+        className="absolute inset-0 z-0"
         style={{ y: backgroundY }}
       >
-        <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/40 z-10" />
+        <div className="absolute inset-0" style={{ filter: 'blur(80px)', WebkitFilter: 'blur(80px)' }}>
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover scale-150"
+          >
+            <source src="/about/about-video.mp4" type="video/mp4" />
+          </video>
+        </div>
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/50 z-10" />
       </motion.div>
 
       {/* Hero Content with BlurText Animation */}
@@ -48,7 +60,7 @@ export default function AboutHero() {
               fontFamily: 'var(--font-playfair), serif',
               fontWeight: 400,
               letterSpacing: '-0.02em',
-              textShadow: '0 1px 4px rgba(0, 0, 0, 0.6), 0 2px 8px rgba(0, 0, 0, 0.4)'
+              textShadow: '0 1px 4px rgba(0, 0, 0, 0.54), 0 2px 8px rgba(0, 0, 0, 0.36)'
             }}
           >
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">

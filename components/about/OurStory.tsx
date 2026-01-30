@@ -107,19 +107,21 @@ export default function OurStory() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="relative"
-          >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <Image
-                src="/about/story-side.jpg"
-                alt="Solitario craftsmanship"
-                width={800}
-                height={600}
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          > 
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900" style={{ aspectRatio: '4/5', maxHeight: '750px' }}>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+              >
+                <source src="/about/about-video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
               
               {/* Floating Badge */}
-              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg z-10">
                 <div className="flex items-center gap-2">
                   <Leaf className="w-4 h-4 text-classic-green" />
                   <span className="text-sm font-gotham text-brand-800 uppercase tracking-wider">Sustainable</span>
