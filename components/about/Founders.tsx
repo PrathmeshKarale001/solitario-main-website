@@ -9,7 +9,7 @@ const FOUNDERS = [
     id: 'ricky',
     name: 'Ricky Vasandani',
     title: 'Chief Executive Officer',
-    image: '/about/IMG_0061.JPG',
+    image: '/about/IMG_0061.webp',
     signature: '/images/Signatures/ricky-vasandani-png.png',
     bio: 'Born in Africa, Ricky is a visionary entrepreneur who has lived across four continents of the world. Hailing from a family that has successfully scaled a legacy diamond jewellery business over decades, Ricky brings his acumen in the diamond jewellery business to the fore with Solitario Diamonds. His business ventures in the Sports and F&B domains are a major success story in Spain. Ricky drives the day-to-day business at Solitario Diamonds with unmatched expertise in Marketing & Operations. ',
   },
