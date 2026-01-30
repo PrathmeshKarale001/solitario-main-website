@@ -458,12 +458,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <span>Expected delivery: {pincodeResult.eta}</span>
                           </div>
                         )}
-                        {pincodeResult.cod && (
-                          <div className="flex items-center gap-2 text-green-600 text-sm">
-                            <BadgeCheck className="w-4 h-4" />
-                            <span>Cash on Delivery available</span>
-                          </div>
-                        )}
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 text-red-700">
@@ -853,7 +847,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-brand-700 font-montserrat">Hallmarked gold ensuring purity and durability.</span>
+                      <span className="text-brand-700 font-montserrat">Vermeil gold ensuring premium quality and elegance.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
@@ -865,7 +859,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-brand-700 font-montserrat">Lifetime buyback guarantee for your peace of mind.</span>
+                      <span className="text-brand-700 font-montserrat">Lifetime Exchange for your peace of mind.</span>
                     </li>
                   </ul>
                 </motion.div>

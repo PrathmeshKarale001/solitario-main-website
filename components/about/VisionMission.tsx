@@ -5,7 +5,7 @@ import { Eye, Target, Sparkles, Shield, Gem, Heart } from 'lucide-react';
 
 export default function VisionMission() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-brand-50 via-white to-brand-50 relative overflow-hidden">
+    <section className="pt-24 pb-12 px-4 bg-gradient-to-b from-brand-50 via-white to-brand-50 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-bronze-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-classic-green/5 rounded-full blur-3xl" />
@@ -49,8 +49,8 @@ export default function VisionMission() {
               Flipping the Script on <span className="text-classic-green">Luxury</span>
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-bronze-gold/10 rounded-xl flex items-center justify-center">
                   <Gem className="w-6 h-6 text-bronze-gold" />
                 </div>
@@ -60,7 +60,7 @@ export default function VisionMission() {
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-classic-green/10 rounded-xl flex items-center justify-center">
                   <Heart className="w-6 h-6 text-classic-green" />
                 </div>
@@ -70,7 +70,7 @@ export default function VisionMission() {
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-bronze-gold/10 rounded-xl flex items-center justify-center">
                   <Target className="w-6 h-6 text-bronze-gold" />
                 </div>

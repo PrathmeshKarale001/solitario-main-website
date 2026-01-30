@@ -170,6 +170,9 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const refreshPrices = useCallback(async () => {
     if (items.length === 0) return;
     
+    // Prevent duplicate calls
+    if (isRefreshing) return;
+    
     setIsRefreshing(true);
     try {
       const handles = items.map(item => item.product.id);
@@ -189,7 +192,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsRefreshing(false);
     }
-  }, [items, fetchFreshProducts]);
+  }, [items, fetchFreshProducts, isRefreshing]);
 
   const addToCart = (product: Product, quantity = 1, size?: string) => {
     // Check if item already exists before updating state

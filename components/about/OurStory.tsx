@@ -12,11 +12,6 @@ export default function OurStory() {
       description: "Founded with a vision to make luxury accessible while staying true to ethical values"
     },
     {
-      icon: Leaf,
-      title: "Sustainable Future",
-      description: "Lab-grown diamonds that don't compromise the Earth for beauty"
-    },
-    {
       icon: Award,
       title: "Unmatched Quality",
       description: "Every piece crafted with precision and attention to detail"
@@ -25,6 +20,11 @@ export default function OurStory() {
       icon: Users,
       title: "For Everyone",
       description: "Luxury that's inclusive, accessible, and meaningful"
+    },
+    {
+      icon: Leaf,
+      title: "Sustainable Future",
+      description: "Lab-grown diamonds that don't compromise the Earth for beauty"
     }
   ];
 
@@ -65,16 +65,19 @@ export default function OurStory() {
           >
             <div className="space-y-6 text-brand-700 text-lg leading-relaxed font-montserrat">
               <p className="text-xl font-medium text-brand-800">
-                When modern, consciously-minded customers asked for timeless sustainable luxury, we listened.
+                When modern customers asked for diamonds they could wear every day, we listened.
               </p>
               <p>
-                Solitario was born from the belief that luxury shouldn't come at the Earth's expense. We saw an opportunity to revolutionize the diamond industry by creating pieces that are as ethical as they are beautiful.
+                Solitario was born from a simple idea - diamonds should not live in lockers. They should move with you, become a part of your everyday style, and feel as effortless as they are extraordinary.
               </p>
               <p>
-                At our core, we're creating heirlooms for modern and future generations. Each piece tells a story of bespoke design, unparalleled craftsmanship, and unwavering commitment to sustainability.
+                We saw an opportunity to reimagine fine jewellery for the way people live today. Pieces that are timeless in design, exceptional in craftsmanship, and made to be worn - not saved.
+              </p>
+              <p>
+                At our core, we create modern heirlooms. Jewellery that blends precision, elegance, and versatility, crafted for every occasion and every generation.
               </p>
               <p className="text-classic-green font-medium">
-                Our style is timeless, created for all occasions, and doesn't cost the Earth. Literally.
+                Our style is timeless, made for everyday wear, and designed to be lived in.
               </p>
             </div>
 
@@ -82,15 +85,18 @@ export default function OurStory() {
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-brand-200">
               <div className="text-center">
                 <div className="text-3xl font-playfair text-classic-green mb-2">100%</div>
-                <div className="text-sm text-brand-600 font-montserrat">Lab-Grown</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Lab-Grown Diamonds</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Visually identical. Chemically identical. Exceptionally brilliant.</div>
               </div>
               <div className="text-center">
                 <div className="text-3xl font-playfair text-classic-green mb-2">∞</div>
-                <div className="text-sm text-brand-600 font-montserrat">Lifetime Value</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Lifetime Value</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Designed to be worn every day, for years to come.</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">0</div>
-                <div className="text-sm text-brand-600 font-montserrat">Earth Impact</div>
+                <div className="text-3xl font-playfair text-classic-green mb-2">✓</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Crafted to Perfection</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Uncompromising quality, finish, and attention to detail.</div>
               </div>
             </div>
           </motion.div>

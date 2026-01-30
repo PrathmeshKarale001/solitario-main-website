@@ -112,6 +112,9 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const refreshPrices = useCallback(async () => {
     if (wishlist.length === 0) return;
     
+    // Prevent duplicate calls
+    if (isRefreshing) return;
+    
     setIsRefreshing(true);
     try {
       const handles = wishlist.map(p => p.id);
@@ -131,7 +134,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
     } finally {
       setIsRefreshing(false);
     }
-  }, [wishlist, fetchFreshProducts]);
+  }, [wishlist, fetchFreshProducts, isRefreshing]);
 
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {

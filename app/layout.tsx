@@ -16,7 +16,6 @@ import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonL
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
 import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
 import { Analytics } from '@vercel/analytics/next';
-import { QueryProvider } from '@/lib/query-client';
 import { Toaster } from '@/components/providers/Toaster';
 import { SkipLinks } from '@/components/ui/SkipLink';
 import './globals.css'
@@ -69,12 +68,12 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" className={`${playfair.variable} ${montserrat.variable}`} style={{ '--font-gotham': 'var(--font-montserrat)' } as React.CSSProperties}>
+    <html lang="en" className={`${playfair.variable} ${montserrat.variable}`} style={{ '--font-gotham': 'var(--font-montserrat)' } as React.CSSProperties} suppressHydrationWarning>
       <head>
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>
-      <body className="antialiased overflow-x-hidden">
+      <body className="antialiased overflow-x-hidden" suppressHydrationWarning>
         <SkipLinks />
         {/* Google Ads Conversion Tracking */}
         <Script
@@ -92,8 +91,7 @@ export default function RootLayout({
         
         <GoogleAnalytics />
         <ClerkProvider>
-          <QueryProvider>
-            <PostHogProvider>
+          <PostHogProvider>
             <SmoothScrollWrapper>
               <Suspense fallback={null}>
                 <ScrollToTopOnRouteChange />
@@ -112,8 +110,7 @@ export default function RootLayout({
                 </CartProvider>
               </WishlistProvider>
             </SmoothScrollWrapper>
-            </PostHogProvider>
-          </QueryProvider>
+          </PostHogProvider>
         </ClerkProvider>
         <Toaster />
         <Analytics />

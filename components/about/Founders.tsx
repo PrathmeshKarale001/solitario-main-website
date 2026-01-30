@@ -52,7 +52,7 @@ const CORE_TEAM = [
 
 export default function Founders() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+    <section className="pt-12 pb-24 px-4 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div

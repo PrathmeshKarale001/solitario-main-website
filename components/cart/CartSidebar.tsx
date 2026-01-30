@@ -7,7 +7,7 @@ import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2, ChevronRight }
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { CartErrorBoundary } from '@/components/ui/ErrorBoundary';
 
@@ -100,6 +100,9 @@ function CartSidebarContent() {
       return;
     }
 
+    // Prevent duplicate calls
+    if (isPricingLoading) return;
+
     setIsPricingLoading(true);
     try {
       const response = await fetch('/api/pricing/quote', {
@@ -135,9 +138,23 @@ function CartSidebarContent() {
     }
   };
 
+  // Create stable items signature to prevent infinite loops
+  const itemsSignature = useMemo(() => {
+    return JSON.stringify(items.map(item => ({
+      id: item.product.id,
+      quantity: item.quantity,
+      price: item.product.price
+    })));
+  }, [items]);
+
   useEffect(() => {
-    fetchPromotionPricing();
-  }, [items, appliedCoupon, userId]);
+    // Debounce to prevent rapid calls
+    const timeoutId = setTimeout(() => {
+      fetchPromotionPricing();
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [itemsSignature, appliedCoupon, userId]);
 
 
 

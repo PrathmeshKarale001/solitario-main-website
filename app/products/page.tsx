@@ -71,26 +71,45 @@ function ProductsPageContent() {
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/products');
+        console.log('🔄 Starting products fetch...');
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          controller.abort();
+          console.error('⏱️ Products fetch timeout after 15 seconds');
+        }, 15000); // 15 second timeout
+        
+        const response = await fetch('/api/products', {
+          signal: controller.signal
+        });
+        
+        clearTimeout(timeoutId);
         
         if (!response.ok) {
-          console.error('Failed to fetch products:', response.status);
+          console.error('❌ Failed to fetch products:', response.status);
           setProducts([]);
+          setLoading(false);
           return;
         }
         
         const data = await response.json();
         
         if (!data.products || !Array.isArray(data.products)) {
-          console.error('Invalid products data:', data);
+          console.error('❌ Invalid products data:', data);
           setProducts([]);
+          setLoading(false);
           return;
         }
         
         console.log(`✅ Loaded ${data.products.length} products in frontend`);
         setProducts(data.products);
       } catch (error) {
-        console.error('Error loading products:', error);
+        if (error instanceof Error && error.name === 'AbortError') {
+          console.error('⏱️ Products fetch was aborted (timeout)');
+        } else {
+          console.error('❌ Error loading products:', error);
+        }
         setProducts([]);
       } finally {
         setLoading(false);

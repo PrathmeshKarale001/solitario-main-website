@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, getCollectionProducts } from '@/lib/shopify-data';
 
+// Mark as dynamic route to prevent static optimization attempts (which cause slowness)
+export const dynamic = 'force-dynamic';
+
 // Cache products for 5 minutes to improve performance
 export const revalidate = 300; // 5 minutes
 
@@ -10,11 +13,11 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export async function GET(req: NextRequest) {
   try {
-    const { searchParams } = new URL(req.url);
-    const category = searchParams.get('category');
-    const collection = searchParams.get('collection');
-    const exclude = searchParams.get('exclude');
-    const limitParam = searchParams.get('limit');
+    // Use req.nextUrl.searchParams instead of req.url to avoid dynamic server usage
+    const category = req.nextUrl.searchParams.get('category');
+    const collection = req.nextUrl.searchParams.get('collection');
+    const exclude = req.nextUrl.searchParams.get('exclude');
+    const limitParam = req.nextUrl.searchParams.get('limit');
     const limit = limitParam ? Number(limitParam) : undefined;
 
     // Check in-memory cache first (useful in development)
@@ -24,12 +27,44 @@ export async function GET(req: NextRequest) {
       var products = [...cachedProducts.products]; // Clone to avoid mutations
     } else {
       console.log('🔄 Fetching fresh products from Shopify...');
-      products = await getProducts();
-      // Update cache
-      cachedProducts = {
-        products: products,
-        timestamp: now,
-      };
+      
+      // Add timeout to prevent 5+ minute hangs
+      try {
+        const fetchWithTimeout = async <T>(
+          promise: Promise<T>,
+          timeoutMs: number = 30000 // 30 second timeout
+        ): Promise<T> => {
+          return Promise.race([
+            promise,
+            new Promise<T>((_, reject) =>
+              setTimeout(() => reject(new Error('Products fetch timeout after 30s')), timeoutMs)
+            )
+          ]);
+        };
+
+        products = await fetchWithTimeout(getProducts(), 30000);
+        
+        // Update cache
+        cachedProducts = {
+          products: products,
+          timestamp: now,
+        };
+      } catch (error) {
+        console.error('❌ Products fetch failed or timed out:', error);
+        
+        // Return cached products if available (even if expired)
+        if (cachedProducts?.products) {
+          console.log('⚠️ Using stale cached products due to fetch failure');
+          products = [...cachedProducts.products];
+        } else {
+          // No cache available, return empty array
+          console.error('❌ No cached products available, returning empty array');
+          return NextResponse.json(
+            { products: [], error: 'Failed to fetch products. Please try again.' },
+            { status: 500 }
+          );
+        }
+      }
     }
 
     // ALWAYS filter out gift products (SKU: GIFT) - they should never appear in listings

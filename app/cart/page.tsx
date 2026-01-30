@@ -10,7 +10,7 @@ import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { useWishlist } from '@/lib/wishlist-context';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 
@@ -108,6 +108,9 @@ export default function CartPage() {
       return;
     }
 
+    // Prevent duplicate calls
+    if (isPricingLoading) return;
+
     setIsPricingLoading(true);
     try {
       const response = await fetch('/api/pricing/quote', {
@@ -143,9 +146,23 @@ export default function CartPage() {
     }
   };
 
+  // Create stable items signature to prevent infinite loops
+  const itemsSignature = useMemo(() => {
+    return JSON.stringify(items.map(item => ({
+      id: item.product.id,
+      quantity: item.quantity,
+      price: item.product.price
+    })));
+  }, [items]);
+
   useEffect(() => {
-    fetchPromotionPricing();
-  }, [items, appliedCoupon, userId]);
+    // Debounce to prevent rapid calls
+    const timeoutId = setTimeout(() => {
+      fetchPromotionPricing();
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [itemsSignature, appliedCoupon, userId]);
 
 
   const validateCoupon = async (code: string) => {
