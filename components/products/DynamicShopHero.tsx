@@ -44,7 +44,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/Banner1 1.webp',
+      src: '/images/Shop/shop1desk.jpeg',
       pos: 'object-[50%_0%]',
       title: '',
       subtitle: '',
@@ -80,6 +80,16 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
       type: 'image' as const,
       src: '/images/home-hero/newhero/2ndMobile.png',
       pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Shop/shop1mobile.jpeg',
+      pos: 'object-[50%_20%]',
       title: '',
       subtitle: '',
       description: '',
@@ -198,7 +208,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
         <div className="absolute inset-0 z-10 flex items-end justify-center pb-16 md:pb-20">
           <Link
             href="#products"
-            className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
             style={{
               background: 'rgba(255, 255, 255, 0.08)',
               backdropFilter: 'blur(20px) saturate(180%)',
@@ -209,7 +219,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
           >
             <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
             <span className="relative z-10">Shop Collection</span>
-            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+            <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
           </Link>
         </div>
       </section>
@@ -305,7 +315,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
                     }
                   })()
                 : currentMedia.ctaLink}
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -316,12 +326,12 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <span className="relative z-10">{currentMedia.ctaText}</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+              <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
             </Link>
           ) : (
             <Link
               href="#products"
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -332,7 +342,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <span className="relative z-10">Shop Collection</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+              <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
             </Link>
           )}
         </motion.div>

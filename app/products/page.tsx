@@ -20,7 +20,7 @@ const LOAD_MORE_THRESHOLD = 12;
 const HERO_IMAGES_DESKTOP = [
     // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2nd.png', pos: 'object-center' },
-  { src: '/images/Shop/Banner1 1.webp', pos: 'object-[50%_0%]' },
+  { src: '/images/Shop/shop1desk.jpeg', pos: 'object-[50%_0%]' },
   { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/3.webp', pos: 'object-[50%_25%]' },
 ];
@@ -29,7 +29,7 @@ const HERO_IMAGES_DESKTOP = [
 const HERO_IMAGES_MOBILE = [
   // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2ndMobile.png', pos: 'object-center' },
-  { src: '/images/Shop/ShopMobile.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/shop1mobile.jpeg', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
 ];
 

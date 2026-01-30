@@ -44,16 +44,6 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     },
     {
       type: 'image' as const,
-      src: '/images/HERO BANNER 2.webp',
-      pos: 'object-[50%_20%]',
-      title: '',
-      subtitle: '',
-      description: '',
-      ctaText: 'Explore Collection',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
       src: '/images/hero-banner-3.webp',
       pos: 'object-center',
       title: '',
@@ -89,16 +79,6 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     {
       type: 'image' as const,
       src: '/images/home-hero/newhero/1stMobile.png',
-      pos: 'object-center',
-      title: '',
-      subtitle: '',
-      description: '',
-      ctaText: 'Explore Collection',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
-      src: '/images/HOMEBanner5.jpg',
       pos: 'object-center',
       title: '',
       subtitle: '',
