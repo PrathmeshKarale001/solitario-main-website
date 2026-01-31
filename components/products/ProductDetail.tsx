@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Twitter, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Linkedin, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
@@ -724,7 +724,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       <Facebook className="w-4 h-4" />
                     </a>
                     <a 
-                      href={`https://www.instagram.com/`}
+                      href="https://www.instagram.com/solitariodiamonds/"
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
@@ -732,12 +732,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       <Instagram className="w-4 h-4" />
                     </a>
                     <a 
-                      href={`https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=${encodeURIComponent(shareText)}`}
+                      href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
-                      <Twitter className="w-4 h-4" />
+                      <Linkedin className="w-4 h-4" />
                     </a>
                     <a 
                       href={`mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(`Check out this beautiful piece: ${currentUrl}`)}`}
