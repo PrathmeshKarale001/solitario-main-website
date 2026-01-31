@@ -26,7 +26,7 @@ const MOBILE_MENU_SECTIONS = [
     title: 'Shop',
     links: [
       { href: '/products', label: 'All Products', icon: Sparkles, highlight: true },
-      // { href: '/warner-bros', label: 'Collectibles', icon: Gift, highlight: true },
+      { href: '/warner-bros', label: 'Collectibles', icon: Gift, highlight: true },
       { href: '/products/category/rings', label: 'Rings', icon: CircleDot },
       { href: '/products/category/earrings', label: 'Earrings', icon: Gem },
       { href: '/products/category/necklaces', label: 'Necklaces', icon: Diamond },
@@ -182,8 +182,8 @@ export default function Header() {
                   router.push('/warner-bros');
                 }} 
               />
-              {/* Collectibles CTA - Warner Bros Premium Redesign - TEMPORARILY DISABLED */}
-              {/* {!isWarnerBrosPage && (
+              {/* Collectibles CTA - Warner Bros */}
+              {!isWarnerBrosPage && (
                 <button
                   onClick={() => setShowBatTransition(true)}
                   className="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#C6A664] via-[#8c7560] to-[#0a0a0a] text-white rounded-lg border border-[#C6A664]/40 shadow-[0_0_15px_rgba(198,166,100,0.3)] hover:shadow-[0_0_25px_rgba(198,166,100,0.5)] transition-all duration-500 group animate-premium-breathe relative overflow-hidden"
@@ -194,7 +194,7 @@ export default function Header() {
                     Collectibles
                   </span>
                 </button>
-              )} */}
+              )}
 
               {/* Search - Desktop only in header, mobile in menu */}
               <button

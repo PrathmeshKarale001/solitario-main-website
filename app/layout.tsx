@@ -5,7 +5,7 @@ import { Montserrat, Playfair_Display } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-// import { WarnerBrosFloatingButton } from '@/components/ui'
+import { WarnerBrosFloatingButton } from '@/components/ui'
 import { CartProvider } from '@/lib/cart-context'
 import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
 import { CartSidebar } from '@/components/cart'
@@ -105,7 +105,7 @@ export default function RootLayout({
                     </main>
                     <Footer />
                     <CartSidebar />
-                    {/* <WarnerBrosFloatingButton /> */}
+                    <WarnerBrosFloatingButton />
                   </ShopifyCartProvider>
                 </CartProvider>
               </WishlistProvider>

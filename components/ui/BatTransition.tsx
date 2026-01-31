@@ -92,19 +92,21 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
         );
       })}
 
-      {/* Gold cinematic text with logos */}
+      {/* Gold cinematic text with logos - matching exact UI */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         transition={{ delay: 0.8, duration: 0.6 }}
-        className="absolute inset-0 flex flex-col items-center justify-center gap-6 sm:gap-8 p-4"
+        className="absolute inset-0 flex flex-col items-center justify-center p-4"
       >
-        <div className="flex items-center justify-center gap-4 sm:gap-6 lg:gap-12">
+        {/* Main logos row - center aligned */}
+        <div className="flex items-center justify-center gap-3 sm:gap-5 lg:gap-8">
+          {/* Solitario Logo */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="relative w-[180px] h-[45px] sm:w-[260px] sm:h-[65px] lg:w-[380px] lg:h-[95px] flex items-center justify-center"
+            className="relative w-[120px] h-[40px] sm:w-[180px] sm:h-[55px] lg:w-[260px] lg:h-[80px] flex items-center justify-center"
           >
             <Image 
               src="/logo.svg" 
@@ -114,53 +116,113 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
             />
           </motion.div>
 
+          {/* X separator */}
           <motion.div
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, type: "spring" }}
-            className="text-[#C6A664] text-xl sm:text-3xl lg:text-5xl font-playfair font-bold flex items-center justify-center"
-            style={{ lineHeight: 1, margin: '0 auto' }}
+            className="text-[#C6A664] text-lg sm:text-2xl lg:text-4xl font-playfair font-bold flex items-center justify-center"
           >
             X
           </motion.div>
 
-          <br />
+          {/* DC Logo */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 1.1, duration: 0.6 }}
+            className="relative w-[70px] h-[70px] sm:w-[100px] sm:h-[100px] lg:w-[140px] lg:h-[140px] flex items-center justify-center"
+          >
+            <Image 
+              src="/images/warnerbroassets/dc-logo.webp" 
+              alt="DC Logo" 
+              fill 
+              className="object-contain"
+            />
+          </motion.div>
 
+          {/* Vertical separator line */}
+          <motion.div
+            initial={{ opacity: 0, scaleY: 0 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            transition={{ delay: 1.3, duration: 0.4 }}
+            className="w-[1px] h-[50px] sm:h-[70px] lg:h-[100px] bg-[#C6A664]/60"
+          />
+
+          {/* Tom & Jerry Logo */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 1, duration: 0.8 }}
-            className="relative w-[90px] h-[90px] sm:w-[130px] sm:h-[130px] lg:w-[190px] lg:h-[190px] flex items-center justify-center"
+            className="relative w-[80px] h-[60px] sm:w-[120px] sm:h-[90px] lg:w-[160px] lg:h-[120px] flex items-center justify-center"
           >
             <Image 
-              src="/images/warnerbroassets/warner-bg.webp" 
-              alt="Warner Bros Logo" 
+              src="/images/warnerbroassets/T&J-Logo.png" 
+              alt="Tom and Jerry Logo" 
               fill 
               className="object-contain"
             />
           </motion.div>
         </div>
 
+        {/* SOLITARIO text and WARNER BROS tagline */}
         <motion.div
-          animate={{
-            textShadow: [
-              "0 0 20px rgba(198,166,100,0.3)",
-              "0 0 40px rgba(198,166,100,0.6)",
-              "0 0 20px rgba(198,166,100,0.3)"
-            ]
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex flex-col items-center"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1.4, duration: 0.6 }}
+          className="flex flex-col items-center mt-8 sm:mt-10 lg:mt-14"
         >
-          <span className="text-[#C6A664] text-2xl sm:text-4xl lg:text-6xl font-gotham font-bold tracking-[0.2em] sm:tracking-[0.3em]">
-            SOLITARIO
-          </span>
-          <div className="flex items-center gap-3 sm:gap-4 mt-2">
-            <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-r from-transparent to-[#C6A664]" />
-            <span className="text-white/80 text-xs sm:text-base lg:text-lg font-montserrat tracking-[0.3em] sm:tracking-[0.5em] uppercase">
-              Warner Bros
+          <motion.div
+            animate={{
+              textShadow: [
+                "0 0 20px rgba(198,166,100,0.3)",
+                "0 0 40px rgba(198,166,100,0.6)",
+                "0 0 20px rgba(198,166,100,0.3)"
+              ]
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <span className="text-[#C6A664] text-2xl sm:text-4xl lg:text-6xl font-gotham font-bold tracking-[0.3em] sm:tracking-[0.4em] lg:tracking-[0.5em]">
+              SOLITARIO
             </span>
-            <div className="h-[1px] w-8 sm:w-12 bg-gradient-to-l from-transparent to-[#C6A664]" />
+          </motion.div>
+          <span className="text-white text-xs sm:text-sm lg:text-lg font-montserrat tracking-[0.3em] sm:tracking-[0.4em] lg:tracking-[0.5em] uppercase mt-2 sm:mt-3">
+            WARNER BROS
+          </span>
+        </motion.div>
+
+        {/* Bottom footer with logos and copyright */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.6, duration: 0.5 }}
+          className="absolute bottom-6 sm:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+        >
+          <div className="flex items-center justify-center gap-3 sm:gap-4">
+            {/* Small DC Logo */}
+            <div className="relative w-[28px] h-[28px] sm:w-[36px] sm:h-[36px]">
+              <Image 
+                src="/images/warnerbroassets/dc-logo.webp" 
+                alt="DC" 
+                fill 
+                className="object-contain"
+              />
+            </div>
+            {/* WB Shield */}
+            <div className="relative w-[32px] h-[32px] sm:w-[40px] sm:h-[40px]">
+              <Image 
+                src="/images/warnerbroassets/warner-bg.webp" 
+                alt="Warner Bros" 
+                fill 
+                className="object-contain"
+              />
+            </div>
+            {/* Copyright text */}
+            <div className="text-white/50 text-[8px] sm:text-[10px] font-montserrat leading-tight text-left">
+              <p>All DC characters and elements © & ™ DC.</p>
+              <p>WB SHIELD: © & ™ WBEI. (s26)</p>
+              <p>© & ™ Turner Entertainment Co. (s26)</p>
+            </div>
           </div>
         </motion.div>
       </motion.div>
