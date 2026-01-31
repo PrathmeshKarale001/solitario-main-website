@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { Facebook, Instagram, Mail } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -71,7 +71,7 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               <a
-                href="https://facebook.com"
+                href="https://www.facebook.com/profile.php?id=61586760412779"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ivory-pearl hover:text-bronze-gold transition-colors"
@@ -80,13 +80,22 @@ export default function Footer() {
                 <Facebook className="w-5 h-5" />
               </a>
               <a
-                href="https://instagram.com"
+                href="https://www.instagram.com/solitariodiamonds/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-ivory-pearl hover:text-bronze-gold transition-colors"
                 aria-label="Instagram"
               >
                 <Instagram className="w-5 h-5" />
+              </a>
+              <a
+                href="https://in.linkedin.com/company/solitario-lab-grown-diamonds"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-ivory-pearl hover:text-bronze-gold transition-colors"
+                aria-label="LinkedIn"
+              >
+                <Linkedin className="w-5 h-5" />
               </a>
               <a
                 href="mailto:info@solitario.com"

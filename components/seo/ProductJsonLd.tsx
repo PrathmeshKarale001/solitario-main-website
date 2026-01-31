@@ -58,8 +58,9 @@ export function OrganizationJsonLd() {
     description: "India's most loved new-age diamond jewellery brand. Sustainable luxury with lab-grown diamonds.",
     foundingDate: '1984',
     sameAs: [
-      'https://www.instagram.com/thesolitario',
-      'https://www.facebook.com/thesolitario',
+      'https://www.instagram.com/solitariodiamonds/',
+      'https://www.facebook.com/profile.php?id=61586760412779',
+      'https://in.linkedin.com/company/solitario-lab-grown-diamonds',
     ],
     contactPoint: {
       '@type': 'ContactPoint',

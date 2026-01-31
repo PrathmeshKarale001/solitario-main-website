@@ -93,8 +93,9 @@ export function OrganizationSchema({
   phone = '+91-9876543210',
   address,
   socialLinks = [
-    'https://instagram.com/thesolitario',
-    'https://facebook.com/thesolitario',
+    'https://www.instagram.com/solitariodiamonds/',
+    'https://www.facebook.com/profile.php?id=61586760412779',
+    'https://in.linkedin.com/company/solitario-lab-grown-diamonds',
   ],
 }: OrganizationSchemaProps) {
   const schema = {
