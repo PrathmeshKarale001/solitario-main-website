@@ -53,12 +53,16 @@ const nextConfig = {
             key: 'Content-Security-Policy', 
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.vercel-scripts.com https://*.posthog.com https://*.sentry.io",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com",
+              // script-src: Allow Google Tag Manager, Analytics, and Ads scripts
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://checkout.razorpay.com https://*.clerk.accounts.dev https://*.vercel-scripts.com https://*.posthog.com https://*.sentry.io https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagmanager.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://tagmanager.google.com",
+              // img-src: Allow Google tracking pixels and analytics images
+              "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://*.google.com https://*.googleadservices.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://www.google.co.in https://pagead2.googlesyndication.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://*.shopify.com https://*.razorpay.com https://*.clerk.accounts.dev https://*.posthog.com https://*.sentry.io https://*.vercel-insights.com https://api.radar.io https://track.delhivery.com",
-              "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://www.google.com",
+              // connect-src: Allow Google analytics and ads conversion tracking (comprehensive list)
+              "connect-src 'self' https://*.shopify.com https://*.razorpay.com https://*.clerk.accounts.dev https://*.posthog.com https://*.sentry.io https://*.vercel-insights.com https://api.radar.io https://track.delhivery.com https://www.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://region1.google-analytics.com https://stats.g.doubleclick.net https://*.doubleclick.net https://www.googletagmanager.com https://www.google.com https://*.google.com https://www.googleadservices.com https://*.googleadservices.com https://googleads.g.doubleclick.net https://pagead2.googlesyndication.com https://*.googlesyndication.com",
+              // frame-src: Allow Google frames for reCAPTCHA, Ads, etc.
+              "frame-src 'self' https://checkout.razorpay.com https://*.clerk.accounts.dev https://www.google.com https://*.google.com https://td.doubleclick.net https://*.doubleclick.net https://www.googletagmanager.com https://bid.g.doubleclick.net",
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
