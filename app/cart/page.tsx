@@ -12,6 +12,7 @@ import ProductRecommendations from '@/components/product/ProductRecommendations'
 import { useWishlist } from '@/lib/wishlist-context';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 
 export default function CartPage() {
@@ -19,6 +20,7 @@ export default function CartPage() {
   const { addToWishlist } = useWishlist();
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
+  const router = useRouter();
   const [appliedCoupon, setAppliedCouponState] = useState<string>('');
   const [couponInput, setCouponInput] = useState('');
   const [isValidating, setIsValidating] = useState(false);
@@ -255,7 +257,7 @@ export default function CartPage() {
             <div className="w-32 h-32 bg-brand-100 rounded-full flex items-center justify-center mb-8">
               <Heart className="w-16 h-16 text-brand-300" />
             </div>
-            <h1 className="font-playfair text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
+            <h1 className="font-montserrat font-bold text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
             <p className="text-brand-600 font-montserrat text-body-md mb-8 max-w-md">
               Discover our exquisite collection and find the perfect piece for you or your loved ones.
             </p>
@@ -286,7 +288,7 @@ export default function CartPage() {
             </Link>
             <div className="flex flex-wrap items-center justify-between gap-4">
               <div>
-                <h1 className="font-playfair text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
+                <h1 className="font-montserrat font-bold text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
                 <p className="text-brand-600 font-montserrat text-body-md">
                   {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
                 </p>
@@ -333,7 +335,7 @@ export default function CartPage() {
                       <div className="flex-1">
                         <Link
                           href={`/products/${item.product.id}`}
-                          className="font-playfair text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
+                          className="font-montserrat font-bold text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
                         >
                           {item.product.name}
                         </Link>
@@ -449,7 +451,7 @@ export default function CartPage() {
                       <div className="flex-1 min-w-0 flex flex-col justify-center">
                         <div className="flex items-center gap-2 mb-2">
                           <Gift size={18} className="text-amber-500 shrink-0" />
-                          <h3 className="font-playfair text-heading-md text-brand-800">{giftProduct.name}</h3>
+                          <h3 className="font-montserrat font-bold text-heading-md text-brand-800">{giftProduct.name}</h3>
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-body-sm font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Free Gift</span>
@@ -463,7 +465,7 @@ export default function CartPage() {
               {/* Saved for Later Section */}
               {savedForLater.length > 0 && (
                 <div className="mt-8 pt-8 border-t border-brand-200">
-                  <h2 className="font-playfair text-heading-lg text-brand-800 mb-4">
+                  <h2 className="font-montserrat font-bold text-heading-lg text-brand-800 mb-4">
                     Saved for Later ({savedForLater.length})
                   </h2>
                   <div className="space-y-4">
@@ -510,7 +512,7 @@ export default function CartPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-brand-xl p-6 border border-brand-200 shadow-luxury">
-                <h2 className="font-playfair text-heading-xl text-brand-800 mb-6">Order Summary</h2>
+                <h2 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 {/* Active Offers */}
                 <div className="space-y-2 mb-6">
@@ -633,7 +635,7 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
-                  <span className="font-playfair text-heading-md text-brand-800">Total</span>
+                  <span className="font-montserrat font-bold text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
                     {formatPrice(promotionPricing ? promotionPricing.total : grandTotal)}
                   </span>
@@ -641,15 +643,19 @@ export default function CartPage() {
                 <p className="text-body-sm text-brand-500 font-montserrat mb-6">(Prices include GST)</p>
 
                 {/* Checkout Button */}
-                <Link
-                  href="/checkout"
-                  onClick={(e) => {
+                <button
+                  onClick={() => {
+                    // Track Begin Checkout conversion FIRST
                     trackBeginCheckout();
+                    // Navigate after a short delay to ensure gtag event fires
+                    setTimeout(() => {
+                      router.push('/checkout');
+                    }, 150);
                   }}
-                  className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
+                  className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3 cursor-pointer"
                 >
                   Proceed to Checkout
-                </Link>
+                </button>
 
                 {/* Trust Signals */}
                 <div className="flex items-center justify-center gap-3 mb-4 pb-4 border-b border-brand-200">

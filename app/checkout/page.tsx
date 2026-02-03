@@ -391,9 +391,8 @@ export default function CheckoutPage() {
     }
     
     // Track Payment Initiate conversion
-    // Convert grandTotal from paise to rupees for GTM (e.g., 1099900 paise = 10999 rupees)
-    const orderValueInRupees = grandTotal / 100;
-    trackPaymentInitiate(orderValueInRupees);
+    // grandTotal is already in rupees (e.g., 10999 for ₹10,999)
+    trackPaymentInitiate(grandTotal);
     
     setIsProcessing(true);
     setError(null);
@@ -497,9 +496,8 @@ export default function CheckoutPage() {
               const waybillParam = verifyData.order.delhiveryWaybill 
                 ? `&waybill=${verifyData.order.delhiveryWaybill}` 
                 : '';
-              // Pass order value in rupees for GTM tracking (grandTotal is in paise, divide by 100)
-              const orderValueInRupees = grandTotal / 100;
-              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}&value=${orderValueInRupees}${waybillParam}`);
+              // Pass order value for GTM tracking (grandTotal is already in rupees, e.g., 10999 for ₹10,999)
+              router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}&value=${grandTotal}${waybillParam}`);
             } else {
               throw new Error(verifyData.error || 'Payment verification failed');
             }
@@ -534,7 +532,7 @@ export default function CheckoutPage() {
       <div className="min-h-screen bg-white pt-24">
         <Container>
           <div className="flex flex-col items-center justify-center py-24 text-center">
-            <h1 className="font-playfair text-display-sm text-brand-800 mb-4">No Items in Cart</h1>
+            <h1 className="font-montserrat font-bold text-display-sm text-brand-800 mb-4">No Items in Cart</h1>
             <p className="text-brand-600 font-montserrat text-body-md mb-8">
               Please add items to your cart before proceeding to checkout.
             </p>
@@ -600,7 +598,7 @@ export default function CheckoutPage() {
               </div>
             </div>
             
-            <h1 className="font-playfair text-3xl md:text-4xl text-gray-900">Secure Checkout</h1>
+            <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900">Secure Checkout</h1>
           </div>
 
           {/* Error Alert */}
@@ -626,7 +624,7 @@ export default function CheckoutPage() {
             <div className="lg:col-span-2 space-y-6">
               {/* Contact Information */}
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
-                <h2 className="font-playfair text-xl text-gray-900 mb-6">Contact Information</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">Contact Information</h2>
                 <div className="space-y-4">
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
@@ -692,7 +690,7 @@ export default function CheckoutPage() {
 
               {/* Shipping Address */}
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
-                <h2 className="font-playfair text-xl text-gray-900 mb-6">Shipping Address</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">Shipping Address</h2>
                 
                 {loadingAddresses ? (
                   <div className="p-8 flex items-center justify-center gap-3">
@@ -981,7 +979,7 @@ export default function CheckoutPage() {
 
               {/* Payment Info */}
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
-                <h2 className="font-playfair text-xl text-gray-900 mb-4">Payment</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-4">Payment</h2>
                 <div className="flex items-center gap-4 p-4 bg-classic-green/5 border border-classic-green/20 rounded-lg">
                   <ShieldCheck className="w-8 h-8 text-classic-green" />
                   <div>
@@ -1001,7 +999,7 @@ export default function CheckoutPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-xl p-6 border border-gray-200 shadow-sm">
-                <h2 className="font-playfair text-xl text-gray-900 mb-6">Order Summary</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">Order Summary</h2>
 
                 {/* Cart Items */}
                 <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
@@ -1129,7 +1127,7 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-gray-300 mb-2">
-                  <span className="font-playfair text-lg text-gray-900">Total</span>
+                  <span className="font-montserrat font-bold text-lg text-gray-900">Total</span>
                   <span className="font-bold text-2xl text-classic-green">
                     {formatPrice(grandTotal, '₹')}
                   </span>

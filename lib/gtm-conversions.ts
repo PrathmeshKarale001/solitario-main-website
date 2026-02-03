@@ -17,15 +17,41 @@ declare global {
 }
 
 /**
+ * Helper function to safely call gtag with fallback to dataLayer
+ * This ensures events are tracked even if gtag function isn't fully initialized
+ */
+function safeGtag(eventName: string, eventParams: object) {
+  if (typeof window === 'undefined') return;
+
+  // Primary method: use gtag function
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'conversion', eventParams);
+    console.log('[GTM] Conversion tracked via gtag:', eventName, eventParams);
+    return;
+  }
+
+  // Fallback: push directly to dataLayer
+  if (typeof window.dataLayer !== 'undefined') {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      'event': 'conversion',
+      ...eventParams
+    });
+    console.log('[GTM] Conversion tracked via dataLayer:', eventName, eventParams);
+    return;
+  }
+
+  console.warn('[GTM] Neither gtag nor dataLayer available for:', eventName);
+}
+
+/**
  * 1. Page View - Track when users view product pages
  * Conversion ID: AW-17875605995/LRTeCO6g9eobEOuz4MtC
  */
 export function trackPageView() {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-17875605995/LRTeCO6g9eobEOuz4MtC'
-    });
-  }
+  safeGtag('page_view', {
+    'send_to': 'AW-17875605995/LRTeCO6g9eobEOuz4MtC'
+  });
 }
 
 /**
@@ -33,19 +59,17 @@ export function trackPageView() {
  * Conversion ID: AW-17875605995/a_7uCLDI9eobEOuz4MtC
  */
 export function trackAddToCart(url?: string) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    const callback = () => {
-      if (typeof url !== 'undefined' && url) {
-        window.location.href = url;
-      }
-    };
+  const eventParams: any = {
+    'send_to': 'AW-17875605995/a_7uCLDI9eobEOuz4MtC'
+  };
 
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-17875605995/a_7uCLDI9eobEOuz4MtC',
-      'event_callback': callback
-    });
+  if (url) {
+    eventParams['event_callback'] = () => {
+      window.location.href = url;
+    };
   }
-  
+
+  safeGtag('add_to_cart', eventParams);
   return false;
 }
 
@@ -54,19 +78,17 @@ export function trackAddToCart(url?: string) {
  * Conversion ID: AW-17875605995/Q-DNCLqC9uobEOuz4MtC
  */
 export function trackBeginCheckout(url?: string) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    const callback = () => {
-      if (typeof url !== 'undefined' && url) {
-        window.location.href = url;
-      }
-    };
+  const eventParams: any = {
+    'send_to': 'AW-17875605995/Q-DNCLqC9uobEOuz4MtC'
+  };
 
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-17875605995/Q-DNCLqC9uobEOuz4MtC',
-      'event_callback': callback
-    });
+  if (url) {
+    eventParams['event_callback'] = () => {
+      window.location.href = url;
+    };
   }
-  
+
+  safeGtag('begin_checkout', eventParams);
   return false;
 }
 
@@ -78,21 +100,19 @@ export function trackBeginCheckout(url?: string) {
  * @param url - Optional redirect URL after tracking
  */
 export function trackPaymentInitiate(value: number, url?: string) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    const callback = () => {
-      if (typeof url !== 'undefined' && url) {
-        window.location.href = url;
-      }
-    };
+  const eventParams: any = {
+    'send_to': 'AW-17875605995/ceIECLrhgusbEOuz4MtC',
+    'value': value,
+    'currency': 'INR'
+  };
 
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-17875605995/ceIECLrhgusbEOuz4MtC',
-      'value': value,
-      'currency': 'INR',
-      'event_callback': callback
-    });
+  if (url) {
+    eventParams['event_callback'] = () => {
+      window.location.href = url;
+    };
   }
-  
+
+  safeGtag('payment_initiate', eventParams);
   return false;
 }
 
@@ -104,12 +124,10 @@ export function trackPaymentInitiate(value: number, url?: string) {
  * @param transactionId - The order ID or payment ID
  */
 export function trackPaymentComplete(value: number, transactionId: string) {
-  if (typeof window !== 'undefined' && window.gtag) {
-    window.gtag('event', 'conversion', {
-      'send_to': 'AW-17875605995/sViRCK3hxOkbEOuz4MtC',
-      'value': value,
-      'currency': 'INR',
-      'transaction_id': transactionId
-    });
-  }
+  safeGtag('payment_complete', {
+    'send_to': 'AW-17875605995/sViRCK3hxOkbEOuz4MtC',
+    'value': value,
+    'currency': 'INR',
+    'transaction_id': transactionId
+  });
 }
