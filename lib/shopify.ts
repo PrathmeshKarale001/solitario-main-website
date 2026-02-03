@@ -170,11 +170,10 @@ export async function shopifyStorefrontFetch<T = any>(
       headers: {
         'Content-Type': 'application/json',
         'X-Shopify-Storefront-Access-Token': STOREFRONT_TOKEN,
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
       },
       body: JSON.stringify({ query, variables }),
-      cache: 'no-store',
-      next: { revalidate: 0 }, // Force fresh data in Next.js
+      cache: 'force-cache',
+      next: { revalidate: 300 }, // Cache for 5 minutes - balance freshness with performance
     }
   );
 

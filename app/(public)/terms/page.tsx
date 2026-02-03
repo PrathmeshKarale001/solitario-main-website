@@ -1,11 +1,6 @@
-'use client';
-
-import { motion } from 'framer-motion';
+// Server component - static content
 import { FileText, Mail, Phone } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
-
-// Force dynamic rendering for this page
-export const dynamic = 'force-dynamic';
 
 const sections = [
   {
@@ -95,11 +90,7 @@ export default function TermsPage() {
       {/* Hero */}
       <section className="bg-classic-green py-10 md:py-14">
         <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
-          >
+          <div className="text-center max-w-3xl mx-auto">
             <FileText className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
             <h1 className="text-4xl md:text-5xl font-montserrat font-bold text-white mb-4">
               Terms & Conditions
@@ -107,50 +98,37 @@ export default function TermsPage() {
             <p className="text-white/80 font-montserrat">
               Last updated: December 2024
             </p>
-          </motion.div>
+          </div>
         </Container>
       </section>
 
       <Section variant="light" padding="lg">
         <Container>
           <div className="max-w-3xl mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-2xl shadow-brand border border-brand-100 p-8 mb-8"
-            >
+            <div className="bg-white rounded-2xl shadow-brand border border-brand-100 p-8 mb-8">
               <p className="text-brand-600 font-montserrat leading-relaxed">
                 Please read these Terms and Conditions carefully before using the Solitario website 
                 or making a purchase. These terms constitute a legally binding agreement between 
                 you and Solitario Jewellery Pvt. Ltd.
               </p>
-            </motion.div>
+            </div>
 
             <div className="space-y-6">
-              {sections.map((section, index) => (
-                <motion.div
+              {sections.map((section) => (
+                <div
                   key={section.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.03 }}
                   className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6"
                 >
                   <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-3">{section.title}</h2>
                   <div className="text-brand-600 font-montserrat text-sm leading-relaxed whitespace-pre-line">
                     {section.content}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
 
             {/* Contact */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mt-8 bg-classic-green/5 rounded-2xl p-6 border border-classic-green/20"
-            >
+            <div className="mt-8 bg-classic-green/5 rounded-2xl p-6 border border-classic-green/20">
               <h2 className="font-montserrat font-bold text-xl text-brand-800 mb-4">Questions?</h2>
               <p className="text-brand-600 font-montserrat text-sm mb-4">
                 If you have any questions about these Terms and Conditions, please contact us:
@@ -165,7 +143,7 @@ export default function TermsPage() {
                   +91 22 4567 8900
                 </p>
               </div>
-            </motion.div>
+            </div>
           </div>
         </Container>
       </Section>

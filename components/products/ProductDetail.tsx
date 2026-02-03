@@ -393,6 +393,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       src={img}
                       alt={`${product.name} view ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) 64px, 96px"
+                      loading="lazy"
                       className="object-contain p-2 bg-gradient-to-br from-brand-50 to-white"
                     />
                   </button>

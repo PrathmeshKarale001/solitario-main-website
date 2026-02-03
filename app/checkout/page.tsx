@@ -121,13 +121,22 @@ export default function CheckoutPage() {
         phone: prev.phone || userPhone.replace(/\D/g, '').slice(-10),
       }));
 
-      // Load saved addresses
-      loadSavedAddresses();
+      // Parallelize: Load saved addresses and gift product simultaneously
+      Promise.all([
+        loadSavedAddresses(),
+        hasGift && !giftProduct ? fetchGiftProduct() : Promise.resolve()
+      ]).catch(err => {
+        console.error('Error loading checkout data:', err);
+      });
     } else if (isLoaded && !user) {
       // Guest checkout - show new address form by default
       setShowNewAddressForm(true);
+      // Still fetch gift if needed
+      if (hasGift && !giftProduct) {
+        fetchGiftProduct().catch(err => console.error('Error fetching gift:', err));
+      }
     }
-  }, [isLoaded, user]);
+  }, [isLoaded, user, hasGift, giftProduct]);
 
   // Load saved addresses from API
   const loadSavedAddresses = async () => {
@@ -210,29 +219,27 @@ export default function CheckoutPage() {
     });
   };
 
-  useEffect(() => {
-    async function fetchGift() {
-      if (hasGift && !giftProduct) {
-        setIsGiftLoading(true);
-        try {
-          const response = await fetch('/api/products/gift');
-          if (response.ok) {
-            const data = await response.json();
-            setGiftProduct({
-              name: data.name,
-              image: data.image,
-              price: 5000
-            });
-          }
-        } catch (err) {
-          console.error('Error fetching gift:', err);
-        } finally {
-          setIsGiftLoading(false);
+  // Extract gift fetching to a reusable function for parallelization
+  const fetchGiftProduct = async () => {
+    if (hasGift && !giftProduct) {
+      setIsGiftLoading(true);
+      try {
+        const response = await fetch('/api/products/gift');
+        if (response.ok) {
+          const data = await response.json();
+          setGiftProduct({
+            name: data.name,
+            image: data.image,
+            price: 5000
+          });
         }
+      } catch (err) {
+        console.error('Error fetching gift:', err);
+      } finally {
+        setIsGiftLoading(false);
       }
     }
-    fetchGift();
-  }, [hasGift, giftProduct]);
+  };
 
   // Shipping cost calculation
   const shipping = 0;

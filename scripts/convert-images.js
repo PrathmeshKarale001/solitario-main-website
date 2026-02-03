@@ -12,24 +12,26 @@ const fs = require('fs');
 const path = require('path');
 
 // Directories to process (prioritized by LCP impact)
+// Quality settings: 88-92 to maintain high quality while targeting 600-800KB per image
 const DIRECTORIES = [
-  // CRITICAL - Hero images (LCP elements)
+  // CRITICAL - Hero images (LCP elements) - High quality for hero banners
+  { path: 'public/images/home-hero', priority: 'CRITICAL', quality: 92 },
   { path: 'public/images', priority: 'CRITICAL', quality: 90 },
   { path: 'public/images/Hero_Mobile', priority: 'CRITICAL', quality: 90 },
   { path: 'public/images/Shop', priority: 'CRITICAL', quality: 90 },
   
   // HIGH - Above-fold content
-  { path: 'public/images/Stores', priority: 'HIGH', quality: 85 },
-  { path: 'public/about', priority: 'HIGH', quality: 85 },
+  { path: 'public/images/Stores', priority: 'HIGH', quality: 88 },
+  { path: 'public/about', priority: 'HIGH', quality: 88 },
   
   // MEDIUM - Below-fold content
-  { path: 'public/carouselgrid', priority: 'MEDIUM', quality: 80 },
-  { path: 'public/diamonds', priority: 'MEDIUM', quality: 85 },
-  { path: 'public/images/products', priority: 'MEDIUM', quality: 80 },
+  { path: 'public/carouselgrid', priority: 'MEDIUM', quality: 85 },
+  { path: 'public/diamonds', priority: 'MEDIUM', quality: 88 },
+  { path: 'public/images/products', priority: 'MEDIUM', quality: 85 },
   
   // LOW - Icons and small assets
-  { path: 'public/category-home', priority: 'LOW', quality: 85 },
-  { path: 'public/images/Awards', priority: 'LOW', quality: 85 },
+  { path: 'public/category-home', priority: 'LOW', quality: 88 },
+  { path: 'public/images/Awards', priority: 'LOW', quality: 88 },
 ];
 
 // Statistics tracking
@@ -54,17 +56,27 @@ function formatBytes(bytes) {
 }
 
 /**
- * Convert single image to WebP
+ * Convert single image to WebP with quality optimization
+ * Target: 600-800KB for large images while maintaining quality
  */
 async function convertImage(inputPath, outputPath, quality) {
   try {
     const originalSize = fs.statSync(inputPath).size;
     
+    // Use higher effort (6) for better compression with quality preservation
+    // Smart subsample reduces file size while maintaining visual quality
     await sharp(inputPath)
-      .webp({ quality, effort: 6 })
+      .webp({ 
+        quality, 
+        effort: 6,
+        smartSubsample: true,
+        nearLossless: false,
+        alphaQuality: quality
+      })
       .toFile(outputPath);
     
     const webpSize = fs.statSync(outputPath).size;
+    const webpSizeKB = (webpSize / 1024).toFixed(0);
     const savings = ((originalSize - webpSize) / originalSize * 100).toFixed(1);
     
     stats.totalOriginalSize += originalSize;
@@ -72,7 +84,7 @@ async function convertImage(inputPath, outputPath, quality) {
     stats.success++;
     
     console.log(`  ✓ ${path.basename(inputPath)}`);
-    console.log(`    ${formatBytes(originalSize)} → ${formatBytes(webpSize)} (${savings}% reduction)`);
+    console.log(`    ${formatBytes(originalSize)} → ${formatBytes(webpSize)} (${webpSizeKB}KB, ${savings}% reduction)`);
     
     return true;
   } catch (err) {
