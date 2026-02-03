@@ -4,10 +4,11 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingBag } from 'lucide-react';
+import { Heart, ShoppingBag, Ticket } from 'lucide-react';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
+import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
 import { Product } from '@/lib/data';
 import { getRecommendationProducts } from '@/lib/shopify-data';
 
@@ -141,24 +142,36 @@ export default function ProductRecommendations({
               
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
-                  <span className="font-bold text-lg text-classic-green">
-                    {formatPrice(product.price, product.currency)}
-                  </span>
-                  {product.comparePrice && product.comparePrice > product.price && (
-                    <span className="text-sm text-gray-500 line-through">
-                      {formatPrice(product.comparePrice, product.currency)}
+                  {isPrebookingProduct(product) ? (
+                    <span className="font-bold text-lg text-purple-600">
+                      {getProductDisplayPrice(product)}
                     </span>
+                  ) : (
+                    <>
+                      <span className="font-bold text-lg text-classic-green">
+                        {formatPrice(product.price, product.currency)}
+                      </span>
+                      {product.comparePrice && product.comparePrice > product.price && (
+                        <span className="text-sm text-gray-500 line-through">
+                          {formatPrice(product.comparePrice, product.currency)}
+                        </span>
+                      )}
+                    </>
                   )}
                 </div>
               </div>
 
-              {/* Add to Cart Button */}
+              {/* Add to Cart / Prebook Button */}
               <button
                 onClick={() => handleAddToCart(product)}
-                className="w-full bg-classic-green hover:bg-classic-green/90 text-white py-2 px-4 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2"
+                className={`w-full text-white py-2 px-4 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 ${
+                  isPrebookingProduct(product)
+                    ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
+                    : 'bg-classic-green hover:bg-classic-green/90'
+                }`}
               >
-                <ShoppingBag className="w-4 h-4" />
-                Add to Cart
+                {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
+                {getProductButtonText(product, false)}
               </button>
             </div>
           </motion.div>

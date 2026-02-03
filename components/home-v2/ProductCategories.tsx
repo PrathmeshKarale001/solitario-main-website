@@ -8,6 +8,7 @@ import { ArrowRight, ShoppingBag } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
 import { formatPrice } from '@/lib';
 import { PRODUCTS, Product } from '@/lib/data';
+import { isPrebookingProduct, getProductDisplayPrice } from '@/lib/prebooking';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
 
@@ -114,8 +115,8 @@ export default function ProductCategories() {
                       {product.name}
                     </h3>
                     <div className="flex items-center justify-between">
-                      <p className="font-gotham text-sm text-gray-500">
-                        {formatPrice(product.price, product.currency)}
+                      <p className={`font-gotham text-sm ${isPrebookingProduct(product) ? 'text-purple-600 font-semibold' : 'text-gray-500'}`}>
+                        {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                       </p>
                       <span className="text-xs font-gotham uppercase tracking-wider text-gray-400 group-hover:text-gray-900 transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100">
                         Shop <ArrowRight className="w-3 h-3" />

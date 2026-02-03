@@ -36,13 +36,15 @@ export const WARNER_BROS_CONFIG = {
       logo: '/images/warnerbroassets/dc-logo.webp',
       alt: 'DC Comics',
       tag: 'dc', // Used for product filtering
+      tagVariants: ['dc', 'dc-comics', 'dccomics', 'batman', 'superman', 'wonder-woman'], // Additional matching tags
     },
     {
       id: 'tom-jerry',
       name: 'Tom & Jerry',
       logo: '/images/warnerbroassets/tom-jerry-logo.webp',
       alt: 'Tom & Jerry',
-      tag: 'tom-jerry', // Used for product filtering
+      tag: 'tom&jerry', // Used for product filtering
+      tagVariants: ['tom&jerry', 'tom-jerry', 'tomandjerry', 'tom-and-jerry', 'tom jerry'], // Additional matching tags
     },
   ],
 

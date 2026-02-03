@@ -3,12 +3,13 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck, RefreshCw } from 'lucide-react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck, RefreshCw, Ticket } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
+import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
 
 
 // Force dynamic rendering for this page
@@ -172,18 +173,22 @@ export default function WishlistPage() {
                     <p className="text-sm text-brand-500 font-montserrat capitalize mb-2">
                       {product.category}
                     </p>
-                    <p className="font-gotham text-classic-green font-semibold text-lg mb-4">
-                      {formatPrice(product.price, product.currency)}
+                    <p className={`font-gotham font-semibold text-lg mb-4 ${isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                      {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                     </p>
 
                     {/* Actions */}
                     <div className="flex items-center gap-2">
                       <button
                         onClick={() => handleAddToCart(product)}
-                        className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-classic-green text-white rounded-lg hover:bg-classic-green/90 transition-colors text-sm font-montserrat"
+                        className={`flex-1 flex items-center justify-center gap-2 py-2.5 text-white rounded-lg transition-colors text-sm font-montserrat ${
+                          isPrebookingProduct(product)
+                            ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
+                            : 'bg-classic-green hover:bg-classic-green/90'
+                        }`}
                       >
-                        <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
+                        {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+                        {getProductButtonText(product, false)}
                       </button>
                       <button
                         onClick={() => removeFromWishlist(product.id)}

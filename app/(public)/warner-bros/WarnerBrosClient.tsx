@@ -70,6 +70,37 @@ function WarnerBrosPageContent() {
   const filteredAndSortedProducts: Product[] = useMemo(() => {
     let productList = [...products];
 
+    // Brand/Tag filter - filter by DC or Tom & Jerry tags
+    if (activeBrand !== 'all') {
+      const selectedBrand = WARNER_BROS_CONFIG.brands.find(b => b.id === activeBrand);
+      if (selectedBrand) {
+        // Collect all possible tag variations to match
+        const tagsToMatch = [
+          selectedBrand.tag.toLowerCase(),
+          ...(selectedBrand.tagVariants || []).map(t => t.toLowerCase())
+        ];
+        
+        productList = productList.filter(product => {
+          // Check product tags against all variations
+          if (product.tags && product.tags.length > 0) {
+            const productTagsLower = product.tags.map(t => t.toLowerCase());
+            const hasMatchingTag = tagsToMatch.some(matchTag => 
+              productTagsLower.some(productTag => 
+                productTag.includes(matchTag) || matchTag.includes(productTag)
+              )
+            );
+            if (hasMatchingTag) return true;
+          }
+          // Fallback: check product name or description for brand terms
+          const nameLower = product.name.toLowerCase();
+          const descLower = product.description?.toLowerCase() || '';
+          return tagsToMatch.some(tag => 
+            nameLower.includes(tag) || descLower.includes(tag)
+          );
+        });
+      }
+    }
+
     // Category filter (case-insensitive)
     if (activeCategory !== 'all') {
       productList = productList.filter(product =>
@@ -122,7 +153,7 @@ function WarnerBrosPageContent() {
     }
 
     return productList;
-  }, [products, activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
+  }, [products, activeBrand, activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
 
   // Update displayed products when filters change
   useEffect(() => {
@@ -202,7 +233,12 @@ function WarnerBrosPageContent() {
   };
 
   const handleBrandClick = (brandId: string) => {
-    setActiveBrand(brandId);
+    // Toggle brand selection - click again to show all
+    if (activeBrand === brandId) {
+      setActiveBrand('all');
+    } else {
+      setActiveBrand(brandId);
+    }
     // Scroll to products section
     productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };

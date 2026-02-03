@@ -494,8 +494,8 @@ export default function CartPage() {
                         </div>
                         <div className="flex-1">
                           <p className="font-medium text-brand-800 text-sm mb-1">{item.product.name}</p>
-                          <p className="text-classic-green font-semibold text-sm mb-2">
-                            {formatPrice(item.product.price)}
+                          <p className={`font-semibold text-sm mb-2 ${isPrebookingProduct(item.product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                            {isPrebookingProduct(item.product) ? `Prebook for ₹${getCartItemPrice(item.product).toLocaleString('en-IN')}` : formatPrice(item.product.price)}
                           </p>
                           <div className="flex gap-3">
                             <button

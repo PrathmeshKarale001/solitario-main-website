@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, ShoppingCart } from 'lucide-react';
+import { X, ShoppingCart, Ticket } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
+import { isPrebookingProduct, getProductDisplayPrice, getCartItemPrice, getProductButtonText, isProductButtonEnabled, PREBOOK_PRICE } from '@/lib/prebooking';
 
 export interface QuickLookModalProps {
   isOpen: boolean;
@@ -17,6 +18,7 @@ export interface QuickLookModalProps {
 
 export default function QuickLookModal({ isOpen, onClose, product }: QuickLookModalProps) {
   const { addToCart } = useCart();
+  const [showFullDescription, setShowFullDescription] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -30,6 +32,11 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
     };
   }, [isOpen]);
 
+  // Reset description state when product changes
+  useEffect(() => {
+    setShowFullDescription(false);
+  }, [product?.id]);
+
   const handleBackdropClick = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
       onClose();
@@ -39,11 +46,23 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, 1);
-      // Optional: Show a success message or animation
     }
   };
 
   if (!product) return null;
+
+  // Check if prebooking product
+  const isPrebook = isPrebookingProduct(product);
+  const buttonEnabled = isProductButtonEnabled(product);
+  const buttonText = getProductButtonText(product, false);
+
+  // Description handling - strip HTML and truncate
+  const rawDescription = product.description?.replace(/<[^>]*>/g, '').split('Specifications')[0].trim() || '';
+  const maxLength = 150;
+  const shouldTruncate = rawDescription.length > maxLength;
+  const truncatedDescription = shouldTruncate && !showFullDescription 
+    ? rawDescription.slice(0, maxLength).trim() + '...' 
+    : rawDescription;
 
   return (
     <AnimatePresence>
@@ -84,8 +103,16 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                   priority
                 />
                 
+                {/* Prebook Badge */}
+                {isPrebook && (
+                  <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-1.5 text-xs font-gotham uppercase tracking-[0.15em] rounded-full shadow-luxury-lg border border-white/20 backdrop-blur-sm flex items-center gap-1.5">
+                    <Ticket className="w-4 h-4" />
+                    Prebook
+                  </div>
+                )}
+                
                 {/* Featured Badge */}
-                {product.featured && (
+                {!isPrebook && product.featured && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-bronze-gold to-bronze-gold/80 text-white px-4 py-1.5 text-xs font-gotham uppercase tracking-[0.2em] rounded-full shadow-luxury-lg border border-white/20 backdrop-blur-sm">
                     Featured
                   </div>
@@ -109,32 +136,56 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                     {product.name}
                   </h2>
 
-                  {/* Description - Strip HTML tags */}
-                  <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
-                    {product.description?.replace(/<[^>]*>/g, '').split('Specifications')[0].trim() || product.description}
-                  </p>
+                  {/* Description with View More */}
+                  <div>
+                    <p className="text-sm md:text-base text-gray-600 leading-relaxed font-montserrat">
+                      {truncatedDescription}
+                      {shouldTruncate && (
+                        <button
+                          onClick={() => setShowFullDescription(!showFullDescription)}
+                          className="text-bronze-gold hover:text-bronze-gold/80 font-medium ml-1 transition-colors"
+                        >
+                          {showFullDescription ? 'Show less' : 'View more'}
+                        </button>
+                      )}
+                    </p>
+                  </div>
 
                   {/* Price */}
                   <div className="pt-4 border-t border-gray-100">
-                    <div className="flex items-center gap-3 flex-wrap">
-                      {product.comparePrice ? (
-                        <>
+                    {isPrebook ? (
+                      <div className="flex flex-col gap-2">
+                        <p className="font-gotham text-2xl md:text-3xl font-semibold text-purple-600 tracking-wide">
+                          {getProductDisplayPrice(product)}
+                        </p>
+                        <div className="flex items-center gap-2 px-3 py-2 bg-purple-50 rounded-lg border border-purple-100">
+                          <Ticket className="w-4 h-4 text-purple-500" />
+                          <span className="text-xs text-purple-700 font-montserrat">
+                            Secure your piece with ₹{PREBOOK_PRICE.toLocaleString('en-IN')} prebooking
+                          </span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-3 flex-wrap">
+                        {product.comparePrice ? (
+                          <>
+                            <p className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green tracking-wide">
+                              {formatPrice(product.price, product.currency)}
+                            </p>
+                            <p className="font-gotham text-lg text-gray-400 line-through">
+                              {formatPrice(product.comparePrice, product.currency)}
+                            </p>
+                            <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-600 text-xs font-gotham font-semibold rounded">
+                              {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
+                            </span>
+                          </>
+                        ) : (
                           <p className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green tracking-wide">
                             {formatPrice(product.price, product.currency)}
                           </p>
-                          <p className="font-gotham text-lg text-gray-400 line-through">
-                            {formatPrice(product.comparePrice, product.currency)}
-                          </p>
-                          <span className="inline-flex items-center px-2 py-1 bg-red-100 text-red-600 text-xs font-gotham font-semibold rounded">
-                            {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
-                          </span>
-                        </>
-                      ) : (
-                        <p className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green tracking-wide">
-                          {formatPrice(product.price, product.currency)}
-                        </p>
-                      )}
-                    </div>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {/* Features */}
@@ -162,10 +213,17 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                 <div className="pt-6 space-y-3">
                   <button
                     onClick={handleAddToCart}
-                    className="w-full bg-bronze-gold hover:bg-bronze-gold/90 text-white px-6 py-3.5 rounded-lg font-gotham text-sm uppercase tracking-[0.2em] transition-all duration-300 shadow-luxury hover:shadow-glow flex items-center justify-center gap-2"
+                    disabled={!buttonEnabled}
+                    className={`w-full px-6 py-3.5 rounded-lg font-gotham text-sm uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${
+                      isPrebook
+                        ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg hover:shadow-xl'
+                        : buttonEnabled
+                          ? 'bg-bronze-gold hover:bg-bronze-gold/90 text-white shadow-luxury hover:shadow-glow'
+                          : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    }`}
                   >
-                    <ShoppingCart className="w-4 h-4" />
-                    Add to Cart
+                    {isPrebook ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+                    {buttonText}
                   </button>
                   
                   <Link
@@ -184,4 +242,3 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
     </AnimatePresence>
   );
 }
-
