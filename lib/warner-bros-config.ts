@@ -1,24 +1,30 @@
 // Warner Bros Collectibles Configuration
-// Hero slides: use literal paths (no %20) so static serving works in production.
-// Desktop uses same slides as mobile (WB_Mob) since WB_PC files may not be deployed; both work everywhere.
+// Hero slides: WB_PC for desktop, WB_Mob for mobile (auto-rotate every 4s)
+// Using literal paths (no %20 encoding) for reliable static serving in production
 
 const HERO_BASE = '/images/warnerbroassets';
 
-const HERO_MOBILE_SLIDES = [
-  `${HERO_BASE}/1 (WB_Mob).jpeg`,
-  `${HERO_BASE}/2 (WB_Mob).jpeg`,
-  `${HERO_BASE}/3 (WB_Mob).jpeg`,
-  `${HERO_BASE}/4 (WB_Mob).jpg`,
-  `${HERO_BASE}/5 (WB_Mob).jpg`,
-  `${HERO_BASE}/6 (WB_Mob).jpg`,
-  `${HERO_BASE}/7 (WB_Mob).jpg`,
-];
-
 export const WARNER_BROS_CONFIG = {
-  // Hero Banner Configuration - rotating slides (same assets for desktop & mobile for reliable production loading)
+  // Hero Banner Configuration - rotating slides
   hero: {
-    desktopSlides: HERO_MOBILE_SLIDES,
-    mobileSlides: HERO_MOBILE_SLIDES,
+    desktopSlides: [
+      `${HERO_BASE}/1 (WB_PC).jpg`,
+      `${HERO_BASE}/2 (WB_PC).jpg`,
+      `${HERO_BASE}/3 (WB_PC).jpg`,
+      `${HERO_BASE}/4 (WB_PC).jpg`,
+      `${HERO_BASE}/5 (WB_PC).jpg`,
+      `${HERO_BASE}/6 (WB_PC).jpg`,
+      `${HERO_BASE}/7 (WB_PC).jpg`,
+    ],
+    mobileSlides: [
+      `${HERO_BASE}/1 (WB_Mob).jpeg`,
+      `${HERO_BASE}/2 (WB_Mob).jpeg`,
+      `${HERO_BASE}/3 (WB_Mob).jpeg`,
+      `${HERO_BASE}/4 (WB_Mob).jpg`,
+      `${HERO_BASE}/5 (WB_Mob).jpg`,
+      `${HERO_BASE}/6 (WB_Mob).jpg`,
+      `${HERO_BASE}/7 (WB_Mob).jpg`,
+    ],
     alt: 'Solitario x Warner Bros Collection',
     rotationIntervalMs: 4000,
   },
