@@ -193,6 +193,7 @@ export default function Hero() {
                   priority={index === 0}
                   quality={index === 0 ? 90 : 80}
                   sizes="100vw"
+                  unoptimized
                   className={`object-cover object-center`}
                 />
               )}

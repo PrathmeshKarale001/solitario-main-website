@@ -255,6 +255,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                   priority={index === 0}
                   quality={index === 0 ? 90 : 80}
                   sizes="100vw"
+                  unoptimized
                   className={`${media.pos ?? 'object-cover'} object-center`}
                 />
               )}

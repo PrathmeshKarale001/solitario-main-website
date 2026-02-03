@@ -273,10 +273,11 @@ function WarnerBrosPageContent() {
                 src={heroSlides[heroIndex]}
                 alt={`${WARNER_BROS_CONFIG.hero.alt} ${heroIndex + 1}`}
                 fill
-                className="object-cover object-center scale-90 md:scale-100"
+                className="object-cover object-center"
                 priority={heroIndex === 0}
                 quality={90}
                 sizes="100vw"
+                unoptimized
                 onError={(e) => {
                   const target = e.target as HTMLImageElement;
                   target.style.display = 'none';
