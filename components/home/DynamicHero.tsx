@@ -29,36 +29,36 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const sectionRef = useRef<HTMLElement>(null);
 
   // New hero images - Desktop: 1600x700px, Mobile: 1080x1350px (4:5)
-  // Images with CTA embedded - but also showing overlay CTA button
+  // Using optimized WebP format for 86.7% size reduction with maintained quality
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277230.jpg',
-      mobileSrc: '/images/home-hero/Mobile_Banner_1.jpg',
+      src: '/images/home-hero/Home_Herofeb 1171277230.webp',
+      mobileSrc: '/images/home-hero/Mobile_Banner_1.webp',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277231.jpg',
-      mobileSrc: '/images/home-hero/Mobile_Banner_2.jpg',
+      src: '/images/home-hero/Home_Herofeb 1171277231.webp',
+      mobileSrc: '/images/home-hero/Mobile_Banner_2.webp',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277232.jpg',
-      mobileSrc: '/images/home-hero/Mobile_Banner_3.jpg',
+      src: '/images/home-hero/Home_Herofeb 1171277232.webp',
+      mobileSrc: '/images/home-hero/Mobile_Banner_3.webp',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277233.jpg',
-      mobileSrc: '/images/home-hero/Mobile_Banner_4.jpg',
+      src: '/images/home-hero/Home_Herofeb 1171277233.webp',
+      mobileSrc: '/images/home-hero/Mobile_Banner_4.webp',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
@@ -73,14 +73,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   ];
 
   // Mobile fallback media - Mobile_Banner images for mobile viewport
+  // Using optimized WebP format for 86.7% size reduction
   const defaultFallbackMediaMobile = [
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_1.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_2.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_3.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_4.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_5.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_1.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_2.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_3.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_4.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_5.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_6.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_7.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
   ];
 
   useEffect(() => {
@@ -240,9 +241,8 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                   alt="Solitario Jewelry Collection"
                   fill
                   priority={index === 0}
-                  quality={index === 0 ? 90 : 80}
+                  quality={index === 0 ? 90 : 85}
                   sizes="100vw"
-                  unoptimized
                   className={`${media.pos ?? 'object-cover'} object-center`}
                 />
               )}
