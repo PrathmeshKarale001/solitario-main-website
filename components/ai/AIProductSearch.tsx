@@ -243,7 +243,7 @@ export default function AIProductSearch() {
                           </div>
                         )}
                         <div className="p-4">
-                          <h4 className="font-playfair text-lg text-gray-900 mb-2 line-clamp-2">
+                          <h4 className="font-montserrat font-bold text-lg text-gray-900 mb-2 line-clamp-2">
                             {product.name}
                           </h4>
                           <p className="text-gray-600 text-sm mb-3 line-clamp-2">

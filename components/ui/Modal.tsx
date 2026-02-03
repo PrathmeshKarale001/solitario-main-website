@@ -60,7 +60,7 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
       >
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
-          {title && <h2 className="text-2xl font-playfair">{title}</h2>}
+          {title && <h2 className="text-2xl font-montserrat font-bold">{title}</h2>}
           <button
             onClick={onClose}
             className="ml-auto text-gray-400 hover:text-gray-600 transition-colors"

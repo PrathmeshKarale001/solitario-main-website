@@ -1,12 +1,31 @@
 // Warner Bros Collectibles Configuration
-// Update these paths with actual assets from /public/images/warnerbroassets/
+// Hero slides: WB_PC for desktop, WB_Mob for mobile (auto-rotate every 4s)
+
+const HERO_BASE = '/images/warnerbroassets';
 
 export const WARNER_BROS_CONFIG = {
-  // Hero Banner Configuration
+  // Hero Banner Configuration - rotating slides
   hero: {
-    desktop: '/images/warnerbroassets/hero-banner-desktop.jpg',
-    mobile: '/images/warnerbroassets/hero-banner-mobile.jpg',
+    desktopSlides: [
+      `${HERO_BASE}/1%20(WB_PC).jpg`,
+      `${HERO_BASE}/2%20(WB_PC).jpg`,
+      `${HERO_BASE}/3%20(WB_PC).jpg`,
+      `${HERO_BASE}/4%20(WB_PC).jpg`,
+      `${HERO_BASE}/5%20(WB_PC).jpg`,
+      `${HERO_BASE}/6%20(WB_PC).jpg`,
+      `${HERO_BASE}/7%20(WB_PC).jpg`,
+    ],
+    mobileSlides: [
+      `${HERO_BASE}/1%20(WB_Mob).jpeg`,
+      `${HERO_BASE}/2%20(WB_Mob).jpeg`,
+      `${HERO_BASE}/3%20(WB_Mob).jpeg`,
+      `${HERO_BASE}/4%20(WB_Mob).jpg`,
+      `${HERO_BASE}/5%20(WB_Mob).jpg`,
+      `${HERO_BASE}/6%20(WB_Mob).jpg`,
+      `${HERO_BASE}/7%20(WB_Mob).jpg`,
+    ],
     alt: 'Solitario x Warner Bros Collection',
+    rotationIntervalMs: 4000,
   },
 
   // Brand Logos for Legends Unleashed Section

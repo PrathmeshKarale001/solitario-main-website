@@ -22,7 +22,7 @@ export default function AISearchPage() {
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-classic-green/10 rounded-full mb-4">
             <span className="text-classic-green font-semibold text-sm">AI-Powered Search</span>
           </div>
-          <h1 className="text-4xl md:text-5xl font-playfair text-gray-900 mb-4">
+          <h1 className="text-4xl md:text-5xl font-montserrat font-bold text-gray-900 mb-4">
             Find Your Perfect Jewellery
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
@@ -37,7 +37,7 @@ export default function AISearchPage() {
 
         {/* Example Queries */}
         <div className="mb-16">
-          <h2 className="text-2xl font-playfair text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-montserrat font-bold text-gray-900 mb-6 text-center">
             Try These Examples
           </h2>
           <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
@@ -69,7 +69,7 @@ export default function AISearchPage() {
 
         {/* How It Works */}
         <div className="bg-white rounded-xl p-8 shadow-sm border border-gray-100">
-          <h2 className="text-2xl font-playfair text-gray-900 mb-6 text-center">
+          <h2 className="text-2xl font-montserrat font-bold text-gray-900 mb-6 text-center">
             How It Works
           </h2>
           <div className="grid md:grid-cols-3 gap-8">

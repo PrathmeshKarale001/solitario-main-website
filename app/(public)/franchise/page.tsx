@@ -49,7 +49,7 @@ const BENEFITS = [
 ];
 
 const REQUIREMENTS = [
-  'Minimum investment capacity of ₹1 Crore',
+  'Minimum investment capacity of ₹1.5 Crore',
   'Retail space of 500-1000 sq ft in premium location',
   'Passion for luxury retail and customer service',
   'Commitment to brand values and excellence',
@@ -141,15 +141,15 @@ export default function FranchisePage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-montserrat font-bold text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-playfair), serif',
+                fontFamily: 'var(--font-montserrat font-bold), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <BlurText
                 text="Franchise"
-                className="font-playfair inline-block"
+                className="font-montserrat font-bold inline-block"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -158,7 +158,7 @@ export default function FranchisePage() {
               <span className="inline-block">&nbsp;</span>
               <BlurText
                 text="With"
-                className="font-playfair inline-block"
+                className="font-montserrat font-bold inline-block"
                 animateBy="characters"
                 direction="top"
                 delay={150}
@@ -167,7 +167,7 @@ export default function FranchisePage() {
               <span className="inline-block">&nbsp;</span>
               <BlurText
                 text="Us"
-                className="font-playfair inline-block"
+                className="font-montserrat font-bold inline-block"
                 animateBy="characters"
                 direction="top"
                 delay={250}
@@ -202,7 +202,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Why Partner Section */}
-      <section className="py-24 px-4 bg-white">
+      <section className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -211,7 +211,7 @@ export default function FranchisePage() {
             transition={{ duration: 0.8 }}
             className="text-center mb-16"
           >
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Why Partner With <span className="text-classic-green">Solitario</span>?
             </h2>
             <p className="text-brand-700 font-montserrat max-w-2xl mx-auto">
@@ -232,7 +232,7 @@ export default function FranchisePage() {
                 <div className="w-14 h-14 mx-auto mb-4 rounded-full bg-classic-green/10 flex items-center justify-center">
                   <benefit.icon className="w-7 h-7 text-classic-green" />
                 </div>
-                <h3 className="text-xl font-playfair text-brand-800 mb-3">{benefit.title}</h3>
+                <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-3">{benefit.title}</h3>
                 <p className="text-brand-600 text-sm font-montserrat">{benefit.description}</p>
               </motion.div>
             ))}
@@ -241,7 +241,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Requirements Section */}
-      <section className="py-24 px-4 bg-brand-100">
+      <section className="py-12 md:py-16 px-4 bg-brand-100">
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-2 gap-12 items-center">
             <motion.div
@@ -250,7 +250,7 @@ export default function FranchisePage() {
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
             >
-              <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+              <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
                 Franchise <span className="text-classic-green">Requirements</span>
               </h2>
               <p className="text-brand-700 font-montserrat mb-8">
@@ -295,7 +295,7 @@ export default function FranchisePage() {
       </section>
 
       {/* Apply Form Section */}
-      <section id="apply" className="py-24 px-4 bg-white">
+      <section id="apply" className="py-12 md:py-16 px-4 bg-white">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -305,7 +305,7 @@ export default function FranchisePage() {
             className="text-center mb-12"
           >
             <Sparkles className="w-12 h-12 text-classic-green mx-auto mb-4" />
-            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4">
               Start Your <span className="text-classic-green">Journey</span>
             </h2>
             <p className="text-brand-700 font-montserrat">

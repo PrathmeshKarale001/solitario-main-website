@@ -79,7 +79,7 @@ export default function AdminAccessPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center py-12">
             <Shield className="w-16 h-16 mx-auto mb-4 text-gray-400" />
-            <h1 className="font-playfair text-3xl text-gray-900 mb-2">Access Denied</h1>
+            <h1 className="font-montserrat font-bold text-3xl text-gray-900 mb-2">Access Denied</h1>
             <p className="text-gray-600">You don't have permission to access this page.</p>
           </div>
         </div>
@@ -92,7 +92,7 @@ export default function AdminAccessPage() {
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="font-playfair text-4xl text-gray-900 mb-2">Admin Access Management</h1>
+          <h1 className="font-montserrat font-bold text-4xl text-gray-900 mb-2">Admin Access Management</h1>
           <p className="text-gray-600 font-montserrat">Manage who has access to the admin panel</p>
         </div>
 
@@ -125,7 +125,7 @@ export default function AdminAccessPage() {
         <div className="bg-white rounded-lg border border-gray-200 shadow-sm">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
-              <h2 className="font-playfair text-xl text-gray-900">Admin Users</h2>
+              <h2 className="font-montserrat font-bold text-xl text-gray-900">Admin Users</h2>
               {isSuperAdmin && (
                 <button
                   onClick={() => setIsAdding(true)}
@@ -254,7 +254,7 @@ export default function AdminAccessPage() {
 
         {/* Role Descriptions */}
         <div className="mt-8 bg-white rounded-lg p-6 border border-gray-200 shadow-sm">
-          <h3 className="font-playfair text-lg text-gray-900 mb-4">Role Permissions</h3>
+          <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-4">Role Permissions</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="flex items-start gap-3">
               <Crown className="w-5 h-5 text-yellow-500 mt-1" />

@@ -32,7 +32,7 @@ export default function PromoBanner1() {
             <span className="text-bronze-gold font-gotham text-xs md:text-sm uppercase tracking-[0.3em] mb-4 md:mb-6 block pl-1">
               Exclusive Collection
             </span>
-            <h2 className="text-5xl md:text-7xl lg:text-8xl font-playfair text-white mb-6 md:mb-8 leading-[0.9]">
+            <h2 className="text-5xl md:text-7xl lg:text-8xl font-montserrat font-bold text-white mb-6 md:mb-8 leading-[0.9]">
               Timeless<br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-white/80 to-white/20 italic">
                 Elegance

@@ -191,7 +191,7 @@ export function PromotionDisplay({ cartId, onPricingUpdate }: PromotionDisplayPr
         <div className="bg-gradient-to-br from-bronze-gold/10 to-soft-bronze/10 border border-bronze-gold/30 rounded-brand-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Gift className="w-5 h-5 text-bronze-gold" />
-            <h4 className="font-playfair text-heading-sm text-brand-800">Free Gift Included!</h4>
+            <h4 className="font-montserrat font-bold text-heading-sm text-brand-800">Free Gift Included!</h4>
           </div>
           {giftLines.map((gift, index) => (
             <p key={index} className="text-body-sm font-montserrat text-brand-600">
@@ -206,7 +206,7 @@ export function PromotionDisplay({ cartId, onPricingUpdate }: PromotionDisplayPr
         <div className="bg-gradient-to-br from-classic-green/10 to-classic-green/5 border border-classic-green/30 rounded-brand-lg p-4">
           <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-5 h-5 text-classic-green" />
-            <h4 className="font-playfair text-heading-sm text-brand-800">Active Offers</h4>
+            <h4 className="font-montserrat font-bold text-heading-sm text-brand-800">Active Offers</h4>
           </div>
           <div className="space-y-2">
             {pricing.discounts.map((discount, index) => (
@@ -252,7 +252,7 @@ export function PromotionDisplay({ cartId, onPricingUpdate }: PromotionDisplayPr
         ))}
 
         <div className="flex items-center justify-between pt-3 border-t border-brand-300">
-          <span className="font-playfair text-heading-md text-brand-800">Total</span>
+          <span className="font-montserrat font-bold text-heading-md text-brand-800">Total</span>
           <span className="font-gotham text-heading-xl font-bold text-classic-green">
             ₹{pricing.total.toLocaleString('en-IN')}
           </span>

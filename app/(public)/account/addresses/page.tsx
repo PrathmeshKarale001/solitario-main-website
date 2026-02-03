@@ -346,7 +346,7 @@ function AddressesPageContent() {
               className="flex flex-col sm:flex-row sm:items-center justify-between mb-8"
             >
               <div>
-                <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">My Addresses</h1>
+                <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">My Addresses</h1>
                 <p className="text-brand-500 font-montserrat">Manage your delivery addresses</p>
               </div>
               <button
@@ -366,7 +366,7 @@ function AddressesPageContent() {
                 className="bg-white rounded-2xl shadow-brand border border-brand-100 p-12 text-center"
               >
                 <MapPin className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-                <h2 className="text-xl font-playfair text-brand-800 mb-2">No addresses saved</h2>
+                <h2 className="text-xl font-montserrat font-bold text-brand-800 mb-2">No addresses saved</h2>
                 <p className="text-brand-500 font-montserrat mb-6">
                   Add a delivery address to make checkout faster
                 </p>
@@ -409,7 +409,7 @@ function AddressesPageContent() {
                     </div>
 
                     {/* Address Details */}
-                    <h3 className="font-playfair text-lg text-brand-800 mb-1">{address.name}</h3>
+                    <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-1">{address.name}</h3>
                     <p className="text-sm text-brand-600 font-montserrat mb-1">{address.phone}</p>
                     <p className="text-sm text-brand-500 font-montserrat">
                       {address.line1}
@@ -470,7 +470,7 @@ function AddressesPageContent() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-playfair text-brand-800">
+                  <h2 className="text-xl font-montserrat font-bold text-brand-800">
                     {editingAddress ? 'Edit Address' : 'Add New Address'}
                   </h2>
                   <button onClick={closeModal} className="p-2 hover:bg-brand-100 rounded-lg transition-colors">

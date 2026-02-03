@@ -174,7 +174,7 @@ export default function OrderDetailPage() {
         <Container>
           <div className="text-center py-20">
             <Package className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-            <h1 className="text-2xl font-playfair text-brand-800 mb-2">Order not found</h1>
+            <h1 className="text-2xl font-montserrat font-bold text-brand-800 mb-2">Order not found</h1>
             <Link href="/account/orders" className="text-classic-green hover:underline font-montserrat">
               Back to Orders
             </Link>
@@ -204,7 +204,7 @@ export default function OrderDetailPage() {
               className="flex flex-col md:flex-row md:items-center justify-between mb-8"
             >
               <div>
-                <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">
+                <h1 className="text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-1">
                   Order {order.orderNumber}
                 </h1>
                 <p className="text-brand-500 font-montserrat">Placed on {formatDate(order.date)}</p>
@@ -226,7 +226,7 @@ export default function OrderDetailPage() {
                 transition={{ delay: 0.1 }}
                 className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 mb-6"
               >
-                <h2 className="font-playfair text-lg text-brand-800 mb-6">Order Status</h2>
+                <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-6">Order Status</h2>
                 <div className="relative">
                   {/* Progress Line */}
                   <div className="absolute top-5 left-5 right-5 h-0.5 bg-brand-200">
@@ -306,7 +306,7 @@ export default function OrderDetailPage() {
                 transition={{ delay: 0.2 }}
                 className="lg:col-span-2 bg-white rounded-2xl shadow-brand border border-brand-100 p-6"
               >
-                <h2 className="font-playfair text-lg text-brand-800 mb-4">Order Items</h2>
+                <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Order Items</h2>
                 <div className="space-y-4">
                   {order.items.map((item) => (
                     <div key={item.id} className="flex items-center gap-4 p-4 bg-brand-50 rounded-xl">
@@ -319,7 +319,7 @@ export default function OrderDetailPage() {
                         />
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-playfair text-brand-800">{item.name}</h3>
+                        <h3 className="font-montserrat font-bold text-brand-800">{item.name}</h3>
                         {item.variant && (
                           <p className="text-sm text-brand-500 font-montserrat">{item.variant}</p>
                         )}
@@ -360,7 +360,7 @@ export default function OrderDetailPage() {
                 transition={{ delay: 0.3 }}
                 className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 h-fit"
               >
-                <h2 className="font-playfair text-lg text-brand-800 mb-4">Shipping Address</h2>
+                <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Shipping Address</h2>
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
                     <MapPin className="w-5 h-5 text-classic-green flex-shrink-0 mt-0.5" />

@@ -18,9 +18,9 @@ export default function AboutPage() {
       <Promise />
       
       {/* CTA Section - Light Theme - Compact */}
-      <section className="py-12 sm:py-16 md:py-20 lg:py-24 px-3 sm:px-4 bg-classic-green">
+      <section className="py-8 sm:py-10 md:py-12 lg:py-14 px-3 sm:px-4 bg-classic-green">
         <div className="max-w-3xl sm:max-w-4xl mx-auto text-center">
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-white mb-3 sm:mb-4 md:mb-6">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-white mb-3 sm:mb-4 md:mb-6">
             Ready to Discover Your <span className="text-bronze-gold">Perfect Piece</span>?
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-white/80 mb-4 sm:mb-6 md:mb-8 font-montserrat hidden sm:block">

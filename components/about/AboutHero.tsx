@@ -31,6 +31,13 @@ export default function AboutHero() {
             muted
             playsInline
             className="absolute inset-0 w-full h-full object-cover scale-150"
+            onLoadedMetadata={e => {
+              try {
+                if (e.currentTarget.currentTime < 4) {
+                  e.currentTarget.currentTime = 4;
+                }
+              } catch {}
+            }}
           >
             <source src="/about/about-video.mp4" type="video/mp4" />
           </video>
@@ -55,10 +62,8 @@ export default function AboutHero() {
           </motion.span>
 
           <h1
-            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4 relative z-10"
+            className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-montserrat font-bold text-white leading-[1.1] tracking-tight px-4 relative z-10"
             style={{
-              fontFamily: 'var(--font-playfair), serif',
-              fontWeight: 400,
               letterSpacing: '-0.02em',
               textShadow: '0 1px 4px rgba(0, 0, 0, 0.54), 0 2px 8px rgba(0, 0, 0, 0.36)'
             }}
@@ -66,7 +71,7 @@ export default function AboutHero() {
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
               <BlurText
                 text="Designed"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={50}
@@ -74,7 +79,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="for"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={100}
@@ -82,7 +87,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="Today"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={150}
@@ -92,7 +97,7 @@ export default function AboutHero() {
             <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
               <BlurText
                 text="Inspired"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={200}
@@ -100,7 +105,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="by"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={250}
@@ -108,7 +113,7 @@ export default function AboutHero() {
               />
               <BlurText
                 text="Tomorrow"
-                className="font-playfair"
+                className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={300}

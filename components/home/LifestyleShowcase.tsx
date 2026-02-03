@@ -24,7 +24,7 @@ export default function LifestyleShowcase() {
         <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
           Radiate Elegance
         </span>
-        <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
+        <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
           Celebrity Cameo with Solitario
         </h2>
         <div className="w-24 h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent" />

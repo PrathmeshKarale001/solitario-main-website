@@ -121,7 +121,7 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
             initial={{ opacity: 0, scale: 0 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 1.2, type: "spring" }}
-            className="text-[#C6A664] text-lg sm:text-2xl lg:text-4xl font-playfair font-bold flex items-center justify-center"
+            className="text-[#C6A664] text-lg sm:text-2xl lg:text-4xl font-montserrat font-bold font-bold flex items-center justify-center"
           >
             X
           </motion.div>

@@ -20,7 +20,7 @@ export default function AdminOrdersPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">Orders</h1>
+          <h1 className="text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-1">Orders</h1>
           <p className="text-brand-500 font-montserrat text-sm">Manage customer orders</p>
         </div>
         <Link
@@ -38,7 +38,7 @@ export default function AdminOrdersPage() {
           <div className="w-16 h-16 bg-teal/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <ShoppingCart className="w-8 h-8 text-teal" />
           </div>
-          <h2 className="text-xl font-playfair text-brand-800 mb-2">Orders Managed via Shopify</h2>
+          <h2 className="text-xl font-montserrat font-bold text-brand-800 mb-2">Orders Managed via Shopify</h2>
           <p className="text-brand-500 font-montserrat text-sm mb-6">
             All orders are processed and managed through your Shopify admin panel. 
             Click the button above to view, fulfill, and manage orders.

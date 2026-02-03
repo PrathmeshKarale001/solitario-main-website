@@ -201,7 +201,7 @@ export default function SettingsPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
             >
-              <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">Profile Settings</h1>
+              <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">Profile Settings</h1>
               <p className="text-brand-500 font-montserrat">Manage your account information</p>
             </motion.div>
 
@@ -224,7 +224,7 @@ export default function SettingsPage() {
               transition={{ delay: 0.1 }}
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 mb-6"
             >
-              <h2 className="font-playfair text-lg text-brand-800 mb-4">Profile Picture</h2>
+              <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Profile Picture</h2>
               <div className="flex items-center gap-6">
                 <div className="relative w-24 h-24 flex-shrink-0">
                   {user?.imageUrl ? (
@@ -267,7 +267,7 @@ export default function SettingsPage() {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 mb-6"
             >
-              <h2 className="font-playfair text-lg text-brand-800 mb-4">Personal Information</h2>
+              <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Personal Information</h2>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-montserrat text-brand-600 mb-1">
@@ -331,7 +331,7 @@ export default function SettingsPage() {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 mb-6"
             >
-              <h2 className="font-playfair text-lg text-brand-800 mb-4 flex items-center gap-2">
+              <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4 flex items-center gap-2">
                 <Bell className="w-5 h-5 text-bronze-gold" />
                 Notification Preferences
               </h2>

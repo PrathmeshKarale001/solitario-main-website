@@ -71,16 +71,16 @@ export default function StoresPage() {
             </motion.span>
 
             <h1
-              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-playfair text-white leading-[1.1] tracking-tight px-4"
+              className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-montserrat font-bold text-white leading-[1.1] tracking-tight px-4"
               style={{
-                fontFamily: 'var(--font-playfair), serif',
+                fontFamily: 'var(--font-montserrat font-bold), serif',
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8)',
               }}
             >
               <div className="flex items-center justify-center gap-2 md:gap-4 flex-wrap">
                 <BlurText
                   text="Find"
-                  className="font-playfair"
+                  className="font-montserrat font-bold"
                   animateBy="characters"
                   direction="top"
                   delay={50}
@@ -88,7 +88,7 @@ export default function StoresPage() {
                 />
                 <BlurText
                   text="Your"
-                  className="font-playfair"
+                  className="font-montserrat font-bold"
                   animateBy="characters"
                   direction="top"
                   delay={150}
@@ -96,7 +96,7 @@ export default function StoresPage() {
                 />
                 <BlurText
                   text="Sparkle"
-                  className="font-playfair"
+                  className="font-montserrat font-bold"
                   animateBy="characters"
                   direction="top"
                   delay={250}
@@ -121,7 +121,7 @@ export default function StoresPage() {
       <LazyNearestStore showTitle={true} maxStores={3} />
 
       {/* All Stores */}
-      <section className="py-24 bg-brand-100">
+      <section className="py-12 md:py-16 bg-brand-100">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -133,7 +133,7 @@ export default function StoresPage() {
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               All Locations
             </span>
-            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800">
+            <h2 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800">
               Our <span className="text-classic-green">Stores</span>
             </h2>
           </motion.div>
@@ -148,7 +148,7 @@ export default function StoresPage() {
                 transition={{ duration: 0.4, delay: idx * 0.02 }}
                 className="rounded-2xl bg-white border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-6 transition-all duration-500"
               >
-                <h3 className="text-xl font-playfair text-brand-800 mb-4">{store.name}</h3>
+                <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-4">{store.name}</h3>
                 
                 <div className="space-y-3">
                   <div className="flex items-start gap-3">
@@ -189,7 +189,7 @@ export default function StoresPage() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-24 bg-classic-green">
+      <section className="py-12 md:py-16 bg-classic-green">
         <Container size="md" className="text-center">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -197,7 +197,7 @@ export default function StoresPage() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <h2 className="text-3xl md:text-4xl font-playfair text-white mb-6">
+            <h2 className="text-3xl md:text-4xl font-montserrat font-bold text-white mb-6">
               Can't Visit a <span className="text-bronze-gold">Store</span>?
             </h2>
             <p className="text-white/80 font-montserrat mb-8">

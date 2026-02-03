@@ -44,7 +44,7 @@ export default function UnifiedOfferBanner({ variant = 'homepage', className = '
     <div className={`bg-ivory-pearl py-6 my-4 ${className}`}>
       <div className="container mx-auto px-4">
         {variant === 'checkout' && (
-          <h3 className="text-center text-lg font-playfair font-semibold text-brand-900 mb-4">
+          <h3 className="text-center text-lg font-montserrat font-bold font-semibold text-brand-900 mb-4">
             Your Benefits
           </h3>
         )}

@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, getCollectionProducts } from '@/lib/shopify-data';
 
-// Mark as dynamic route to prevent static optimization attempts (which cause slowness)
-export const dynamic = 'force-dynamic';
-
-// Cache products for 1 minute to improve performance while keeping data fresh
-export const revalidate = 60; // 1 minute
+// Cache products for 5 minutes to improve performance
+export const revalidate = 300; // 5 minutes
 
 // In-memory cache for development (bypasses Next.js cache limitations in dev mode)
 let cachedProducts: { products: any[]; timestamp: number } | null = null;
-const CACHE_DURATION = 60 * 1000; // 1 minute
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 export async function GET(req: NextRequest) {
   try {

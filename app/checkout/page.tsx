@@ -6,9 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package } from 'lucide-react';
+import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package, Ticket } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
+import { isPrebookingProduct, getCartItemPrice, formatPrebookingOrderNotes, PREBOOK_PRICE } from '@/lib/prebooking';
 import { Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
@@ -399,18 +400,29 @@ export default function CheckoutPage() {
 
     try {
       // Prepare order data with SKU for shipping
+      // Use prebooking price for Warner Bros products
       const orderItems = items.map(item => ({
         productId: item.product.id,
         variantId: item.product.variantId,
         sku: item.product.sku || item.product.id, // Use SKU if available
         name: item.product.name,
-        price: item.product.price,
+        price: getCartItemPrice(item.product), // Use prebooking price for WB items
         quantity: item.quantity,
         image: item.product.image,
+        isPrebook: isPrebookingProduct(item.product),
       }));
 
+      // Identify prebooking items for order notes
+      const prebookingItems = items
+        .filter(item => isPrebookingProduct(item.product))
+        .map(item => ({ name: item.product.name, quantity: item.quantity }));
+      
+      const customerName = `${customer.firstName} ${customer.lastName}`;
+      const prebookingNotes = formatPrebookingOrderNotes(customerName, prebookingItems);
+      const hasPrebookingItems = prebookingItems.length > 0;
+
       const customerData = {
-        name: `${customer.firstName} ${customer.lastName}`,
+        name: customerName,
         email: customer.email,
         phone: customer.phone.replace(/\D/g, ''),
         address: {
@@ -434,6 +446,8 @@ export default function CheckoutPage() {
           shipping,
           tax,
           total: grandTotal,
+          prebookingNotes: prebookingNotes || undefined,
+          hasPrebookingItems,
         }),
       });
 
@@ -449,7 +463,7 @@ export default function CheckoutPage() {
         amount: data.order.amount,
         currency: data.order.currency,
         name: 'Solitario',
-        description: 'Diamond Jewellery Purchase',
+        description: hasPrebookingItems ? 'Prebooking Order - Warner Bros Collection' : 'Diamond Jewellery Purchase',
         image: '/logo.svg',
         order_id: data.order.id,
         prefill: {
@@ -459,9 +473,10 @@ export default function CheckoutPage() {
         },
         notes: {
           address: `${customer.address1}, ${customer.city}, ${customer.state} - ${customer.pincode}`,
+          ...(hasPrebookingItems ? { order_type: 'prebooking', prebooking_items: prebookingItems.map(i => i.name).join(', ') } : {}),
         },
         theme: {
-          color: '#146552',
+          color: hasPrebookingItems ? '#7c3aed' : '#146552', // Purple for prebooking
         },
         handler: async function (response: any) {
           // Verify payment on server
@@ -484,6 +499,8 @@ export default function CheckoutPage() {
                   tax,
                   total: grandTotal,
                   receiptId: data.order.receipt,
+                  prebookingNotes: prebookingNotes || undefined,
+                  hasPrebookingItems,
                 },
               }),
             });
@@ -1003,7 +1020,10 @@ export default function CheckoutPage() {
 
                 {/* Cart Items */}
                 <div className="space-y-4 mb-6 max-h-[400px] overflow-y-auto pr-2">
-                  {items.map((item) => (
+                  {items.map((item) => {
+                    const isPrebook = isPrebookingProduct(item.product);
+                    const itemPrice = getCartItemPrice(item.product);
+                    return (
                     <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
                       <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
                         <Image
@@ -1012,20 +1032,31 @@ export default function CheckoutPage() {
                           fill
                           className="object-contain p-2"
                         />
+                        {isPrebook && (
+                          <div className="absolute top-0 right-0 bg-purple-600 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">
+                            Prebook
+                          </div>
+                        )}
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="font-medium text-sm text-gray-900 line-clamp-2 mb-1">
                           {item.product.name}
                         </p>
+                        {isPrebook && (
+                          <span className="inline-flex items-center gap-1 mb-1 px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[9px] font-semibold uppercase tracking-wide rounded">
+                            <Ticket className="w-2.5 h-2.5" />
+                            Prebooking
+                          </span>
+                        )}
                         <div className="flex items-center justify-between">
                           <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                          <p className="font-semibold text-sm text-classic-green">
-                            {formatPrice(item.product.price * item.quantity, item.product.currency)}
+                          <p className={`font-semibold text-sm ${isPrebook ? 'text-purple-600' : 'text-classic-green'}`}>
+                            {formatPrice(itemPrice * item.quantity, item.product.currency)}
                           </p>
                         </div>
                       </div>
                     </div>
-                  ))}
+                  );})}
 
                   {/* Gift Item Display - Clean, Minimal Design */}
                   {hasGift && (
@@ -1087,6 +1118,21 @@ export default function CheckoutPage() {
                     <div className="mt-4 flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-2 rounded-lg text-xs border border-amber-100">
                       <Gift size={14} className="shrink-0" />
                       <span>Free gift {giftProduct?.name ? `(${giftProduct.name})` : ''} included with your order</span>
+                    </div>
+                  )}
+                  {/* Prebooking Info Banner */}
+                  {items.some(item => isPrebookingProduct(item.product)) && (
+                    <div className="mt-4 bg-gradient-to-r from-purple-50 to-indigo-50 text-purple-800 px-4 py-3 rounded-lg text-xs border border-purple-200">
+                      <div className="flex items-start gap-2">
+                        <Ticket size={16} className="shrink-0 mt-0.5 text-purple-600" />
+                        <div>
+                          <p className="font-semibold mb-1">Prebooking Order - Warner Bros Collection</p>
+                          <p className="text-purple-600 text-[11px]">
+                            This order includes prebooking items at ₹{PREBOOK_PRICE.toLocaleString('en-IN')}/item. 
+                            Full payment will be collected upon product availability.
+                          </p>
+                        </div>
+                      </div>
                     </div>
                   )}
                 </div>

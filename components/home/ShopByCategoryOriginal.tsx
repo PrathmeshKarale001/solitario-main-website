@@ -55,7 +55,7 @@ export default function ShopByCategoryOriginal() {
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">
             Curated For You
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green" style={{ letterSpacing: '-0.02em' }}>
             Featured Categories
           </h2>
         </motion.div>
@@ -96,7 +96,7 @@ export default function ShopByCategoryOriginal() {
                       <div className="relative">
                         {/* Decorative underline on hover */}
                         <span className="absolute left-1/2 -translate-x-1/2 bottom-0 h-[1px] w-0 bg-bronze-gold/50 group-hover:w-full transition-all duration-500" />
-                        <h3 className="relative font-playfair text-lg sm:text-xl md:text-2xl text-classic-green group-hover:text-bronze-gold transition-colors duration-300 pb-1">
+                        <h3 className="relative font-montserrat font-bold text-lg sm:text-xl md:text-2xl text-classic-green group-hover:text-bronze-gold transition-colors duration-300 pb-1">
                           {category.name}
                         </h3>
                       </div>

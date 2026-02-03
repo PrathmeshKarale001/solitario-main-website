@@ -182,7 +182,7 @@ export default function ShopCheckoutPage() {
           {/* Left Column - Customer Details */}
           <div className="space-y-6">
             <div>
-              <h1 className="text-2xl md:text-3xl font-playfair text-classic-green mb-2">
+              <h1 className="text-2xl md:text-3xl font-montserrat font-bold text-classic-green mb-2">
                 Checkout
               </h1>
               <p className="text-gray-600 text-sm">

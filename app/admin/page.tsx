@@ -89,7 +89,7 @@ export default function AdminDashboard() {
       {/* Welcome Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">
+          <h1 className="text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-1">
             Welcome back, {adminUser?.name || 'Admin'}
           </h1>
           <p className="text-brand-500 font-montserrat text-sm">
@@ -128,7 +128,7 @@ export default function AdminDashboard() {
               <Package className="w-6 h-6 text-classic-green" />
             </div>
           </div>
-          <p className="text-3xl font-playfair text-brand-800">{stats.totalProducts}</p>
+          <p className="text-3xl font-montserrat font-bold text-brand-800">{stats.totalProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Total Products</p>
         </motion.div>
 
@@ -143,7 +143,7 @@ export default function AdminDashboard() {
               <Star className="w-6 h-6 text-bronze-gold" />
             </div>
           </div>
-          <p className="text-3xl font-playfair text-brand-800">{stats.featuredProducts}</p>
+          <p className="text-3xl font-montserrat font-bold text-brand-800">{stats.featuredProducts}</p>
           <p className="text-brand-500 text-sm font-montserrat">Featured Items</p>
         </motion.div>
 
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
               <BarChart3 className="w-6 h-6 text-teal" />
             </div>
           </div>
-          <p className="text-3xl font-playfair text-brand-800">{stats.categories.length}</p>
+          <p className="text-3xl font-montserrat font-bold text-brand-800">{stats.categories.length}</p>
           <p className="text-brand-500 text-sm font-montserrat">Categories</p>
         </motion.div>
 
@@ -173,7 +173,7 @@ export default function AdminDashboard() {
               <TrendingUp className="w-6 h-6 text-soft-bronze" />
             </div>
           </div>
-          <p className="text-2xl font-playfair text-brand-800">{formatPrice(stats.avgPrice, 'INR')}</p>
+          <p className="text-2xl font-montserrat font-bold text-brand-800">{formatPrice(stats.avgPrice, 'INR')}</p>
           <p className="text-brand-500 text-sm font-montserrat">Avg. Price</p>
         </motion.div>
       </div>
@@ -181,7 +181,7 @@ export default function AdminDashboard() {
       {/* Quick Actions */}
       <div className="bg-white rounded-2xl p-6 shadow-brand border border-brand-100">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-lg font-playfair text-brand-800">Quick Actions</h2>
+          <h2 className="text-lg font-montserrat font-bold text-brand-800">Quick Actions</h2>
           <Zap className="w-5 h-5 text-bronze-gold" />
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-3">
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
 
       {/* Featured Guide */}
       <div className="bg-gradient-to-r from-bronze-gold/10 to-bronze-gold/5 rounded-2xl p-6 border border-bronze-gold/20">
-        <h2 className="text-lg font-playfair text-brand-800 mb-3 flex items-center gap-2">
+        <h2 className="text-lg font-montserrat font-bold text-brand-800 mb-3 flex items-center gap-2">
           <Star className="w-5 h-5 text-bronze-gold" />
           How to Mark Products as Featured
         </h2>
@@ -264,7 +264,7 @@ export default function AdminDashboard() {
       {/* Recent Products */}
       <div className="bg-white rounded-2xl shadow-brand border border-brand-100 overflow-hidden">
         <div className="p-6 border-b border-brand-100 flex items-center justify-between">
-          <h2 className="text-lg font-playfair text-brand-800">Recent Products</h2>
+          <h2 className="text-lg font-montserrat font-bold text-brand-800">Recent Products</h2>
           <Link href="/admin/products" className="flex items-center gap-1 text-classic-green font-montserrat text-sm hover:underline">
             View All <ArrowRight className="w-4 h-4" />
           </Link>

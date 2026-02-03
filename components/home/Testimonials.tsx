@@ -41,7 +41,7 @@ export default function Testimonials() {
             <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham text-bronze-gold">Testimonials</span>
             <Star className="w-4 h-4 sm:w-5 sm:h-5 text-bronze-gold fill-bronze-gold" />
           </div>
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair mb-2 sm:mb-4 md:mb-6 text-classic-green">What Our Customers Say</h2>
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold mb-2 sm:mb-4 md:mb-6 text-classic-green">What Our Customers Say</h2>
           <p className="text-xs sm:text-sm md:text-lg text-gray-600 max-w-md sm:max-w-2xl mx-auto font-montserrat leading-relaxed hidden sm:block">
             Real reviews from our valued customers
           </p>
@@ -71,7 +71,7 @@ export default function Testimonials() {
                 className="relative"
               >
                 {/* Quote Text - Centered */}
-                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black mb-6 sm:mb-8 leading-relaxed font-playfair italic relative z-10">
+                <p className="text-lg sm:text-xl md:text-2xl lg:text-3xl text-black mb-6 sm:mb-8 leading-relaxed font-montserrat font-bold italic relative z-10">
                   "{currentTestimonial.text}"
                 </p>
 
@@ -147,7 +147,7 @@ export default function Testimonials() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="mt-16 pt-12 border-t border-bronze-gold/20"
+            className="mt-8 pt-6 border-t border-bronze-gold/20"
           >
             <div className="flex flex-wrap items-center justify-center gap-4">
               <div className="px-6 py-3 bg-bronze-gold/10 backdrop-blur-sm rounded-lg border border-bronze-gold/20">

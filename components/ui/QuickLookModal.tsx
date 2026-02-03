@@ -105,7 +105,7 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                   </span>
 
                   {/* Product Name */}
-                  <h2 className="font-playfair text-3xl md:text-4xl text-gray-900 leading-tight" style={{ letterSpacing: '-0.01em' }}>
+                  <h2 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900 leading-tight" style={{ letterSpacing: '-0.01em' }}>
                     {product.name}
                   </h2>
 

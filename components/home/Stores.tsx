@@ -47,7 +47,7 @@ export default function Stores() {
   }, []);
 
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-white">
+    <section className="py-8 sm:py-10 md:py-14 px-4 sm:px-6 lg:px-8 bg-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -60,7 +60,7 @@ export default function Stores() {
           <span className="inline-block text-classic-green text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham mb-2 sm:mb-4">
             Global Presence
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-brand-800 mb-2 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-brand-800 mb-2 sm:mb-4">
             Visit Our <span className="text-classic-green">Stores</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
@@ -99,7 +99,7 @@ export default function Stores() {
 
               {/* Content Overlay */}
               <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-playfair text-white mb-1 sm:mb-2">{store.name}</h3>
+                <h3 className="text-lg sm:text-xl md:text-2xl font-montserrat font-bold text-white mb-1 sm:mb-2">{store.name}</h3>
                 <div className="flex items-center gap-2 text-white/70 text-xs sm:text-sm font-montserrat">
                   <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-bronze-gold" />
                   {store.location}

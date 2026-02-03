@@ -4,11 +4,12 @@ import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Eye, Heart, Flame, Sparkles, Clock, ShoppingCart } from 'lucide-react';
+import { Eye, Heart, Flame, Sparkles, Clock, ShoppingCart, Ticket } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice, cn } from '@/lib/utils';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
+import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText, isProductButtonEnabled } from '@/lib/prebooking';
 
 export interface ProductCardProps {
   product: Product;
@@ -103,6 +104,13 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
                 Only {(product as any).quantity} left
               </span>
             )}
+            {/* Prebooking Badge for Warner Bros */}
+            {isPrebookingProduct(product) && (
+              <span className="inline-flex items-center gap-1 px-1.5 sm:px-2 py-0.5 sm:py-1 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[8px] sm:text-[10px] font-gotham uppercase tracking-wider rounded-full shadow-sm">
+                <Ticket className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                Prebook
+              </span>
+            )}
           </div>
 
           {/* Wishlist Heart Icon */}
@@ -157,7 +165,7 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
 
           {/* Product Name */}
           <h3 className={cn(
-            "font-playfair text-xs sm:text-sm line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors",
+            "font-montserrat font-bold text-xs sm:text-sm line-clamp-1 mb-0.5 sm:mb-1 group-hover:text-bronze-gold transition-colors",
             darkMode ? "text-gray-100" : "text-gray-900"
           )}>
             {product.name}
@@ -165,7 +173,14 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
 
           {/* Price */}
           <div className="flex items-center gap-2 mb-2">
-            {(product as any).displayPrice ? (
+            {isPrebookingProduct(product) ? (
+              <p className={cn(
+                "font-gotham text-xs sm:text-sm font-semibold",
+                darkMode ? "text-purple-400" : "text-purple-600"
+              )}>
+                {getProductDisplayPrice(product)}
+              </p>
+            ) : (product as any).displayPrice ? (
               <p className={cn(
                 "font-gotham text-xs sm:text-sm font-semibold",
                 darkMode ? "text-[#C6A664]" : "text-classic-green"
@@ -206,19 +221,21 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
           {/* Inline Add to Cart Button */}
           <motion.button
             onClick={handleAddToCart}
-            disabled={!product.inStock || isAdding}
+            disabled={!isProductButtonEnabled(product) || isAdding}
             className={cn(
               "w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg text-xs font-gotham font-semibold uppercase tracking-wider transition-all",
-              product.inStock
-                ? "bg-classic-green text-white hover:bg-classic-green/90 active:scale-95"
-                : "bg-gray-200 text-gray-500 cursor-not-allowed",
-              isAdding && "bg-classic-green/70"
+              isPrebookingProduct(product)
+                ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white hover:from-purple-700 hover:to-indigo-700 active:scale-95"
+                : isProductButtonEnabled(product)
+                  ? "bg-classic-green text-white hover:bg-classic-green/90 active:scale-95"
+                  : "bg-gray-200 text-gray-500 cursor-not-allowed",
+              isAdding && (isPrebookingProduct(product) ? "opacity-70" : "bg-classic-green/70")
             )}
-            whileHover={product.inStock ? { scale: 1.02 } : {}}
-            whileTap={product.inStock ? { scale: 0.98 } : {}}
+            whileHover={isProductButtonEnabled(product) ? { scale: 1.02 } : {}}
+            whileTap={isProductButtonEnabled(product) ? { scale: 0.98 } : {}}
           >
-            <ShoppingCart className="w-3.5 h-3.5" />
-            {isAdding ? 'Added!' : product.inStock ? 'Add to Cart' : 'Out of Stock'}
+            {isPrebookingProduct(product) ? <Ticket className="w-3.5 h-3.5" /> : <ShoppingCart className="w-3.5 h-3.5" />}
+            {getProductButtonText(product, isAdding)}
           </motion.button>
         </div>
       </motion.div>

@@ -59,7 +59,7 @@ export default function WishlistPage() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-brand-800 mb-2">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-montserrat font-bold text-brand-800 mb-2">
                 My Wishlist
               </h1>
               <p className="text-brand-500 font-montserrat">
@@ -112,7 +112,7 @@ export default function WishlistPage() {
               <div className="w-24 h-24 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="w-12 h-12 text-brand-300" />
               </div>
-              <h2 className="text-2xl font-playfair text-brand-800 mb-3">Your wishlist is empty</h2>
+              <h2 className="text-2xl font-montserrat font-bold text-brand-800 mb-3">Your wishlist is empty</h2>
               <p className="text-brand-500 font-montserrat mb-6 max-w-md mx-auto">
                 Start adding items you love to your wishlist. They'll be saved here for you to revisit anytime.
               </p>
@@ -165,7 +165,7 @@ export default function WishlistPage() {
                   {/* Content */}
                   <div className="p-4">
                     <Link href={`/products/${product.id}`}>
-                      <h3 className="font-playfair text-lg text-brand-800 mb-1 hover:text-classic-green transition-colors truncate">
+                      <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-1 hover:text-classic-green transition-colors truncate">
                         {product.name}
                       </h3>
                     </Link>
@@ -221,7 +221,7 @@ export default function WishlistPage() {
                 className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-playfair text-xl text-gray-900">Share Wishlist</h3>
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">Share Wishlist</h3>
                   <button
                     onClick={() => setShowShareModal(false)}
                     className="text-gray-400 hover:text-gray-600"

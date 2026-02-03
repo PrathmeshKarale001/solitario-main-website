@@ -45,11 +45,11 @@ const config: Config = {
         'info': '#107571',             // Use teal for info
       },
       fontFamily: {
-        // Brand Typography
-        playfair: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'],
-        didot: ['var(--font-playfair)', 'Playfair Display', 'Georgia', 'serif'], // Alias for backwards compatibility
+        // Brand Typography - Unified to Montserrat
+        playfair: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'], // Mapped to Montserrat
+        didot: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'], // Mapped to Montserrat
         montserrat: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'],
-        gotham: ['var(--font-gotham)', 'Montserrat', 'system-ui', 'sans-serif'],
+        gotham: ['var(--font-montserrat)', 'Montserrat', 'system-ui', 'sans-serif'], // Mapped to Montserrat
       },
       fontSize: {
         // Brand Type Scale

@@ -129,7 +129,7 @@ export default function TrackingTimeline({ waybill, orderStatus }: TrackingTimel
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h2 className="font-playfair text-lg text-brand-800 mb-1">Shipment Tracking</h2>
+          <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-1">Shipment Tracking</h2>
           <p className="text-sm text-brand-500 font-montserrat">
             Tracking Number: <span className="font-mono font-medium">{tracking.waybill}</span>
           </p>

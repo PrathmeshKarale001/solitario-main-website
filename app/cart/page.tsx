@@ -3,10 +3,11 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
+import { isPrebookingProduct, getCartItemPrice } from '@/lib/prebooking';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { useWishlist } from '@/lib/wishlist-context';
@@ -124,7 +125,8 @@ export default function CartPage() {
           cartLines: items.map(item => ({
             merchandise: {
               price: {
-                amount: item.product.price.toString(),
+                // Use prebooking price for Warner Bros items
+                amount: getCartItemPrice(item.product).toString(),
                 currencyCode: item.product.currency || 'INR'
               }
             },
@@ -155,7 +157,7 @@ export default function CartPage() {
     return JSON.stringify(items.map(item => ({
       id: item.product.id,
       quantity: item.quantity,
-      price: item.product.price
+      price: getCartItemPrice(item.product) // Use prebooking price for WB items
     })));
   }, [items]);
 
@@ -341,6 +343,12 @@ export default function CartPage() {
                         >
                           {item.product.name}
                         </Link>
+                        {isPrebookingProduct(item.product) && (
+                          <span className="inline-flex items-center gap-1 mb-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[9px] font-gotham uppercase tracking-wider rounded-full">
+                            <Ticket className="w-2.5 h-2.5" />
+                            Prebook
+                          </span>
+                        )}
                         <p className="text-body-sm text-brand-500 font-montserrat capitalize">
                           {item.product.category}
                         </p>
@@ -416,14 +424,14 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      {/* Price */}
+                      {/* Price - Use prebooking price for WB items */}
                       <div className="text-left sm:text-right">
-                        <p className="font-gotham text-heading-md font-semibold text-classic-green">
-                          {formatPrice(item.product.price * item.quantity)}
+                        <p className={`font-gotham text-heading-md font-semibold ${isPrebookingProduct(item.product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                          {formatPrice(getCartItemPrice(item.product) * item.quantity)}
                         </p>
                         {item.quantity > 1 && (
                           <p className="text-body-sm text-brand-500 font-montserrat">
-                            {formatPrice(item.product.price)} each
+                            {formatPrice(getCartItemPrice(item.product))} each
                           </p>
                         )}
                       </div>

@@ -46,7 +46,7 @@ export default function OurStory() {
           <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             The Solitario Story
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-montserrat font-bold text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Crafting Tomorrow's <span className="text-classic-green">Heirlooms</span>
           </h2>
           <p className="text-lg md:text-xl text-brand-600 max-w-3xl mx-auto font-montserrat leading-relaxed">
@@ -84,17 +84,17 @@ export default function OurStory() {
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-brand-200">
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">100%</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">100%</div>
                 <div className="text-sm text-brand-600 font-montserrat font-medium">Lab-Grown Diamonds</div>
                 <div className="text-xs text-brand-500 font-montserrat mt-1">Visually identical. Chemically identical. Exceptionally brilliant.</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">∞</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">∞</div>
                 <div className="text-sm text-brand-600 font-montserrat font-medium">Lifetime Value</div>
                 <div className="text-xs text-brand-500 font-montserrat mt-1">Designed to be worn every day, for years to come.</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">✓</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">✓</div>
                 <div className="text-sm text-brand-600 font-montserrat font-medium">Crafted to Perfection</div>
                 <div className="text-xs text-brand-500 font-montserrat mt-1">Uncompromising quality, finish, and attention to detail.</div>
               </div>
@@ -154,7 +154,7 @@ export default function OurStory() {
                 <div className="w-12 h-12 bg-classic-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-classic-green/20 transition-colors duration-300">
                   <point.icon className="w-6 h-6 text-classic-green" />
                 </div>
-                <h4 className="text-lg font-playfair text-brand-800 mb-3 group-hover:text-classic-green transition-colors duration-300">
+                <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-3 group-hover:text-classic-green transition-colors duration-300">
                   {point.title}
                 </h4>
                 <p className="text-brand-600 text-sm font-montserrat leading-relaxed">

@@ -114,7 +114,7 @@ export default function OrdersPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
             >
-              <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">My Orders</h1>
+              <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">My Orders</h1>
               <p className="text-brand-500 font-montserrat">Track and manage your orders</p>
             </motion.div>
 
@@ -156,7 +156,7 @@ export default function OrdersPage() {
                 className="bg-white rounded-2xl shadow-brand border border-brand-100 p-12 text-center"
               >
                 <Package className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-                <h2 className="text-xl font-playfair text-brand-800 mb-2">No orders found</h2>
+                <h2 className="text-xl font-montserrat font-bold text-brand-800 mb-2">No orders found</h2>
                 <p className="text-brand-500 font-montserrat mb-6">
                   {searchQuery || filterStatus !== 'all' 
                     ? 'Try adjusting your search or filters'
@@ -217,7 +217,7 @@ export default function OrdersPage() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <h3 className="font-playfair text-brand-800 truncate">{item.name}</h3>
+                              <h3 className="font-montserrat font-bold text-brand-800 truncate">{item.name}</h3>
                               <p className="text-sm text-brand-500 font-montserrat">Qty: {item.quantity}</p>
                             </div>
                             <p className="font-gotham text-classic-green font-semibold">

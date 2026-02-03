@@ -3,11 +3,13 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { Product } from './data';
 import { toast } from '@/components/providers/Toaster';
+import { isPrebookingProduct, getCartItemPrice, PREBOOK_PRICE } from './prebooking';
 
 export interface CartItem {
   product: Product;
   quantity: number;
   selectedSize?: string;
+  isPrebook?: boolean; // Track if this is a prebooking item
 }
 
 // Stored cart item - only essential data, no prices
@@ -202,6 +204,8 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       (item) => item.product.id === product.id && item.selectedSize === size
     );
     
+    const isPrebook = isPrebookingProduct(product);
+    
     setItems((prevItems) => {
       const existingIndex = prevItems.findIndex(
         (item) => item.product.id === product.id && item.selectedSize === size
@@ -213,17 +217,17 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
         return newItems;
       }
 
-      return [...prevItems, { product, quantity, selectedSize: size }];
+      return [...prevItems, { product, quantity, selectedSize: size, isPrebook }];
     });
     
     // Show toast outside of state setter to avoid duplicate calls
     if (existingItemIndex > -1) {
-      toast.success('Cart updated!', {
+      toast.success(isPrebook ? 'Prebooking updated!' : 'Cart updated!', {
         description: `${product.name} quantity increased`,
       });
     } else {
-      toast.success('Added to cart!', {
-        description: product.name,
+      toast.success(isPrebook ? 'Added to prebooking!' : 'Added to cart!', {
+        description: isPrebook ? `${product.name} - ₹${PREBOOK_PRICE.toLocaleString('en-IN')}` : product.name,
       });
     }
     
@@ -270,7 +274,11 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const itemCount = items.reduce((total, item) => total + item.quantity, 0);
-  const total = items.reduce((sum, item) => sum + item.product.price * item.quantity, 0);
+  // Calculate total considering prebooking prices for Warner Bros products
+  const total = items.reduce((sum, item) => {
+    const itemPrice = getCartItemPrice(item.product);
+    return sum + itemPrice * item.quantity;
+  }, 0);
 
   // Refresh prices when cart opens
   const openCart = useCallback(() => {

@@ -35,7 +35,7 @@ export default function Error({
             />
           </svg>
         </div>
-        <h1 className="text-2xl font-playfair font-bold text-gray-900 mb-4">
+        <h1 className="text-2xl font-montserrat font-bold font-bold text-gray-900 mb-4">
           Something went wrong
         </h1>
         <p className="text-gray-600 mb-8">

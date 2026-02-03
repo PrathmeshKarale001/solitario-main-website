@@ -166,7 +166,7 @@ export default function PromotionsAdminPage() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="font-playfair text-4xl text-gray-900 mb-2">Promotions & Loyalty</h1>
+          <h1 className="font-montserrat font-bold text-4xl text-gray-900 mb-2">Promotions & Loyalty</h1>
           <p className="text-gray-600 font-montserrat">Manage coupons, view orders, and configure promotions</p>
         </div>
 
@@ -264,7 +264,7 @@ export default function PromotionsAdminPage() {
                 {activeTab === 'coupons' && (
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="font-playfair text-xl text-gray-900">Loyalty Coupons</h2>
+                      <h2 className="font-montserrat font-bold text-xl text-gray-900">Loyalty Coupons</h2>
                       <div className="flex gap-2">
                         <button
                           onClick={() => setIsAddingCoupon(true)}
@@ -395,7 +395,7 @@ export default function PromotionsAdminPage() {
                 {activeTab === 'orders' && (
                   <div>
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="font-playfair text-xl text-gray-900">Orders with Promotions</h2>
+                      <h2 className="font-montserrat font-bold text-xl text-gray-900">Orders with Promotions</h2>
                       <button
                         onClick={loadData}
                         className="px-4 py-2 text-sm bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg flex items-center gap-2"
@@ -469,7 +469,7 @@ export default function PromotionsAdminPage() {
                 {/* Configuration Tab */}
                 {activeTab === 'config' && (
                   <div>
-                    <h2 className="font-playfair text-xl text-gray-900 mb-4">Promotion Configuration</h2>
+                    <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-4">Promotion Configuration</h2>
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                       <p className="text-sm text-blue-800">
                         Configuration is managed via environment variables in <code className="bg-white px-2 py-1 rounded">.env.local</code>

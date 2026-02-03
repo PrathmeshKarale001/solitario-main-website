@@ -57,7 +57,7 @@ export default function LabGrownBenefitsV2() {
               {/* Badge */}
               <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#FAF5EF] border border-bronze-gold/30 rounded-full flex items-center justify-center z-20 shadow-xl">
                 <div className="text-center text-brand-800">
-                  <span className="block text-2xl font-bold font-playfair">100%</span>
+                  <span className="block text-2xl font-bold font-montserrat font-bold">100%</span>
                   <span className="text-[10px] uppercase font-gotham tracking-wider">Conflict Free</span>
                 </div>
               </div>
@@ -74,7 +74,7 @@ export default function LabGrownBenefitsV2() {
               <span className="text-classic-green font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
                 Why Lab Grown?
               </span>
-              <h2 className="text-4xl md:text-5xl font-playfair text-brand-800 mb-5">
+              <h2 className="text-4xl md:text-5xl font-montserrat font-bold text-brand-800 mb-5">
                 The Future of <span className="italic text-classic-green">Luxury</span>
               </h2>
               <p className="text-brand-600 font-montserrat leading-relaxed">
@@ -96,7 +96,7 @@ export default function LabGrownBenefitsV2() {
                     <item.icon className="w-5 h-5 text-classic-green" />
                   </div>
                   <div>
-                    <h4 className="text-brand-800 font-playfair text-lg mb-2">{item.title}</h4>
+                    <h4 className="text-brand-800 font-montserrat font-bold text-lg mb-2">{item.title}</h4>
                     <p className="text-brand-600 text-sm leading-relaxed">{item.description}</p>
                   </div>
                 </motion.div>
