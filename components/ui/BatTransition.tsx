@@ -83,12 +83,14 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
 
   useEffect(() => {
     if (isActive) {
+      // Shorter timeout on mobile for better UX
+      const timeout = isMobile ? 1500 : 2000;
       const timer = setTimeout(() => {
         onComplete();
-      }, 2000);
+      }, timeout);
       return () => clearTimeout(timer);
     }
-  }, [isActive, onComplete]);
+  }, [isActive, onComplete, isMobile]);
 
   if (!isActive) return null;
 

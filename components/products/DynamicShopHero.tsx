@@ -30,7 +30,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // Default fallback media - using your original shop hero content
+  // Default fallback media - using optimized WebP images
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
@@ -44,7 +44,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/shop1desk.jpeg',
+      src: '/images/Shop/shop1desk.webp',
       pos: 'object-[50%_0%]',
       title: '',
       subtitle: '',
@@ -74,7 +74,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     }
   ];
 
-  // Mobile fallback media
+  // Mobile fallback media - using optimized WebP images
   const defaultFallbackMediaMobile = [
     {
       type: 'image' as const,
@@ -88,7 +88,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/shop1mobile.jpeg',
+      src: '/images/Shop/shop1mobile.webp',
       pos: 'object-[50%_20%]',
       title: '',
       subtitle: '',
