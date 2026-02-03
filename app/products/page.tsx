@@ -80,8 +80,11 @@ function ProductsPageContent() {
           console.error('⏱️ Products fetch timeout after 15 seconds');
         }, 15000); // 15 second timeout
         
-        const response = await fetch('/api/products', {
-          signal: controller.signal
+        // Add cache busting to ensure fresh data on page load
+        const cacheBuster = Date.now();
+        const response = await fetch(`/api/products?_=${cacheBuster}`, {
+          signal: controller.signal,
+          cache: 'no-store' // Force fresh data from server
         });
         
         clearTimeout(timeoutId);
@@ -522,7 +525,7 @@ function ProductsPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
-                <h2 className="font-playfair text-xl text-gray-900">Filters</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Filters</h2>
                 <button
                   onClick={() => setShowMobileFilters(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"
@@ -582,7 +585,7 @@ function ProductsPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="font-playfair text-xl text-gray-900">Sort By</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Sort By</h2>
                 <button
                   onClick={() => setShowMobileSort(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"

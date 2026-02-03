@@ -4,12 +4,12 @@ import { getProducts, getCollectionProducts } from '@/lib/shopify-data';
 // Mark as dynamic route to prevent static optimization attempts (which cause slowness)
 export const dynamic = 'force-dynamic';
 
-// Cache products for 5 minutes to improve performance
-export const revalidate = 300; // 5 minutes
+// Cache products for 1 minute to improve performance while keeping data fresh
+export const revalidate = 60; // 1 minute
 
 // In-memory cache for development (bypasses Next.js cache limitations in dev mode)
 let cachedProducts: { products: any[]; timestamp: number } | null = null;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 60 * 1000; // 1 minute
 
 export async function GET(req: NextRequest) {
   try {
@@ -89,12 +89,12 @@ export async function GET(req: NextRequest) {
       products = products.slice(0, limit);
     }
 
-    // Add cache headers for client-side caching
+    // Add cache headers for client-side caching (1 minute cache, revalidate in background)
     return NextResponse.json(
       { products },
       {
         headers: {
-          'Cache-Control': 'public, s-maxage=300, stale-while-revalidate=600',
+          'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120, must-revalidate',
         },
       }
     );

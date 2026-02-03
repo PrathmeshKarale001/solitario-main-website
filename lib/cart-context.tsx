@@ -168,31 +168,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
 
   // Function to manually refresh prices (e.g., when cart opens)
   const refreshPrices = useCallback(async () => {
-    if (items.length === 0) return;
-    
-    // Prevent duplicate calls
-    if (isRefreshing) return;
-    
-    setIsRefreshing(true);
-    try {
-      const handles = items.map(item => item.product.id);
-      const freshProducts = await fetchFreshProducts(handles);
-
-      setItems(prevItems => 
-        prevItems.map(item => {
-          const freshProduct = freshProducts.find(p => p.id === item.product.id);
-          if (freshProduct) {
-            return { ...item, product: freshProduct };
-          }
-          return item;
+    // Get current items synchronously to avoid race conditions
+    setItems(prevItems => {
+      if (prevItems.length === 0 || isRefreshing) return prevItems;
+      
+      setIsRefreshing(true);
+      const handles = prevItems.map(item => item.product.id);
+      
+      // Fetch and update asynchronously
+      fetchFreshProducts(handles)
+        .then(freshProducts => {
+          setItems(currentItems => 
+            currentItems.map(item => {
+              const freshProduct = freshProducts.find(p => p.id === item.product.id);
+              return freshProduct ? { ...item, product: freshProduct } : item;
+            })
+          );
         })
-      );
-    } catch (error) {
-      console.error('Error refreshing prices:', error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [items, fetchFreshProducts, isRefreshing]);
+        .catch(error => {
+          console.error('Error refreshing prices:', error);
+        })
+        .finally(() => {
+          setIsRefreshing(false);
+        });
+      
+      return prevItems;
+    });
+  }, [fetchFreshProducts, isRefreshing]);
 
   const addToCart = (product: Product, quantity = 1, size?: string) => {
     // Check if item already exists before updating state

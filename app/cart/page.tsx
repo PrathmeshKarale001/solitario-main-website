@@ -29,9 +29,11 @@ export default function CartPage() {
   const [showApplied, setShowApplied] = useState(false);
 
   // Refresh prices on mount to ensure we have the latest from Shopify
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     refreshPrices();
-  }, [refreshPrices]);
+    // Only run once on mount, not when refreshPrices changes to avoid infinite loop
+  }, []);
 
   // Load coupon from localStorage on mount
   useEffect(() => {
