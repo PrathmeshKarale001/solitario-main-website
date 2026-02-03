@@ -34,7 +34,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     {
       type: 'image' as const,
       src: '/images/home-hero/Home_Herofeb 1171277230.jpg',
-      mobileSrc: '/images/home-hero/Home_Herofeb 1171277234.jpg',
+      mobileSrc: '/images/home-hero/Mobile_Banner_1.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
@@ -42,7 +42,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     {
       type: 'image' as const,
       src: '/images/home-hero/Home_Herofeb 1171277231.jpg',
-      mobileSrc: '/images/home-hero/Home_Herofeb 1171277235.jpg',
+      mobileSrc: '/images/home-hero/Mobile_Banner_2.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
@@ -50,7 +50,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     {
       type: 'image' as const,
       src: '/images/home-hero/Home_Herofeb 1171277232.jpg',
-      mobileSrc: '/images/home-hero/Home_Herofeb 1171277236.jpg',
+      mobileSrc: '/images/home-hero/Mobile_Banner_3.jpg',
+      pos: 'object-cover',
+      ctaText: 'Shop Now',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/Home_Herofeb 1171277233.jpg',
+      mobileSrc: '/images/home-hero/Mobile_Banner_4.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
@@ -64,36 +72,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     }
   ];
 
-  // Mobile fallback media - using mobile-specific images
+  // Mobile fallback media - Mobile_Banner images for mobile viewport
   const defaultFallbackMediaMobile = [
-    {
-      type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277234.jpg',
-      pos: 'object-cover',
-      ctaText: 'Shop Now',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277235.jpg',
-      pos: 'object-cover',
-      ctaText: 'Shop Now',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277236.jpg',
-      pos: 'object-cover',
-      ctaText: 'Shop Now',
-      ctaLink: '/products'
-    },
-    {
-      type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277237.jpg',
-      pos: 'object-cover',
-      ctaText: 'Shop Now',
-      ctaLink: '/products'
-    }
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_1.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_2.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_3.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_4.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_5.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
   ];
 
   useEffect(() => {

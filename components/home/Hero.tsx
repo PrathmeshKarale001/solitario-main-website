@@ -6,7 +6,7 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// New hero images - Desktop: 1600x700px format (compact banner like Palmonas/LimeLight)
+// New hero images - Desktop: 1600x700px (230-233), Mobile: 1080x1350 4:5 (234-237)
 const HERO_MEDIA_DESKTOP = [
   {
     type: 'image',
@@ -30,6 +30,13 @@ const HERO_MEDIA_DESKTOP = [
     ctaLink: '/products',
   },
   {
+    type: 'image',
+    src: '/images/home-hero/Home_Herofeb 1171277233.jpg',
+    pos: 'object-cover',
+    ctaText: 'Shop Now',
+    ctaLink: '/products',
+  },
+  {
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
     ctaText: 'Explore Collection',
@@ -37,36 +44,15 @@ const HERO_MEDIA_DESKTOP = [
   },
 ];
 
-// Mobile hero images - 1080x1350px (4:5 ratio)
+// Mobile hero images - Mobile_Banner for mobile viewport
 const HERO_MEDIA_MOBILE = [
-  {
-    type: 'image',
-    src: '/images/home-hero/Home_Herofeb 1171277234.jpg',
-    pos: 'object-cover',
-    ctaText: 'Shop Now',
-    ctaLink: '/products',
-  },
-  {
-    type: 'image',
-    src: '/images/home-hero/Home_Herofeb 1171277235.jpg',
-    pos: 'object-cover',
-    ctaText: 'Shop Now',
-    ctaLink: '/products',
-  },
-  {
-    type: 'image',
-    src: '/images/home-hero/Home_Herofeb 1171277236.jpg',
-    pos: 'object-cover',
-    ctaText: 'Shop Now',
-    ctaLink: '/products',
-  },
-  {
-    type: 'image',
-    src: '/images/home-hero/Home_Herofeb 1171277237.jpg',
-    pos: 'object-cover',
-    ctaText: 'Shop Now',
-    ctaLink: '/products',
-  },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_1.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_2.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_3.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_4.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_5.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
 ];
 
 export default function Hero() {
