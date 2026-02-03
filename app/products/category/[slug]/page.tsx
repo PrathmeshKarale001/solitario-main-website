@@ -240,7 +240,7 @@ function CategoryPageContent() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-playfair text-white mb-4"
+            className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
           >
             {categoryConfig.title}
           </motion.h1>
@@ -387,7 +387,7 @@ function CategoryPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
-                <h2 className="font-playfair text-xl text-gray-900">Filters</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Filters</h2>
                 <button onClick={() => setShowMobileFilters(false)} className="p-2 hover:bg-gray-100 rounded-full">
                   <X className="w-5 h-5" />
                 </button>
@@ -441,7 +441,7 @@ function CategoryPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="font-playfair text-xl text-gray-900">Sort By</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Sort By</h2>
                 <button onClick={() => setShowMobileSort(false)} className="p-2 hover:bg-gray-100 rounded-full">
                   <X className="w-5 h-5" />
                 </button>

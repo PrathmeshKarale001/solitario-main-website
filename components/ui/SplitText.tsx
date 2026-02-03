@@ -45,7 +45,7 @@ export default function SplitText({ children, className = '', delay = 0, duratio
             <motion.span
               key={charIndex}
               className={`inline-block ${className}`}
-              style={className.includes('font-playfair') ? { fontFamily: 'var(--font-playfair), serif' } : undefined}
+              style={className.includes('font-montserrat font-bold') ? { fontFamily: 'var(--font-montserrat font-bold), serif' } : undefined}
               initial={{ opacity: 0, y: 50, rotateX: -90 }}
               animate={isVisible ? { opacity: 1, y: 0, rotateX: 0 } : {}}
               transition={{

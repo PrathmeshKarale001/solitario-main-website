@@ -155,7 +155,7 @@ const QuickViewPreview = forwardRef<HTMLDivElement, QuickViewPreviewProps>(({
               <span className="text-[10px] uppercase tracking-[0.25em] font-gotham text-gray-400">
                 {product.category.toUpperCase()}
               </span>
-              <h3 className="font-playfair text-xl text-gray-900 mt-1 leading-tight" style={{ letterSpacing: '-0.01em' }}>
+              <h3 className="font-montserrat font-bold text-xl text-gray-900 mt-1 leading-tight" style={{ letterSpacing: '-0.01em' }}>
                 {product.name}
               </h3>
               <p className="text-xs text-gray-600 leading-relaxed font-montserrat mt-2 line-clamp-2">

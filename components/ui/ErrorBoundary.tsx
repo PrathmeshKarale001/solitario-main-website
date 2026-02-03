@@ -40,7 +40,7 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="min-h-[400px] flex items-center justify-center p-8">
           <div className="text-center max-w-md">
             <AlertTriangle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-playfair font-semibold text-brand-900 mb-2">
+            <h2 className="text-2xl font-montserrat font-bold font-semibold text-brand-900 mb-2">
               Something went wrong
             </h2>
             <p className="text-brand-600 mb-6">

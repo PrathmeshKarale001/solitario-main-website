@@ -76,7 +76,7 @@ export default function LoginPopup() {
                   </span>
                   <Sparkles className="w-5 h-5 text-bronze-gold" />
                 </div>
-                <h2 className="text-2xl md:text-3xl font-playfair text-white mb-2">
+                <h2 className="text-2xl md:text-3xl font-montserrat font-bold text-white mb-2">
                   Login to Get Exclusive Offers
                 </h2>
                 <p className="text-white/80 font-montserrat text-sm">

@@ -276,6 +276,18 @@ async function createShopifyOrder(
     logger.error('Failed to search for customer:', error);
   }
 
+  // Build order note with prebooking info if applicable
+  let orderNote = `Razorpay Payment ID: ${paymentId}\nInternal Order ID: ${internalOrderId}`;
+  if (orderData.prebookingNotes) {
+    orderNote += `\n\n${orderData.prebookingNotes}`;
+  }
+
+  // Build tags including prebooking tag if applicable
+  const tags = ['razorpay', 'website', 'solitario'];
+  if (orderData.hasPrebookingItems) {
+    tags.push('prebooking', 'warnerbros');
+  }
+
   const shopifyOrder = {
     order: {
       line_items: lineItems,
@@ -297,8 +309,8 @@ async function createShopifyOrder(
         phone: orderData.customer.phone,
       },
       financial_status: 'paid',
-      note: `Razorpay Payment ID: ${paymentId}\nInternal Order ID: ${internalOrderId}`,
-      tags: 'razorpay,website,solitario',
+      note: orderNote,
+      tags: tags.join(','),
       transactions: [
         {
           kind: 'sale',

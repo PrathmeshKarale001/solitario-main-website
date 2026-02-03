@@ -42,7 +42,7 @@ export default function Promise() {
           <h3 className="text-[10px] sm:text-xs uppercase tracking-[0.15em] text-gray-500 font-gotham mb-1 sm:mb-2">
             THE PROMISE
           </h3>
-          <h2 className="text-lg sm:text-xl md:text-3xl text-classic-green font-playfair px-2">
+          <h2 className="text-lg sm:text-xl md:text-3xl text-classic-green font-montserrat font-bold px-2">
             The Fine Print of Trust
           </h2>
         </motion.div>

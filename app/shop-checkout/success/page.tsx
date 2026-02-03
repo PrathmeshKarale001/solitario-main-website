@@ -31,7 +31,7 @@ function SuccessContent() {
           </motion.div>
 
           {/* Title */}
-          <h1 className="text-3xl md:text-4xl font-playfair text-classic-green mb-4">
+          <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-classic-green mb-4">
             Order Received!
           </h1>
           

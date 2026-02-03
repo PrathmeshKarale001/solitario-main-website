@@ -3,27 +3,38 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
+import { isPrebookingProduct, getCartItemPrice } from '@/lib/prebooking';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/product/ProductRecommendations';
 import { useWishlist } from '@/lib/wishlist-context';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
+import { useRouter } from 'next/navigation';
+import { trackBeginCheckout } from '@/lib/gtm-conversions';
 
 export default function CartPage() {
-  const { items, updateQuantity, removeFromCart, total, itemCount, addToCart } = useCart();
+  const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
   const { addToWishlist } = useWishlist();
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
+  const router = useRouter();
   const [appliedCoupon, setAppliedCouponState] = useState<string>('');
   const [couponInput, setCouponInput] = useState('');
   const [isValidating, setIsValidating] = useState(false);
   const [couponError, setCouponError] = useState<string | null>(null);
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [showApplied, setShowApplied] = useState(false);
+
+  // Refresh prices on mount to ensure we have the latest from Shopify
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    refreshPrices();
+    // Only run once on mount, not when refreshPrices changes to avoid infinite loop
+  }, []);
 
   // Load coupon from localStorage on mount
   useEffect(() => {
@@ -102,6 +113,9 @@ export default function CartPage() {
       return;
     }
 
+    // Prevent duplicate calls
+    if (isPricingLoading) return;
+
     setIsPricingLoading(true);
     try {
       const response = await fetch('/api/pricing/quote', {
@@ -111,7 +125,8 @@ export default function CartPage() {
           cartLines: items.map(item => ({
             merchandise: {
               price: {
-                amount: item.product.price.toString(),
+                // Use prebooking price for Warner Bros items
+                amount: getCartItemPrice(item.product).toString(),
                 currencyCode: item.product.currency || 'INR'
               }
             },
@@ -137,9 +152,23 @@ export default function CartPage() {
     }
   };
 
+  // Create stable items signature to prevent infinite loops
+  const itemsSignature = useMemo(() => {
+    return JSON.stringify(items.map(item => ({
+      id: item.product.id,
+      quantity: item.quantity,
+      price: getCartItemPrice(item.product) // Use prebooking price for WB items
+    })));
+  }, [items]);
+
   useEffect(() => {
-    fetchPromotionPricing();
-  }, [items, appliedCoupon, userId]);
+    // Debounce to prevent rapid calls
+    const timeoutId = setTimeout(() => {
+      fetchPromotionPricing();
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [itemsSignature, appliedCoupon, userId]);
 
 
   const validateCoupon = async (code: string) => {
@@ -232,7 +261,7 @@ export default function CartPage() {
             <div className="w-32 h-32 bg-brand-100 rounded-full flex items-center justify-center mb-8">
               <Heart className="w-16 h-16 text-brand-300" />
             </div>
-            <h1 className="font-playfair text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
+            <h1 className="font-montserrat font-bold text-display-sm text-brand-800 mb-4">Your Cart is Empty</h1>
             <p className="text-brand-600 font-montserrat text-body-md mb-8 max-w-md">
               Discover our exquisite collection and find the perfect piece for you or your loved ones.
             </p>
@@ -261,10 +290,23 @@ export default function CartPage() {
               <ChevronLeft className="w-4 h-4" />
               Continue Browsing
             </Link>
-            <h1 className="font-playfair text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
-            <p className="text-brand-600 font-montserrat text-body-md">
-              {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              <div>
+                <h1 className="font-montserrat font-bold text-display-md md:text-display-lg text-brand-800 mb-2">Shopping Cart</h1>
+                <p className="text-brand-600 font-montserrat text-body-md">
+                  {items.length} {items.length === 1 ? 'item' : 'items'} in your cart
+                </p>
+              </div>
+              <button
+                onClick={() => refreshPrices()}
+                disabled={isRefreshing}
+                className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
+                title="Refresh prices from Shopify"
+              >
+                <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                {isRefreshing ? 'Refreshing...' : 'Refresh Prices'}
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-12">
@@ -297,10 +339,16 @@ export default function CartPage() {
                       <div className="flex-1">
                         <Link
                           href={`/products/${item.product.id}`}
-                          className="font-playfair text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
+                          className="font-montserrat font-bold text-heading-md text-brand-800 hover:text-bronze-gold transition-colors mb-1 block"
                         >
                           {item.product.name}
                         </Link>
+                        {isPrebookingProduct(item.product) && (
+                          <span className="inline-flex items-center gap-1 mb-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[9px] font-gotham uppercase tracking-wider rounded-full">
+                            <Ticket className="w-2.5 h-2.5" />
+                            Prebook
+                          </span>
+                        )}
                         <p className="text-body-sm text-brand-500 font-montserrat capitalize">
                           {item.product.category}
                         </p>
@@ -376,14 +424,14 @@ export default function CartPage() {
                         </div>
                       </div>
 
-                      {/* Price */}
+                      {/* Price - Use prebooking price for WB items */}
                       <div className="text-left sm:text-right">
-                        <p className="font-gotham text-heading-md font-semibold text-classic-green">
-                          {formatPrice(item.product.price * item.quantity)}
+                        <p className={`font-gotham text-heading-md font-semibold ${isPrebookingProduct(item.product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                          {formatPrice(getCartItemPrice(item.product) * item.quantity)}
                         </p>
                         {item.quantity > 1 && (
                           <p className="text-body-sm text-brand-500 font-montserrat">
-                            {formatPrice(item.product.price)} each
+                            {formatPrice(getCartItemPrice(item.product))} each
                           </p>
                         )}
                       </div>
@@ -413,7 +461,7 @@ export default function CartPage() {
                       <div className="flex-1 min-w-0 flex flex-col justify-center">
                         <div className="flex items-center gap-2 mb-2">
                           <Gift size={18} className="text-amber-500 shrink-0" />
-                          <h3 className="font-playfair text-heading-md text-brand-800">{giftProduct.name}</h3>
+                          <h3 className="font-montserrat font-bold text-heading-md text-brand-800">{giftProduct.name}</h3>
                         </div>
                         <div className="flex items-center gap-3">
                           <span className="text-body-sm font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Free Gift</span>
@@ -427,7 +475,7 @@ export default function CartPage() {
               {/* Saved for Later Section */}
               {savedForLater.length > 0 && (
                 <div className="mt-8 pt-8 border-t border-brand-200">
-                  <h2 className="font-playfair text-heading-lg text-brand-800 mb-4">
+                  <h2 className="font-montserrat font-bold text-heading-lg text-brand-800 mb-4">
                     Saved for Later ({savedForLater.length})
                   </h2>
                   <div className="space-y-4">
@@ -474,7 +522,7 @@ export default function CartPage() {
             {/* Order Summary */}
             <div className="lg:col-span-1">
               <div className="sticky top-24 bg-white rounded-brand-xl p-6 border border-brand-200 shadow-luxury">
-                <h2 className="font-playfair text-heading-xl text-brand-800 mb-6">Order Summary</h2>
+                <h2 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 {/* Active Offers */}
                 <div className="space-y-2 mb-6">
@@ -597,7 +645,7 @@ export default function CartPage() {
                 </div>
 
                 <div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
-                  <span className="font-playfair text-heading-md text-brand-800">Total</span>
+                  <span className="font-montserrat font-bold text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
                     {formatPrice(promotionPricing ? promotionPricing.total : grandTotal)}
                   </span>
@@ -605,12 +653,19 @@ export default function CartPage() {
                 <p className="text-body-sm text-brand-500 font-montserrat mb-6">(Prices include GST)</p>
 
                 {/* Checkout Button */}
-                <Link
-                  href="/checkout"
-                  className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3"
+                <button
+                  onClick={() => {
+                    // Track Begin Checkout conversion FIRST
+                    trackBeginCheckout();
+                    // Navigate after a short delay to ensure gtag event fires
+                    setTimeout(() => {
+                      router.push('/checkout');
+                    }, 150);
+                  }}
+                  className="block w-full text-center bg-bronze-gold hover:bg-soft-bronze text-white px-6 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 mb-3 cursor-pointer"
                 >
                   Proceed to Checkout
-                </Link>
+                </button>
 
                 {/* Trust Signals */}
                 <div className="flex items-center justify-center gap-3 mb-4 pb-4 border-b border-brand-200">

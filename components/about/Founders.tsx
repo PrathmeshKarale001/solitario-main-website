@@ -9,7 +9,7 @@ const FOUNDERS = [
     id: 'ricky',
     name: 'Ricky Vasandani',
     title: 'Chief Executive Officer',
-    image: '/about/IMG_0061.JPG',
+    image: '/about/IMG_0061.webp',
     signature: '/images/Signatures/ricky-vasandani-png.png',
     bio: 'Born in Africa, Ricky is a visionary entrepreneur who has lived across four continents of the world. Hailing from a family that has successfully scaled a legacy diamond jewellery business over decades, Ricky brings his acumen in the diamond jewellery business to the fore with Solitario Diamonds. His business ventures in the Sports and F&B domains are a major success story in Spain. Ricky drives the day-to-day business at Solitario Diamonds with unmatched expertise in Marketing & Operations. ',
   },
@@ -52,7 +52,7 @@ const CORE_TEAM = [
 
 export default function Founders() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-gray-50 to-white">
+    <section className="pt-12 pb-24 px-4 bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
         {/* Section Header */}
         <motion.div
@@ -65,7 +65,7 @@ export default function Founders() {
           <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             Our Founders
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
             Shine with <span className="text-bronze-gold">Solitario</span>
           </h2>
           <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto font-montserrat">
@@ -98,7 +98,7 @@ export default function Founders() {
 
                 {/* Content */}
                 <div className="p-6 md:p-8 flex flex-col justify-center">
-                  <h3 className="text-2xl md:text-3xl font-playfair text-gray-900 mb-2">
+                  <h3 className="text-2xl md:text-3xl font-montserrat font-bold text-gray-900 mb-2">
                     {founder.name}
                   </h3>
                   <p className="text-bronze-gold font-gotham uppercase tracking-wider text-sm mb-4">
@@ -136,7 +136,7 @@ export default function Founders() {
           <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             Core Team
           </span>
-          <h3 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green" style={{ letterSpacing: '-0.02em' }}>
+          <h3 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green" style={{ letterSpacing: '-0.02em' }}>
             The Minds Behind the <span className="text-bronze-gold">Brilliance</span>
           </h3>
         </motion.div>
@@ -164,7 +164,7 @@ export default function Founders() {
               </div>
 
               {/* Content */}
-              <h4 className="text-xl font-playfair text-gray-900 mb-1">
+              <h4 className="text-xl font-montserrat font-bold text-gray-900 mb-1">
                 {member.name}
               </h4>
               <p className="text-bronze-gold font-gotham uppercase tracking-wider text-xs mb-3">

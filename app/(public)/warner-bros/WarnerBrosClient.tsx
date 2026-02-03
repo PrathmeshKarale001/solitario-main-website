@@ -207,30 +207,52 @@ function WarnerBrosPageContent() {
     productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
 
+  // Rotating hero slides (WB_PC desktop, WB_Mob mobile) - 4s interval
+  const heroSlides = isMobile ? WARNER_BROS_CONFIG.hero.mobileSlides : WARNER_BROS_CONFIG.hero.desktopSlides;
+  const [heroIndex, setHeroIndex] = useState(0);
+  useEffect(() => {
+    if (heroSlides.length <= 1) return;
+    setHeroIndex(0); // reset when switching desktop/mobile
+    const interval = setInterval(() => {
+      setHeroIndex((prev) => (prev + 1) % heroSlides.length);
+    }, WARNER_BROS_CONFIG.hero.rotationIntervalMs);
+    return () => clearInterval(interval);
+  }, [isMobile]); // re-run when viewport (desktop/mobile) changes
+
   return (
     <div className="bg-[#0a0a0a] min-h-screen overflow-x-hidden">
       {/* Hero Banner Section - Mobile Optimized */}
       <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">
         <div className="absolute inset-0">
-          <Image
-            src={isMobile ? WARNER_BROS_CONFIG.hero.mobile : WARNER_BROS_CONFIG.hero.desktop}
-            alt={WARNER_BROS_CONFIG.hero.alt}
-            fill
-            className="object-cover scale-105"
-            priority
-            quality={90}
-            sizes="100vw"
-            onError={(e) => {
-              // Fallback to a gradient if image fails to load
-              const target = e.target as HTMLImageElement;
-              target.style.display = 'none';
-            }}
-          />
+          <AnimatePresence mode="wait" initial={false}>
+            <motion.div
+              key={heroIndex}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6 }}
+              className="absolute inset-0"
+            >
+              <Image
+                src={heroSlides[heroIndex]}
+                alt={`${WARNER_BROS_CONFIG.hero.alt} ${heroIndex + 1}`}
+                fill
+                className="object-cover object-center scale-90 md:scale-100"
+                priority={heroIndex === 0}
+                quality={90}
+                sizes="100vw"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  target.style.display = 'none';
+                }}
+              />
+            </motion.div>
+          </AnimatePresence>
           {/* Cinematic gradient overlays - Balanced for visibility */}
           <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/0 to-transparent" />
           <div className="absolute inset-0 bg-gradient-to-r from-black/1 via-transparent to-black/5" />
-          {/* Bottom gradient for text visibility */}
-          <div className="absolute bottom-0 left-0 right-0 h-1/3 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+          {/* Bottom gradient for text visibility - reduced */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/7 bg-gradient-to-t from-black/20 via-black/20 to-transparent" />
           {/* Vignette effect */}
           <div className="absolute inset-0 shadow-[inset_0_0_150px_rgba(0,0,0,0.6)]" />
         </div>
@@ -250,7 +272,7 @@ function WarnerBrosPageContent() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
-              className="text-2xl sm:text-3xl md:text-5xl font-playfair text-white mb-2 sm:mb-3 font-bold leading-tight" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
+              className="text-2xl sm:text-3xl md:text-5xl font-montserrat font-bold text-white mb-2 sm:mb-3 font-bold leading-tight" style={{ textShadow: '0 2px 8px rgba(0,0,0,0.7)' }}
             >
               Collectibles
             </motion.h1>
@@ -282,11 +304,11 @@ function WarnerBrosPageContent() {
         {/* Background Texture */}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-gray-800/20 via-[#0a0a0a] to-[#0a0a0a] pointer-events-none" />
         
-        {/* Warner BG - Left (30% opacity) - Constrained for mobile */}
+        {/* DC BG - Left (30% opacity) - Constrained for mobile */}
         <div className="absolute top-1/2 left-0 -translate-y-1/2 translate-x-0 md:-translate-x-1/4 w-[30%] md:w-[35%] max-w-[120px] md:max-w-none opacity-30 pointer-events-none select-none">
             <Image 
-              src="/images/warnerbroassets/warner-bg.webp" 
-              alt="Warner Bros Logo" 
+              src="/images/warnerbroassets/dc-logo.webp" 
+              alt="DC Logo" 
               width={600} 
               height={600} 
               className="object-contain"
@@ -575,7 +597,7 @@ function WarnerBrosPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-[#111] border-b border-[#1f1f1f] p-4 flex items-center justify-between z-10">
-                <h2 className="font-playfair text-xl text-white">Filters</h2>
+                <h2 className="font-montserrat font-bold text-xl text-white">Filters</h2>
                 <button
                   onClick={() => setShowMobileFilters(false)}
                   className="p-2 hover:bg-[#1a1a1a] rounded-full text-gray-400"
@@ -635,7 +657,7 @@ function WarnerBrosPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-[#1f1f1f] flex items-center justify-between">
-                <h2 className="font-playfair text-xl text-white">Sort By</h2>
+                <h2 className="font-montserrat font-bold text-xl text-white">Sort By</h2>
                 <button
                   onClick={() => setShowMobileSort(false)}
                   className="p-2 hover:bg-[#1a1a1a] rounded-full text-gray-400"
@@ -820,7 +842,7 @@ function WarnerBrosPageContent() {
         }
 
         /* Hero Title Glow */
-        .font-playfair.text-white {
+        .font-montserrat font-bold.text-white {
           text-shadow: 0 0 20px rgba(198, 166, 100, 0.3), 0 2px 4px rgba(0,0,0,0.5);
         }
         

@@ -3,11 +3,12 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2, ChevronRight } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2, ChevronRight, Ticket } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
-import { useState, useEffect } from 'react';
+import { isPrebookingProduct, getCartItemPrice, PREBOOK_PRICE } from '@/lib/prebooking';
+import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { CartErrorBoundary } from '@/components/ui/ErrorBoundary';
 
@@ -100,6 +101,9 @@ function CartSidebarContent() {
       return;
     }
 
+    // Prevent duplicate calls
+    if (isPricingLoading) return;
+
     setIsPricingLoading(true);
     try {
       const response = await fetch('/api/pricing/quote', {
@@ -109,7 +113,8 @@ function CartSidebarContent() {
           cartLines: items.map(item => ({
             merchandise: {
               price: {
-                amount: item.product.price.toString(),
+                // Use prebooking price for Warner Bros items
+                amount: getCartItemPrice(item.product).toString(),
                 currencyCode: item.product.currency || 'INR'
               }
             },
@@ -135,9 +140,23 @@ function CartSidebarContent() {
     }
   };
 
+  // Create stable items signature to prevent infinite loops
+  const itemsSignature = useMemo(() => {
+    return JSON.stringify(items.map(item => ({
+      id: item.product.id,
+      quantity: item.quantity,
+      price: getCartItemPrice(item.product) // Use prebooking price for WB items
+    })));
+  }, [items]);
+
   useEffect(() => {
-    fetchPromotionPricing();
-  }, [items, appliedCoupon, userId]);
+    // Debounce to prevent rapid calls
+    const timeoutId = setTimeout(() => {
+      fetchPromotionPricing();
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [itemsSignature, appliedCoupon, userId]);
 
 
 
@@ -231,7 +250,7 @@ function CartSidebarContent() {
           >
             {/* Header */}
             <div className="flex items-center justify-between p-6 border-b border-brand-200">
-              <h2 className="font-playfair text-heading-xl text-brand-800">Shopping Cart</h2>
+              <h2 className="font-montserrat font-bold text-heading-xl text-brand-800">Shopping Cart</h2>
               <button
                 onClick={closeCart}
                 className="w-10 h-10 rounded-full bg-brand-100 hover:bg-brand-200 flex items-center justify-center transition-all duration-300"
@@ -246,7 +265,7 @@ function CartSidebarContent() {
               {items.length === 0 ? (
                 <div className="flex flex-col items-center justify-center h-full text-center py-12">
                   <ShoppingBag className="w-20 h-20 text-brand-300 mb-4" />
-                  <p className="font-playfair text-heading-md text-brand-800 mb-2">Your cart is empty</p>
+                  <p className="font-montserrat font-bold text-heading-md text-brand-800 mb-2">Your cart is empty</p>
                   <p className="text-brand-600 font-montserrat text-body-md mb-6">
                     To speed up the checkout process, sign in now.
                   </p>
@@ -279,13 +298,22 @@ function CartSidebarContent() {
                       {/* Product Info */}
                       <div className="flex-1 min-w-0">
                         <div className="flex items-start justify-between mb-2">
-                          <Link
-                            href={`/products/${item.product.id}`}
-                            onClick={closeCart}
-                            className="font-playfair text-body-md text-brand-800 hover:text-bronze-gold transition-colors line-clamp-2"
-                          >
-                            {item.product.name}
-                          </Link>
+                          <div>
+                            <Link
+                              href={`/products/${item.product.id}`}
+                              onClick={closeCart}
+                              className="font-montserrat font-bold text-body-md text-brand-800 hover:text-bronze-gold transition-colors line-clamp-2"
+                            >
+                              {item.product.name}
+                            </Link>
+                            {/* Prebooking Badge */}
+                            {isPrebookingProduct(item.product) && (
+                              <span className="inline-flex items-center gap-1 mt-1 px-2 py-0.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-[9px] font-gotham uppercase tracking-wider rounded-full">
+                                <Ticket className="w-2.5 h-2.5" />
+                                Prebook
+                              </span>
+                            )}
+                          </div>
                           <button
                             onClick={() => removeFromCart(item.product.id)}
                             className="ml-2 text-brand-400 hover:text-error transition-colors flex-shrink-0"
@@ -323,9 +351,9 @@ function CartSidebarContent() {
                             </button>
                           </div>
 
-                          {/* Price */}
-                          <p className="font-gotham text-body-md font-semibold text-classic-green">
-                            {formatPrice(item.product.price * item.quantity, item.product.currency)}
+                          {/* Price - Show prebooking price for Warner Bros items */}
+                          <p className={`font-gotham text-body-md font-semibold ${isPrebookingProduct(item.product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                            {formatPrice(getCartItemPrice(item.product) * item.quantity, item.product.currency)}
                           </p>
                         </div>
                       </div>
@@ -353,7 +381,7 @@ function CartSidebarContent() {
                           <div className="flex-1 flex flex-col justify-center">
                             <div className="flex items-center gap-2 mb-1">
                               <Gift size={14} className="text-amber-500" />
-                              <h4 className="font-playfair text-body-md text-brand-800">{giftProduct.name}</h4>
+                              <h4 className="font-montserrat font-bold text-body-md text-brand-800">{giftProduct.name}</h4>
                             </div>
                             <span className="text-[10px] font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-2 py-0.5 rounded-full border border-amber-100 w-fit">Free Gift</span>
                           </div>
@@ -476,7 +504,7 @@ function CartSidebarContent() {
                       ))}
 
                       <div className="flex items-center justify-between pt-3 border-t border-brand-100">
-                        <span className="font-playfair text-lg text-brand-800">Total</span>
+                        <span className="font-montserrat font-bold text-lg text-brand-800">Total</span>
                         <span className="font-gotham text-xl font-bold text-classic-green">
                           {formatPrice(promotionPricing.total, items[0].product.currency)}
                         </span>
@@ -497,7 +525,7 @@ function CartSidebarContent() {
                       )}
 
                       <div className="flex items-center justify-between pt-3 border-t border-brand-100">
-                        <span className="font-playfair text-lg text-brand-800">Total</span>
+                        <span className="font-montserrat font-bold text-lg text-brand-800">Total</span>
                         <span className="font-gotham text-xl font-bold text-classic-green">
                           {formatPrice(Math.max(0, total - couponDiscount), items[0].product.currency)}
                         </span>

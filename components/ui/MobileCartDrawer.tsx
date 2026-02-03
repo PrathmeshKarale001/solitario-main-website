@@ -53,7 +53,7 @@ export default function MobileCartDrawer({
             
             {/* Header */}
             <div className="flex items-center justify-between mb-4">
-              <Drawer.Title className="text-xl font-playfair font-semibold text-brand-900">
+              <Drawer.Title className="text-xl font-montserrat font-bold font-semibold text-brand-900">
                 Your Cart ({items.length})
               </Drawer.Title>
               <Drawer.Close asChild>

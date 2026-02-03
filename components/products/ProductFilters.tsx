@@ -67,7 +67,7 @@ export default function ProductFilters({
           onClick={() => toggleSection('sort')}
           className="flex items-center justify-between w-full mb-4"
         >
-          <h3 className="font-playfair text-lg text-gray-900">Sort By</h3>
+          <h3 className="font-montserrat font-bold text-lg text-gray-900">Sort By</h3>
           {expandedSections.sort ? (
             <ChevronUp className="w-4 h-4 text-gray-500" />
           ) : (
@@ -106,7 +106,7 @@ export default function ProductFilters({
           onClick={() => toggleSection('price')}
           className="flex items-center justify-between w-full mb-4"
         >
-          <h3 className="font-playfair text-lg text-gray-900">Price Filter</h3>
+          <h3 className="font-montserrat font-bold text-lg text-gray-900">Price Filter</h3>
           {expandedSections.price ? (
             <ChevronUp className="w-4 h-4 text-gray-500" />
           ) : (
@@ -139,7 +139,7 @@ export default function ProductFilters({
 
       {/* Product Status Section */}
       <div className="border-b border-gray-200 pb-6">
-        <h3 className="font-playfair text-lg text-gray-900 mb-4">Product Status</h3>
+        <h3 className="font-montserrat font-bold text-lg text-gray-900 mb-4">Product Status</h3>
         <div className="space-y-3">
           <label className="flex items-center gap-3 cursor-pointer group">
             <input
@@ -164,7 +164,7 @@ export default function ProductFilters({
           onClick={() => toggleSection('categories')}
           className="flex items-center justify-between w-full mb-4"
         >
-          <h3 className="font-playfair text-lg text-gray-900">Categories</h3>
+          <h3 className="font-montserrat font-bold text-lg text-gray-900">Categories</h3>
           {expandedSections.categories ? (
             <ChevronUp className="w-4 h-4 text-gray-500" />
           ) : (
@@ -233,7 +233,7 @@ export default function ProductFilters({
           onClick={() => toggleSection('view')}
           className="flex items-center justify-between w-full mb-4"
         >
-          <h3 className="font-playfair text-lg text-gray-900">View Mode</h3>
+          <h3 className="font-montserrat font-bold text-lg text-gray-900">View Mode</h3>
           {expandedSections.view ? (
             <ChevronUp className="w-4 h-4 text-gray-500" />
           ) : (

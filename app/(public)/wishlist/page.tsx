@@ -3,8 +3,8 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck } from 'lucide-react';
-import { useState } from 'react';
+import { Heart, ShoppingCart, Trash2, ArrowRight, Share2, Package, Check, AlertTriangle, Copy, CheckCheck, RefreshCw } from 'lucide-react';
+import { useState, useEffect } from 'react';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
@@ -15,11 +15,16 @@ import { Section, Container } from '@/components/ui';
 export const dynamic = 'force-dynamic';
 
 export default function WishlistPage() {
-  const { wishlist, removeFromWishlist, clearWishlist } = useWishlist();
+  const { wishlist, removeFromWishlist, clearWishlist, refreshPrices, isRefreshing } = useWishlist();
   const { addToCart } = useCart();
   const [shareLink, setShareLink] = useState('');
   const [copied, setCopied] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
+
+  // Refresh prices when page loads
+  useEffect(() => {
+    refreshPrices();
+  }, [refreshPrices]);
 
   const handleAddToCart = (product: any) => {
     addToCart(product, 1);
@@ -54,7 +59,7 @@ export default function WishlistPage() {
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
             <div>
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-playfair text-brand-800 mb-2">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-montserrat font-bold text-brand-800 mb-2">
                 My Wishlist
               </h1>
               <p className="text-brand-500 font-montserrat">
@@ -69,6 +74,15 @@ export default function WishlistPage() {
                 >
                   <ShoppingCart className="w-4 h-4" />
                   Add All to Cart
+                </button>
+                <button
+                  onClick={() => refreshPrices()}
+                  disabled={isRefreshing}
+                  className="flex items-center gap-2 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors text-sm font-medium disabled:opacity-50"
+                  title="Refresh prices from Shopify"
+                >
+                  <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  {isRefreshing ? 'Refreshing...' : 'Refresh Prices'}
                 </button>
                 <button
                   onClick={handleShareWishlist}
@@ -98,7 +112,7 @@ export default function WishlistPage() {
               <div className="w-24 h-24 bg-brand-100 rounded-full flex items-center justify-center mx-auto mb-6">
                 <Heart className="w-12 h-12 text-brand-300" />
               </div>
-              <h2 className="text-2xl font-playfair text-brand-800 mb-3">Your wishlist is empty</h2>
+              <h2 className="text-2xl font-montserrat font-bold text-brand-800 mb-3">Your wishlist is empty</h2>
               <p className="text-brand-500 font-montserrat mb-6 max-w-md mx-auto">
                 Start adding items you love to your wishlist. They'll be saved here for you to revisit anytime.
               </p>
@@ -151,7 +165,7 @@ export default function WishlistPage() {
                   {/* Content */}
                   <div className="p-4">
                     <Link href={`/products/${product.id}`}>
-                      <h3 className="font-playfair text-lg text-brand-800 mb-1 hover:text-classic-green transition-colors truncate">
+                      <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-1 hover:text-classic-green transition-colors truncate">
                         {product.name}
                       </h3>
                     </Link>
@@ -207,7 +221,7 @@ export default function WishlistPage() {
                 className="bg-white rounded-xl p-6 max-w-md w-full shadow-xl"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-playfair text-xl text-gray-900">Share Wishlist</h3>
+                  <h3 className="font-montserrat font-bold text-xl text-gray-900">Share Wishlist</h3>
                   <button
                     onClick={() => setShowShareModal(false)}
                     className="text-gray-400 hover:text-gray-600"

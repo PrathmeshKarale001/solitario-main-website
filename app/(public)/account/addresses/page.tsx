@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useState, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
-import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle } from 'lucide-react';
+import { MapPin, ChevronLeft, Plus, Edit2, Trash2, Home, Building, Check, X, AlertCircle, Loader2 } from 'lucide-react';
 import { Section, Container } from '@/components/ui';
+import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
@@ -45,6 +46,45 @@ function AddressesPageContent() {
     pincode: '',
     isDefault: false,
   });
+  
+  // PIN code auto-fill hook
+  const { lookup: lookupPincode, loading: pincodeAutoFillLoading, data: pincodeData, error: pincodeError } = usePincodeLookup();
+  const [isCityStateLocked, setIsCityStateLocked] = useState(false);
+  
+  // Fetch city and state from PIN code
+  const fetchCityState = async (pincode: string) => {
+    if (!/^\d{6}$/.test(pincode)) return;
+    
+    const result = await lookupPincode(pincode);
+    if (result.success && result.city && result.state) {
+      setFormData(prev => ({
+        ...prev,
+        city: result.city || prev.city,
+        state: result.state || prev.state,
+      }));
+      setIsCityStateLocked(true);
+    }
+  };
+
+  // Handle PIN code change
+  const handlePincodeChange = (value: string) => {
+    const cleanValue = value.replace(/\D/g, '').slice(0, 6);
+    setFormData({ ...formData, pincode: cleanValue });
+    // Unlock city/state when PIN code changes
+    setIsCityStateLocked(false);
+  };
+
+  // Handle PIN code blur - auto-fetch city/state
+  const handlePincodeBlur = async () => {
+    if (formData.pincode.length === 6 && /^\d{6}$/.test(formData.pincode)) {
+      await fetchCityState(formData.pincode);
+    }
+  };
+
+  // Unlock city/state fields for manual editing
+  const unlockCityState = () => {
+    setIsCityStateLocked(false);
+  };
 
   useEffect(() => {
     if (isLoaded && !isSignedIn) {
@@ -224,6 +264,7 @@ function AddressesPageContent() {
   const closeModal = () => {
     setIsModalOpen(false);
     setEditingAddress(null);
+    setIsCityStateLocked(false);
     setFormData({
       type: 'home',
       name: user?.fullName || '',
@@ -305,7 +346,7 @@ function AddressesPageContent() {
               className="flex flex-col sm:flex-row sm:items-center justify-between mb-8"
             >
               <div>
-                <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">My Addresses</h1>
+                <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">My Addresses</h1>
                 <p className="text-brand-500 font-montserrat">Manage your delivery addresses</p>
               </div>
               <button
@@ -325,7 +366,7 @@ function AddressesPageContent() {
                 className="bg-white rounded-2xl shadow-brand border border-brand-100 p-12 text-center"
               >
                 <MapPin className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-                <h2 className="text-xl font-playfair text-brand-800 mb-2">No addresses saved</h2>
+                <h2 className="text-xl font-montserrat font-bold text-brand-800 mb-2">No addresses saved</h2>
                 <p className="text-brand-500 font-montserrat mb-6">
                   Add a delivery address to make checkout faster
                 </p>
@@ -368,7 +409,7 @@ function AddressesPageContent() {
                     </div>
 
                     {/* Address Details */}
-                    <h3 className="font-playfair text-lg text-brand-800 mb-1">{address.name}</h3>
+                    <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-1">{address.name}</h3>
                     <p className="text-sm text-brand-600 font-montserrat mb-1">{address.phone}</p>
                     <p className="text-sm text-brand-500 font-montserrat">
                       {address.line1}
@@ -429,7 +470,7 @@ function AddressesPageContent() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-playfair text-brand-800">
+                  <h2 className="text-xl font-montserrat font-bold text-brand-800">
                     {editingAddress ? 'Edit Address' : 'Add New Address'}
                   </h2>
                   <button onClick={closeModal} className="p-2 hover:bg-brand-100 rounded-lg transition-colors">
@@ -509,42 +550,130 @@ function AddressesPageContent() {
                     />
                   </div>
 
-                  {/* City, State, Pincode */}
+                  {/* Pincode, City, State - PIN code first for auto-fill */}
                   <div className="grid grid-cols-3 gap-4">
                     <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">City</label>
+                      <label className="block text-sm font-montserrat text-brand-600 mb-1">
+                        Pincode
+                        {pincodeAutoFillLoading && (
+                          <span className="ml-1 text-xs text-classic-green">Fetching...</span>
+                        )}
+                      </label>
+                      <div className="relative">
+                        <input
+                          type="text"
+                          required
+                          maxLength={6}
+                          pattern="[0-9]{6}"
+                          value={formData.pincode}
+                          onChange={(e) => handlePincodeChange(e.target.value)}
+                          onBlur={handlePincodeBlur}
+                          placeholder="6-digit PIN"
+                          className="w-full px-4 py-2.5 pr-20 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => fetchCityState(formData.pincode)}
+                          disabled={formData.pincode.length !== 6 || pincodeAutoFillLoading}
+                          className="absolute right-1 top-1/2 -translate-y-1/2 px-2 py-1 text-xs font-medium bg-classic-green hover:bg-classic-green/90 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded transition-colors"
+                          title="Fetch City & State"
+                        >
+                          {pincodeAutoFillLoading ? (
+                            <Loader2 className="w-3 h-3 animate-spin" />
+                          ) : (
+                            'Fetch'
+                          )}
+                        </button>
+                      </div>
+                      {pincodeError && !pincodeAutoFillLoading && (
+                        <p className="text-amber-600 text-[10px] mt-1 flex items-center gap-1">
+                          <AlertCircle className="w-3 h-3" />
+                          <span>Could not auto-fill. Enter manually.</span>
+                        </p>
+                      )}
+                      {pincodeData?.success && (
+                        <p className="text-green-600 text-[10px] mt-1 flex items-center gap-1">
+                          <Check className="w-3 h-3" />
+                          <span>City & State auto-filled</span>
+                        </p>
+                      )}
+                    </div>
+                    <div>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-sm font-montserrat text-brand-600">
+                          City
+                          {pincodeAutoFillLoading && (
+                            <Loader2 className="inline w-3 h-3 ml-1 animate-spin text-classic-green" />
+                          )}
+                        </label>
+                        {isCityStateLocked && (
+                          <button
+                            type="button"
+                            onClick={unlockCityState}
+                            className="text-[10px] text-classic-green hover:text-classic-green/80 font-medium"
+                            title="Click to edit manually"
+                          >
+                            Unlock
+                          </button>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required
                         value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
+                        onChange={(e) => {
+                          if (!isCityStateLocked) {
+                            setFormData({ ...formData, city: e.target.value });
+                          }
+                        }}
+                        disabled={isCityStateLocked}
+                        placeholder={isCityStateLocked ? "Auto-filled from PIN" : "Enter PIN to auto-fill"}
+                        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat transition-colors ${
+                          isCityStateLocked 
+                            ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300' 
+                            : formData.city && pincodeData?.success 
+                              ? 'border-classic-green/30 bg-classic-green/5' 
+                              : 'border-brand-200'
+                        }`}
                       />
                     </div>
                     <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">State</label>
+                      <div className="flex items-center justify-between mb-1">
+                        <label className="block text-sm font-montserrat text-brand-600">
+                          State
+                          {pincodeAutoFillLoading && (
+                            <Loader2 className="inline w-3 h-3 ml-1 animate-spin text-classic-green" />
+                          )}
+                        </label>
+                        {isCityStateLocked && (
+                          <button
+                            type="button"
+                            onClick={unlockCityState}
+                            className="text-[10px] text-classic-green hover:text-classic-green/80 font-medium"
+                            title="Click to edit manually"
+                          >
+                            Unlock
+                          </button>
+                        )}
+                      </div>
                       <input
                         type="text"
                         required
                         value={formData.state}
-                        onChange={(e) => setFormData({ ...formData, state: e.target.value })}
-                        className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-montserrat text-brand-600 mb-1">Pincode</label>
-                      <input
-                        type="text"
-                        required
-                        maxLength={6}
-                        pattern="[0-9]{6}"
-                        value={formData.pincode}
                         onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, '').slice(0, 6);
-                          setFormData({ ...formData, pincode: value });
+                          if (!isCityStateLocked) {
+                            setFormData({ ...formData, state: e.target.value });
+                          }
                         }}
-                        placeholder="6-digit pincode"
-                        className="w-full px-4 py-2.5 border border-brand-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat"
+                        disabled={isCityStateLocked}
+                        placeholder={isCityStateLocked ? "Auto-filled from PIN" : "Enter PIN to auto-fill"}
+                        className={`w-full px-4 py-2.5 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat transition-colors ${
+                          isCityStateLocked 
+                            ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300' 
+                            : formData.state && pincodeData?.success 
+                              ? 'border-classic-green/30 bg-classic-green/5' 
+                              : 'border-brand-200'
+                        }`}
                       />
                     </div>
                   </div>

@@ -77,7 +77,7 @@ export default function AccountPage() {
               transition={{ duration: 0.6 }}
               className="mb-10"
             >
-              <h1 className="font-playfair text-4xl md:text-5xl text-brand-800 mb-3">My Account</h1>
+              <h1 className="font-montserrat font-bold text-4xl md:text-5xl text-brand-800 mb-3">My Account</h1>
               <p className="text-brand-600 font-montserrat text-lg">
                 Welcome back, <span className="text-bronze-gold font-semibold">{user.fullName || user.primaryEmailAddress?.emailAddress}</span>
               </p>
@@ -107,7 +107,7 @@ export default function AccountPage() {
                       )}
                     </div>
                     <div>
-                      <h2 className="font-playfair text-heading-md text-brand-800">{user.fullName || 'Customer'}</h2>
+                      <h2 className="font-montserrat font-bold text-heading-md text-brand-800">{user.fullName || 'Customer'}</h2>
                       <p className="text-body-sm text-brand-500 font-montserrat">{user.primaryEmailAddress?.emailAddress}</p>
                     </div>
                   </div>
@@ -162,7 +162,7 @@ export default function AccountPage() {
               className="mt-8"
             >
               <div className="flex items-center justify-between mb-6">
-                <h2 className="font-playfair text-3xl text-brand-800">Recent Orders</h2>
+                <h2 className="font-montserrat font-bold text-3xl text-brand-800">Recent Orders</h2>
                 <Link href="/account/orders" className="text-teal hover:text-teal-dark font-montserrat text-body-sm transition-colors">
                   View All
                 </Link>
@@ -176,7 +176,7 @@ export default function AccountPage() {
                 ) : orders.length === 0 ? (
                   <div className="text-center py-12">
                     <Package className="w-12 h-12 text-brand-300 mx-auto mb-4" />
-                    <h3 className="font-playfair text-heading-md text-brand-800 mb-2">No orders yet</h3>
+                    <h3 className="font-montserrat font-bold text-heading-md text-brand-800 mb-2">No orders yet</h3>
                     <p className="text-brand-500 font-montserrat text-body-md mb-6">
                       Start shopping to see your orders here
                     </p>

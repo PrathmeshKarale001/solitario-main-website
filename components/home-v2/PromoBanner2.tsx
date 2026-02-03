@@ -19,7 +19,7 @@ export default function PromoBanner2() {
             <span className="text-bronze-gold font-gotham text-xs uppercase tracking-[0.3em] mb-6 block">
               Craftsmanship
             </span>
-            <h2 className="text-4xl md:text-6xl font-playfair text-gray-900 mb-6">
+            <h2 className="text-4xl md:text-6xl font-montserrat font-bold text-gray-900 mb-6">
               Luxury <br />
               <span className="italic font-light">Reimagined</span>
             </h2>

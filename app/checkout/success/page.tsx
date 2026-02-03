@@ -7,12 +7,14 @@ import { useSearchParams } from 'next/navigation';
 import { CheckCircle, Package, Truck, Mail, Phone, ArrowRight, Download, Share2, Copy, Check } from 'lucide-react';
 import { Container } from '@/components/ui';
 import confetti from 'canvas-confetti';
+import { trackPaymentComplete } from '@/lib/gtm-conversions';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
   const orderId = searchParams.get('orderId');
   const paymentId = searchParams.get('paymentId');
   const waybill = searchParams.get('waybill');
+  const orderValue = searchParams.get('value');
   const [copied, setCopied] = useState(false);
 
   // Trigger confetti on mount
@@ -51,6 +53,24 @@ function SuccessContent() {
     return () => clearInterval(interval);
   }, []);
 
+  // Track Payment Complete conversion
+  useEffect(() => {
+    if (orderId && orderValue) {
+      const value = parseFloat(orderValue);
+      const transactionId = orderId || paymentId || '';
+      
+      if (!isNaN(value) && transactionId) {
+        // Small delay to ensure gtag is fully loaded
+        const timeoutId = setTimeout(() => {
+          trackPaymentComplete(value, transactionId);
+          console.log('[GTM] Payment Complete tracked:', { value, transactionId });
+        }, 500);
+        
+        return () => clearTimeout(timeoutId);
+      }
+    }
+  }, [orderId, orderValue, paymentId]);
+
   const copyOrderId = () => {
     if (orderId) {
       navigator.clipboard.writeText(orderId);
@@ -83,7 +103,7 @@ function SuccessContent() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
-            className="font-playfair text-3xl md:text-4xl text-gray-900 mb-4"
+            className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900 mb-4"
           >
             Thank You for Your Order!
           </motion.h1>
@@ -104,7 +124,7 @@ function SuccessContent() {
             transition={{ delay: 0.5 }}
             className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 mb-8 text-left"
           >
-            <h2 className="font-playfair text-xl text-gray-900 mb-6 text-center">Order Details</h2>
+            <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6 text-center">Order Details</h2>
             
             <div className="space-y-4">
               {/* Order ID */}
@@ -171,7 +191,7 @@ function SuccessContent() {
             transition={{ delay: 0.6 }}
             className="bg-white rounded-2xl p-6 md:p-8 shadow-lg border border-gray-100 mb-8"
           >
-            <h2 className="font-playfair text-xl text-gray-900 mb-6">What Happens Next?</h2>
+            <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">What Happens Next?</h2>
             
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="text-center">

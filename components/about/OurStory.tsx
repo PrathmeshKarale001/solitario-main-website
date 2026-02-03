@@ -12,11 +12,6 @@ export default function OurStory() {
       description: "Founded with a vision to make luxury accessible while staying true to ethical values"
     },
     {
-      icon: Leaf,
-      title: "Sustainable Future",
-      description: "Lab-grown diamonds that don't compromise the Earth for beauty"
-    },
-    {
       icon: Award,
       title: "Unmatched Quality",
       description: "Every piece crafted with precision and attention to detail"
@@ -25,6 +20,11 @@ export default function OurStory() {
       icon: Users,
       title: "For Everyone",
       description: "Luxury that's inclusive, accessible, and meaningful"
+    },
+    {
+      icon: Leaf,
+      title: "Sustainable Future",
+      description: "Lab-grown diamonds that don't compromise the Earth for beauty"
     }
   ];
 
@@ -46,7 +46,7 @@ export default function OurStory() {
           <span className="inline-block text-classic-green text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             The Solitario Story
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-montserrat font-bold text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Crafting Tomorrow's <span className="text-classic-green">Heirlooms</span>
           </h2>
           <p className="text-lg md:text-xl text-brand-600 max-w-3xl mx-auto font-montserrat leading-relaxed">
@@ -65,32 +65,38 @@ export default function OurStory() {
           >
             <div className="space-y-6 text-brand-700 text-lg leading-relaxed font-montserrat">
               <p className="text-xl font-medium text-brand-800">
-                When modern, consciously-minded customers asked for timeless sustainable luxury, we listened.
+                When modern customers asked for diamonds they could wear every day, we listened.
               </p>
               <p>
-                Solitario was born from the belief that luxury shouldn't come at the Earth's expense. We saw an opportunity to revolutionize the diamond industry by creating pieces that are as ethical as they are beautiful.
+                Solitario was born from a simple idea - diamonds should not live in lockers. They should move with you, become a part of your everyday style, and feel as effortless as they are extraordinary.
               </p>
               <p>
-                At our core, we're creating heirlooms for modern and future generations. Each piece tells a story of bespoke design, unparalleled craftsmanship, and unwavering commitment to sustainability.
+                We saw an opportunity to reimagine fine jewellery for the way people live today. Pieces that are timeless in design, exceptional in craftsmanship, and made to be worn - not saved.
+              </p>
+              <p>
+                At our core, we create modern heirlooms. Jewellery that blends precision, elegance, and versatility, crafted for every occasion and every generation.
               </p>
               <p className="text-classic-green font-medium">
-                Our style is timeless, created for all occasions, and doesn't cost the Earth. Literally.
+                Our style is timeless, made for everyday wear, and designed to be lived in.
               </p>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-6 pt-8 border-t border-brand-200">
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">100%</div>
-                <div className="text-sm text-brand-600 font-montserrat">Lab-Grown</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">100%</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Lab-Grown Diamonds</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Visually identical. Chemically identical. Exceptionally brilliant.</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">∞</div>
-                <div className="text-sm text-brand-600 font-montserrat">Lifetime Value</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">∞</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Lifetime Value</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Designed to be worn every day, for years to come.</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl font-playfair text-classic-green mb-2">0</div>
-                <div className="text-sm text-brand-600 font-montserrat">Earth Impact</div>
+                <div className="text-3xl font-montserrat font-bold text-classic-green mb-2">✓</div>
+                <div className="text-sm text-brand-600 font-montserrat font-medium">Crafted to Perfection</div>
+                <div className="text-xs text-brand-500 font-montserrat mt-1">Uncompromising quality, finish, and attention to detail.</div>
               </div>
             </div>
           </motion.div>
@@ -101,19 +107,21 @@ export default function OurStory() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="relative"
-          >
-            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
-              <Image
-                src="/about/story-side.jpg"
-                alt="Solitario craftsmanship"
-                width={800}
-                height={600}
-                className="w-full h-auto object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent" />
+          > 
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900" style={{ aspectRatio: '4/5', maxHeight: '750px' }}>
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                className="w-full h-full object-contain"
+              >
+                <source src="/about/about-video.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
               
               {/* Floating Badge */}
-              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg">
+              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg z-10">
                 <div className="flex items-center gap-2">
                   <Leaf className="w-4 h-4 text-classic-green" />
                   <span className="text-sm font-gotham text-brand-800 uppercase tracking-wider">Sustainable</span>
@@ -146,7 +154,7 @@ export default function OurStory() {
                 <div className="w-12 h-12 bg-classic-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-classic-green/20 transition-colors duration-300">
                   <point.icon className="w-6 h-6 text-classic-green" />
                 </div>
-                <h4 className="text-lg font-playfair text-brand-800 mb-3 group-hover:text-classic-green transition-colors duration-300">
+                <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-3 group-hover:text-classic-green transition-colors duration-300">
                   {point.title}
                 </h4>
                 <p className="text-brand-600 text-sm font-montserrat leading-relaxed">

@@ -3,10 +3,11 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ShoppingCart, Eye } from 'lucide-react';
+import { ShoppingCart, Eye, Ticket } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
+import { isPrebookingProduct, getProductDisplayPrice, isProductButtonEnabled, PREBOOK_PRICE } from '@/lib/prebooking';
 
 export interface ProductListViewProps {
   products: Product[];
@@ -76,7 +77,7 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                         }`}>
                           {product.category.toUpperCase()}
                         </span>
-                        <h3 className={`font-playfair text-2xl md:text-3xl group-hover:text-bronze-gold transition-colors mb-2 ${
+                        <h3 className={`font-montserrat font-bold text-2xl md:text-3xl group-hover:text-bronze-gold transition-colors mb-2 ${
                           darkMode ? 'text-gray-100' : 'text-gray-900'
                         }`}>
                           {product.name}
@@ -94,7 +95,19 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                     darkMode ? 'border-[#2a2a2a]' : 'border-gray-100'
                   }`}>
                     <div className="flex items-center gap-3">
-                      {product.comparePrice ? (
+                      {isPrebookingProduct(product) ? (
+                        <>
+                          <p className={`font-gotham text-2xl font-semibold tracking-wide ${
+                            darkMode ? 'text-purple-400' : 'text-purple-600'
+                          }`}>
+                            {getProductDisplayPrice(product)}
+                          </p>
+                          <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-gotham font-semibold rounded bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
+                            <Ticket className="w-3 h-3" />
+                            Prebook
+                          </span>
+                        </>
+                      ) : product.comparePrice ? (
                         <>
                           <p className={`font-gotham text-2xl font-semibold tracking-wide ${
                             darkMode ? 'text-[#C6A664]' : 'text-classic-green'
@@ -138,12 +151,21 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                         onClick={(e) => {
                           e.preventDefault();
                           e.stopPropagation();
-                          addToCart(product, 1);
+                          if (isProductButtonEnabled(product)) {
+                            addToCart(product, 1);
+                          }
                         }}
-                        className="px-6 py-2.5 bg-bronze-gold hover:bg-bronze-gold/90 text-white rounded-full font-gotham text-xs uppercase tracking-[0.2em] transition-all shadow-luxury hover:shadow-glow flex items-center gap-2"
+                        disabled={!isProductButtonEnabled(product)}
+                        className={`px-6 py-2.5 text-white rounded-full font-gotham text-xs uppercase tracking-[0.2em] transition-all shadow-luxury hover:shadow-glow flex items-center gap-2 ${
+                          isPrebookingProduct(product)
+                            ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                            : isProductButtonEnabled(product)
+                              ? 'bg-bronze-gold hover:bg-bronze-gold/90'
+                              : 'bg-gray-300 cursor-not-allowed'
+                        }`}
                       >
-                        <ShoppingCart className="w-4 h-4" />
-                        Add to Cart
+                        {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+                        {isPrebookingProduct(product) ? 'Prebook Now' : isProductButtonEnabled(product) ? 'Add to Cart' : 'Out of Stock'}
                       </button>
                     </div>
                   </div>

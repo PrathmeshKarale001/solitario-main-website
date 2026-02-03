@@ -146,7 +146,7 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4">
               Personalized For You
             </span>
-            <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
+            <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
               Nearest Store to <span className="text-classic-green">Your Location</span>
             </h2>
             <p className="text-sm md:text-base text-brand-600 max-w-2xl mx-auto font-montserrat">
@@ -239,7 +239,7 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
                       </span>
                     )}
                     
-                    <h3 className="text-xl font-playfair text-brand-800 mb-2">{store.name}</h3>
+                    <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-2">{store.name}</h3>
                     
                     <div className="space-y-1 mb-4">
                       <div className="flex items-center gap-2 text-classic-green font-gotham text-sm">

@@ -32,7 +32,7 @@ const returnSteps = [
 ];
 
 const eligibleItems = [
-  'Exchange requests within 7 days of delivery',
+  'Exchange requests within 15 days of delivery',
   'Items unused, unworn, and undamaged',
   'Original condition with original packaging',
   'Original invoice and certificates included',
@@ -43,7 +43,7 @@ const nonEligibleItems = [
   'Customized, engraved, or made-to-order items',
   'Items showing signs of wear or damage',
   'Items without original packaging or certificates',
-  'Items returned after 7 days',
+  'Items returned after 15 days',
   'Items sent without prior approval',
   'Making charges and taxes (non-recoverable)',
 ];
@@ -60,11 +60,11 @@ export default function ReturnsPage() {
             className="text-center max-w-3xl mx-auto"
           >
             <RotateCcw className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h1 className="text-4xl md:text-5xl font-playfair text-white mb-4">
-              Returns, Exchange & Buyback
+            <h1 className="text-4xl md:text-5xl font-montserrat font-bold text-white mb-4">
+              Returns & Exchange
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
-              7-day exchange policy with buyback options available
+              15-day exchange policy for your peace of mind
             </p>
           </motion.div>
         </Container>
@@ -81,7 +81,7 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <Clock className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">7 Days</h3>
+              <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-2">15 Days</h3>
               <p className="text-brand-500 font-montserrat text-sm">Exchange window from delivery</p>
             </motion.div>
             <motion.div
@@ -92,7 +92,7 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <Package className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">Pre-Approval</h3>
+              <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-2">Pre-Approval</h3>
               <p className="text-brand-500 font-montserrat text-sm">Contact support before returning</p>
             </motion.div>
             <motion.div
@@ -103,8 +103,8 @@ export default function ReturnsPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-6 text-center"
             >
               <CreditCard className="w-10 h-10 text-classic-green mx-auto mb-3" />
-              <h3 className="font-playfair text-lg text-brand-800 mb-2">Buyback Available</h3>
-              <p className="text-brand-500 font-montserrat text-sm">Store credit or purchase adjustment</p>
+              <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-2">Easy Exchange</h3>
+              <p className="text-brand-500 font-montserrat text-sm">Hassle-free exchange process</p>
             </motion.div>
           </div>
         </Container>
@@ -119,7 +119,7 @@ export default function ReturnsPage() {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-4">
+            <h2 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4">
               How to Return
             </h2>
             <p className="text-brand-600 font-montserrat">
@@ -141,7 +141,7 @@ export default function ReturnsPage() {
                   <div className="w-10 h-10 bg-classic-green rounded-full flex items-center justify-center text-white font-gotham font-bold mb-4">
                     {step.step}
                   </div>
-                  <h3 className="font-playfair text-lg text-brand-800 mb-2">{step.title}</h3>
+                  <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-2">{step.title}</h3>
                   <p className="text-brand-500 font-montserrat text-sm">{step.description}</p>
                 </div>
                 {index < returnSteps.length - 1 && (
@@ -168,7 +168,7 @@ export default function ReturnsPage() {
                 <div className="w-10 h-10 bg-classic-green/10 rounded-full flex items-center justify-center">
                   <CheckCircle className="w-5 h-5 text-classic-green" />
                 </div>
-                <h3 className="font-playfair text-xl text-brand-800">Eligible for Return</h3>
+                <h3 className="font-montserrat font-bold text-xl text-brand-800">Eligible for Return</h3>
               </div>
               <ul className="space-y-3">
                 {eligibleItems.map((item) => (
@@ -191,7 +191,7 @@ export default function ReturnsPage() {
                 <div className="w-10 h-10 bg-error/10 rounded-full flex items-center justify-center">
                   <XCircle className="w-5 h-5 text-error" />
                 </div>
-                <h3 className="font-playfair text-xl text-brand-800">Not Eligible</h3>
+                <h3 className="font-montserrat font-bold text-xl text-brand-800">Not Eligible</h3>
               </div>
               <ul className="space-y-3">
                 {nonEligibleItems.map((item) => (
@@ -216,11 +216,11 @@ export default function ReturnsPage() {
               viewport={{ once: true }}
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-8"
             >
-              <h2 className="font-playfair text-2xl text-brand-800 mb-6">Exchange Policy</h2>
+              <h2 className="font-montserrat font-bold text-2xl text-brand-800 mb-6">Exchange Policy</h2>
               
               <div className="space-y-4 text-brand-600 font-montserrat text-sm leading-relaxed">
                 <p>
-                  We offer exchanges on eligible jewellery items within <strong>7 days of delivery</strong>:
+                  We offer exchanges on eligible jewellery items within <strong>15 days of delivery</strong>:
                 </p>
                 <ul className="list-disc list-inside space-y-2 ml-4">
                   <li>Item must be unused, unworn, and undamaged</li>
@@ -242,42 +242,6 @@ export default function ReturnsPage() {
               </div>
             </motion.div>
 
-            {/* Buyback Policy */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mt-8 bg-classic-green/5 rounded-2xl p-6 border border-classic-green/20"
-            >
-              <h3 className="font-playfair text-lg text-brand-800 mb-4">Buyback Policy</h3>
-              <div className="space-y-3 text-brand-600 font-montserrat text-sm">
-                <p>
-                  We offer buyback services on jewellery purchased from Solitario:
-                </p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
-                    <p className="font-semibold text-brand-700 mb-2">Valuation Basis:</p>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>Current metal market value</li>
-                      <li>Gemstone valuation (if applicable)</li>
-                      <li>Company policy deductions</li>
-                    </ul>
-                  </div>
-                  <div>
-                    <p className="font-semibold text-brand-700 mb-2">Non-Recoverable:</p>
-                    <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>Making charges and craftsmanship fees</li>
-                      <li>Taxes and certification charges</li>
-                      <li>Shipping and handling costs</li>
-                    </ul>
-                  </div>
-                </div>
-                <p className="text-xs text-brand-500 mt-4">
-                  Buyback values subject to prevailing market rates. Payment as store credit or purchase adjustment.
-                </p>
-              </div>
-            </motion.div>
-
             {/* Refund Policy */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -285,7 +249,7 @@ export default function ReturnsPage() {
               viewport={{ once: true }}
               className="mt-8 bg-bronze-gold/5 rounded-2xl p-6 border border-bronze-gold/20"
             >
-              <h3 className="font-playfair text-lg text-brand-800 mb-4">Refund Policy</h3>
+              <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Refund Policy</h3>
               <div className="space-y-3 text-brand-600 font-montserrat text-sm">
                 <p className="flex items-start gap-2">
                   <XCircle className="w-4 h-4 text-error flex-shrink-0 mt-0.5" />
@@ -322,7 +286,7 @@ export default function ReturnsPage() {
             className="bg-gradient-to-br from-classic-green to-teal rounded-3xl p-8 md:p-12 text-center"
           >
             <HelpCircle className="w-12 h-12 text-bronze-gold mx-auto mb-4" />
-            <h2 className="text-2xl md:text-3xl font-playfair text-white mb-4">
+            <h2 className="text-2xl md:text-3xl font-montserrat font-bold text-white mb-4">
               Need Help with a Return?
             </h2>
             <p className="text-white/80 font-montserrat mb-8 max-w-xl mx-auto">

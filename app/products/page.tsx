@@ -20,7 +20,7 @@ const LOAD_MORE_THRESHOLD = 12;
 const HERO_IMAGES_DESKTOP = [
     // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2nd.png', pos: 'object-center' },
-  { src: '/images/Shop/Banner1 1.webp', pos: 'object-[50%_0%]' },
+  { src: '/images/Shop/shop1desk.jpeg', pos: 'object-[50%_0%]' },
   { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/3.webp', pos: 'object-[50%_25%]' },
 ];
@@ -29,7 +29,7 @@ const HERO_IMAGES_DESKTOP = [
 const HERO_IMAGES_MOBILE = [
   // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
   { src: '/images/home-hero/newhero/2ndMobile.png', pos: 'object-center' },
-  { src: '/images/Shop/ShopMobile.webp', pos: 'object-[50%_20%]' },
+  { src: '/images/Shop/shop1mobile.jpeg', pos: 'object-[50%_20%]' },
   { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
 ];
 
@@ -39,6 +39,7 @@ function ProductsPageContent() {
   const categoryParam = searchParams.get('category');
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const imageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
   
@@ -58,22 +59,67 @@ function ProductsPageContent() {
   const [showMobileSort, setShowMobileSort] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Load initial products
+  // Mount check to prevent SSR issues
   useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Load initial products - only after mount to avoid SSR issues
+  useEffect(() => {
+    if (!mounted) return;
+    
     const loadProducts = async () => {
       try {
         setLoading(true);
-        const response = await fetch('/api/products');
+        console.log('🔄 Starting products fetch...');
+        
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => {
+          controller.abort();
+          console.error('⏱️ Products fetch timeout after 15 seconds');
+        }, 15000); // 15 second timeout
+        
+        // Add cache busting to ensure fresh data on page load
+        const cacheBuster = Date.now();
+        const response = await fetch(`/api/products?_=${cacheBuster}`, {
+          signal: controller.signal,
+          cache: 'no-store' // Force fresh data from server
+        });
+        
+        clearTimeout(timeoutId);
+        
+        if (!response.ok) {
+          console.error('❌ Failed to fetch products:', response.status);
+          setProducts([]);
+          setLoading(false);
+          return;
+        }
+        
         const data = await response.json();
-        setProducts(data.products || []);
+        
+        if (!data.products || !Array.isArray(data.products)) {
+          console.error('❌ Invalid products data:', data);
+          setProducts([]);
+          setLoading(false);
+          return;
+        }
+        
+        console.log(`✅ Loaded ${data.products.length} products in frontend`);
+        setProducts(data.products);
       } catch (error) {
-        console.error('Failed to load products:', error);
+        if (error instanceof Error && error.name === 'AbortError') {
+          console.error('⏱️ Products fetch was aborted (timeout)');
+        } else {
+          console.error('❌ Error loading products:', error);
+        }
+        setProducts([]);
       } finally {
         setLoading(false);
       }
     };
     loadProducts();
-  }, []);
+  }, [mounted]);
 
   // Get current hero images based on viewport
   const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
@@ -222,16 +268,18 @@ function ProductsPageContent() {
     }
   }, [categoryParam]);
 
-  // Detect mobile viewport
+  // Detect mobile viewport - only after mount
   useEffect(() => {
+    if (!mounted) return;
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+  }, [mounted]);
 
-  // Start cycling images
+  // Start cycling images - only after mount
   useEffect(() => {
+    if (!mounted) return;
     const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
     imageIntervalRef.current = setInterval(() => {
       setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -240,12 +288,13 @@ function ProductsPageContent() {
     return () => {
       if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
     };
-  }, [isMobile]);
+  }, [isMobile, mounted]);
 
   // Reset index when viewport changes
   useEffect(() => {
+    if (!mounted) return;
     setCurrentImageIndex(0);
-  }, [isMobile]);
+  }, [isMobile, mounted]);
 
 
   // Calculate category counts for sidebar
@@ -281,6 +330,18 @@ function ProductsPageContent() {
       setIsLoadingMore(false);
     }, 500);
   };
+
+  // Show simple loading screen until mounted (prevents SSR render issues)
+  if (!mounted) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white">
+        <div className="flex flex-col items-center gap-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-classic-green"></div>
+          <p className="text-gray-600 font-montserrat">Loading shop...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -333,23 +394,36 @@ function ProductsPageContent() {
               className="flex-1 min-w-0"
             >
               {/* Results Header */}
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
-                <div>
-                  <p className="text-gray-600 font-montserrat text-sm sm:text-base">
-                    Showing <span className="font-semibold text-classic-green">{displayedProducts.length}</span> of {filteredAndSortedProducts.length} products
-                    {filteredAndSortedProducts.length !== products.length && (
-                      <span className="text-gray-400"> (filtered from {products.length})</span>
-                    )}
-                  </p>
-                  {searchQuery && (
-                    <p className="text-xs sm:text-sm text-gray-500 mt-1">
-                      Results for "<span className="font-semibold">{searchQuery}</span>"
+              {!loading && (
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
+                  <div>
+                    <p className="text-gray-600 font-montserrat text-sm sm:text-base">
+                      Showing <span className="font-semibold text-classic-green">{displayedProducts.length}</span> of {filteredAndSortedProducts.length} products
+                      {filteredAndSortedProducts.length !== products.length && (
+                        <span className="text-gray-400"> (filtered from {products.length})</span>
+                      )}
                     </p>
-                  )}
+                    {searchQuery && (
+                      <p className="text-xs sm:text-sm text-gray-500 mt-1">
+                        Results for "<span className="font-semibold">{searchQuery}</span>"
+                      </p>
+                    )}
+                  </div>
                 </div>
-              </div>
-              
-              {filteredAndSortedProducts.length === 0 && (
+              )}
+
+              {/* Loading State */}
+              {loading && (
+                <div className="flex items-center justify-center py-24">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-classic-green"></div>
+                    <p className="text-gray-600 font-montserrat">Loading products...</p>
+                  </div>
+                </div>
+              )}
+
+              {/* No Products Message */}
+              {!loading && filteredAndSortedProducts.length === 0 && (
                 <div className="text-center py-12">
                   <p className="text-lg text-gray-500 font-montserrat">No products match your filters.</p>
                   <button
@@ -367,17 +441,17 @@ function ProductsPageContent() {
               )}
 
               {/* Products Display - Using displayed products for infinite scroll */}
-              {viewMode === 'grid' ? (
+              {!loading && viewMode === 'grid' ? (
                 <ProductGrid
                   products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
-              ) : (
+              ) : !loading ? (
                 <ProductListView
                   products={displayedProducts}
                   onQuickView={setSelectedProduct}
                 />
-              )}
+              ) : null}
 
               {/* Load More Section */}
               {hasMore && (
@@ -451,7 +525,7 @@ function ProductsPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
-                <h2 className="font-playfair text-xl text-gray-900">Filters</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Filters</h2>
                 <button
                   onClick={() => setShowMobileFilters(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"
@@ -511,7 +585,7 @@ function ProductsPageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-gray-200 flex items-center justify-between">
-                <h2 className="font-playfair text-xl text-gray-900">Sort By</h2>
+                <h2 className="font-montserrat font-bold text-xl text-gray-900">Sort By</h2>
                 <button
                   onClick={() => setShowMobileSort(false)}
                   className="p-2 hover:bg-gray-100 rounded-full"

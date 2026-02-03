@@ -44,7 +44,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/Banner1 1.webp',
+      src: '/images/Shop/shop1desk.jpeg',
       pos: 'object-[50%_0%]',
       title: '',
       subtitle: '',
@@ -85,6 +85,16 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
       description: '',
       ctaText: 'Shop Collection',
       ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/Shop/shop1mobile.jpeg',
+      pos: 'object-[50%_20%]',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
     }
   ];
 
@@ -93,10 +103,21 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     checkMobile();
     window.addEventListener('resize', checkMobile);
     
-    // Fetch shop hero content
+    // Set loading to false immediately so fallback images show right away
+    setLoading(false);
+    
+    // Fetch shop hero content in background (non-blocking)
     async function fetchShopHeroContent() {
       try {
-        const heroResponse = await fetch('/api/dynamic-content?type=shop-hero');
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 5000); // 5 second timeout
+        
+        const heroResponse = await fetch('/api/dynamic-content?type=shop-hero', {
+          signal: controller.signal
+        });
+
+        clearTimeout(timeoutId);
 
         if (heroResponse.ok) {
           const heroData = await heroResponse.json();
@@ -106,12 +127,14 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
         }
 
       } catch (error) {
-        // Silent error handling
-      } finally {
-        setLoading(false);
+        // Silent error handling - fallback images will be used
+        if (error instanceof Error && error.name !== 'AbortError') {
+          console.warn('Failed to fetch shop hero content, using fallback');
+        }
       }
     }
 
+    // Fetch in background without blocking
     fetchShopHeroContent();
     
     return () => window.removeEventListener('resize', checkMobile);
@@ -160,7 +183,48 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
   
   // Show Shopify content first, then static content
-  const mediaToUse = shopifyMedia.length > 0 ? [...shopifyMedia, ...staticMedia] : staticMedia;
+  // Always ensure we have at least fallback media available
+  const mediaToUse = shopifyMedia.length > 0 
+    ? [...shopifyMedia, ...staticMedia] 
+    : (staticMedia.length > 0 ? staticMedia : defaultFallbackMedia);
+  
+  // Safety check - if somehow no media, use desktop fallback
+  if (mediaToUse.length === 0) {
+    console.warn('No media available, using desktop fallback');
+    return (
+      <section className="relative min-h-[60vh] md:min-h-[80vh] flex flex-col overflow-hidden bg-black">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/images/home-hero/newhero/2nd.png"
+            alt="Solitario Jewelry Shop"
+            fill
+            priority
+            quality={90}
+            sizes="100vw"
+            className="object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+        </div>
+        <div className="absolute inset-0 z-10 flex items-end justify-center pb-16 md:pb-20">
+          <Link
+            href="#products"
+            className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+            style={{
+              background: 'rgba(255, 255, 255, 0.08)',
+              backdropFilter: 'blur(20px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+              border: '1px solid rgba(255, 255, 255, 0.15)',
+              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+            }}
+          >
+            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            <span className="relative z-10">Shop Collection</span>
+            <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+          </Link>
+        </div>
+      </section>
+    );
+  }
 
   // Handle media transition
   const handleMediaEnded = () => {
@@ -251,7 +315,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
                     }
                   })()
                 : currentMedia.ctaLink}
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -262,12 +326,12 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <span className="relative z-10">{currentMedia.ctaText}</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+              <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
             </Link>
           ) : (
             <Link
               href="#products"
-              className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              className="group inline-flex items-center gap-2 px-5 py-2.5 md:gap-3 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
               style={{
                 background: 'rgba(255, 255, 255, 0.08)',
                 backdropFilter: 'blur(20px) saturate(180%)',
@@ -278,7 +342,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
             >
               <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <span className="relative z-10">Shop Collection</span>
-              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+              <ArrowRight className="w-3 h-3 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
             </Link>
           )}
         </motion.div>

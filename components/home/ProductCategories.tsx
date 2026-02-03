@@ -38,17 +38,22 @@ export default function ProductCategories() {
   }, []);
 
   const filteredProducts: Product[] = (() => {
+    // Filter products by price range (10K-30K)
+    const priceFilteredProducts = allProducts.filter(
+      (product) => product.price >= 10000 && product.price <= 30000
+    );
+
     if (activeCategory === 'all') {
       return categories
         .map((cat) =>
-          allProducts.find(
+          priceFilteredProducts.find(
             (product) => product.category?.toLowerCase() === cat.slug.toLowerCase()
           )
         )
         .filter(Boolean)
         .slice(0, 4) as Product[];
     }
-    return allProducts
+    return priceFilteredProducts
       .filter(
         (product) => product.category?.toLowerCase() === activeCategory.toLowerCase()
       )
@@ -67,7 +72,7 @@ export default function ProductCategories() {
           className="mb-3 sm:mb-6 md:mb-8 text-center"
         >
           <span className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham text-bronze-gold mb-2 block">Collections</span>
-          <h2 className="text-xl sm:text-2xl md:text-4xl font-playfair text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green mb-2 sm:mb-4" style={{ letterSpacing: '-0.02em' }}>
             Find Your Perfect Lab Grown Diamond
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto font-montserrat hidden sm:block">
@@ -155,7 +160,7 @@ export default function ProductCategories() {
                   {/* Product Info */}
                   <div className="p-4">
                     <Link href={`/products/${product.id}`}>
-                      <h3 className="font-playfair text-sm sm:text-base text-gray-900 line-clamp-1 mb-2 group-hover:text-classic-green transition-colors min-h-[1.5rem]">
+                      <h3 className="font-montserrat font-bold text-sm sm:text-base text-gray-900 line-clamp-1 mb-2 group-hover:text-classic-green transition-colors min-h-[1.5rem]">
                         {product.name}
                       </h3>
                     </Link>

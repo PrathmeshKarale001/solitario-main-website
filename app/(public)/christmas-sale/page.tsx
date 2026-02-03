@@ -261,7 +261,7 @@ function ChristmasSalePageContent() {
             <div className="flex justify-center mb-6">
               <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-yellow-300" />
             </div>
-            <h1 className="text-4xl md:text-6xl lg:text-7xl font-playfair font-bold mb-4">
+            <h1 className="text-4xl md:text-6xl lg:text-7xl font-montserrat font-bold font-bold mb-4">
               Christmas Sale
             </h1>
             <p className="text-xl md:text-2xl lg:text-3xl font-montserrat mb-6 text-red-200">
@@ -314,7 +314,7 @@ function ChristmasSalePageContent() {
             <aside className="hidden lg:block w-72 flex-shrink-0">
               <div className="sticky top-24 max-h-[calc(100vh-140px)] overflow-y-auto pr-2">
                 <div className="mb-6 p-4 bg-gradient-to-br from-red-50 to-green-50 rounded-lg border border-red-100">
-                  <h3 className="font-playfair text-lg text-red-800 mb-2">🎄 Christmas Special</h3>
+                  <h3 className="font-montserrat font-bold text-lg text-red-800 mb-2">🎄 Christmas Special</h3>
                   <p className="text-sm text-gray-600">Find the perfect gift for your loved ones this holiday season!</p>
                 </div>
                 <ProductFilters
@@ -456,7 +456,7 @@ function ChristmasSalePageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="sticky top-0 bg-gradient-to-r from-red-600 to-green-600 border-b border-red-200 p-4 flex items-center justify-between z-10">
-                <h2 className="font-playfair text-xl text-white">Christmas Filters</h2>
+                <h2 className="font-montserrat font-bold text-xl text-white">Christmas Filters</h2>
                 <button
                   onClick={() => setShowMobileFilters(false)}
                   className="p-2 hover:bg-white/20 rounded-full transition-colors"
@@ -519,7 +519,7 @@ function ChristmasSalePageContent() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-4 border-b border-gray-200 flex items-center justify-between bg-gradient-to-r from-red-600 to-green-600">
-                <h2 className="font-playfair text-xl text-white">Sort By</h2>
+                <h2 className="font-montserrat font-bold text-xl text-white">Sort By</h2>
                 <button
                   onClick={() => setShowMobileSort(false)}
                   className="p-2 hover:bg-white/20 rounded-full transition-colors"

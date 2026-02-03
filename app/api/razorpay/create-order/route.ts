@@ -22,13 +22,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    let { items, customer, subtotal, shipping, tax, total } = body as {
+    let { items, customer, subtotal, shipping, tax, total, prebookingNotes, hasPrebookingItems } = body as {
       items: CartItemForOrder[];
       customer: CustomerDetails;
       subtotal: number;
       shipping: number;
       tax: number;
       total: number;
+      prebookingNotes?: string;
+      hasPrebookingItems?: boolean;
     };
     
     // Sanitize customer inputs
@@ -95,6 +97,10 @@ export async function POST(request: NextRequest) {
         customer_phone: customer.phone,
         items_count: items.length.toString(),
         shipping_address: `${customer.address.line1}, ${customer.address.city}, ${customer.address.state} - ${customer.address.pincode}`,
+        ...(hasPrebookingItems ? { 
+          order_type: 'PREBOOKING',
+          prebooking_items: items.filter((i: any) => i.isPrebook).map((i: any) => i.name).join(', '),
+        } : {}),
       },
     });
 

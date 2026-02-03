@@ -80,7 +80,7 @@ export default function ProductRecommendations({
         viewport={{ once: true }}
         className="mb-6"
       >
-        <h2 className="font-playfair text-2xl md:text-3xl text-gray-900 mb-2">
+        <h2 className="font-montserrat font-bold text-2xl md:text-3xl text-gray-900 mb-2">
           {title}
         </h2>
         <p className="text-gray-600 font-montserrat text-sm">

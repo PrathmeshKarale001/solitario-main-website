@@ -62,7 +62,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
           <div className="w-16 h-16 bg-error/10 rounded-full flex items-center justify-center mx-auto mb-4">
             <AlertTriangle className="w-8 h-8 text-error" />
           </div>
-          <h1 className="text-2xl font-playfair text-brand-800 mb-2">Access Denied</h1>
+          <h1 className="text-2xl font-montserrat font-bold text-brand-800 mb-2">Access Denied</h1>
           <p className="text-brand-500 font-montserrat mb-6">
             You don't have permission to access the admin panel. 
             Please contact the administrator if you believe this is an error.
@@ -115,7 +115,7 @@ function AdminVerification({ children }: { children: React.ReactNode }) {
                 className="object-contain"
               />
             </div>
-            <h1 className="text-2xl font-playfair text-brand-800 mb-2">Admin Verification</h1>
+            <h1 className="text-2xl font-montserrat font-bold text-brand-800 mb-2">Admin Verification</h1>
             <p className="text-brand-500 font-montserrat text-sm">
               Enter your admin PIN to continue
             </p>
@@ -232,7 +232,7 @@ function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => voi
                   />
                 </div>
                 <div>
-                  <span className="font-playfair text-lg text-white block leading-tight">Solitario</span>
+                  <span className="font-montserrat font-bold text-lg text-white block leading-tight">Solitario</span>
                   <span className="text-[10px] text-bronze-gold font-gotham uppercase tracking-wider">Admin Panel</span>
                 </div>
               </Link>

@@ -20,11 +20,6 @@ const HERO_MEDIA_DESKTOP = [
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 2.webp',
-    pos: 'object-[50%_20%]',
-  },
-  {
-    type: 'image',
     src: '/images/hero-banner-3.webp',
     pos: 'object-center',
   },
@@ -49,11 +44,6 @@ const HERO_MEDIA_MOBILE = [
     {
     type: 'image',
     src: '/images/home-hero/newhero/1stMobile.png',
-    pos: 'object-center',
-  },
-  {
-    type: 'image',
-    src: '/images/HOMEBanner5.jpg',
     pos: 'object-center',
   },
   {

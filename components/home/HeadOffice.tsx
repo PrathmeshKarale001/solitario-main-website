@@ -6,7 +6,7 @@ import Link from 'next/link';
 
 export default function HeadOffice() {
   return (
-    <section className="py-12 sm:py-16 md:py-24 px-4 sm:px-6 lg:px-8 bg-brand-100">
+    <section className="py-8 sm:py-10 md:py-14 px-4 sm:px-6 lg:px-8 bg-brand-100">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <motion.div
@@ -19,7 +19,7 @@ export default function HeadOffice() {
           <span className="inline-block text-classic-green text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham mb-2 sm:mb-4">
             Visit Us
           </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-playfair text-brand-800 mb-2 sm:mb-4">
+          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-brand-800 mb-2 sm:mb-4">
             Our <span className="text-classic-green">Head Office</span>
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
@@ -28,24 +28,30 @@ export default function HeadOffice() {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
-          {/* Map - Full Height */}
+          {/* Map - Full Height - Rebuilt Container */}
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="rounded-2xl sm:rounded-3xl overflow-hidden border border-brand-200 shadow-brand h-[500px] sm:h-[550px] lg:h-[600px]"
+            className="relative w-full h-[500px] sm:h-[550px] lg:h-[600px] rounded-2xl sm:rounded-3xl border border-brand-200 shadow-brand overflow-hidden bg-gray-100"
           >
-            <iframe
-              src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title="Solitario Head Office Location"
-            />
+            <div className="absolute inset-0 w-full h-full">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"
+                className="absolute top-0 left-0 w-full h-full"
+                style={{ 
+                  border: 0,
+                  minHeight: '100%',
+                  minWidth: '100%'
+                }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title="Solitario Head Office Location"
+                aria-label="Solitario Head Office Location Map"
+              />
+            </div>
           </motion.div>
 
           {/* Office Details - Matching Height */}
@@ -56,7 +62,7 @@ export default function HeadOffice() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="rounded-2xl sm:rounded-3xl bg-white border border-brand-200 p-6 sm:p-8 flex flex-col justify-center shadow-brand h-[500px] sm:h-[550px] lg:h-[600px]"
           >
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-playfair text-brand-800 mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-6 sm:mb-8">
               Solitario Lab Grown <span className="text-classic-green">Pvt. Ltd.</span>
             </h3>
 

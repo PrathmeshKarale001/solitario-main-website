@@ -5,12 +5,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Linkedin, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Linkedin, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck, Ticket } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import { useCart } from '@/lib/cart-context';
 import { NearestStore } from '@/components/stores';
+import { trackPageView, trackAddToCart } from '@/lib/gtm-conversions';
+import { isPrebookingProduct, getProductDisplayPrice, PREBOOK_PRICE } from '@/lib/prebooking';
 
 interface ProductDetailProps {
   product: Product;
@@ -53,6 +55,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
     setIsWishlisted(isInWishlist);
+    
+    // Track page view conversion
+    trackPageView();
   }, [product.id]);
 
   // Fetch related products from Shopify
@@ -88,12 +93,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleAddToCart = () => {
     addToCartContext(product, quantity);
+    // Track Add to Cart conversion
+    trackAddToCart();
   };
 
   const handleBuyNow = () => {
     // Clear cart and add only this product for direct checkout
     localStorage.removeItem('cart');
     addToCartContext(product, quantity);
+    // Track Add to Cart conversion (Buy Now also counts as Add to Cart)
+    trackAddToCart();
     router.push('/checkout');
   };
 
@@ -305,7 +314,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             </nav>
 
             {/* Product Title - 10% smaller */}
-            <h1 className="font-playfair text-xl md:text-2xl lg:text-3xl text-white leading-tight" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="font-montserrat font-bold text-xl md:text-2xl lg:text-3xl text-white leading-tight" style={{ letterSpacing: '-0.02em' }}>
               {product.name.toUpperCase()}
             </h1>
           </motion.div>
@@ -450,12 +459,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <span>Expected delivery: {pincodeResult.eta}</span>
                           </div>
                         )}
-                        {pincodeResult.cod && (
-                          <div className="flex items-center gap-2 text-green-600 text-sm">
-                            <BadgeCheck className="w-4 h-4" />
-                            <span>Cash on Delivery available</span>
-                          </div>
-                        )}
                       </div>
                     ) : (
                       <div className="flex items-center gap-2 text-red-700">
@@ -498,13 +501,23 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               </div>
 
               {/* Product Name */}
-              <h1 className="font-playfair text-2xl md:text-3xl text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
+              <h1 className="font-montserrat font-bold text-2xl md:text-3xl text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
                 {product.name}
               </h1>
 
               {/* Price */}
               <div className="flex items-center gap-3 flex-wrap">
-                {product.comparePrice ? (
+                {isPrebookingProduct(product) ? (
+                  <>
+                    <span className="font-gotham text-2xl md:text-3xl font-semibold text-purple-600">
+                      {getProductDisplayPrice(product)}
+                    </span>
+                    <span className="inline-flex items-center gap-1 px-3 py-1.5 bg-gradient-to-r from-purple-600 to-indigo-600 text-white text-xs md:text-sm font-gotham font-semibold rounded-full">
+                      <Ticket className="w-3.5 h-3.5" />
+                      Prebooking
+                    </span>
+                  </>
+                ) : product.comparePrice ? (
                   <>
                     <span className="font-gotham text-2xl md:text-3xl font-semibold text-classic-green">
                       {formatPrice(product.price, product.currency)}
@@ -522,6 +535,22 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   </span>
                 )}
               </div>
+
+              {/* Prebooking Info Banner */}
+              {isPrebookingProduct(product) && (
+                <div className="bg-gradient-to-r from-purple-50 to-indigo-50 border border-purple-200 rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <Ticket className="w-5 h-5 text-purple-600 flex-shrink-0 mt-0.5" />
+                    <div>
+                      <h4 className="font-semibold text-purple-800 mb-1">Warner Bros Collection - Prebooking</h4>
+                      <p className="text-sm text-purple-700">
+                        Secure your exclusive piece with a prebooking amount of ₹{PREBOOK_PRICE.toLocaleString('en-IN')}. 
+                        Full payment will be collected upon product availability.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Promotions Callout - Single Line Design */}
               <div className="space-y-2">
@@ -663,9 +692,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                         <div className="px-4 pb-4 border-t border-gray-100">
                           <div className="mt-3 space-y-3 text-sm">
                             <div>
-                              <h5 className="font-semibold text-gray-900 mb-2">7-Day Exchange Policy</h5>
+                              <h5 className="font-semibold text-gray-900 mb-2">15-Day Exchange Policy</h5>
                               <p className="text-gray-700 leading-relaxed">
-                                Exchange requests must be raised within 7 days of delivery. Items must be unused, unworn, 
+                                Exchange requests must be raised within 15 days of delivery. Items must be unused, unworn, 
                                 and in original condition with all certificates and packaging.
                               </p>
                             </div>
@@ -695,16 +724,28 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                   <button
                     onClick={handleAddToCart}
-                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 bg-bronze-gold hover:bg-soft-bronze text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand hover:shadow-gold-glow transition-all duration-500 group"
+                    className={`flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 group ${
+                      isPrebookingProduct(product)
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                        : 'bg-bronze-gold hover:bg-soft-bronze hover:shadow-gold-glow'
+                    }`}
                   >
-                    <ShoppingCart className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
-                    Add to Cart
+                    {isPrebookingProduct(product) ? (
+                      <Ticket className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
+                    ) : (
+                      <ShoppingCart className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
+                    )}
+                    {isPrebookingProduct(product) ? 'Prebook Now' : 'Add to Cart'}
                   </button>
                   <button
                     onClick={handleBuyNow}
-                    className="flex-1 flex items-center justify-center gap-2 md:gap-3 bg-classic-green hover:bg-classic-green/90 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500"
+                    className={`flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 ${
+                      isPrebookingProduct(product)
+                        ? 'bg-purple-800 hover:bg-purple-900'
+                        : 'bg-classic-green hover:bg-classic-green/90'
+                    }`}
                   >
-                    Buy Now
+                    {isPrebookingProduct(product) ? 'Prebook & Checkout' : 'Buy Now'}
                   </button>
                 </div>
 
@@ -786,7 +827,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="prose max-w-none"
                 >
-                  <h3 className="font-playfair text-heading-lg text-brand-800 mb-4">Description</h3>
+                  <h3 className="font-montserrat font-bold text-heading-lg text-brand-800 mb-4">Description</h3>
                   <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-4">
                     {descriptionText}
                   </p>
@@ -833,7 +874,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-4"
                 >
-                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-6">Additional Information</h3>
+                  <h3 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Additional Information</h3>
                   <ul className="space-y-3">
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
@@ -845,7 +886,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-brand-700 font-montserrat">Hallmarked gold ensuring purity and durability.</span>
+                      <span className="text-brand-700 font-montserrat">Vermeil gold ensuring premium quality and elegance.</span>
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
@@ -857,7 +898,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </li>
                     <li className="flex items-start gap-3">
                       <Check className="w-5 h-5 text-bronze-gold mt-0.5 flex-shrink-0" />
-                      <span className="text-brand-700 font-montserrat">Lifetime buyback guarantee for your peace of mind.</span>
+                      <span className="text-brand-700 font-montserrat">Lifetime Exchange for your peace of mind.</span>
                     </li>
                   </ul>
                 </motion.div>
@@ -869,7 +910,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-6"
                 >
-                  <h3 className="font-playfair text-heading-xl text-brand-800 mb-6">Customer Reviews</h3>
+                  <h3 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Customer Reviews</h3>
                   
                   {/* No reviews yet message */}
                   <div className="text-center py-12">
@@ -886,7 +927,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Featured Collection */}
       <Section variant="light" padding="lg" className="bg-white">
         <Container>
-          <h2 className="font-playfair text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="font-montserrat font-bold text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
             Featured Collection
           </h2>
           
@@ -921,7 +962,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </button>
                   </div>
                   <div>
-                    <h3 className="font-playfair text-body-sm md:text-body-md text-brand-800 group-hover:text-bronze-gold transition-colors mb-1">
+                    <h3 className="font-montserrat font-bold text-body-sm md:text-body-md text-brand-800 group-hover:text-bronze-gold transition-colors mb-1">
                       {relatedProduct.name}
                     </h3>
                     <div className="flex items-center gap-2 flex-wrap">
@@ -993,7 +1034,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     <div className="w-12 h-12 bg-bronze-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
                       <feature.icon className="w-6 h-6 text-bronze-gold" />
                     </div>
-                    <h3 className="font-playfair text-base text-brand-800 mb-1">{feature.title}</h3>
+                    <h3 className="font-montserrat font-bold text-base text-brand-800 mb-1">{feature.title}</h3>
                     <p className="text-brand-600 font-montserrat text-xs">{feature.description}</p>
                   </div>
                 ))

@@ -5,7 +5,7 @@ import { Eye, Target, Sparkles, Shield, Gem, Heart } from 'lucide-react';
 
 export default function VisionMission() {
   return (
-    <section className="py-24 px-4 bg-gradient-to-b from-brand-50 via-white to-brand-50 relative overflow-hidden">
+    <section className="pt-24 pb-12 px-4 bg-gradient-to-b from-brand-50 via-white to-brand-50 relative overflow-hidden">
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-96 h-96 bg-bronze-gold/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 right-0 w-96 h-96 bg-classic-green/5 rounded-full blur-3xl" />
@@ -21,7 +21,7 @@ export default function VisionMission() {
           <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
             What Drives Us
           </span>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-playfair text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-montserrat font-bold text-brand-800 mb-6" style={{ letterSpacing: '-0.02em' }}>
             Our <span className="text-classic-green">Vision</span>
           </h2>
           <p className="text-lg md:text-xl text-brand-600 max-w-3xl mx-auto font-montserrat leading-relaxed">
@@ -45,36 +45,36 @@ export default function VisionMission() {
               <Eye className="w-10 h-10 text-classic-green" />
             </div>
             
-            <h3 className="text-2xl md:text-4xl font-playfair text-brand-800 mb-8">
+            <h3 className="text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-8">
               Flipping the Script on <span className="text-classic-green">Luxury</span>
             </h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
-              <div className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-bronze-gold/10 rounded-xl flex items-center justify-center">
                   <Gem className="w-6 h-6 text-bronze-gold" />
                 </div>
-                <h4 className="text-xl font-playfair text-brand-800">Accessible Luxury</h4>
+                <h4 className="text-xl font-montserrat font-bold text-brand-800">Accessible Luxury</h4>
                 <p className="text-brand-700 font-montserrat leading-relaxed">
                   Diamonds aren't exclusive indulgences but luxury that's accessible to all, ethically crafted and tastefully designed.
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-classic-green/10 rounded-xl flex items-center justify-center">
                   <Heart className="w-6 h-6 text-classic-green" />
                 </div>
-                <h4 className="text-xl font-playfair text-brand-800">Personal Expression</h4>
+                <h4 className="text-xl font-montserrat font-bold text-brand-800">Personal Expression</h4>
                 <p className="text-brand-700 font-montserrat leading-relaxed">
                   Our pieces become an extension of your personality - tools of expression and symbols of love, power, and joy.
                 </p>
               </div>
               
-              <div className="space-y-4">
+              <div className="space-y-4 flex flex-col items-center">
                 <div className="w-12 h-12 bg-bronze-gold/10 rounded-xl flex items-center justify-center">
                   <Target className="w-6 h-6 text-bronze-gold" />
                 </div>
-                <h4 className="text-xl font-playfair text-brand-800">Conscious Impact</h4>
+                <h4 className="text-xl font-montserrat font-bold text-brand-800">Conscious Impact</h4>
                 <p className="text-brand-700 font-montserrat leading-relaxed">
                   We bling better with strong ethics powered by dynamic design, making the world more consciously cool.
                 </p>
@@ -110,7 +110,7 @@ export default function VisionMission() {
                 <div className={`w-16 h-16 bg-${item.color}/10 rounded-xl flex items-center justify-center mb-4 mx-auto group-hover:bg-${item.color}/20 transition-colors duration-300`}>
                   <item.icon className={`w-8 h-8 text-${item.color}`} />
                 </div>
-                <h4 className={`text-xl font-playfair text-brand-800 mb-3 group-hover:text-${item.color} transition-colors duration-300`}>
+                <h4 className={`text-xl font-montserrat font-bold text-brand-800 mb-3 group-hover:text-${item.color} transition-colors duration-300`}>
                   {item.label}
                 </h4>
                 <p className="text-brand-600 font-montserrat leading-relaxed">

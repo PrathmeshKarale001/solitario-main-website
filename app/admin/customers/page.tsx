@@ -19,7 +19,7 @@ export default function AdminCustomersPage() {
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-playfair text-brand-800 mb-1">Customers</h1>
+          <h1 className="text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-1">Customers</h1>
           <p className="text-brand-500 font-montserrat text-sm">Manage your customer base</p>
         </div>
         <Link
@@ -37,7 +37,7 @@ export default function AdminCustomersPage() {
           <div className="w-16 h-16 bg-soft-bronze/10 rounded-2xl flex items-center justify-center mx-auto mb-4">
             <Users className="w-8 h-8 text-soft-bronze" />
           </div>
-          <h2 className="text-xl font-playfair text-brand-800 mb-2">Customer Management via Shopify</h2>
+          <h2 className="text-xl font-montserrat font-bold text-brand-800 mb-2">Customer Management via Shopify</h2>
           <p className="text-brand-500 font-montserrat text-sm mb-6">
             All customer data is securely managed through your Shopify admin panel. 
             View customer profiles, order history, and communication preferences.

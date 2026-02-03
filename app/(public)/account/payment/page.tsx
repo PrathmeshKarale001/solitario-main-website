@@ -107,7 +107,7 @@ export default function PaymentPage() {
               animate={{ opacity: 1, y: 0 }}
               className="mb-8"
             >
-              <h1 className="text-3xl md:text-4xl font-playfair text-brand-800 mb-2">Payment Methods</h1>
+              <h1 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">Payment Methods</h1>
               <p className="text-brand-500 font-montserrat">Manage your saved payment options</p>
             </motion.div>
 
@@ -166,12 +166,12 @@ export default function PaymentPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <h2 className="font-playfair text-lg text-brand-800 mb-4">Saved Payment Methods</h2>
+              <h2 className="font-montserrat font-bold text-lg text-brand-800 mb-4">Saved Payment Methods</h2>
               
               {methods.length === 0 ? (
                 <div className="bg-white rounded-2xl shadow-brand border border-brand-100 p-12 text-center">
                   <CreditCard className="w-16 h-16 text-brand-300 mx-auto mb-4" />
-                  <h3 className="text-xl font-playfair text-brand-800 mb-2">No payment methods saved</h3>
+                  <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-2">No payment methods saved</h3>
                   <p className="text-brand-500 font-montserrat">
                     Add a payment method for faster checkout
                   </p>
@@ -262,7 +262,7 @@ export default function PaymentPage() {
             >
               <div className="p-6">
                 <div className="flex items-center justify-between mb-6">
-                  <h2 className="text-xl font-playfair text-brand-800">
+                  <h2 className="text-xl font-montserrat font-bold text-brand-800">
                     {modalType === 'card' ? 'Add Card' : 'Add UPI'}
                   </h2>
                   <button onClick={() => setIsModalOpen(false)} className="p-2 hover:bg-brand-100 rounded-lg transition-colors">
@@ -278,7 +278,7 @@ export default function PaymentPage() {
                       <span className="text-2xl font-bold text-bronze-gold">₹</span>
                     )}
                   </div>
-                  <h3 className="font-playfair text-lg text-brand-800 mb-2">Coming Soon</h3>
+                  <h3 className="font-montserrat font-bold text-lg text-brand-800 mb-2">Coming Soon</h3>
                   <p className="text-brand-500 font-montserrat text-sm">
                     {modalType === 'card' 
                       ? 'Card saving will be available during checkout with Shopify Payments.'

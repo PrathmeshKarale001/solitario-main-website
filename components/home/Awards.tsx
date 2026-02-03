@@ -16,7 +16,7 @@ export default function Awards() {
           transition={{ duration: 0.4 }}
           className="text-center mb-6 sm:mb-8"
         >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-playfair text-classic-green mb-2">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold text-classic-green mb-2">
             Awards & Recognition
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-2xl mx-auto hidden sm:block">
@@ -47,7 +47,7 @@ export default function Awards() {
                 </div>
                 {/* Award Info */}
                 <div className="p-4 text-center">
-                  <h3 className="font-playfair text-sm md:text-base text-classic-green mb-1">
+                  <h3 className="font-montserrat font-bold text-sm md:text-base text-classic-green mb-1">
                     {award.title}
                   </h3>
                   <p className="text-xs text-gray-600">{award.description}</p>
