@@ -230,37 +230,24 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
           </div>
         </motion.div>
 
-        {/* Bottom footer */}
+        {/* Bottom footer with tagline - centered */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 0.4 }}
-          className="absolute bottom-6 sm:bottom-8 lg:bottom-10 left-1/2 -translate-x-1/2 flex items-center gap-3 sm:gap-4"
+          className="absolute bottom-6 sm:bottom-8 lg:bottom-10 left-0 right-0 flex flex-col items-center justify-center gap-3 sm:gap-4 w-full"
         >
-          {/* Small DC Logo */}
-          <div className="relative w-[28px] h-[28px] sm:w-[36px] sm:h-[36px]">
+          {/* WB Tagline Image - centered */}
+          <div className="relative w-[180px] h-[24px] sm:w-[240px] sm:h-[32px] lg:w-[384px] lg:h-[50px] flex justify-center">
             <Image 
-              src="/images/warnerbroassets/dc-logo.webp" 
-              alt="DC" 
+              src="/images/warnerbroassets/WB-Tagline.png" 
+              alt="Warner Bros Tagline" 
               fill 
-              className="object-contain"
+              className="object-contain object-center"
+              priority
             />
           </div>
-          {/* WB Shield */}
-          <div className="relative w-[32px] h-[32px] sm:w-[40px] sm:h-[40px]">
-            <Image 
-              src="/images/warnerbroassets/warner-bg.webp" 
-              alt="Warner Bros" 
-              fill 
-              className="object-contain"
-            />
-          </div>
-          {/* Copyright text */}
-          <div className="text-white/50 text-[8px] sm:text-[10px] font-montserrat leading-tight text-left">
-            <p>All DC characters and elements © & ™ DC.</p>
-            <p>WB SHIELD: © & ™ WBEI. (s26)</p>
-            <p>© & ™ Turner Entertainment Co. (s26)</p>
-          </div>
+        
         </motion.div>
       </motion.div>
     </div>
