@@ -57,7 +57,7 @@ const nextConfig = {
               "script-src 'self' 'unsafe-inline' 'unsafe-eval' blob: https://checkout.razorpay.com https://api.razorpay.com https://cdn.razorpay.com https://*.clerk.accounts.dev https://*.clerk.com https://*.vercel-scripts.com https://*.posthog.com https://*.sentry.io https://www.googletagmanager.com https://www.google-analytics.com https://ssl.google-analytics.com https://tagmanager.google.com https://www.googleadservices.com https://googleads.g.doubleclick.net https://*.googlesyndication.com https://www.google.com https://pagead2.googlesyndication.com",
               // worker-src: Allow Clerk and other workers using blob URLs
               "worker-src 'self' blob:",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://tagmanager.google.com https://cdn.razorpay.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://tagmanager.google.com https://www.googletagmanager.com https://cdn.razorpay.com",
               // img-src: Allow Google tracking pixels and analytics images
               "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://*.google.com https://*.googleadservices.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://bid.g.doubleclick.net https://www.google.co.in https://pagead2.googlesyndication.com",
               "font-src 'self' https://fonts.gstatic.com",
