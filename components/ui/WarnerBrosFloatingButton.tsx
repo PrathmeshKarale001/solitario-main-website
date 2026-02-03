@@ -12,8 +12,17 @@ export default function WarnerBrosFloatingButton() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
   const [showTransition, setShowTransition] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
+
+  // Check for mobile viewport
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   // Don't show on Warner Bros page itself or admin pages
   const isWarnerBrosPage = pathname === '/warner-bros';
@@ -33,9 +42,10 @@ export default function WarnerBrosFloatingButton() {
     return () => clearInterval(interval);
   }, [isHovered]);
 
-  // Reset transition state when pathname changes
+  // Reset transition and hover state when pathname changes
   useEffect(() => {
     setShowTransition(false);
+    setIsHovered(false);
   }, [pathname]);
 
   // Don't render on certain pages
@@ -45,6 +55,7 @@ export default function WarnerBrosFloatingButton() {
 
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault();
+    setIsHovered(false); // Reset hover state immediately on click
     setShowTransition(true);
   };
 
@@ -68,8 +79,8 @@ export default function WarnerBrosFloatingButton() {
           animate={{ 
             scale: 1, 
             opacity: 1,
-            width: isHovered ? (typeof window !== 'undefined' && window.innerWidth < 1024 ? '220px' : '280px') : '72px',
-            height: isHovered ? (typeof window !== 'undefined' && window.innerWidth < 1024 ? '72px' : '80px') : '72px',
+            width: isHovered ? (isMobile ? '200px' : '260px') : '72px',
+            height: isHovered ? (isMobile ? '72px' : '80px') : '72px',
             borderRadius: isHovered ? '20px' : '36px'
           }}
           transition={{ 

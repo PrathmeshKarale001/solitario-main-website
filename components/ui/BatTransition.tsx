@@ -93,7 +93,7 @@ export default function BatTransition({ isActive, onComplete }: BatTransitionPro
   if (!isActive) return null;
 
   return (
-    <div className="fixed inset-0 z-[9999] pointer-events-none bg-black overflow-hidden">
+    <div className="fixed inset-0 z-[9999] pointer-events-none bg-black overflow-hidden" style={{ width: '100vw', height: '100vh', maxWidth: '100%' }}>
       {/* Bat swarm with varied paths and sizes */}
       {bats.map((bat) => (
         <motion.div
