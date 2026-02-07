@@ -273,22 +273,25 @@ export async function getHomeHeroSections(): Promise<HomeHeroSection[]> {
       .map(edge => {
         const node = edge.node;
         const fields = parseMetaobjectFields(node.fields);
-        
+        const isActiveRaw = fields['is_active'] ?? fields['Is Active'] ?? fields['is active'];
+        const isActive = isActiveRaw === true || isActiveRaw === 'true';
+        const displayOrderRaw = fields['display_order'] ?? fields['Display Order'] ?? fields['display order'];
+        const displayOrder = typeof displayOrderRaw === 'number' ? displayOrderRaw : parseInt(String(displayOrderRaw), 10) || 0;
         return {
           id: node.id,
           handle: node.handle,
-          title: fields['title'],
-          subtitle: fields['subtitle'],
-          description: fields['description'],
-          backgroundImage: fields['background_image'] || { url: '', altText: '' },
-          backgroundVideo: fields['background_video'],
-          mobileBackgroundImage: fields['mobile_background_image'],
-          mobileBackgroundVideo: fields['mobile_background_video'],
-          mediaType: fields['media_type']?.toLowerCase() || 'image',
-          ctaText: fields['cta_text'],
-          ctaLink: fields['cta_link'],
-          isActive: fields['is_active'] || false,
-          displayOrder: fields['display_order'] || 0,
+          title: fields['title'] ?? fields['Display name'],
+          subtitle: fields['subtitle'] ?? fields['Subtitle'],
+          description: fields['description'] ?? fields['Description'],
+          backgroundImage: fields['background_image'] ?? fields['Background Image'] ?? { url: '', altText: '' },
+          backgroundVideo: fields['background_video'] ?? fields['Background Video'],
+          mobileBackgroundImage: fields['mobile_background_image'] ?? fields['Mobile Background Image'],
+          mobileBackgroundVideo: fields['mobile_background_video'] ?? fields['Mobile Background Video'],
+          mediaType: (fields['media_type'] ?? fields['Media Type'] ?? 'image').toString().toLowerCase() || 'image',
+          ctaText: fields['cta_text'] ?? fields['CTA Text'] ?? fields['cta text'],
+          ctaLink: fields['cta_link'] ?? fields['CTA Link'] ?? fields['cta link'],
+          isActive: Boolean(isActive),
+          displayOrder,
           updatedAt: node.updatedAt
         };
       })

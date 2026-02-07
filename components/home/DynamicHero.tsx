@@ -25,6 +25,17 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [dynamicMedia, setDynamicMedia] = useState<Array<{
+    type: 'image' | 'video';
+    src: string;
+    mobileSrc?: string;
+    pos?: string;
+    title?: string;
+    subtitle?: string;
+    description?: string;
+    ctaText?: string;
+    ctaLink?: string;
+  }> | null>(null);
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
@@ -88,11 +99,62 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
-    
-    // Skip dynamic content fetching for now - using static images
-    setLoading(false);
-    
     return () => window.removeEventListener('resize', checkMobile);
+  }, []);
+
+  // Fetch dynamic home hero from Shopify metaobjects (Home hero)
+  useEffect(() => {
+    let cancelled = false;
+    async function fetchHero() {
+      try {
+        const res = await fetch('/api/dynamic-content?type=home-hero');
+        const json = await res.json();
+        if (cancelled || !json?.success || !Array.isArray(json.data) || json.data.length === 0) {
+          setLoading(false);
+          return;
+        }
+        const items = json.data.map((section: {
+          mediaType?: string;
+          backgroundImage?: { url?: string };
+          backgroundVideo?: string;
+          mobileBackgroundImage?: { url?: string };
+          mobileBackgroundVideo?: string;
+          ctaText?: string;
+          ctaLink?: string;
+          title?: string;
+          subtitle?: string;
+          description?: string;
+        }) => {
+          const isVideo = (section.mediaType || 'image').toLowerCase() === 'video';
+          const src = isVideo
+            ? (section.backgroundVideo || '')
+            : (section.backgroundImage?.url || '');
+          const mobileSrc = isVideo
+            ? section.mobileBackgroundVideo
+            : section.mobileBackgroundImage?.url;
+          return {
+            type: (isVideo ? 'video' : 'image') as 'image' | 'video',
+            src,
+            mobileSrc,
+            pos: 'object-cover' as const,
+            title: section.title,
+            subtitle: section.subtitle,
+            description: section.description,
+            ctaText: section.ctaText || 'Explore Collection',
+            ctaLink: section.ctaLink || '/products',
+          };
+        }).filter((m: { src: string }) => m.src);
+        if (!cancelled && items.length > 0) {
+          setDynamicMedia(items);
+        }
+      } catch {
+        // ignore; fallback to static
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    fetchHero();
+    return () => { cancelled = true; };
   }, []);
 
   // Define media type with optional content fields
@@ -108,9 +170,9 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     ctaLink?: string;
   };
 
-  // Use mobile-specific media array on mobile devices
+  // Use mobile-specific media array on mobile devices (fallback)
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
-  const mediaToUse = staticMedia;
+  const mediaToUse = (dynamicMedia && dynamicMedia.length > 0) ? dynamicMedia : staticMedia;
   
   // Helper to get the correct source based on device
   const getMediaSrc = (media: MediaItem) => {
