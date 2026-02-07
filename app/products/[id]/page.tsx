@@ -1,6 +1,6 @@
 import { getProductByHandle } from '@/lib/shopify-data';
 import { notFound } from 'next/navigation';
-import ProductDetail from '@/components/products/ProductDetail';
+import { LazyProductDetail } from '@/components/lazy';
 import { ProductSchema } from '@/components/seo/JsonLd';
 import Breadcrumbs from '@/components/ui/Breadcrumbs';
 import { ProductErrorBoundary } from '@/components/ui/ErrorBoundary';
@@ -40,7 +40,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <Breadcrumbs items={breadcrumbs} />
       </div>
       <ProductErrorBoundary>
-        <ProductDetail product={product} />
+        <LazyProductDetail product={product} />
       </ProductErrorBoundary>
     </div>
   );

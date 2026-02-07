@@ -18,8 +18,9 @@ export async function GET(request: NextRequest) {
       currentProductId
     });
 
-    // Direct Shopify API call on server-side - fetch more products to find cheaper ones
-    const result = await shopifyStorefrontFetch(GET_PRODUCTS_QUERY, { first: 550 });
+    // Optimize: Fetch only 50 products instead of 550 for better performance
+    // We'll fetch enough to get good recommendations without over-fetching
+    const result = await shopifyStorefrontFetch(GET_PRODUCTS_QUERY, { first: 50 });
 
     if (result.errors || !result.data?.products?.edges) {
       console.error('❌ API: Shopify fetch failed:', result.errors);

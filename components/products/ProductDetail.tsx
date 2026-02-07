@@ -393,6 +393,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       src={img}
                       alt={`${product.name} view ${index + 1}`}
                       fill
+                      sizes="(max-width: 768px) 64px, 96px"
+                      loading="lazy"
                       className="object-contain p-2 bg-gradient-to-br from-brand-50 to-white"
                     />
                   </button>
@@ -737,16 +739,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     )}
                     {isPrebookingProduct(product) ? 'Prebook Now' : 'Add to Cart'}
                   </button>
-                  <button
-                    onClick={handleBuyNow}
-                    className={`flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 ${
-                      isPrebookingProduct(product)
-                        ? 'bg-purple-800 hover:bg-purple-900'
-                        : 'bg-classic-green hover:bg-classic-green/90'
-                    }`}
-                  >
-                    {isPrebookingProduct(product) ? 'Prebook & Checkout' : 'Buy Now'}
-                  </button>
+                  {/* Hide Buy Now button for prebooking products - only show Prebook */}
+                  {!isPrebookingProduct(product) && (
+                    <button
+                      onClick={handleBuyNow}
+                      className="flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 bg-classic-green hover:bg-classic-green/90"
+                    >
+                      Buy Now
+                    </button>
+                  )}
                 </div>
 
                 {/* Nearest Store CTA */}
@@ -856,13 +857,24 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </div>
                   )}
                   
-                  {/* Buy Now CTA in Description */}
+                  {/* Buy Now / Prebook CTA in Description */}
                   <div className="mt-6 pt-6 border-t border-brand-200">
                     <button
-                      onClick={handleBuyNow}
-                      className="w-full sm:w-auto flex items-center justify-center gap-3 bg-classic-green hover:bg-classic-green/90 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500"
+                      onClick={handleAddToCart}
+                      className={`w-full sm:w-auto flex items-center justify-center gap-3 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500 ${
+                        isPrebookingProduct(product)
+                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                          : 'bg-classic-green hover:bg-classic-green/90'
+                      }`}
                     >
-                      Buy Now
+                      {isPrebookingProduct(product) ? (
+                        <>
+                          <Ticket className="w-5 h-5" />
+                          Prebook Now
+                        </>
+                      ) : (
+                        'Buy Now'
+                      )}
                     </button>
                   </div>
                 </motion.div>
@@ -966,7 +978,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       {relatedProduct.name}
                     </h3>
                     <div className="flex items-center gap-2 flex-wrap">
-                      {relatedProduct.comparePrice ? (
+                      {isPrebookingProduct(relatedProduct) ? (
+                        <p className="font-gotham text-body-sm font-semibold text-purple-600">
+                          {getProductDisplayPrice(relatedProduct)}
+                        </p>
+                      ) : relatedProduct.comparePrice ? (
                         <>
                           <p className="font-gotham text-body-sm font-semibold text-classic-green">
                             {formatPrice(relatedProduct.price, relatedProduct.currency)}

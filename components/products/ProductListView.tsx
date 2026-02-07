@@ -58,6 +58,7 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                     src={product.image || '/images/placeholder.svg'}
                     alt={product.name}
                     fill
+                    sizes="(max-width: 768px) 100vw, 256px"
                     className="object-contain p-6 transition-transform duration-700 group-hover:scale-110"
                   />
                   {product.featured && (

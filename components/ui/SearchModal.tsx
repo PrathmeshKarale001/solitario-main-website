@@ -7,6 +7,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
+import { isPrebookingProduct, getProductDisplayPrice } from '@/lib/prebooking';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -222,8 +223,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                 {product.category}
                               </p>
                             </div>
-                            <p className="font-gotham text-classic-green font-semibold">
-                              {formatPrice(product.price, product.currency)}
+                            <p className={`font-gotham font-semibold ${isPrebookingProduct(product) ? 'text-purple-600 text-sm' : 'text-classic-green'}`}>
+                              {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                             </p>
                             <ArrowRight className="w-4 h-4 text-brand-400 group-hover:text-classic-green group-hover:translate-x-1 transition-all" />
                           </Link>

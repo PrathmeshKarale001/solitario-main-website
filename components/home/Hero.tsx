@@ -1,67 +1,60 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+// New hero images - Desktop: 1600x700px (230-233), Mobile: 1080x1350 4:5 (234-237)
+// Using WebP format directly for optimal performance (86.7% smaller than JPG)
 const HERO_MEDIA_DESKTOP = [
-  // {
-  //   type: 'image',
-  //   src: '/images/HomeBanner1st.jpg',
-  //   pos: 'object-center',
-  // },
-
   {
     type: 'image',
-    src: '/images/home-hero/newhero/1st.png',
-    pos: 'object-center',
+    src: '/images/home-hero/Home_Herofeb 1171277230.webp',
+    pos: 'object-cover',
+    ctaText: 'Shop Now',
+    ctaLink: '/products',
   },
   {
     type: 'image',
-    src: '/images/hero-banner-3.webp',
-    pos: 'object-center',
+    src: '/images/home-hero/Home_Herofeb 1171277231.webp',
+    pos: 'object-cover',
+    ctaText: 'Shop Now',
+    ctaLink: '/products',
   },
   {
     type: 'image',
-    src: '/images/HERO BANNER 4.webp',
-    pos: 'object-center',
+    src: '/images/home-hero/Home_Herofeb 1171277232.webp',
+    pos: 'object-cover',
+    ctaText: 'Shop Now',
+    ctaLink: '/products',
+  },
+  {
+    type: 'image',
+    src: '/images/home-hero/Home_Herofeb 1171277233.webp',
+    pos: 'object-cover',
+    ctaText: 'Shop Now',
+    ctaLink: '/products',
   },
   {
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+    ctaText: 'Explore Collection',
+    ctaLink: '/products',
   },
 ];
 
+// Mobile hero images - Mobile_Banner for mobile viewport
+// Using WebP format directly for optimal performance (86.7% smaller than JPG)
 const HERO_MEDIA_MOBILE = [
-  // {
-  //   type: 'image',
-  //   src: '/images/HomeBanner1st.jpg',
-  //   pos: 'object-center',
-  // },
-
-    {
-    type: 'image',
-    src: '/images/home-hero/newhero/1stMobile.png',
-    pos: 'object-center',
-  },
-  {
-    type: 'image',
-    src: '/images/Hero_Mobile/Hero%20banner%202.jpg',
-    pos: 'object-center',
-  },
-  {
-    type: 'image',
-    src: '/images/home-hero/newhero/3rdMobile.png',
-    pos: 'object-center',
-  },
-  {
-    type: 'image',
-    src: '/images/Hero_Mobile/Hero%20banner%204.jpg',
-    pos: 'object-center',
-  },
-  
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_1.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_2.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_3.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_4.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_5.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_6.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+  { type: 'image', src: '/images/home-hero/Mobile_Banner_7.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
 ];
 
 export default function Hero() {
@@ -79,9 +72,27 @@ export default function Hero() {
   }, []);
 
   const heroMedia = isMobile ? HERO_MEDIA_MOBILE : HERO_MEDIA_DESKTOP;
+  const currentMedia = heroMedia[currentVideoIndex];
 
   // Handle video ended event to cycle to next media
   const handleVideoEnded = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentVideoIndex((prev) => (prev + 1) % heroMedia.length);
+      setIsTransitioning(false);
+    }, 300);
+  };
+
+  // Navigate to previous/next slide
+  const goToPrevious = () => {
+    setIsTransitioning(true);
+    setTimeout(() => {
+      setCurrentVideoIndex((prev) => (prev - 1 + heroMedia.length) % heroMedia.length);
+      setIsTransitioning(false);
+    }, 300);
+  };
+  
+  const goToNext = () => {
     setIsTransitioning(true);
     setTimeout(() => {
       setCurrentVideoIndex((prev) => (prev + 1) % heroMedia.length);
@@ -131,93 +142,116 @@ export default function Hero() {
   }, [isMobile]);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-screen flex flex-col overflow-hidden bg-black">
-      {/* Video/Image Background */}
-      <div className="absolute inset-0 z-0">
-        {heroMedia.map((media, index) => (
+    <section 
+      ref={sectionRef} 
+      className="relative w-full overflow-hidden bg-[#1a1a1a]"
+    >
+      {/* Aspect ratio container - Desktop: ~16:7, Mobile: 4:5 */}
+      <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
+        {/* Video/Image Background */}
+        <div className="absolute inset-0 z-0">
+          {heroMedia.map((media, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: index === currentVideoIndex && !isTransitioning ? 1 : 0 }}
+              transition={{ duration: 0.5 }}
+              className="absolute inset-0"
+              style={{ pointerEvents: index === currentVideoIndex ? 'auto' : 'none' }}
+            >
+              {media.type === 'video' ? (
+                <>
+                  <video
+                    ref={(el) => { videoRefs.current[index] = el; }}
+                    src={media.src}
+                    muted
+                    playsInline
+                    preload="auto"
+                    onEnded={handleVideoEnded}
+                    className="absolute inset-0 w-full h-full object-cover"
+                  />
+                  {/* Dark overlay for video */}
+                  <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
+                </>
+              ) : (
+                <Image
+                  src={media.src}
+                  alt="Solitario Jewelry Collection"
+                  fill
+                  priority={index === 0}
+                  quality={index === 0 ? 90 : 85}
+                  sizes="100vw"
+                  className={`object-cover object-center`}
+                />
+              )}
+            </motion.div>
+          ))}
+        </div>
+
+        {/* CTA Button - Show on all slides */}
+        <div className="absolute inset-0 z-10 flex items-end justify-center pb-16 md:pb-20">
           <motion.div
-            key={index}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: index === currentVideoIndex && !isTransitioning ? 1 : 0 }}
-            transition={{ duration: 0.5 }}
-            className="absolute inset-0"
-            style={{ pointerEvents: index === currentVideoIndex ? 'auto' : 'none' }}
+            key={currentVideoIndex}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-center"
           >
-            {media.type === 'video' ? (
-              <video
-                ref={(el) => { videoRefs.current[index] = el; }}
-                src={media.src}
-                muted
-                playsInline
-                preload="auto"
-                onEnded={handleVideoEnded}
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-            ) : (
-              <Image
-                src={media.src}
-                alt="Solitario Jewelry"
-                fill
-                priority={index === 0} // Always prioritize first image for LCP
-                quality={index === 0 ? 90 : 75} // Higher quality for LCP image
-                sizes="100vw"
-                className={`object-cover ${(media as any).pos ?? 'object-center'}`}
-              />
-            )}
-            {/* Dark overlay for better CTA visibility */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/60" />
+            <Link
+              href={(currentMedia as any).ctaLink || '/products'}
+              className="group inline-flex items-center gap-3 px-6 py-3 md:px-8 md:py-3.5 text-white font-gotham uppercase tracking-[0.2em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
+              style={{
+                background: 'rgba(255, 255, 255, 0.1)',
+                backdropFilter: 'blur(16px) saturate(180%)',
+                WebkitBackdropFilter: 'blur(16px) saturate(180%)',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 4px 24px rgba(0, 0, 0, 0.3)',
+              }}
+            >
+              <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <span className="relative z-10">{(currentMedia as any).ctaText || 'Shop Now'}</span>
+              <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
+            </Link>
           </motion.div>
-        ))}
-      </div>
+        </div>
 
-      {/* Aesthetic CTA - Centered at bottom */}
-      <div className="absolute inset-0 z-10 flex items-end justify-center pb-20 md:pb-24">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 1, delay: 0.5 }}
-          className="text-center"
+        {/* Navigation Arrows */}
+        <button
+          onClick={goToPrevious}
+          className="absolute left-3 md:left-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 group"
+          aria-label="Previous slide"
         >
-          <Link
-            href="/products"
-            className="group inline-flex items-center gap-3 px-8 py-4 md:px-12 md:py-5 text-white font-gotham uppercase tracking-[0.3em] text-xs md:text-sm rounded-full transition-all duration-500 hover:scale-105 relative overflow-hidden"
-            style={{
-              background: 'rgba(255, 255, 255, 0.08)',
-              backdropFilter: 'blur(20px) saturate(180%)',
-              WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-              border: '1px solid rgba(255, 255, 255, 0.15)',
-              boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
-            }}
-          >
-            {/* Shimmer effect */}
-            <div className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-            
-            <span className="relative z-10">Explore Collection</span>
-            <ArrowRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-2 transition-transform duration-300 relative z-10" />
-          </Link>
-        </motion.div>
-      </div>
+          <ChevronLeft className="w-5 h-5 md:w-6 md:h-6 group-hover:-translate-x-0.5 transition-transform" />
+        </button>
+        <button
+          onClick={goToNext}
+          className="absolute right-3 md:right-6 top-1/2 -translate-y-1/2 z-20 w-10 h-10 md:w-12 md:h-12 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center text-white hover:bg-white/20 transition-all duration-300 group"
+          aria-label="Next slide"
+        >
+          <ChevronRight className="w-5 h-5 md:w-6 md:h-6 group-hover:translate-x-0.5 transition-transform" />
+        </button>
 
-      {/* Media indicators */}
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20 flex gap-2">
-        {heroMedia.map((_, index) => (
-          <button
-            key={index}
-            onClick={() => {
-              setIsTransitioning(true);
-              setTimeout(() => {
-                setCurrentVideoIndex(index);
-                setIsTransitioning(false);
-              }, 300);
-            }}
-            className={`h-1 rounded-full transition-all duration-300 ${
-              index === currentVideoIndex
-                ? 'w-8 bg-white'
-                : 'w-2 bg-white/30 hover:bg-white/50'
-            }`}
-            aria-label={`Go to media ${index + 1}`}
-          />
-        ))}
+        {/* Media indicators */}
+        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+          {heroMedia.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentVideoIndex(index);
+                  setIsTransitioning(false);
+                }, 300);
+              }}
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${
+                index === currentVideoIndex
+                  ? 'w-6 md:w-8 bg-white'
+                  : 'w-1.5 md:w-2 bg-white/40 hover:bg-white/60'
+              }`}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

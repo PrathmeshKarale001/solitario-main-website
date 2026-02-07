@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useSearchParams } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
 import { ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
 import { Product } from '@/lib/data';
 import ProductFilters from '@/components/products/ProductFilters';
@@ -64,62 +65,42 @@ function ProductsPageContent() {
     setMounted(true);
   }, []);
 
-  // Load initial products - only after mount to avoid SSR issues
-  useEffect(() => {
-    if (!mounted) return;
-    
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        console.log('🔄 Starting products fetch...');
-        
-        // Add timeout to prevent hanging
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => {
-          controller.abort();
-          console.error('⏱️ Products fetch timeout after 15 seconds');
-        }, 15000); // 15 second timeout
-        
-        // Add cache busting to ensure fresh data on page load
-        const cacheBuster = Date.now();
-        const response = await fetch(`/api/products?_=${cacheBuster}`, {
-          signal: controller.signal,
-          cache: 'no-store' // Force fresh data from server
-        });
-        
-        clearTimeout(timeoutId);
-        
-        if (!response.ok) {
-          console.error('❌ Failed to fetch products:', response.status);
-          setProducts([]);
-          setLoading(false);
-          return;
-        }
-        
-        const data = await response.json();
-        
-        if (!data.products || !Array.isArray(data.products)) {
-          console.error('❌ Invalid products data:', data);
-          setProducts([]);
-          setLoading(false);
-          return;
-        }
-        
-        console.log(`✅ Loaded ${data.products.length} products in frontend`);
-        setProducts(data.products);
-      } catch (error) {
-        if (error instanceof Error && error.name === 'AbortError') {
-          console.error('⏱️ Products fetch was aborted (timeout)');
-        } else {
-          console.error('❌ Error loading products:', error);
-        }
-        setProducts([]);
-      } finally {
-        setLoading(false);
+  // Load products using React Query for automatic caching and deduplication
+  const { data: productsData, isLoading: isLoadingProducts } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      console.log('🔄 Starting products fetch...');
+      const response = await fetch('/api/products');
+      
+      if (!response.ok) {
+        console.error('❌ Failed to fetch products:', response.status);
+        throw new Error('Failed to fetch products');
       }
-    };
-    loadProducts();
-  }, [mounted]);
+      
+      const data = await response.json();
+      
+      if (!data.products || !Array.isArray(data.products)) {
+        console.error('❌ Invalid products data:', data);
+        throw new Error('Invalid products data');
+      }
+      
+      console.log(`✅ Loaded ${data.products.length} products`);
+      return data.products;
+    },
+    enabled: mounted, // Only fetch when mounted
+    staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh
+    gcTime: 30 * 60 * 1000, // 30 minutes - cache time
+  });
+
+  // Update local state when React Query data changes
+  useEffect(() => {
+    if (productsData) {
+      setProducts(productsData);
+      setLoading(false);
+    } else if (isLoadingProducts) {
+      setLoading(true);
+    }
+  }, [productsData, isLoadingProducts]);
 
   // Get current hero images based on viewport
   const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;

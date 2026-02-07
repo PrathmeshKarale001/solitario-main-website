@@ -4,13 +4,14 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, ShoppingCart, Heart } from 'lucide-react';
+import { ArrowRight, ShoppingCart, Heart, Ticket } from 'lucide-react';
 import { CATEGORIES } from '@/lib/constants';
 import { Section, Container } from '@/components/ui';
 import { formatPrice } from '@/lib/utils';
 import { Product } from '@/lib/data';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
+import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
 
@@ -164,20 +165,24 @@ export default function ProductCategories() {
                         {product.name}
                       </h3>
                     </Link>
-                    <p className="font-gotham text-base sm:text-lg font-semibold text-classic-green mb-3 min-h-[1.75rem]">
-                      {formatPrice(product.price, product.currency)}
+                    <p className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'}`}>
+                      {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                     </p>
                     
-                    {/* Add to Cart Button */}
+                    {/* Add to Cart / Prebook Button */}
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         addToCart(product, 1);
                       }}
-                      className="w-full flex items-center justify-center gap-2 bg-classic-green text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider hover:bg-classic-green/90 transition-all active:scale-95"
+                      className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${
+                        isPrebookingProduct(product) 
+                          ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600' 
+                          : 'bg-classic-green hover:bg-classic-green/90'
+                      }`}
                     >
-                      <ShoppingCart className="w-4 h-4" />
-                      Add to Cart
+                      {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
+                      {getProductButtonText(product, false)}
                     </button>
                   </div>
                 </div>

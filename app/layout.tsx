@@ -11,7 +11,9 @@ import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
 import { CartSidebar } from '@/components/cart'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import { PostHogProvider } from '@/lib/posthog'
+import { QueryProvider } from '@/lib/query-client'
 import GoogleAnalytics from '@/components/analytics/GoogleAnalytics'
+import MetaPixel from '@/components/analytics/MetaPixel'
 import { OrganizationJsonLd, WebsiteJsonLd } from '@/components/seo/ProductJsonLd'
 import ScrollToTopOnRouteChange from '@/components/ui/ScrollToTopOnRouteChange'
 import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
@@ -79,26 +81,29 @@ export default function RootLayout({
         </Script>
         
         <GoogleAnalytics />
+        <MetaPixel />
         <ClerkProvider>
           <PostHogProvider>
-            <SmoothScrollWrapper>
-              <Suspense fallback={null}>
-                <ScrollToTopOnRouteChange />
-              </Suspense>
-              <WishlistProvider>
-                <CartProvider>
-                  <ShopifyCartProvider>
-                    <Header />
-                    <main id="main-content">
-                      {children}
-                    </main>
-                    <Footer />
-                    <CartSidebar />
-                    <WarnerBrosFloatingButton />
-                  </ShopifyCartProvider>
-                </CartProvider>
-              </WishlistProvider>
-            </SmoothScrollWrapper>
+            <QueryProvider>
+              <SmoothScrollWrapper>
+                <Suspense fallback={null}>
+                  <ScrollToTopOnRouteChange />
+                </Suspense>
+                <WishlistProvider>
+                  <CartProvider>
+                    <ShopifyCartProvider>
+                      <Header />
+                      <main id="main-content">
+                        {children}
+                      </main>
+                      <Footer />
+                      <CartSidebar />
+                      <WarnerBrosFloatingButton />
+                    </ShopifyCartProvider>
+                  </CartProvider>
+                </WishlistProvider>
+              </SmoothScrollWrapper>
+            </QueryProvider>
           </PostHogProvider>
         </ClerkProvider>
         <Toaster />
