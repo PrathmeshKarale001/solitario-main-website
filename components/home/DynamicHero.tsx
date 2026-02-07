@@ -172,7 +172,11 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
 
   // Use mobile-specific media array on mobile devices (fallback)
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
-  const mediaToUse = (dynamicMedia && dynamicMedia.length > 0) ? dynamicMedia : staticMedia;
+  // Always include static slides: use dynamic first (from Shopify), then append static so both load
+  const mediaToUse =
+    dynamicMedia && dynamicMedia.length > 0
+      ? [...dynamicMedia, ...staticMedia]
+      : staticMedia;
   
   // Helper to get the correct source based on device
   const getMediaSrc = (media: MediaItem) => {
