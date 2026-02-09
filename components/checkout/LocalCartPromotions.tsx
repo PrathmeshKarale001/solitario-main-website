@@ -53,17 +53,10 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
     let calculatedDiscount = 0;
     const newMessages: string[] = [];
 
-    // Buy 3+ items: 30% off
-    if (totalItems >= 3) {
-      calculatedDiscount = Math.round(subtotal * 0.30);
-      newMessages.push('🎉 30% discount applied for buying 3+ items!');
-    }
-    // Buy 2 items: 10% off + gift
-    else if (totalItems === 2) {
-      calculatedDiscount = Math.round(subtotal * 0.10);
-      newMessages.push('🎁 10% discount applied for buying 2 items!');
-      newMessages.push('✨ Free gift will be added to your order!');
-      setShowGift(true);
+    // Buy 2 Get 1 Free
+    // Note: Actual discount calculation happens in the backend
+    if (totalItems >= 2) {
+      newMessages.push('🎁 Buy 2 Get 1 Free!');
     }
 
     setDiscount(calculatedDiscount);
@@ -99,9 +92,9 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
         return;
       }
 
-      // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
+      // Block ALL coupons from stacking with cart discounts (BUY 2+ offers)
       if (totalItems >= 2) {
-        setErrors(["Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers)."]);
+        setErrors(["Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer)."]);
         if (!codeOverride) setAppliedCoupon('');
         return;
       }

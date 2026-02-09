@@ -8,7 +8,6 @@ jest.mock('@/lib/promotions/config', () => ({
     loyalty_coupon_percent: 10,
     loyalty_coupon_validity_days: 30,
     buy2_percent: 10,
-    buy3_percent: 30,
     gift_variant_id: 'gid://shopify/ProductVariant/12345',
     gift_product_name: '10-cent Diamond Gift',
     stacking_first_purchase: false,
@@ -53,7 +52,7 @@ describe('Promotion Engine', () => {
   });
 
   describe('Buy 2 items promotion', () => {
-    it('should apply 10% discount for 2 items', async () => {
+    it('should make lowest-priced item free for 2+ items', async () => {
       (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
 
       const cartLines = [createCartLine(100, 2)];
@@ -65,12 +64,12 @@ describe('Promotion Engine', () => {
       expect(result.subtotal).toBe(20000);
       expect(result.discounts).toHaveLength(1);
       expect(result.discounts[0].type).toBe('BUY2');
-      expect(result.discounts[0].percent).toBe(10);
-      expect(result.discounts[0].amount).toBe(2000);
-      expect(result.total).toBe(18000);
+      expect(result.discounts[0].amount).toBe(10000);
+      expect(result.discounts[0].description).toBe('Buy 2 Get 1 Free');
+      expect(result.total).toBe(10000); // Pay for 1 item, 1 free
     });
 
-    it('should add free gift for 2 items', async () => {
+    it('should not add free gift for Buy 2 Get 1 Free offer', async () => {
       (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
 
       const cartLines = [createCartLine(100, 2)];
@@ -79,57 +78,10 @@ describe('Promotion Engine', () => {
         cartLines,
       });
 
-      expect(result.giftLines).toHaveLength(1);
-      expect(result.giftLines[0].variant_id).toBe('gid://shopify/ProductVariant/12345');
-      expect(result.giftLines[0].product_name).toBe('10-cent Diamond Gift');
-      expect(result.giftLines[0].is_gift).toBe(true);
-      expect(result.giftLines[0].unit_price).toBe(0);
-    });
-  });
-
-  describe('Buy 3+ items promotion', () => {
-    it('should apply 30% discount for 3 items', async () => {
-      (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
-
-      const cartLines = [createCartLine(100, 3)];
-      const result = await calculatePromotions({
-        clerkUserId: 'user_123',
-        cartLines,
-      });
-
-      expect(result.subtotal).toBe(30000);
-      expect(result.discounts).toHaveLength(1);
-      expect(result.discounts[0].type).toBe('BUY3');
-      expect(result.discounts[0].percent).toBe(30);
-      expect(result.discounts[0].amount).toBe(9000);
-      expect(result.total).toBe(21000);
-    });
-
-    it('should not add gift for 3+ items', async () => {
-      (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
-
-      const cartLines = [createCartLine(100, 3)];
-      const result = await calculatePromotions({
-        clerkUserId: 'user_123',
-        cartLines,
-      });
-
       expect(result.giftLines).toHaveLength(0);
     });
-
-    it('should apply 30% discount for 5 items', async () => {
-      (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
-
-      const cartLines = [createCartLine(100, 5)];
-      const result = await calculatePromotions({
-        clerkUserId: 'user_123',
-        cartLines,
-      });
-
-      expect(result.discounts[0].type).toBe('BUY3');
-      expect(result.discounts[0].percent).toBe(30);
-    });
   });
+
 
   describe('First purchase discount', () => {
     it('should apply 20% discount for first purchase with 1 item', async () => {
@@ -272,7 +224,7 @@ describe('Promotion Engine', () => {
   });
 
   describe('Multiple items in cart', () => {
-    it('should count total quantity across different products', async () => {
+    it('should apply discount for 2 items', async () => {
       (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
 
       const cartLines = [
@@ -284,11 +236,13 @@ describe('Promotion Engine', () => {
         cartLines,
       });
 
+      expect(result.discounts).toHaveLength(1);
       expect(result.discounts[0].type).toBe('BUY2');
-      expect(result.giftLines).toHaveLength(1);
+      expect(result.discounts[0].amount).toBe(10000);
+      expect(result.giftLines).toHaveLength(0);
     });
 
-    it('should apply BUY3 for mixed quantities totaling 3+', async () => {
+    it('should apply discount for 3 items - lowest-priced item free', async () => {
       (OrderRepository.countPaidOrdersByClerkUserId as jest.Mock).mockReturnValue(1);
 
       const cartLines = [
@@ -300,7 +254,9 @@ describe('Promotion Engine', () => {
         cartLines,
       });
 
-      expect(result.discounts[0].type).toBe('BUY3');
+      expect(result.discounts).toHaveLength(1);
+      expect(result.discounts[0].type).toBe('BUY2');
+      expect(result.discounts[0].amount).toBe(10000);
       expect(result.giftLines).toHaveLength(0);
     });
   });

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { Loader2, Tag, Gift, Sparkles } from 'lucide-react';
 
 interface Discount {
-  type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2' | 'BUY3';
+  type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2';
   percent: number;
   amount: number;
   description: string;
@@ -216,7 +216,6 @@ export function PromotionDisplay({ cartId, onPricingUpdate }: PromotionDisplayPr
                     {discount.type === 'FIRST_PURCHASE' && '🌟 First Purchase'}
                     {discount.type === 'LOYALTY_COUPON' && '💎 Loyalty Coupon'}
                     {discount.type === 'BUY2' && '🎁 Buy 2 Items'}
-                    {discount.type === 'BUY3' && '🎉 Buy 3+ Items'}
                   </p>
                   <p className="text-xs text-brand-600 font-montserrat">
                     {discount.description}
