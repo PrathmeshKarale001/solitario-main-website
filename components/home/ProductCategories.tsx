@@ -88,10 +88,10 @@ export default function ProductCategories() {
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.slug)}
-                className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 font-gotham text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-300 rounded-full touch-manipulation ${
+                className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 font-gotham text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-300 rounded-full touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center ${
                   activeCategory === category.slug
                     ? 'bg-bronze-gold text-white shadow-luxury-lg'
-                    : 'bg-gray-100 text-gray-600 hover:bg-bronze-gold/10 hover:text-bronze-gold'
+                    : 'bg-gray-100 text-gray-700 hover:bg-bronze-gold/10 hover:text-bronze-gold'
                 }`}
               >
                 {category.label}
@@ -131,7 +131,7 @@ export default function ProductCategories() {
                       
                       {/* Category Badge */}
                       <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-                        <span className="text-[10px] uppercase tracking-wider font-gotham text-gray-600">
+                        <span className="text-[10px] uppercase tracking-wider font-gotham text-gray-700">
                           {categoryLabel}
                         </span>
                       </div>
@@ -148,6 +148,7 @@ export default function ProductCategories() {
                           }
                         }}
                         className="absolute top-3 right-3 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
+                        aria-label={isInWishlist ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
                       >
                         <Heart
                           className={`w-4 h-4 transition-colors ${

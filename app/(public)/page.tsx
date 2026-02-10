@@ -8,8 +8,9 @@ import {
 } from '@/components/home';
 import DynamicHero from '@/components/home/DynamicHero';
 import { Promise } from '@/components/about';
-import LoginPopup from '@/components/home/LoginPopup';
 import OffersMarquee from '@/components/ui/OffersMarquee';
+
+const LoginPopup = dynamic(() => import('@/components/home/LoginPopup'));
 import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
 // Lazy load below-fold components for better performance and reduced initial bundle

@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts, getCollectionProducts } from '@/lib/shopify-data';
 
+// Route uses searchParams (category, collection, etc.) so it must be dynamic
+export const dynamic = 'force-dynamic';
+
 // Cache products for 5 minutes to improve performance
 export const revalidate = 300; // 5 minutes
 

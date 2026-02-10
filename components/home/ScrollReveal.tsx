@@ -171,7 +171,7 @@ export default function ScrollReveal() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-bronze-gold/20 via-bronze-gold/10 to-soft-bronze/20 border-2 border-bronze-gold/30 rounded-2xl p-7 flex flex-col justify-center shadow-luxury hover:shadow-glow transition-all duration-500 group relative overflow-hidden"
+            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-bronze-gold/20 via-bronze-gold/10 to-soft-bronze/20 border-2 border-bronze-gold/30 rounded-2xl p-7 flex flex-col justify-center shadow-luxury hover:shadow-glow transition-[box-shadow,opacity] duration-500 group relative overflow-hidden [transform:translateZ(0)]"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent opacity-70" />
             <div className="absolute -top-8 -right-8 w-24 h-24 rotate-45 bg-bronze-gold/10 group-hover:bg-bronze-gold/20 transition-all duration-500" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />
@@ -205,7 +205,7 @@ export default function ScrollReveal() {
             whileInView={{ opacity: 1, scale: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.3 }}
-            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-classic-green/30 via-teal/20 to-classic-green/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-luxury hover:shadow-glow transition-all duration-500 group relative overflow-hidden"
+            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-classic-green/30 via-teal/20 to-classic-green/30 rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-luxury hover:shadow-glow transition-[box-shadow,opacity] duration-500 group relative overflow-hidden [transform:translateZ(0)]"
           >
             <div className="absolute inset-0 rounded-2xl border-2 border-bronze-gold/40" />
             <div className="relative mb-4">
@@ -213,7 +213,7 @@ export default function ScrollReveal() {
                 <span className="text-4xl -rotate-45 text-bronze-gold">♢</span>
               </div>
             </div>
-            <h4 className="text-lg lg:text-xl font-montserrat font-bold text-ivory-pearl mb-2">Lab-Grown</h4>
+            <h3 className="text-lg lg:text-xl font-montserrat font-bold text-ivory-pearl mb-2">Lab-Grown</h3>
             <p className="text-sm text-ivory-pearl/90 font-montserrat">Sustainable Luxury</p>
           </motion.div>
 
@@ -243,7 +243,7 @@ export default function ScrollReveal() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-classic-green/20 via-classic-green/10 to-teal/20 border-2 border-classic-green/30 rounded-2xl p-7 flex flex-col justify-center shadow-luxury hover:shadow-glow transition-all duration-500 group relative overflow-hidden"
+            className="col-span-1 row-span-1 backdrop-blur-2xl bg-gradient-to-br from-classic-green/20 via-classic-green/10 to-teal/20 border-2 border-classic-green/30 rounded-2xl p-7 flex flex-col justify-center shadow-luxury hover:shadow-glow transition-[box-shadow,opacity] duration-500 group relative overflow-hidden [transform:translateZ(0)]"
           >
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-bronze-gold to-transparent opacity-70" />
             <div className="absolute -top-8 -right-8 w-24 h-24 rotate-45 bg-bronze-gold/10 group-hover:bg-bronze-gold/20 transition-all duration-500" style={{ clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)' }} />

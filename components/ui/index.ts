@@ -17,5 +17,7 @@ export { default as BlurText } from './BlurText';
 export { default as Particles } from './Particles';
 export { default as QuickLookModal } from './QuickLookModal';
 export { default as WarnerBrosFloatingButton } from './WarnerBrosFloatingButton';
+export { default as CookieConsent } from './CookieConsent';
+export type { CookiePreference } from './CookieConsent';
 
 

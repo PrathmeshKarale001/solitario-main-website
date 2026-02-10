@@ -96,7 +96,7 @@ export default function LabGrownBenefitsV2() {
                     <item.icon className="w-5 h-5 text-classic-green" />
                   </div>
                   <div>
-                    <h4 className="text-brand-800 font-montserrat font-bold text-lg mb-2">{item.title}</h4>
+                    <h3 className="text-brand-800 font-montserrat font-bold text-lg mb-2">{item.title}</h3>
                     <p className="text-brand-600 text-sm leading-relaxed">{item.description}</p>
                   </div>
                 </motion.div>

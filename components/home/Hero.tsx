@@ -6,6 +6,9 @@ import { ArrowRight, ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import Image from 'next/image';
 
+// Poster for video slide (avoids loading video on initial load; used for LCP)
+const HERO_VIDEO_POSTER = '/images/home-hero/Home_Herofeb 1171277230.webp';
+
 // New hero images - Desktop: 1600x700px (230-233), Mobile: 1080x1350 4:5 (234-237)
 // Using WebP format directly for optimal performance (86.7% smaller than JPG)
 const HERO_MEDIA_DESKTOP = [
@@ -40,6 +43,7 @@ const HERO_MEDIA_DESKTOP = [
   {
     type: 'video',
     src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+    poster: HERO_VIDEO_POSTER,
     ctaText: 'Explore Collection',
     ctaLink: '/products',
   },
@@ -161,15 +165,27 @@ export default function Hero() {
             >
               {media.type === 'video' ? (
                 <>
-                  <video
-                    ref={(el) => { videoRefs.current[index] = el; }}
-                    src={media.src}
-                    muted
-                    playsInline
-                    preload="auto"
-                    onEnded={handleVideoEnded}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  {/* Only mount video when this slide is active to avoid loading on initial page load (LCP) */}
+                  {index === currentVideoIndex ? (
+                    <video
+                      ref={(el) => { videoRefs.current[index] = el; }}
+                      src={media.src}
+                      poster={HERO_VIDEO_POSTER}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      onEnded={handleVideoEnded}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={HERO_VIDEO_POSTER}
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      sizes="100vw"
+                    />
+                  )}
                   {/* Dark overlay for video */}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
                 </>
@@ -243,7 +259,7 @@ export default function Hero() {
                   setIsTransitioning(false);
                 }, 300);
               }}
-              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation ${
                 index === currentVideoIndex
                   ? 'w-6 md:w-8 bg-white'
                   : 'w-1.5 md:w-2 bg-white/40 hover:bg-white/60'

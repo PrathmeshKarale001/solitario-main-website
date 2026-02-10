@@ -78,6 +78,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       type: 'video' as const,
       src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
       pos: 'object-cover',
+      poster: '/images/home-hero/Home_Herofeb 1171277230.webp',
       ctaText: 'Explore Collection',
       ctaLink: '/products'
     }
@@ -163,12 +164,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     src: string;
     mobileSrc?: string;
     pos?: string;
+    poster?: string;
     title?: string;
     subtitle?: string;
     description?: string;
     ctaText?: string;
     ctaLink?: string;
   };
+
+  const heroPosterFallback = '/images/home-hero/Home_Herofeb 1171277230.webp';
 
   // Use mobile-specific media array on mobile devices (fallback)
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
@@ -289,15 +293,27 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
             >
               {media.type === 'video' ? (
                 <>
-                  <video
-                    ref={(el) => { videoRefs.current[index] = el; }}
-                    src={media.src}
-                    muted
-                    playsInline
-                    preload="auto"
-                    onEnded={handleMediaEnded}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
+                  {/* Only mount video when this slide is active to avoid loading on initial page load (LCP) */}
+                  {index === currentIndex ? (
+                    <video
+                      ref={(el) => { videoRefs.current[index] = el; }}
+                      src={media.src}
+                      poster={'poster' in media && media.poster ? media.poster : heroPosterFallback}
+                      muted
+                      playsInline
+                      preload="metadata"
+                      onEnded={handleMediaEnded}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+                  ) : (
+                    <Image
+                      src={'poster' in media && media.poster ? media.poster : heroPosterFallback}
+                      alt=""
+                      fill
+                      className="object-cover object-center"
+                      sizes="100vw"
+                    />
+                  )}
                   {/* Dark overlay for video */}
                   <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-transparent to-black/50" />
                 </>
@@ -371,7 +387,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                   setIsTransitioning(false);
                 }, 300);
               }}
-              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 ${
+              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation ${
                 index === currentIndex
                   ? 'w-6 md:w-8 bg-white'
                   : 'w-1.5 md:w-2 bg-white/40 hover:bg-white/60'

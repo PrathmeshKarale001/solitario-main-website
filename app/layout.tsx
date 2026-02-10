@@ -5,10 +5,10 @@ import { Montserrat } from 'next/font/google'
 import { ClerkProvider } from '@clerk/nextjs'
 import Header from '@/components/layout/Header'
 import Footer from '@/components/layout/Footer'
-import { WarnerBrosFloatingButton } from '@/components/ui'
 import { CartProvider } from '@/lib/cart-context'
 import { ShopifyCartProvider } from '@/lib/shopify-cart-context'
-import { CartSidebar } from '@/components/cart'
+import { LazyCartSidebar } from '@/components/lazy'
+import LazyWarnerBrosFloatingButton from '@/components/ui/LazyWarnerBrosFloatingButton'
 import { WishlistProvider } from '@/lib/wishlist-context'
 import { PostHogProvider } from '@/lib/posthog'
 import { QueryProvider } from '@/lib/query-client'
@@ -20,6 +20,7 @@ import SmoothScrollWrapper from '@/components/ui/SmoothScrollWrapper'
 import { Analytics } from '@vercel/analytics/next';
 import { Toaster } from '@/components/providers/Toaster';
 import { SkipLinks } from '@/components/ui/SkipLink';
+import CookieConsent from '@/components/ui/CookieConsent';
 import './globals.css'
 
 // Load Montserrat from Google Fonts - unified font for the entire website
@@ -66,12 +67,12 @@ export default function RootLayout({
       </head>
       <body className="antialiased overflow-x-hidden" suppressHydrationWarning>
         <SkipLinks />
-        {/* Google Ads Conversion Tracking */}
+        {/* Google Ads Conversion Tracking - lazyOnload to avoid blocking LCP/FCP */}
         <Script
           src="https://www.googletagmanager.com/gtag/js?id=AW-17875605995"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
-        <Script id="google-ads-init" strategy="afterInteractive">
+        <Script id="google-ads-init" strategy="lazyOnload">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -92,13 +93,15 @@ export default function RootLayout({
                 <WishlistProvider>
                   <CartProvider>
                     <ShopifyCartProvider>
-                      <Header />
-                      <main id="main-content">
-                        {children}
-                      </main>
-                      <Footer />
-                      <CartSidebar />
-                      <WarnerBrosFloatingButton />
+                      <div suppressHydrationWarning>
+                        <Header />
+                        <main id="main-content">
+                          {children}
+                        </main>
+                        <Footer />
+                        <LazyCartSidebar />
+                        <LazyWarnerBrosFloatingButton />
+                      </div>
                     </ShopifyCartProvider>
                   </CartProvider>
                 </WishlistProvider>
@@ -107,6 +110,7 @@ export default function RootLayout({
           </PostHogProvider>
         </ClerkProvider>
         <Toaster />
+        <CookieConsent />
         <Analytics />
       </body>
     </html>

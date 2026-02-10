@@ -93,9 +93,9 @@ export default function Testimonials() {
 
                 {/* Author Info - Centered */}
                 <div className="mb-6">
-                  <h4 className="text-black font-gotham text-base sm:text-lg md:text-xl font-semibold">
+                  <h3 className="text-black font-gotham text-base sm:text-lg md:text-xl font-semibold">
                     {currentTestimonial.name}
-                  </h4>
+                  </h3>
                   <p className="text-black/70 text-xs sm:text-sm font-montserrat">
                     {currentTestimonial.title}
                   </p>

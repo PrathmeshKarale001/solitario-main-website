@@ -23,7 +23,7 @@ export default function Footer() {
   }
 
   return (
-    <footer className="bg-classic-green text-ivory-pearl">
+    <footer id="footer" className="bg-classic-green text-ivory-pearl">
       {/* Newsletter Section - Compact */}
       <div className="border-b border-bronze-gold/20">
         <div className="section-container py-6 sm:py-8 md:py-12">
@@ -44,6 +44,7 @@ export default function Footer() {
               <button
                 type="submit"
                 className="px-4 py-2 sm:px-6 sm:py-3 bg-bronze-gold text-white rounded text-xs sm:text-sm font-gotham uppercase tracking-wider hover:bg-bronze-gold/90 transition-colors touch-manipulation"
+                aria-label="Subscribe to newsletter"
               >
                 Subscribe
               </button>
@@ -109,7 +110,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="flex flex-col items-start">
-            <h4 className="font-semibold text-base mb-4">Quick Links</h4>
+            <h3 className="font-semibold text-base mb-4">Quick Links</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
@@ -146,7 +147,7 @@ export default function Footer() {
 
           {/* Categories */}
           <div className="flex flex-col items-start">
-            <h4 className="font-semibold text-base mb-4">Categories</h4>
+            <h3 className="font-semibold text-base mb-4">Categories</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/products/category/rings" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
@@ -178,7 +179,7 @@ export default function Footer() {
 
           {/* Customer Service */}
           <div className="flex flex-col items-start">
-            <h4 className="font-semibold text-base mb-4">Customer Service</h4>
+            <h3 className="font-semibold text-base mb-4">Customer Service</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/faq" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
@@ -215,7 +216,7 @@ export default function Footer() {
 
           {/* Policies */}
           <div className="flex flex-col items-start">
-            <h4 className="font-semibold text-base mb-4">Policies</h4>
+            <h3 className="font-semibold text-base mb-4">Policies</h3>
             <ul className="space-y-2">
               <li>
                 <Link href="/privacy-policy" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
@@ -251,7 +252,7 @@ export default function Footer() {
       <div className="border-t border-bronze-gold/20">
         <div className="section-container py-6">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-ivory-pearl/70">
+            <div className="flex flex-wrap justify-center md:justify-start gap-4 text-sm text-ivory-pearl/95">
               <Link href="/privacy-policy" className="hover:text-bronze-gold transition-colors">
                 Privacy Policy
               </Link>
@@ -260,7 +261,7 @@ export default function Footer() {
                 Terms & Conditions
               </Link>
             </div>
-            <p className="text-sm text-ivory-pearl/70">© 2025 Solitario. All rights reserved.</p>
+            <p className="text-sm text-ivory-pearl/95">© 2025 Solitario. All rights reserved.</p>
             
           </div>
         </div>

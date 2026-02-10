@@ -10,18 +10,20 @@ const SmoothScrollDesktop = dynamic(() => import('@/components/ui/SmoothScrollDe
 
 export default function SmoothScrollWrapper({ children }: { children: React.ReactNode }) {
   const [isDesktop, setIsDesktop] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     const checkDesktop = () => setIsDesktop(window.innerWidth >= 1024);
     checkDesktop();
     window.addEventListener('resize', checkDesktop);
     return () => window.removeEventListener('resize', checkDesktop);
   }, []);
 
-  // Only render smooth scroll on desktop
-  if (isDesktop) {
-    return <SmoothScrollDesktop>{children}</SmoothScrollDesktop>;
+  // Always render the same wrapper so server and client match; only switch content after mount
+  if (!mounted || !isDesktop) {
+    return <>{children}</>;
   }
 
-  return <>{children}</>;
+  return <SmoothScrollDesktop>{children}</SmoothScrollDesktop>;
 }

@@ -75,18 +75,15 @@ export default function WarnerBrosFloatingButton() {
         aria-label="Explore Warner Bros Collectibles"
       >
         <motion.div
-          initial={{ scale: 0, opacity: 0 }}
+          initial={{ opacity: 0 }}
           animate={{ 
-            scale: 1, 
             opacity: 1,
             width: isHovered ? (isMobile ? '200px' : '260px') : '72px',
             height: isHovered ? (isMobile ? '72px' : '80px') : '72px',
             borderRadius: isHovered ? '20px' : '36px'
           }}
           transition={{ 
-            type: 'spring', 
-            stiffness: 200, 
-            damping: 25,
+            opacity: { duration: 0.25 },
             width: { duration: 0.4, ease: "circOut" },
             height: { duration: 0.4, ease: "circOut" },
             borderRadius: { duration: 0.3 }

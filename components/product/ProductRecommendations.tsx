@@ -114,6 +114,7 @@ export default function ProductRecommendations({
               <button
                 onClick={() => handleWishlistToggle(product)}
                 className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
+                aria-label={isInWishlist(product.id) ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
               >
                 <Heart 
                   className={`w-4 h-4 transition-colors ${

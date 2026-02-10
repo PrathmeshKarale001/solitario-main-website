@@ -47,6 +47,7 @@ const nextConfig = {
           { key: 'X-XSS-Protection', value: '1; mode=block' },
           { key: 'X-DNS-Prefetch-Control', value: 'on' },
           { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains' },
+          { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
           // Content Security Policy - Google Ads, GA, Meta Pixel, Conversions API
           { 
@@ -116,14 +117,16 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
-
+// Optional: run with ANALYZE=true next build to open bundle analyzer
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+});
+const configWithAnalyzer = withBundleAnalyzer(nextConfig);
 
 // Injected content via Sentry wizard below
-
 const { withSentryConfig } = require("@sentry/nextjs");
 
-module.exports = withSentryConfig(module.exports, {
+module.exports = withSentryConfig(configWithAnalyzer, {
   // For all available options, see:
   // https://www.npmjs.com/package/@sentry/webpack-plugin#options
 

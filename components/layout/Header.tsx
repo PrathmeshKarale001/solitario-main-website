@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
 import Link from 'next/link';
@@ -10,8 +11,10 @@ import { Menu, X, Heart, Search, ShoppingBag, User, ChevronRight, Sparkles, MapP
 import { cn } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
-import SearchModal from '@/components/ui/SearchModal';
 import BatTransition from '@/components/ui/BatTransition';
+
+// Lazy-load SearchModal so its chunk loads only when user opens search (reduces TBT)
+const SearchModal = dynamic(() => import('@/components/ui/SearchModal'), { ssr: false });
 
 // Clean navigation structure - only essential links
 const NAV_LINKS = [
@@ -121,6 +124,7 @@ export default function Header() {
   return (
     <>
       <header
+        id="navigation"
         className={headerClasses}
       >
         {/* Main Header - Increased padding */}
@@ -370,8 +374,10 @@ export default function Header() {
         </div>
       </div>
 
-      {/* Search Modal */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      {/* Search Modal - only mount when open to defer loading its chunk */}
+      {isSearchOpen && (
+        <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
+      )}
     </>
   );
 }
