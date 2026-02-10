@@ -24,7 +24,7 @@ export interface PromoEngineInput {
 export interface PromoEngineOutput {
   subtotal: number;
   discounts: Array<{
-    type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2' | 'BUY3';
+    type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2';
     percent: number;
     amount: number;
     description: string;
@@ -41,7 +41,7 @@ export interface PromoEngineOutput {
   appliedFlags: {
     firstPurchase: boolean;
     loyaltyCoupon: boolean;
-    cartRule: 'BUY2' | 'BUY3' | null;
+    cartRule: 'BUY2' | null;
   };
   errors: string[];
 }
@@ -65,7 +65,7 @@ export async function calculatePromotions(
 
   let firstPurchaseApplied = false;
   let loyaltyCouponApplied = false;
-  let cartRuleApplied: 'BUY2' | 'BUY3' | null = null;
+  let cartRuleApplied: 'BUY2' | null = null;
 
   // First purchase discount only for logged-in users
   const isFirstPurchase =
@@ -74,39 +74,25 @@ export async function calculatePromotions(
   // Loyalty coupons removed - only Shopify discount codes supported via API
   const validCoupon = null;
 
-  // Apply cart-based rules (BUY2, BUY3)
-  if (totalItems >= 3) {
-    cartRuleApplied = 'BUY3';
-    const discountAmount = Math.round((subtotal * config.buy3_percent) / 100);
-    discounts.push({
-      type: 'BUY3',
-      percent: config.buy3_percent,
-      amount: discountAmount,
-      description: `${config.buy3_percent}% off for buying 3+ items`,
-    });
-    messages.push(`🎉 ${config.buy3_percent}% discount applied for 3+ items!`);
-    // No gift for 3+ items, only discount as requested
-  } else if (totalItems === 2) {
+  // Apply cart-based rule (BUY 2 GET 1 FREE - lower-priced item free)
+  if (totalItems >= 2) {
     cartRuleApplied = 'BUY2';
-    const discountAmount = Math.round((subtotal * config.buy2_percent) / 100);
+    
+    const itemPrices = input.cartLines.map(line => {
+      const unitPrice = parseFloat(line.merchandise.price.amount);
+      return unitPrice * 100; // Convert to cents
+    });
+    const lowestItemPrice = Math.min(...itemPrices);
+    const discountAmount = lowestItemPrice;
+    const discountPercent = Math.round((discountAmount / subtotal) * 100);
+    
     discounts.push({
       type: 'BUY2',
-      percent: config.buy2_percent,
+      percent: discountPercent,
       amount: discountAmount,
-      description: `${config.buy2_percent}% off for buying 2 items`,
+      description: 'Buy 2 Get 1 Free',
     });
-    messages.push(`🎁 ${config.buy2_percent}% discount applied for 2 items!`);
-
-    if (config.gift_variant_id) {
-      giftLines.push({
-        variant_id: config.gift_variant_id,
-        product_name: config.gift_product_name,
-        quantity: 1,
-        unit_price: 0,
-        is_gift: true,
-      });
-      // Removed redundant generic gift message
-    }
+    messages.push(`🎁 Buy 2 Get 1 Free!`);
   }
 
   // Apply first purchase discount (can stack with cart rules if enabled)

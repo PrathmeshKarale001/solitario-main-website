@@ -101,8 +101,8 @@ export default function CheckoutPage() {
   // PIN code auto-fill hook
   const { lookup: lookupPincode, loading: pincodeAutoFillLoading, data: pincodeData, error: pincodeError } = usePincodeLookup();
   const [isCityStateLocked, setIsCityStateLocked] = useState(false);
-  // Gift only for exactly 2 items, not 3+
-  const hasGift = items.reduce((sum, item) => sum + item.quantity, 0) === 2;
+  // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
+  const hasGift = false;
 
   // Auto-fill user info and load saved addresses
   useEffect(() => {

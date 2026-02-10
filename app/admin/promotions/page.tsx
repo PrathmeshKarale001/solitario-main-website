@@ -484,15 +484,9 @@ export default function PromotionsAdminPage() {
                       </div>
 
                       <div className="border border-gray-200 rounded-lg p-4">
-                        <h3 className="font-medium text-gray-900 mb-2">Buy 2 Items</h3>
-                        <p className="text-sm text-gray-600">10% off + Free gift</p>
-                        <p className="text-xs text-gray-500 mt-1">Env: <code>PROMO_BUY2_PERCENT</code></p>
-                      </div>
-
-                      <div className="border border-gray-200 rounded-lg p-4">
-                        <h3 className="font-medium text-gray-900 mb-2">Buy 3+ Items</h3>
-                        <p className="text-sm text-gray-600">30% off</p>
-                        <p className="text-xs text-gray-500 mt-1">Env: <code>PROMO_BUY3_PERCENT</code></p>
+                        <h3 className="font-medium text-gray-900 mb-2">Buy 2 Get 1 Free</h3>
+                        <p className="text-sm text-gray-600">One item free when buying 2+ items</p>
+                        <p className="text-xs text-gray-500 mt-1">Calculated automatically based on item prices</p>
                       </div>
 
                       <div className="border border-gray-200 rounded-lg p-4">
@@ -501,20 +495,9 @@ export default function PromotionsAdminPage() {
                         <p className="text-xs text-gray-500 mt-1">Env: <code>PROMO_LOYALTY_PERCENT</code>, <code>PROMO_LOYALTY_VALIDITY_DAYS</code></p>
                       </div>
 
-                      <div className="border border-gray-200 rounded-lg p-4">
-                        <h3 className="font-medium text-gray-900 mb-2">Gift Product</h3>
-                        <p className="text-sm text-gray-600">10 Cent Diamond</p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          Variant ID: <code>gid://shopify/ProductVariant/10264124457235</code>
-                        </p>
-                        <a
-                          href="https://admin.shopify.com/store/solitarioind/products/10264124457235"
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-xs text-blue-600 hover:underline mt-2 inline-block"
-                        >
-                          View in Shopify →
-                        </a>
+                      <div className="border border-gray-200 rounded-lg p-4 opacity-75">
+                        <h3 className="font-medium text-gray-900 mb-2">Gift Product (Disabled)</h3>
+                        <p className="text-sm text-gray-600">Buy 2 Get 1 Free uses a price discount only; no separate gift product is added to the cart.</p>
                       </div>
                     </div>
                   </div>

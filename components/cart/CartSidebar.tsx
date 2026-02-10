@@ -54,8 +54,8 @@ function CartSidebarContent() {
   } | null>(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  // Auto-calculate gift - only for exactly 2 items, not 3+
-  const hasGift = itemCount === 2;
+  // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
+  const hasGift = false;
 
   // Fetch gift product details from Shopify if not already fetched
   useEffect(() => {
@@ -398,13 +398,9 @@ function CartSidebarContent() {
               <div className="border-t border-brand-200 p-6 space-y-4 bg-gradient-to-b from-white to-gray-50/30">
                 {/* Active Offers */}
                 <div className="space-y-1.5">
-                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-1.5 rounded-lg text-[11px]">
-                    <Tag size={12} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 3+ → 30% OFF</span>
-                  </div>
                   <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-[11px]">
                     <Gift size={12} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 2 → 10% OFF + FREE GIFT</span>
+                    <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
                   </div>
                 </div>
 

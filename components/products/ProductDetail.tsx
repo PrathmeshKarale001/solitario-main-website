@@ -556,13 +556,9 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
               {/* Promotions Callout - Single Line Design */}
               <div className="space-y-2">
-                <div className="offer-banner flex items-center gap-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-4 py-3 rounded-lg shadow-sm">
-                  <Tag size={16} className="flex-shrink-0" />
-                  <span className="font-gotham text-sm font-semibold tracking-wide">BUY 3+ ITEMS → GET 30% OFF</span>
-                </div>
                 <div className="offer-banner flex items-center gap-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-3 rounded-lg shadow-sm">
                   <Gift size={16} className="flex-shrink-0" />
-                  <span className="font-gotham text-sm font-semibold tracking-wide">BUY 2 ITEMS → 10% OFF + FREE GIFT</span>
+                  <span className="font-gotham text-sm font-semibold tracking-wide">BUY 2 GET 1 FREE</span>
                 </div>
               </div>
 

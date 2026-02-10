@@ -67,8 +67,8 @@ export default function CartPage() {
   } | null>(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  // Auto-calculate gift - only for exactly 2 items, not 3+
-  const hasGift = itemCount === 2;
+  // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
+  const hasGift = false;
 
   useEffect(() => {
     async function fetchGift() {
@@ -526,13 +526,9 @@ export default function CartPage() {
 
                 {/* Active Offers */}
                 <div className="space-y-2 mb-6">
-                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-emerald-500 to-green-600 text-white px-3 py-2 rounded-lg text-xs">
-                    <Tag size={14} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 3+ → 30% OFF</span>
-                  </div>
                   <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-2 rounded-lg text-xs">
                     <Gift size={14} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 2 → 10% OFF + FREE GIFT</span>
+                    <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
                   </div>
                 </div>
 

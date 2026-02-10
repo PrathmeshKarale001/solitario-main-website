@@ -26,13 +26,13 @@ export interface PromoSnapshot {
   gift_lines: GiftLine[];
   coupon_code: string | null;
   first_purchase_discount: boolean;
-  cart_rule_applied: 'BUY2' | 'BUY3' | null;
+  cart_rule_applied: 'BUY2' | null;
   total_items: number;
   messages: string[];
 }
 
 export interface AppliedDiscount {
-  type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2' | 'BUY3';
+  type: 'FIRST_PURCHASE' | 'LOYALTY_COUPON' | 'BUY2';
   percent: number;
   amount: number;
   description: string;
@@ -65,7 +65,6 @@ export interface PromotionConfig {
   loyalty_coupon_percent: number;
   loyalty_coupon_validity_days: number;
   buy2_percent: number;
-  buy3_percent: number;
   gift_variant_id: string;
   gift_product_name: string;
   stacking_first_purchase: boolean;
@@ -77,7 +76,6 @@ export const DEFAULT_PROMO_CONFIG: PromotionConfig = {
   loyalty_coupon_percent: 10,
   loyalty_coupon_validity_days: 30,
   buy2_percent: 10,
-  buy3_percent: 30,
   gift_variant_id: '',
   gift_product_name: '10-cent Diamond Gift',
   stacking_first_purchase: false,
