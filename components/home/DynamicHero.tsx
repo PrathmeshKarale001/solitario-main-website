@@ -376,7 +376,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
         </button>
 
         {/* Media indicators - positioned at bottom */}
-        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        <div className="absolute bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-1">
           {mediaToUse.map((_, index) => (
             <button
               key={index}
@@ -387,13 +387,17 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                   setIsTransitioning(false);
                 }, 300);
               }}
-              className={`h-1.5 md:h-2 rounded-full transition-all duration-300 min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation ${
-                index === currentIndex
-                  ? 'w-6 md:w-8 bg-white'
-                  : 'w-1.5 md:w-2 bg-white/40 hover:bg-white/60'
-              }`}
+              className="group min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation p-0 bg-transparent border-none"
               aria-label={`Go to slide ${index + 1}`}
-            />
+            >
+              <div 
+                className={`h-1 rounded-full transition-all duration-300 ${
+                  index === currentIndex
+                    ? 'w-4 bg-white'
+                    : 'w-1 bg-white/40 group-hover:bg-white/60'
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>
