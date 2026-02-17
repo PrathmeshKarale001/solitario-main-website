@@ -11,7 +11,7 @@ interface Offer {
 
 const defaultOffers: Offer[] = [
   { id: '1', text: 'Free Shipping on Orders Above ₹5,000', icon: 'gift' },
-  { id: '2', text: 'Get 10% Off on Your First Purchase', icon: 'tag' },
+  { id: '2', text: 'Get 20% Off on Your First Purchase', icon: 'tag' },
   { id: '3', text: 'Buy 2+ Items & Get a Free Diamond Gift', icon: 'sparkles' },
   { id: '4', text: 'Flat 15% Off on Lab-Grown Diamonds', icon: 'trending' },
   { id: '5', text: 'Exclusive Designs - Limited Stock Available', icon: 'sparkles' },

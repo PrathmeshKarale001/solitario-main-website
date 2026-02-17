@@ -94,7 +94,7 @@ export default function LoginPopup() {
                     <Gift className="w-4 h-4 text-classic-green" />
                   </div>
                   <p className="text-sm text-gray-700 font-montserrat">
-                    <span className="font-semibold">10% off</span> on your first purchase
+                    <span className="font-semibold">20% off</span> on your first purchase
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
