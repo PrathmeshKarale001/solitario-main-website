@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { User, Package, Heart, MapPin, CreditCard, LogOut, ChevronRight } from 'lucide-react';
 import { Section, Container, Button } from '@/components/ui';
+import { trackMetaCompleteRegistration } from '@/components/analytics/MetaPixel';
 
 export default function AccountPage() {
   const { user, isLoaded, isSignedIn } = useUser();
@@ -25,6 +26,23 @@ export default function AccountPage() {
     if (isLoaded && isSignedIn && user) {
       // Fetch orders when user is available
       fetchOrders();
+      
+      // Track Complete Registration (Meta Pixel) - only once per user
+      const registrationTracked = localStorage.getItem(`registration_tracked_${user.id}`);
+      if (!registrationTracked && user.createdAt) {
+        // Check if user was created recently (within last 5 minutes)
+        const createdAt = new Date(user.createdAt).getTime();
+        const now = Date.now();
+        const fiveMinutesAgo = now - 5 * 60 * 1000;
+        
+        if (createdAt > fiveMinutesAgo) {
+          trackMetaCompleteRegistration({
+            content_name: 'User Registration',
+            status: 'completed',
+          });
+          localStorage.setItem(`registration_tracked_${user.id}`, 'true');
+        }
+      }
     }
   }, [isLoaded, isSignedIn, user]);
 

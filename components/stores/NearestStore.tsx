@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MapPin, Navigation, Phone, Clock, ExternalLink, Loader2, MapPinOff, RefreshCw } from 'lucide-react';
 import { ALL_STORES, formatDistance, StoreLocation } from '@/lib/stores-data';
 import { findNearestStoresWithRadar, getUserLocation } from '@/lib/radar-client';
+import { trackMetaFindLocation } from '@/components/analytics/MetaPixel';
 
 interface NearestStoreProps {
   showTitle?: boolean;
@@ -60,6 +61,14 @@ export default function NearestStore({ showTitle = true, maxStores = 3, compact 
       // Find nearest stores using Radar with travel time calculations
       const nearest = await findNearestStoresWithRadar(ALL_STORES, maxStores);
       setNearestStores(nearest);
+      
+      // Track Find Location (Meta Pixel)
+      trackMetaFindLocation({
+        content_name: 'Store Locator',
+        content_category: 'Store',
+        latitude: coords.lat,
+        longitude: coords.lng,
+      });
       
     } catch (error: any) {
       let errorMessage = 'Unable to retrieve your location';

@@ -15,6 +15,7 @@ import ProductRecommendations from '@/components/product/ProductRecommendations'
 import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
 import Script from 'next/script';
 import { trackPaymentInitiate } from '@/lib/gtm-conversions';
+import { trackMetaAddPaymentInfo } from '@/components/analytics/MetaPixel';
 import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 
 // Declare Razorpay on window
@@ -398,9 +399,15 @@ export default function CheckoutPage() {
       return;
     }
     
-    // Track Payment Initiate conversion
+    // Track Payment Initiate conversion (Google Ads)
     // grandTotal is already in rupees (e.g., 10999 for ₹10,999)
     trackPaymentInitiate(grandTotal);
+    // Track Add Payment Info (Meta Pixel)
+    trackMetaAddPaymentInfo({
+      content_ids: items.map(item => item.product.id),
+      value: grandTotal,
+      currency: 'INR',
+    });
     
     setIsProcessing(true);
     setError(null);

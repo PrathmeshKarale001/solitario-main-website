@@ -6,6 +6,7 @@ import { contactSchema, ContactFormData } from '@/lib/validations';
 import { toast } from '@/components/providers/Toaster';
 import { useState } from 'react';
 import { Loader2 } from 'lucide-react';
+import { trackMetaLead } from '@/components/analytics/MetaPixel';
 
 // Contact Form with Zod validation and react-hook-form
 // Practical implementation of installed packages
@@ -38,6 +39,12 @@ export default function ContactForm() {
 
       toast.success('Message sent successfully!', {
         description: 'We\'ll get back to you within 24 hours.',
+      });
+      
+      // Track Lead event (Meta Pixel)
+      trackMetaLead({
+        content_name: 'Contact Form Submission',
+        content_category: 'Lead Generation',
       });
       
       reset();

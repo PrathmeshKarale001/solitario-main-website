@@ -229,6 +229,19 @@ export const trackMetaCompleteRegistration = (params?: {
 };
 
 /**
+ * Track when a user finds a location (store locator)
+ */
+export const trackMetaFindLocation = (params?: {
+  content_name?: string;
+  content_category?: string;
+  search_string?: string;
+  latitude?: number;
+  longitude?: number;
+}) => {
+  trackMetaEvent('FindLocation', params);
+};
+
+/**
  * Track custom contact events
  */
 export const trackMetaContact = () => {

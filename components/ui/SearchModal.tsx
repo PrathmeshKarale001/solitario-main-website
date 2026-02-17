@@ -8,6 +8,7 @@ import Link from 'next/link';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { isPrebookingProduct, getProductDisplayPrice } from '@/lib/prebooking';
+import { trackMetaSearch } from '@/components/analytics/MetaPixel';
 
 interface SearchModalProps {
   isOpen: boolean;
@@ -128,6 +129,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   // Handle search submission
   const handleSearch = (searchTerm: string) => {
     saveRecentSearch(searchTerm);
+    // Track Search event (Meta Pixel)
+    trackMetaSearch({
+      search_string: searchTerm,
+    });
     onClose();
     window.location.href = `/products?search=${encodeURIComponent(searchTerm)}`;
   };

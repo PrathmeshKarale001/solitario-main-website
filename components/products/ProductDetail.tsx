@@ -12,6 +12,7 @@ import { Section, Container } from '@/components/ui';
 import { useCart } from '@/lib/cart-context';
 import { NearestStore } from '@/components/stores';
 import { trackPageView, trackAddToCart } from '@/lib/gtm-conversions';
+import { trackMetaViewContent, trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 import { isPrebookingProduct, getProductDisplayPrice, PREBOOK_PRICE } from '@/lib/prebooking';
 
 interface ProductDetailProps {
@@ -56,9 +57,19 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
     setIsWishlisted(isInWishlist);
     
-    // Track page view conversion
+    // Track page view conversion (Google Ads)
     trackPageView();
-  }, [product.id]);
+    
+    // Track ViewContent (Meta Pixel)
+    trackMetaViewContent({
+      content_name: product.name,
+      content_category: product.category,
+      content_ids: [product.id],
+      content_type: 'product',
+      value: product.price,
+      currency: 'INR',
+    });
+  }, [product.id, product.name, product.category, product.price]);
 
   // Fetch related products from Shopify
   useEffect(() => {

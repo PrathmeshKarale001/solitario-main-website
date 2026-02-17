@@ -8,6 +8,7 @@ import { CheckCircle, Package, Truck, Mail, Phone, ArrowRight, Download, Share2,
 import { Container } from '@/components/ui';
 import confetti from 'canvas-confetti';
 import { trackPaymentComplete } from '@/lib/gtm-conversions';
+import { trackMetaPurchase } from '@/components/analytics/MetaPixel';
 
 function SuccessContent() {
   const searchParams = useSearchParams();
@@ -62,8 +63,21 @@ function SuccessContent() {
       if (!isNaN(value) && transactionId) {
         // Small delay to ensure gtag is fully loaded
         const timeoutId = setTimeout(() => {
+          // Track Payment Complete (Google Ads)
           trackPaymentComplete(value, transactionId);
           console.log('[GTM] Payment Complete tracked:', { value, transactionId });
+          
+          // Track Purchase (Meta Pixel)
+          // Note: We track with order value and transaction ID
+          // For full tracking with product details, fetch order from API
+          trackMetaPurchase({
+            content_ids: [transactionId], // Using transaction ID as content ID
+            contents: [{ id: transactionId, quantity: 1, item_price: value }],
+            value: value,
+            currency: 'INR',
+            num_items: 1, // Will be updated if we fetch order details
+          });
+          console.log('[Meta Pixel] Purchase tracked:', { value, transactionId });
         }, 500);
         
         return () => clearTimeout(timeoutId);

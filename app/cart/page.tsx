@@ -15,6 +15,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
+import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
@@ -651,9 +652,21 @@ export default function CartPage() {
                 {/* Checkout Button */}
                 <button
                   onClick={() => {
-                    // Track Begin Checkout conversion FIRST
+                    // Track Begin Checkout conversion (Google Ads)
                     trackBeginCheckout();
-                    // Navigate after a short delay to ensure gtag event fires
+                    // Track Initiate Checkout (Meta Pixel)
+                    const finalTotal = promotionPricing ? promotionPricing.total : grandTotal;
+                    trackMetaInitiateCheckout({
+                      content_ids: items.map(item => item.product.id),
+                      contents: items.map(item => ({
+                        id: item.product.id,
+                        quantity: item.quantity,
+                      })),
+                      value: finalTotal,
+                      currency: 'INR',
+                      num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                    });
+                    // Navigate after a short delay to ensure events fire
                     setTimeout(() => {
                       router.push('/checkout');
                     }, 150);
