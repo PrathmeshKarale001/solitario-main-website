@@ -1,7 +1,6 @@
 'use client';
 
 import Script from 'next/script';
-import { useEffect } from 'react';
 
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
@@ -14,30 +13,16 @@ declare global {
 }
 
 export default function MetaPixel() {
-  useEffect(() => {
-    if (!META_PIXEL_ID) {
-      return;
-    }
-
-    // Initialize Meta Pixel on client-side
-    import('react-facebook-pixel')
-      .then((x) => x.default)
-      .then((ReactPixel) => {
-        ReactPixel.init(META_PIXEL_ID);
-        ReactPixel.pageView();
-      });
-  }, []);
-
   if (!META_PIXEL_ID) {
     return null;
   }
 
   return (
     <>
-      {/* Meta Pixel Base Code */}
+      {/* Meta Pixel Base Code — loads right after hydration so fbq is available for all events */}
       <Script
-        id="meta-pixel"
-        strategy="lazyOnload"
+        id="meta-pixel-base"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: `
             !function(f,b,e,v,n,t,s)
@@ -53,8 +38,8 @@ export default function MetaPixel() {
           `,
         }}
       />
-      
-      {/* Noscript Pixel */}
+
+      {/* Noscript fallback */}
       <noscript>
         <img
           height="1"
@@ -73,21 +58,47 @@ export default function MetaPixel() {
 // =============================================
 
 /**
- * Track custom events
+ * Safely call fbq — queues the call if fbq hasn't loaded yet.
+ * The base pixel code creates a queue automatically, but this
+ * guards against the case where the Script tag hasn't executed at all.
  */
-export const trackMetaEvent = (eventName: string, parameters?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('track', eventName, parameters);
+const safeFbq = (...args: any[]) => {
+  if (typeof window === 'undefined') return;
+
+  // If fbq exists (script loaded or queue created), call it directly
+  if (window.fbq) {
+    window.fbq(...args);
+    return;
   }
+
+  // If fbq doesn't exist yet, set up the queue manually
+  // (mirrors what the base pixel code does)
+  const n: any = function () {
+    n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments);
+  };
+  n.push = n;
+  n.loaded = true;
+  n.version = '2.0';
+  n.queue = [];
+  window.fbq = n;
+  window._fbq = n;
+
+  // Now call with the queued args — they'll fire once fbevents.js loads
+  window.fbq(...args);
 };
 
 /**
- * Track standard events with custom data
+ * Track a standard Meta Pixel event
+ */
+export const trackMetaEvent = (eventName: string, parameters?: Record<string, any>) => {
+  safeFbq('track', eventName, parameters);
+};
+
+/**
+ * Track standard events with trackSingle (pixel-specific)
  */
 export const trackMetaStandardEvent = (eventName: string, parameters?: Record<string, any>) => {
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('trackSingle', META_PIXEL_ID, eventName, parameters);
-  }
+  safeFbq('trackSingle', META_PIXEL_ID, eventName, parameters);
 };
 
 // =============================================
@@ -249,7 +260,7 @@ export const trackMetaContact = () => {
 };
 
 /**
- * Track custom subscribe events
+ * Track subscribe events (newsletter, paid subscription)
  */
 export const trackMetaSubscribe = (params?: {
   value?: number;
@@ -286,7 +297,5 @@ export const setMetaUserData = (userData: {
   zp?: string; // zip code (hashed)
   country?: string; // country code (hashed)
 }) => {
-  if (typeof window !== 'undefined' && window.fbq) {
-    window.fbq('setUserProperties', META_PIXEL_ID, userData);
-  }
+  safeFbq('setUserProperties', META_PIXEL_ID, userData);
 };

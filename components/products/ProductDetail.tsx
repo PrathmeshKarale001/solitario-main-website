@@ -104,21 +104,47 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const handleAddToCart = () => {
     addToCartContext(product, quantity);
-    // Track Add to Cart conversion
+    // Track Add to Cart conversion (Google Ads)
     trackAddToCart();
+    // Track Add to Cart (Meta Pixel)
+    trackMetaAddToCart({
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: 'product',
+      value: product.price,
+      currency: 'INR',
+    });
   };
 
   const handleBuyNow = () => {
     // Clear cart and add only this product for direct checkout
     localStorage.removeItem('cart');
     addToCartContext(product, quantity);
-    // Track Add to Cart conversion (Buy Now also counts as Add to Cart)
+    // Track Add to Cart conversion (Google Ads)
     trackAddToCart();
+    // Track Add to Cart (Meta Pixel) — Buy Now also counts as Add to Cart
+    trackMetaAddToCart({
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: 'product',
+      value: product.price,
+      currency: 'INR',
+    });
     router.push('/checkout');
   };
 
   const toggleWishlist = () => {
-    setIsWishlisted(!isWishlisted);
+    const newWishlisted = !isWishlisted;
+    setIsWishlisted(newWishlisted);
+    // Track AddToWishlist (Meta Pixel) — only when adding, not removing
+    if (newWishlisted) {
+      trackMetaAddToWishlist({
+        content_ids: [product.id],
+        content_name: product.name,
+        value: product.price,
+        currency: 'INR',
+      });
+    }
   };
 
   // Lightbox handlers

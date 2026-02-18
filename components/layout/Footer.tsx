@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Facebook, Instagram, Linkedin, Mail } from 'lucide-react';
+import { trackMetaSubscribe } from '@/components/analytics/MetaPixel';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
@@ -13,6 +14,8 @@ export default function Footer() {
 
   const handleSubscribe = (e: React.FormEvent) => {
     e.preventDefault();
+    // Track Subscribe event (Meta Pixel)
+    trackMetaSubscribe();
     // Handle newsletter subscription
     setEmail('');
   };
@@ -262,7 +265,7 @@ export default function Footer() {
               </Link>
             </div>
             <p className="text-sm text-ivory-pearl/95">© 2025 Solitario. All rights reserved.</p>
-            
+
           </div>
         </div>
       </div>
