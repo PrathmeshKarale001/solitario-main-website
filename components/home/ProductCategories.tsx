@@ -12,6 +12,7 @@ import { Product } from '@/lib/data';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
 import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
+import { trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 
 const categories = CATEGORIES.filter((cat) => cat.id !== 'all');
 
@@ -88,11 +89,10 @@ export default function ProductCategories() {
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.slug)}
-                className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 font-gotham text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-300 rounded-full touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center ${
-                  activeCategory === category.slug
+                className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 font-gotham text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-300 rounded-full touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center ${activeCategory === category.slug
                     ? 'bg-bronze-gold text-white shadow-luxury-lg'
                     : 'bg-gray-100 text-gray-700 hover:bg-bronze-gold/10 hover:text-bronze-gold'
-                }`}
+                  }`}
               >
                 {category.label}
               </button>
@@ -128,14 +128,14 @@ export default function ProductCategories() {
                         className="object-contain p-6 group-hover:scale-105 transition-transform duration-500"
                         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                       />
-                      
+
                       {/* Category Badge */}
                       <div className="absolute top-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
                         <span className="text-[10px] uppercase tracking-wider font-gotham text-gray-700">
                           {categoryLabel}
                         </span>
                       </div>
-                      
+
                       {/* Wishlist Button */}
                       <button
                         onClick={(e) => {
@@ -145,20 +145,25 @@ export default function ProductCategories() {
                             removeFromWishlist(product.id);
                           } else {
                             addToWishlist(product);
+                            trackMetaAddToWishlist({
+                              content_ids: [product.id],
+                              content_name: product.name,
+                              value: product.price,
+                              currency: product.currency || 'INR',
+                            });
                           }
                         }}
                         className="absolute top-3 right-3 w-9 h-9 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform"
                         aria-label={isInWishlist ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
                       >
                         <Heart
-                          className={`w-4 h-4 transition-colors ${
-                            isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'
-                          }`}
+                          className={`w-4 h-4 transition-colors ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                            }`}
                         />
                       </button>
                     </div>
                   </Link>
-                  
+
                   {/* Product Info */}
                   <div className="p-4">
                     <Link href={`/products/${product.id}`}>
@@ -169,18 +174,24 @@ export default function ProductCategories() {
                     <p className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'}`}>
                       {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                     </p>
-                    
+
                     {/* Add to Cart / Prebook Button */}
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         addToCart(product, 1);
+                        trackMetaAddToCart({
+                          content_ids: [product.id],
+                          content_name: product.name,
+                          content_type: 'product',
+                          value: product.price,
+                          currency: product.currency || 'INR',
+                        });
                       }}
-                      className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${
-                        isPrebookingProduct(product) 
-                          ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600' 
+                      className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${isPrebookingProduct(product)
+                          ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
                           : 'bg-classic-green hover:bg-classic-green/90'
-                      }`}
+                        }`}
                     >
                       {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
                       {getProductButtonText(product, false)}

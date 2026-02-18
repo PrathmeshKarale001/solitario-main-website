@@ -11,6 +11,7 @@ import { isPrebookingProduct, getCartItemPrice, PREBOOK_PRICE } from '@/lib/preb
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { CartErrorBoundary } from '@/components/ui/ErrorBoundary';
+import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
 
 function CartSidebarContent() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
@@ -44,7 +45,7 @@ function CartSidebarContent() {
 
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
-  
+
   // Promotion pricing state
   const [promotionPricing, setPromotionPricing] = useState<{
     subtotal: number;
@@ -76,7 +77,7 @@ function CartSidebarContent() {
             // Fallback to a high-quality static image if API fetch fails
             setGiftProduct({
               name: '10 Cent Diamond Gift',
-              image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80', 
+              image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
               price: 5000
             });
           }
@@ -163,22 +164,22 @@ function CartSidebarContent() {
   const validateCoupon = async (code: string) => {
     setIsValidating(true);
     setCouponError(null);
-    
+
     try {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          couponCode: code, 
+        body: JSON.stringify({
+          couponCode: code,
           subtotal: total * 100,
           cartId: localStorage.getItem('shopify-cart-id')
         }),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
         if (totalItems >= 2) {
           setCouponError("Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).");
@@ -187,16 +188,16 @@ function CartSidebarContent() {
           setIsValidating(false);
           return;
         }
-        
+
         // Set coupon as applied
         setAppliedCoupon(code);
         setShowApplied(true);
-        
+
         if (data.percentOff) {
           const discount = Math.round((total * data.percentOff) / 100);
           setCouponDiscount(discount);
         }
-        
+
         // Refresh pricing with the applied coupon
         await fetchPromotionPricing();
       } else {
@@ -413,13 +414,13 @@ function CartSidebarContent() {
                       className="flex items-center justify-between p-3 bg-gradient-to-r from-classic-green/10 to-emerald-50 border-2 border-classic-green/30 rounded-xl shadow-sm"
                     >
                       <div className="flex items-center gap-2.5">
-                         <div className="p-1.5 bg-classic-green/20 rounded-lg">
-                           <Tag className="w-3.5 h-3.5 text-classic-green" />
-                         </div>
-                         <div>
-                           <p className="text-[10px] text-gray-600 uppercase tracking-wide font-medium">Promo Applied</p>
-                           <p className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</p>
-                         </div>
+                        <div className="p-1.5 bg-classic-green/20 rounded-lg">
+                          <Tag className="w-3.5 h-3.5 text-classic-green" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] text-gray-600 uppercase tracking-wide font-medium">Promo Applied</p>
+                          <p className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</p>
+                        </div>
                       </div>
                       <button
                         onClick={removeCoupon}
@@ -491,7 +492,7 @@ function CartSidebarContent() {
                         <span>Subtotal</span>
                         <span>{formatPrice(promotionPricing.subtotal, items[0].product.currency)}</span>
                       </div>
-                      
+
                       {promotionPricing.discounts.map((discount, index) => (
                         <div key={index} className="flex items-center justify-between text-xs font-bold text-classic-green">
                           <span>{discount.description}</span>
@@ -512,7 +513,7 @@ function CartSidebarContent() {
                         <span>Subtotal</span>
                         <span>{formatPrice(total, items[0].product.currency)}</span>
                       </div>
-                      
+
                       {couponDiscount > 0 && (
                         <div className="flex items-center justify-between text-xs font-bold text-success">
                           <span>Discount</span>
@@ -541,7 +542,19 @@ function CartSidebarContent() {
                   </Link>
                   <Link
                     href="/checkout"
-                    onClick={closeCart}
+                    onClick={() => {
+                      trackMetaInitiateCheckout({
+                        content_ids: items.map(item => item.product.id),
+                        contents: items.map(item => ({
+                          id: item.product.id,
+                          quantity: item.quantity,
+                        })),
+                        value: promotionPricing ? promotionPricing.total : Math.max(0, total - couponDiscount),
+                        currency: 'INR',
+                        num_items: items.reduce((sum, item) => sum + item.quantity, 0),
+                      });
+                      closeCart();
+                    }}
                     className="flex items-center justify-center py-3 bg-bronze-gold text-white text-[10px] font-bold uppercase tracking-widest rounded-lg hover:bg-soft-bronze shadow-lg shadow-bronze-gold/20 transition-all"
                   >
                     Checkout

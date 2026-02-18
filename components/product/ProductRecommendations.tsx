@@ -9,6 +9,7 @@ import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
 import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
+import { trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 import { Product } from '@/lib/data';
 import { getRecommendationProducts } from '@/lib/shopify-data';
 
@@ -55,6 +56,13 @@ export default function ProductRecommendations({
 
   const handleAddToCart = (product: Product) => {
     addToCart(product, 1);
+    trackMetaAddToCart({
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: 'product',
+      value: product.price,
+      currency: product.currency || 'INR',
+    });
   };
 
   const isInWishlist = (productId: string) => {
@@ -66,6 +74,12 @@ export default function ProductRecommendations({
       removeFromWishlist(product.id);
     } else {
       addToWishlist(product);
+      trackMetaAddToWishlist({
+        content_ids: [product.id],
+        content_name: product.name,
+        value: product.price,
+        currency: product.currency || 'INR',
+      });
     }
   };
 
@@ -109,19 +123,18 @@ export default function ProductRecommendations({
                   className="object-contain p-4 group-hover:scale-105 transition-transform duration-300"
                 />
               </Link>
-              
+
               {/* Wishlist Button */}
               <button
                 onClick={() => handleWishlistToggle(product)}
                 className="absolute top-3 right-3 w-8 h-8 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center shadow-sm hover:bg-white transition-colors"
                 aria-label={isInWishlist(product.id) ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
               >
-                <Heart 
-                  className={`w-4 h-4 transition-colors ${
-                    isInWishlist(product.id) 
-                      ? 'text-red-500 fill-red-500' 
+                <Heart
+                  className={`w-4 h-4 transition-colors ${isInWishlist(product.id)
+                      ? 'text-red-500 fill-red-500'
                       : 'text-gray-400 hover:text-red-500'
-                  }`} 
+                    }`}
                 />
               </button>
 
@@ -140,7 +153,7 @@ export default function ProductRecommendations({
                   {product.name}
                 </h3>
               </Link>
-              
+
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   {isPrebookingProduct(product) ? (
@@ -165,11 +178,10 @@ export default function ProductRecommendations({
               {/* Add to Cart / Prebook Button */}
               <button
                 onClick={() => handleAddToCart(product)}
-                className={`w-full text-white py-2 px-4 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 ${
-                  isPrebookingProduct(product)
+                className={`w-full text-white py-2 px-4 rounded-lg font-medium text-sm transition-colors flex items-center justify-center gap-2 ${isPrebookingProduct(product)
                     ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
                     : 'bg-classic-green hover:bg-classic-green/90'
-                }`}
+                  }`}
               >
                 {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingBag className="w-4 h-4" />}
                 {getProductButtonText(product, false)}

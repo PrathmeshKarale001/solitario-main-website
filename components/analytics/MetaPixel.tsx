@@ -1,6 +1,8 @@
 'use client';
 
 import Script from 'next/script';
+import { usePathname } from 'next/navigation';
+import { useEffect, useRef } from 'react';
 
 const META_PIXEL_ID = process.env.NEXT_PUBLIC_META_PIXEL_ID;
 
@@ -12,7 +14,32 @@ declare global {
   }
 }
 
+/**
+ * MetaPixel component — handles base pixel loading + SPA route-change PageViews.
+ *
+ * The inline script runs once on initial load: init + first PageView.
+ * The useEffect fires PageView on every subsequent client-side navigation
+ * so Meta's journey/test tools see continuous activity without re-initialisation.
+ */
 export default function MetaPixel() {
+  const pathname = usePathname();
+  const isInitialLoad = useRef(true);
+
+  // Fire PageView on every SPA route change (skip the first — already fired by inline script)
+  useEffect(() => {
+    if (!META_PIXEL_ID) return;
+
+    if (isInitialLoad.current) {
+      isInitialLoad.current = false;
+      return; // The inline <Script> already tracked the initial PageView
+    }
+
+    // Fire a PageView for each subsequent client-side navigation
+    if (typeof window !== 'undefined' && window.fbq) {
+      window.fbq('track', 'PageView');
+    }
+  }, [pathname]);
+
   if (!META_PIXEL_ID) {
     return null;
   }

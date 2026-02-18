@@ -8,6 +8,7 @@ import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { isPrebookingProduct, getProductDisplayPrice, isProductButtonEnabled, PREBOOK_PRICE } from '@/lib/prebooking';
+import { trackMetaAddToCart } from '@/components/analytics/MetaPixel';
 
 export interface ProductListViewProps {
   products: Product[];
@@ -42,18 +43,16 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
           transition={{ duration: 0.3, delay: index * 0.05 }}
         >
           <Link href={`/products/${product.id}`}>
-            <div className={`group rounded-2xl overflow-hidden border hover:border-bronze-gold/30 transition-all duration-500 shadow-luxury hover:shadow-luxury-lg ${
-              darkMode 
-                ? 'bg-[#111] border-[#2a2a2a] hover:bg-[#161616]' 
+            <div className={`group rounded-2xl overflow-hidden border hover:border-bronze-gold/30 transition-all duration-500 shadow-luxury hover:shadow-luxury-lg ${darkMode
+                ? 'bg-[#111] border-[#2a2a2a] hover:bg-[#161616]'
                 : 'bg-white border-gray-200'
-            }`}>
+              }`}>
               <div className="flex flex-col md:flex-row">
                 {/* Image */}
-                <div className={`relative w-full md:w-64 h-64 md:h-auto flex-shrink-0 ${
-                  darkMode 
-                    ? 'bg-[#111]' 
+                <div className={`relative w-full md:w-64 h-64 md:h-auto flex-shrink-0 ${darkMode
+                    ? 'bg-[#111]'
                     : 'bg-gradient-to-br from-gray-50 via-white to-gray-50'
-                }`}>
+                  }`}>
                   <Image
                     src={product.image || '/images/placeholder.svg'}
                     alt={product.name}
@@ -73,34 +72,29 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                   <div>
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex-1">
-                        <span className={`inline-block text-[10px] uppercase tracking-[0.25em] font-gotham mb-2 ${
-                          darkMode ? 'text-bronze-gold' : 'text-gray-400'
-                        }`}>
+                        <span className={`inline-block text-[10px] uppercase tracking-[0.25em] font-gotham mb-2 ${darkMode ? 'text-bronze-gold' : 'text-gray-400'
+                          }`}>
                           {product.category.toUpperCase()}
                         </span>
-                        <h3 className={`font-montserrat font-bold text-2xl md:text-3xl group-hover:text-bronze-gold transition-colors mb-2 ${
-                          darkMode ? 'text-gray-100' : 'text-gray-900'
-                        }`}>
+                        <h3 className={`font-montserrat font-bold text-2xl md:text-3xl group-hover:text-bronze-gold transition-colors mb-2 ${darkMode ? 'text-gray-100' : 'text-gray-900'
+                          }`}>
                           {product.name}
                         </h3>
-                        <p className={`text-sm leading-relaxed font-montserrat line-clamp-2 mb-4 ${
-                          darkMode ? 'text-gray-400' : 'text-gray-600'
-                        }`}>
+                        <p className={`text-sm leading-relaxed font-montserrat line-clamp-2 mb-4 ${darkMode ? 'text-gray-400' : 'text-gray-600'
+                          }`}>
                           {getCleanDescription(product.description) || product.description}
                         </p>
                       </div>
                     </div>
                   </div>
 
-                  <div className={`flex items-center justify-between pt-4 border-t ${
-                    darkMode ? 'border-[#2a2a2a]' : 'border-gray-100'
-                  }`}>
+                  <div className={`flex items-center justify-between pt-4 border-t ${darkMode ? 'border-[#2a2a2a]' : 'border-gray-100'
+                    }`}>
                     <div className="flex items-center gap-3">
                       {isPrebookingProduct(product) ? (
                         <>
-                          <p className={`font-gotham text-2xl font-semibold tracking-wide ${
-                            darkMode ? 'text-purple-400' : 'text-purple-600'
-                          }`}>
+                          <p className={`font-gotham text-2xl font-semibold tracking-wide ${darkMode ? 'text-purple-400' : 'text-purple-600'
+                            }`}>
                             {getProductDisplayPrice(product)}
                           </p>
                           <span className="inline-flex items-center gap-1 px-2 py-1 text-xs font-gotham font-semibold rounded bg-gradient-to-r from-purple-600 to-indigo-600 text-white">
@@ -110,26 +104,22 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                         </>
                       ) : product.comparePrice ? (
                         <>
-                          <p className={`font-gotham text-2xl font-semibold tracking-wide ${
-                            darkMode ? 'text-[#C6A664]' : 'text-classic-green'
-                          }`}>
+                          <p className={`font-gotham text-2xl font-semibold tracking-wide ${darkMode ? 'text-[#C6A664]' : 'text-classic-green'
+                            }`}>
                             {formatPrice(product.price, product.currency)}
                           </p>
-                          <p className={`font-gotham text-lg line-through ${
-                            darkMode ? 'text-gray-500' : 'text-gray-400'
-                          }`}>
+                          <p className={`font-gotham text-lg line-through ${darkMode ? 'text-gray-500' : 'text-gray-400'
+                            }`}>
                             {formatPrice(product.comparePrice, product.currency)}
                           </p>
-                          <span className={`inline-flex items-center px-2 py-1 text-xs font-gotham font-semibold rounded ${
-                            darkMode ? 'bg-red-900/50 text-red-400' : 'bg-red-100 text-red-600'
-                          }`}>
+                          <span className={`inline-flex items-center px-2 py-1 text-xs font-gotham font-semibold rounded ${darkMode ? 'bg-red-900/50 text-red-400' : 'bg-red-100 text-red-600'
+                            }`}>
                             {Math.round(((product.comparePrice - product.price) / product.comparePrice) * 100)}% OFF
                           </span>
                         </>
                       ) : (
-                        <p className={`font-gotham text-2xl font-semibold tracking-wide ${
-                          darkMode ? 'text-[#C6A664]' : 'text-classic-green'
-                        }`}>
+                        <p className={`font-gotham text-2xl font-semibold tracking-wide ${darkMode ? 'text-[#C6A664]' : 'text-classic-green'
+                          }`}>
                           {formatPrice(product.price, product.currency)}
                         </p>
                       )}
@@ -154,16 +144,22 @@ export default function ProductListView({ products, onQuickView, darkMode = fals
                           e.stopPropagation();
                           if (isProductButtonEnabled(product)) {
                             addToCart(product, 1);
+                            trackMetaAddToCart({
+                              content_ids: [product.id],
+                              content_name: product.name,
+                              content_type: 'product',
+                              value: product.price,
+                              currency: product.currency || 'INR',
+                            });
                           }
                         }}
                         disabled={!isProductButtonEnabled(product)}
-                        className={`px-6 py-2.5 text-white rounded-full font-gotham text-xs uppercase tracking-[0.2em] transition-all shadow-luxury hover:shadow-glow flex items-center gap-2 ${
-                          isPrebookingProduct(product)
+                        className={`px-6 py-2.5 text-white rounded-full font-gotham text-xs uppercase tracking-[0.2em] transition-all shadow-luxury hover:shadow-glow flex items-center gap-2 ${isPrebookingProduct(product)
                             ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
                             : isProductButtonEnabled(product)
                               ? 'bg-bronze-gold hover:bg-bronze-gold/90'
                               : 'bg-gray-300 cursor-not-allowed'
-                        }`}
+                          }`}
                       >
                         {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
                         {isPrebookingProduct(product) ? 'Prebook Now' : isProductButtonEnabled(product) ? 'Add to Cart' : 'Out of Stock'}

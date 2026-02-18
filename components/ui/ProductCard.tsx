@@ -10,6 +10,7 @@ import { formatPrice, cn } from '@/lib/utils';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useCart } from '@/lib/cart-context';
 import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText, isProductButtonEnabled } from '@/lib/prebooking';
+import { trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 
 export interface ProductCardProps {
   product: Product;
@@ -36,6 +37,12 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
       removeFromWishlist(product.id);
     } else {
       addToWishlist(product);
+      trackMetaAddToWishlist({
+        content_ids: [product.id],
+        content_name: product.name,
+        value: product.price,
+        currency: product.currency || 'INR',
+      });
     }
   };
 
@@ -44,6 +51,13 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
     e.stopPropagation();
     setIsAdding(true);
     addToCart(product, 1);
+    trackMetaAddToCart({
+      content_ids: [product.id],
+      content_name: product.name,
+      content_type: 'product',
+      value: product.price,
+      currency: product.currency || 'INR',
+    });
     setTimeout(() => setIsAdding(false), 1000);
   };
 
@@ -52,8 +66,8 @@ export default function ProductCard({ product, onQuickView, onAddToCart, darkMod
       <motion.div
         className={cn(
           "relative rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border hover:border-bronze-gold/30",
-          darkMode 
-            ? "bg-[#111] border-[#2a2a2a] hover:bg-[#161616]" 
+          darkMode
+            ? "bg-[#111] border-[#2a2a2a] hover:bg-[#161616]"
             : "bg-white border-gray-100"
         )}
         onMouseEnter={() => setIsHovered(true)}

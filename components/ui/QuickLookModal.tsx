@@ -9,6 +9,7 @@ import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/lib/cart-context';
 import { isPrebookingProduct, getProductDisplayPrice, getCartItemPrice, getProductButtonText, isProductButtonEnabled, PREBOOK_PRICE } from '@/lib/prebooking';
+import { trackMetaAddToCart } from '@/components/analytics/MetaPixel';
 
 export interface QuickLookModalProps {
   isOpen: boolean;
@@ -46,6 +47,13 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
   const handleAddToCart = () => {
     if (product) {
       addToCart(product, 1);
+      trackMetaAddToCart({
+        content_ids: [product.id],
+        content_name: product.name,
+        content_type: 'product',
+        value: product.price,
+        currency: product.currency || 'INR',
+      });
     }
   };
 
@@ -60,8 +68,8 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
   const rawDescription = product.description?.replace(/<[^>]*>/g, '').split('Specifications')[0].trim() || '';
   const maxLength = 150;
   const shouldTruncate = rawDescription.length > maxLength;
-  const truncatedDescription = shouldTruncate && !showFullDescription 
-    ? rawDescription.slice(0, maxLength).trim() + '...' 
+  const truncatedDescription = shouldTruncate && !showFullDescription
+    ? rawDescription.slice(0, maxLength).trim() + '...'
     : rawDescription;
 
   return (
@@ -102,7 +110,7 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                   className="object-contain p-8"
                   priority
                 />
-                
+
                 {/* Prebook Badge */}
                 {isPrebook && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-purple-600 to-purple-500 text-white px-4 py-1.5 text-xs font-gotham uppercase tracking-[0.15em] rounded-full shadow-luxury-lg border border-white/20 backdrop-blur-sm flex items-center gap-1.5">
@@ -110,7 +118,7 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                     Prebook
                   </div>
                 )}
-                
+
                 {/* Featured Badge */}
                 {!isPrebook && product.featured && (
                   <div className="absolute top-4 left-4 bg-gradient-to-r from-bronze-gold to-bronze-gold/80 text-white px-4 py-1.5 text-xs font-gotham uppercase tracking-[0.2em] rounded-full shadow-luxury-lg border border-white/20 backdrop-blur-sm">
@@ -214,18 +222,17 @@ export default function QuickLookModal({ isOpen, onClose, product }: QuickLookMo
                   <button
                     onClick={handleAddToCart}
                     disabled={!buttonEnabled}
-                    className={`w-full px-6 py-3.5 rounded-lg font-gotham text-sm uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${
-                      isPrebook
+                    className={`w-full px-6 py-3.5 rounded-lg font-gotham text-sm uppercase tracking-[0.2em] transition-all duration-300 flex items-center justify-center gap-2 ${isPrebook
                         ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600 text-white shadow-lg hover:shadow-xl'
                         : buttonEnabled
                           ? 'bg-bronze-gold hover:bg-bronze-gold/90 text-white shadow-luxury hover:shadow-glow'
                           : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                    }`}
+                      }`}
                   >
                     {isPrebook ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
                     {buttonText}
                   </button>
-                  
+
                   <Link
                     href={`/products/${product.id}`}
                     onClick={onClose}
