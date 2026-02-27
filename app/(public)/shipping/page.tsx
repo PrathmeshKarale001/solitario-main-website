@@ -12,8 +12,8 @@ const shippingOptions = [
   {
     name: 'Domestic Shipping (India)',
     time: '5-7 Days',
-    price: 'FREE',
-    freeAbove: 'All orders',
+    price: 'Included',
+    freeAbove: null,
     icon: Truck,
     note: 'Made-to-order items may take longer'
   },
@@ -51,7 +51,7 @@ const features = [
 ];
 
 const cities = [
-  'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Kolkata', 
+  'Mumbai', 'Delhi', 'Bangalore', 'Chennai', 'Hyderabad', 'Kolkata',
   'Pune', 'Ahmedabad', 'Jaipur', 'Lucknow', 'Chandigarh', 'Kochi'
 ];
 
@@ -159,16 +159,15 @@ export default function ShippingPage() {
               className="bg-white rounded-2xl shadow-brand border border-brand-100 p-8"
             >
               <h2 className="font-montserrat font-bold text-2xl text-brand-800 mb-6">Delivery Information</h2>
-              
+
               <div className="space-y-6">
                 <div>
                   <h3 className="font-gotham text-sm uppercase tracking-wider text-brand-500 mb-2">
                     Domestic Shipping (India)
                   </h3>
                   <p className="text-brand-600 font-montserrat text-sm">
-                    <strong>Free Shipping:</strong> We offer FREE shipping on all orders within India<br/>
-                    <strong>Delivery Time:</strong> 5-7 Days<br/>
-                    <strong>Made-to-order items:</strong> May take additional time<br/>
+                    <strong>Delivery Time:</strong> 5-7 Days<br />
+                    <strong>Made-to-order items:</strong> May take additional time<br />
                     All orders are fully insured and handled through trusted third-party courier partners.
                   </p>
                 </div>
@@ -178,7 +177,7 @@ export default function ShippingPage() {
                     Packaging & Presentation
                   </h3>
                   <p className="text-brand-600 font-montserrat text-sm">
-                    Every item is delivered in durable, tamper-proof packaging in exclusive Solitario boxes 
+                    Every item is delivered in durable, tamper-proof packaging in exclusive Solitario boxes
                     with all relevant certificates. Free gift packaging and personalized messages available.
                   </p>
                 </div>
@@ -188,7 +187,7 @@ export default function ShippingPage() {
                     Delivery Requirements
                   </h3>
                   <p className="text-brand-600 font-montserrat text-sm">
-                    All deliveries require signature upon receipt. Please ensure someone is available 
+                    All deliveries require signature upon receipt. Please ensure someone is available
                     to receive high-value packages and inspect immediately upon delivery.
                   </p>
                 </div>

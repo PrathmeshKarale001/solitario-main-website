@@ -116,7 +116,7 @@ export const PROMISES = [
   {
     id: 'ethical',
     title: 'Ethical Procedures',
-    description: '100% ethical Lab Grown Diamonds, conflict-free and sustainable',
+    description: '100% conflict free Lab Grown Diamonds',
     icon: 'heart-handshake'
   },
 ] as const;

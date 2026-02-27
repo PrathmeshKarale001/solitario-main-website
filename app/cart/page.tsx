@@ -58,7 +58,7 @@ export default function CartPage() {
   };
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
-  
+
   // Promotion pricing state
   const [promotionPricing, setPromotionPricing] = useState<{
     subtotal: number;
@@ -175,7 +175,7 @@ export default function CartPage() {
   const validateCoupon = async (code: string) => {
     setIsValidating(true);
     setCouponError(null);
-    
+
     try {
       const response = await fetch('/api/coupons/validate', {
         method: 'POST',
@@ -183,19 +183,19 @@ export default function CartPage() {
         body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
       });
       const data = await response.json();
-      
+
       if (response.ok) {
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-        
+
         // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
-        if (totalItems >= 2) {
-          setCouponError("Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).");
+        if (totalItems >= 3) {
+          setCouponError("Coupons cannot be combined with the Buy 2 Get 1 Free offer.");
           setAppliedCoupon(null);
           setCouponDiscount(0);
           setIsValidating(false);
           return;
         }
-        
+
         // Set coupon as applied
         setAppliedCoupon(code);
         setShowApplied(true);
@@ -526,12 +526,14 @@ export default function CartPage() {
                 <h2 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 {/* Active Offers */}
-                <div className="space-y-2 mb-6">
-                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-2 rounded-lg text-xs">
-                    <Gift size={14} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
+                {itemCount >= 3 && (
+                  <div className="space-y-2 mb-6">
+                    <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-2 rounded-lg text-xs">
+                      <Gift size={14} className="flex-shrink-0" />
+                      <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Coupon Code Section */}
                 <div className="mb-6">
@@ -600,7 +602,7 @@ export default function CartPage() {
                           {formatPrice(promotionPricing.subtotal)}
                         </span>
                       </div>
-                      
+
                       {promotionPricing.discounts.map((discount, index) => (
                         <div key={index} className="flex items-center justify-between text-classic-green">
                           <span className="font-montserrat">{discount.description}</span>
@@ -623,7 +625,7 @@ export default function CartPage() {
                           {formatPrice(total)}
                         </span>
                       </div>
-                      
+
                       {couponDiscount > 0 && (
                         <div className="flex items-center justify-between text-success">
                           <span className="font-montserrat">Coupon Discount</span>
@@ -717,7 +719,7 @@ export default function CartPage() {
 
           {/* Product Recommendations */}
           <div className="mt-16">
-            <ProductRecommendations 
+            <ProductRecommendations
               title="Products you may like"
               limit={6}
               maxPrice={15000}

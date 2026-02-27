@@ -75,21 +75,7 @@ export default function Testimonials() {
                   "{currentTestimonial.text}"
                 </p>
 
-                {/* Rating Stars - Centered */}
-                <div className="flex justify-center gap-1 sm:gap-1.5 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 ${
-                        i < Math.floor(currentTestimonial.rating)
-                          ? 'fill-bronze-gold text-bronze-gold'
-                          : i < currentTestimonial.rating
-                          ? 'fill-bronze-gold/50 text-bronze-gold/50'
-                          : 'text-bronze-gold/30'
-                      }`}
-                    />
-                  ))}
-                </div>
+
 
                 {/* Author Info - Centered */}
                 <div className="mb-6">
@@ -107,11 +93,10 @@ export default function Testimonials() {
                     {TESTIMONIALS.map((_, index) => (
                       <div
                         key={index}
-                        className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${
-                          index === currentIndex
+                        className={`h-1.5 sm:h-2 rounded-full transition-all duration-300 ${index === currentIndex
                             ? 'w-6 sm:w-8 bg-bronze-gold'
                             : 'w-1.5 sm:w-2 bg-bronze-gold/30'
-                        }`}
+                          }`}
                       />
                     ))}
                   </div>
@@ -161,7 +146,7 @@ export default function Testimonials() {
                 </div>
               </div>
               <div className="px-6 py-3 bg-bronze-gold/10 backdrop-blur-sm rounded-lg border border-bronze-gold/20">
-                <p className="text-bronze-gold/80 font-gotham text-sm">1200++ Happy Customers</p>
+                <p className="text-bronze-gold/80 font-gotham text-sm">1200+ Happy Customers</p>
               </div>
             </div>
           </motion.div>

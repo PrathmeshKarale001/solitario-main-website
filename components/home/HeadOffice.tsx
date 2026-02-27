@@ -40,7 +40,7 @@ export default function HeadOffice() {
               <iframe
                 src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d7564.914352624912!2d73.7969086!3d18.5534165!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2bf54b5e6cc31%3A0xdc6172742cb69fa3!2sSolitario%20Lab%20Grown%20Private%20Limited%20Head%20Office!5e0!3m2!1sen!2sin!4v1765067715948!5m2!1sen!2sin"
                 className="absolute top-0 left-0 w-full h-full"
-                style={{ 
+                style={{
                   border: 0,
                   minHeight: '100%',
                   minWidth: '100%'
@@ -62,9 +62,12 @@ export default function HeadOffice() {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="rounded-2xl sm:rounded-3xl bg-white border border-brand-200 p-6 sm:p-8 flex flex-col justify-center shadow-brand h-[500px] sm:h-[550px] lg:h-[600px]"
           >
-            <h3 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-6 sm:mb-8">
+            <h3 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold text-brand-800 mb-2">
               Solitario Lab Grown <span className="text-classic-green">Pvt. Ltd.</span>
             </h3>
+            <p className="text-xs sm:text-sm text-brand-600 font-montserrat mb-6 sm:mb-8">
+              CIN: U32111PN2023PTC221023
+            </p>
 
             <div className="space-y-4 sm:space-y-6">
               {/* Address */}

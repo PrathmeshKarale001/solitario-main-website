@@ -34,7 +34,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [isReturnPolicyExpanded, setIsReturnPolicyExpanded] = useState(false);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [isLoadingRelated, setIsLoadingRelated] = useState(false);
-  
+
   // Pincode checker state
   const [pincode, setPincode] = useState('');
   const [pincodeChecking, setPincodeChecking] = useState(false);
@@ -43,7 +43,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     eta?: string;
     cod?: boolean;
   } | null>(null);
-  
+
   // Size guide modal state
   const [showSizeGuide, setShowSizeGuide] = useState(false);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -56,10 +56,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
     setIsWishlisted(isInWishlist);
-    
+
     // Track page view conversion (Google Ads)
     trackPageView();
-    
+
     // Track ViewContent (Meta Pixel)
     trackMetaViewContent({
       content_name: product.name,
@@ -98,8 +98,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   }, [product.category, product.id]);
 
   // Use real images from Shopify, fallback to single image repeated
-  const productImages = product.images && product.images.length > 0 
-    ? product.images 
+  const productImages = product.images && product.images.length > 0
+    ? product.images
     : [product.image];
 
   const handleAddToCart = () => {
@@ -255,34 +255,34 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   // Real stock availability from Shopify
   const inStock = product.inStock ?? true;
   const sku = product.sku || product.id.toUpperCase();
-  
+
   // Get current page URL for sharing
   const [currentUrl, setCurrentUrl] = useState('');
   useEffect(() => {
     setCurrentUrl(window.location.href);
   }, []);
-  
+
   const shareText = `Check out ${product.name} from Solitario!`;
-  
+
   // Parse Shopify HTML description format
   const parseDescription = (html: string) => {
     if (!html) return { mainText: '', specifications: [] };
-    
+
     // Extract main paragraph text (before Specifications)
     const mainTextMatch = html.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
-    const mainText = mainTextMatch 
-      ? mainTextMatch[1].replace(/<[^>]*>/g, '').trim() 
+    const mainText = mainTextMatch
+      ? mainTextMatch[1].replace(/<[^>]*>/g, '').trim()
       : html.replace(/<[^>]*>/g, '').split('Specifications')[0].trim();
-    
+
     // Extract specifications from <li> tags - more robust regex
     const specMatches = html.match(/<li[^>]*>([\s\S]*?)<\/li>/gi) || [];
-    const specifications = specMatches.map(li => 
+    const specifications = specMatches.map(li =>
       li.replace(/<\/?[^>]+(>|$)/g, '').trim()
     ).filter(spec => spec.length > 0);
-    
+
     return { mainText, specifications };
   };
-  
+
   const { mainText: descriptionText, specifications } = parseDescription(product.description || '');
 
   // Random jewelry background images from Unsplash
@@ -318,7 +318,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         {/* Brand Pattern Background */}
         <div className="absolute inset-0 z-0">
           {/* Diamond pattern overlay */}
-          <div 
+          <div
             className="absolute inset-0 opacity-10"
             style={{
               backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23ffffff' fill-opacity='0.4'/%3E%3C/svg%3E")`,
@@ -343,7 +343,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <span>/</span>
               <Link href="/products" className="hover:text-bronze-gold transition-colors">Shop</Link>
               <span>/</span>
-              <Link href={`/products?category=${product.category}`} className="hover:text-bronze-gold transition-colors capitalize">
+              <Link href={`/products/category/${product.category}`} className="hover:text-bronze-gold transition-colors capitalize">
                 {product.category}
               </Link>
               <span>/</span>
@@ -405,10 +405,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   className="absolute top-2 right-2 md:top-4 md:right-4 w-10 h-10 md:w-12 md:h-12 bg-white/95 backdrop-blur-sm rounded-full flex items-center justify-center shadow-brand hover:scale-110 transition-all duration-300 z-10"
                   aria-label={isWishlisted ? "Remove from wishlist" : "Add to wishlist"}
                 >
-                  <Heart 
-                    size={16} 
-                    fill={isWishlisted ? "currentColor" : "none"} 
-                    strokeWidth={1.5} 
+                  <Heart
+                    size={16}
+                    fill={isWishlisted ? "currentColor" : "none"}
+                    strokeWidth={1.5}
                     className={isWishlisted ? 'fill-bronze-gold text-bronze-gold' : 'text-brand-600'}
                   />
                 </button>
@@ -420,11 +420,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   <button
                     key={index}
                     onClick={() => setSelectedImage(index)}
-                    className={`relative aspect-square w-16 h-16 md:w-auto md:h-auto md:flex-1 flex-shrink-0 rounded-lg md:rounded-brand overflow-hidden border-2 transition-all duration-300 ${
-                      selectedImage === index
-                        ? 'border-bronze-gold shadow-brand'
-                        : 'border-brand-200 hover:border-bronze-gold/50'
-                    }`}
+                    className={`relative aspect-square w-16 h-16 md:w-auto md:h-auto md:flex-1 flex-shrink-0 rounded-lg md:rounded-brand overflow-hidden border-2 transition-all duration-300 ${selectedImage === index
+                      ? 'border-bronze-gold shadow-brand'
+                      : 'border-brand-200 hover:border-bronze-gold/50'
+                      }`}
                   >
                     <Image
                       src={img}
@@ -513,7 +512,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                   <Truck className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Free Delivery</span>
+                  <span className="text-xs font-medium text-gray-900 text-center">Express Delivery</span>
                 </div>
                 <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                   <RotateCcw className="w-5 h-5 text-classic-green mb-1" />
@@ -525,7 +524,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 </div>
                 <div className="flex flex-col items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
                   <Award className="w-5 h-5 text-classic-green mb-1" />
-                  <span className="text-xs font-medium text-gray-900 text-center">Lifetime Warranty</span>
+                  <span className="text-xs font-medium text-gray-900 text-center">Lifetime Exchange</span>
                 </div>
               </div>
             </div>
@@ -583,7 +582,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     <div>
                       <h4 className="font-semibold text-purple-800 mb-1">Warner Bros Collection - Prebooking</h4>
                       <p className="text-sm text-purple-700">
-                        Secure your exclusive piece with a prebooking amount of ₹{PREBOOK_PRICE.toLocaleString('en-IN')}. 
+                        Secure your exclusive piece with a prebooking amount of ₹{PREBOOK_PRICE.toLocaleString('en-IN')}.
                         Full payment will be collected upon product availability.
                       </p>
                     </div>
@@ -729,14 +728,14 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                             <div>
                               <h5 className="font-semibold text-gray-900 mb-2">15-Day Exchange Policy</h5>
                               <p className="text-gray-700 leading-relaxed">
-                                Exchange requests must be raised within 15 days of delivery. Items must be unused, unworn, 
+                                Exchange requests must be raised within 15 days of delivery. Items must be unused, unworn,
                                 and in original condition with all certificates and packaging.
                               </p>
                             </div>
                             <div>
                               <h5 className="font-semibold text-gray-900 mb-2">100% Lifetime Exchange</h5>
                               <p className="text-gray-700 leading-relaxed">
-                                We offer complete lifetime exchange guarantee on all lab grown diamond purchases. 
+                                We offer complete lifetime exchange guarantee on all lab grown diamond purchases.
                                 Contact us at paymentdesk@thesolitario.com for assistance.
                               </p>
                             </div>
@@ -759,11 +758,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="flex flex-col sm:flex-row gap-3 md:gap-4">
                   <button
                     onClick={handleAddToCart}
-                    className={`flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 group ${
-                      isPrebookingProduct(product)
-                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
-                        : 'bg-bronze-gold hover:bg-soft-bronze hover:shadow-gold-glow'
-                    }`}
+                    className={`flex-1 flex items-center justify-center gap-2 md:gap-3 text-white px-6 md:px-8 py-3 md:py-4 font-gotham text-xs md:text-ui uppercase tracking-wider md:tracking-luxury rounded-lg md:rounded-brand shadow-brand transition-all duration-500 group ${isPrebookingProduct(product)
+                      ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                      : 'bg-bronze-gold hover:bg-soft-bronze hover:shadow-gold-glow'
+                      }`}
                   >
                     {isPrebookingProduct(product) ? (
                       <Ticket className="w-4 h-4 md:w-5 md:h-5 group-hover:scale-110 transition-transform" />
@@ -790,7 +788,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <div className="flex items-center gap-3 md:gap-4 pt-4 border-t border-brand-200">
                   <span className="text-body-sm text-brand-600 font-montserrat">Share:</span>
                   <div className="flex items-center gap-3">
-                    <a 
+                    <a
                       href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -798,7 +796,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     >
                       <Facebook className="w-4 h-4" />
                     </a>
-                    <a 
+                    <a
                       href="https://www.instagram.com/solitariodiamonds/"
                       target="_blank"
                       rel="noopener noreferrer"
@@ -806,7 +804,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     >
                       <Instagram className="w-4 h-4" />
                     </a>
-                    <a 
+                    <a
                       href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(currentUrl)}`}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -814,7 +812,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     >
                       <Linkedin className="w-4 h-4" />
                     </a>
-                    <a 
+                    <a
                       href={`mailto:?subject=${encodeURIComponent(shareText)}&body=${encodeURIComponent(`Check out this beautiful piece: ${currentUrl}`)}`}
                       className="w-9 h-9 md:w-10 md:h-10 rounded-full bg-brand-100 hover:bg-bronze-gold hover:text-white flex items-center justify-center transition-all duration-300 text-brand-600"
                     >
@@ -842,11 +840,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id as any)}
-                  className={`px-4 md:px-8 py-3 md:py-4 font-gotham text-[10px] md:text-ui uppercase tracking-wider md:tracking-luxury border-b-2 transition-colors whitespace-nowrap flex-shrink-0 ${
-                    activeTab === tab.id
-                      ? 'border-bronze-gold text-bronze-gold'
-                      : 'border-transparent text-brand-600 hover:text-brand-800'
-                  }`}
+                  className={`px-4 md:px-8 py-3 md:py-4 font-gotham text-[10px] md:text-ui uppercase tracking-wider md:tracking-luxury border-b-2 transition-colors whitespace-nowrap flex-shrink-0 ${activeTab === tab.id
+                    ? 'border-bronze-gold text-bronze-gold'
+                    : 'border-transparent text-brand-600 hover:text-brand-800'
+                    }`}
                 >
                   {tab.label}
                 </button>
@@ -866,12 +863,12 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     {descriptionText}
                   </p>
                   <p className="text-brand-700 leading-relaxed font-montserrat text-sm md:text-base mb-6">
-                    Elevate your style with our exquisite {product.name} crafted from high-quality materials. 
-                    This piece effortlessly combines timeless elegance with modern sophistication, making it a versatile 
-                    accessory for any occasion. Each piece is meticulously handcrafted to ensure exceptional quality and 
+                    Elevate your style with our exquisite {product.name} crafted from high-quality materials.
+                    This piece effortlessly combines timeless elegance with modern sophistication, making it a versatile
+                    accessory for any occasion. Each piece is meticulously handcrafted to ensure exceptional quality and
                     lasting beauty.
                   </p>
-                  
+
                   {/* Specifications - Highlighted in Description Tab */}
                   {specifications.length > 0 && (
                     <div className="mb-6 bg-brand-50 border border-bronze-gold/20 rounded-xl p-5">
@@ -889,16 +886,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       </ul>
                     </div>
                   )}
-                  
+
                   {/* Buy Now / Prebook CTA in Description */}
                   <div className="mt-6 pt-6 border-t border-brand-200">
                     <button
                       onClick={handleAddToCart}
-                      className={`w-full sm:w-auto flex items-center justify-center gap-3 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500 ${
-                        isPrebookingProduct(product)
-                          ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
-                          : 'bg-classic-green hover:bg-classic-green/90'
-                      }`}
+                      className={`w-full sm:w-auto flex items-center justify-center gap-3 text-white px-8 py-4 font-gotham text-ui uppercase tracking-luxury rounded-brand shadow-brand transition-all duration-500 ${isPrebookingProduct(product)
+                        ? 'bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700'
+                        : 'bg-classic-green hover:bg-classic-green/90'
+                        }`}
                     >
                       {isPrebookingProduct(product) ? (
                         <>
@@ -956,7 +952,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                   className="space-y-6"
                 >
                   <h3 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Customer Reviews</h3>
-                  
+
                   {/* No reviews yet message */}
                   <div className="text-center py-12">
                     <p className="text-brand-600 font-montserrat mb-4">No reviews yet for this product.</p>
@@ -975,7 +971,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           <h2 className="font-montserrat font-bold text-display-sm md:text-display-md text-brand-800 mb-12 text-center" style={{ letterSpacing: '-0.02em' }}>
             Featured Collection
           </h2>
-          
+
           {isLoadingRelated ? (
             // Loading skeleton
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
@@ -1049,7 +1045,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       {/* Features Section - Horizontal Scroll Loop */}
       <Section variant="light" padding="sm" className="bg-brand-50 py-6 sm:py-8 overflow-hidden">
         <Container className="relative">
-          <div 
+          <div
             className="overflow-hidden"
             style={{
               maskImage: 'linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%)',
@@ -1076,8 +1072,8 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     description: 'Receive your order faster than ever before!',
                   },
                 ].map((feature, index) => (
-                  <div 
-                    key={`${setIndex}-${index}`} 
+                  <div
+                    key={`${setIndex}-${index}`}
                     className="flex-shrink-0 w-64 bg-white rounded-xl p-5 border border-brand-200 shadow-sm text-center"
                   >
                     <div className="w-12 h-12 bg-bronze-gold/10 rounded-full flex items-center justify-center mx-auto mb-3">
@@ -1110,48 +1106,48 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           >
             {/* Top Bar - Controls */}
             <div className="absolute top-0 left-0 right-0 p-3 md:p-6 flex justify-between items-center z-50 pointer-events-none">
-               <div className="pointer-events-auto bg-white/80 backdrop-blur-md rounded-full px-3 md:px-4 py-1.5 md:py-2 shadow-sm border border-brand-100 flex items-center gap-2 md:gap-4">
-                 <span className="text-brand-500 font-gotham text-xs md:text-sm tracking-widest">
-                   {selectedImage + 1} / {productImages.length}
-                 </span>
-               </div>
-               
-               <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
-                 {/* Zoom controls - hidden on mobile */}
-                 <div className="hidden md:flex bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-brand-100 items-center gap-1">
-                    <button
-                      onClick={handleZoomIn}
-                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
-                      title="Zoom In"
-                    >
-                      <ZoomIn className="w-5 h-5" />
-                    </button>
-                    <button
-                      onClick={handleZoomOut}
-                      disabled={zoomLevel <= 1}
-                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
-                      title="Zoom Out"
-                    >
-                      <ZoomOut className="w-5 h-5" />
-                    </button>
-                    <div className="w-px h-6 bg-brand-200 mx-1" />
-                    <button
-                      onClick={handleResetZoom}
-                      className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
-                      title="Reset View"
-                    >
-                      <Maximize2 className="w-5 h-5" />
-                    </button>
-                 </div>
+              <div className="pointer-events-auto bg-white/80 backdrop-blur-md rounded-full px-3 md:px-4 py-1.5 md:py-2 shadow-sm border border-brand-100 flex items-center gap-2 md:gap-4">
+                <span className="text-brand-500 font-gotham text-xs md:text-sm tracking-widest">
+                  {selectedImage + 1} / {productImages.length}
+                </span>
+              </div>
 
-                 <button
-                   onClick={closeLightbox}
-                   className="w-10 h-10 md:w-12 md:h-12 bg-white/80 backdrop-blur-md hover:bg-brand-50 rounded-full flex items-center justify-center text-brand-800 transition-all duration-300 border border-brand-100 shadow-sm"
-                   title="Close"
-                 >
-                   <X className="w-5 h-5 md:w-6 md:h-6" />
-                 </button>
-               </div>
+              <div className="pointer-events-auto flex items-center gap-2 md:gap-3">
+                {/* Zoom controls - hidden on mobile */}
+                <div className="hidden md:flex bg-white/80 backdrop-blur-md rounded-full p-1.5 shadow-sm border border-brand-100 items-center gap-1">
+                  <button
+                    onClick={handleZoomIn}
+                    className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
+                    title="Zoom In"
+                  >
+                    <ZoomIn className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={handleZoomOut}
+                    disabled={zoomLevel <= 1}
+                    className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors disabled:opacity-40 disabled:cursor-not-allowed"
+                    title="Zoom Out"
+                  >
+                    <ZoomOut className="w-5 h-5" />
+                  </button>
+                  <div className="w-px h-6 bg-brand-200 mx-1" />
+                  <button
+                    onClick={handleResetZoom}
+                    className="p-2.5 hover:bg-brand-50 rounded-full text-brand-600 transition-colors"
+                    title="Reset View"
+                  >
+                    <Maximize2 className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <button
+                  onClick={closeLightbox}
+                  className="w-10 h-10 md:w-12 md:h-12 bg-white/80 backdrop-blur-md hover:bg-brand-50 rounded-full flex items-center justify-center text-brand-800 transition-all duration-300 border border-brand-100 shadow-sm"
+                  title="Close"
+                >
+                  <X className="w-5 h-5 md:w-6 md:h-6" />
+                </button>
+              </div>
             </div>
 
             {/* Navigation Arrows */}
@@ -1213,11 +1209,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                       setSelectedImage(index);
                       handleResetZoom();
                     }}
-                    className={`relative w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${
-                      selectedImage === index
-                        ? 'ring-2 ring-bronze-gold ring-offset-2 opacity-100 scale-105'
-                        : 'opacity-60 hover:opacity-100 hover:scale-105'
-                    }`}
+                    className={`relative w-12 h-12 md:w-16 md:h-16 rounded-lg md:rounded-xl overflow-hidden transition-all duration-300 flex-shrink-0 ${selectedImage === index
+                      ? 'ring-2 ring-bronze-gold ring-offset-2 opacity-100 scale-105'
+                      : 'opacity-60 hover:opacity-100 hover:scale-105'
+                      }`}
                   >
                     <Image
                       src={img}

@@ -1,4 +1,3 @@
-export { default as Hero } from './Hero';
 export { default as ScrollReveal } from './ScrollReveal';
 export { default as ProductCategories } from './ProductCategories';
 export { default as BrandStory } from './BrandStory';

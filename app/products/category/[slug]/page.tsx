@@ -72,7 +72,7 @@ function CategoryPageContent() {
 
   const [isMobile, setIsMobile] = useState(false);
   const productsRef = useRef<HTMLDivElement>(null);
-  
+
   const [sortBy, setSortBy] = useState('featured');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
@@ -152,18 +152,18 @@ function CategoryPageContent() {
           { min: 75000, max: 100000 },
           { min: 100000, max: Infinity }
         ];
-        
+
         const sortedByRanges: Product[] = [];
-        
+
         priceRanges.forEach(range => {
-          const rangeProducts = productList.filter(product => 
+          const rangeProducts = productList.filter(product =>
             product.price >= range.min && product.price < range.max
           );
           // Shuffle products within each range
           const shuffledRangeProducts = rangeProducts.sort(() => Math.random() - 0.5);
           sortedByRanges.push(...shuffledRangeProducts);
         });
-        
+
         productList = sortedByRanges;
         break;
       case 'price-high':
@@ -210,48 +210,52 @@ function CategoryPageContent() {
 
   return (
     <div>
-      {/* Hero Section */}
-      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-end justify-center overflow-hidden -mt-14 sm:-mt-16 lg:-mt-20">
-        <div className="absolute inset-0">
-          <Image
-            src={heroImage}
-            alt={categoryConfig.title}
-            fill
-            className={`object-cover ${categoryConfig.heroPosition}`}
-            priority={true}
-            quality={90}
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
-        </div>
-        
-        {/* Hero Content */}
-        <div className="relative z-10 text-center px-4 pb-12 md:pb-16">
-          {/* Breadcrumb */}
-          <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4">
-            <Link href="/products" className="hover:text-white transition-colors">
-              Shop
-            </Link>
-            <span>/</span>
-            <span className="text-white">{categoryConfig.title}</span>
-          </nav>
-          
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
-          >
-            {categoryConfig.title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto"
-          >
-            {categoryConfig.description}
-          </motion.p>
+      {/* Hero Section - matches home hero container sizing */}
+      <section className="relative w-full overflow-hidden bg-[#1a1a1a]">
+        <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
+          <div className="absolute inset-0">
+            <Image
+              src={heroImage}
+              alt={categoryConfig.title}
+              fill
+              className={`object-cover ${categoryConfig.heroPosition}`}
+              priority={true}
+              quality={90}
+              sizes="100vw"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+          </div>
+
+          {/* Hero Content */}
+          <div className="absolute inset-0 z-10 flex items-end justify-center pb-12 md:pb-16">
+            <div className="text-center px-4">
+              {/* Breadcrumb */}
+              <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4">
+                <Link href="/products" className="hover:text-white transition-colors">
+                  Shop
+                </Link>
+                <span>/</span>
+                <span className="text-white">{categoryConfig.title}</span>
+              </nav>
+
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
+              >
+                {categoryConfig.title}
+              </motion.h1>
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: 0.1 }}
+                className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto"
+              >
+                {categoryConfig.description}
+              </motion.p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -264,7 +268,7 @@ function CategoryPageContent() {
               <div className="sticky top-24 max-h-[calc(100vh-140px)] overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin' }}>
                 <ProductFilters
                   activeCategory={slug}
-                  onCategoryChange={() => {}}
+                  onCategoryChange={() => { }}
                   sortBy={sortBy}
                   onSortChange={setSortBy}
                   viewMode={viewMode}
@@ -395,7 +399,7 @@ function CategoryPageContent() {
               <div className="p-4">
                 <ProductFilters
                   activeCategory={slug}
-                  onCategoryChange={() => {}}
+                  onCategoryChange={() => { }}
                   sortBy={sortBy}
                   onSortChange={setSortBy}
                   viewMode={viewMode}
@@ -460,11 +464,10 @@ function CategoryPageContent() {
                       setSortBy(option.value);
                       setShowMobileSort(false);
                     }}
-                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${
-                      sortBy === option.value
-                        ? 'bg-classic-green/10 text-classic-green font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${sortBy === option.value
+                      ? 'bg-classic-green/10 text-classic-green font-medium'
+                      : 'text-gray-700 hover:bg-gray-50'
+                      }`}
                   >
                     {option.label}
                   </button>

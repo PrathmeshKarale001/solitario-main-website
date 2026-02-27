@@ -92,7 +92,7 @@ function parseMetafieldValue(value: string, type: string): any {
 export async function getDynamicContentFromMetafields(): Promise<DynamicContent> {
   try {
     console.log('🔍 Fetching dynamic content from Shopify metafields...');
-    
+
     const result = await shopifyStorefrontFetch(STORE_METAFIELDS_QUERY, {
       namespace: 'dynamic_content'
     });
@@ -118,7 +118,7 @@ export async function getDynamicContentFromMetafields(): Promise<DynamicContent>
 
     metafields.forEach(metafield => {
       const parsedValue = parseMetafieldValue(metafield.value, metafield.type);
-      
+
       if (metafield.key.startsWith('hero_')) {
         content.heroSections.push({
           id: metafield.id,
@@ -149,9 +149,9 @@ export async function getDynamicContentFromMetafields(): Promise<DynamicContent>
     });
 
     console.log(`✅ Parsed ${content.heroSections.length} heroes, ${content.observatoryEvents.length} events, ${content.dynamicBanners.length} banners`);
-    
+
     return content;
-    
+
   } catch (error) {
     console.error('❌ Error fetching dynamic content from metafields:', error);
     return {
@@ -172,7 +172,7 @@ export async function getHeroSectionsFromMetafields(): Promise<HeroSection[]> {
 export async function getCurrentObservatoryEventFromMetafields(): Promise<ObservatoryEvent | null> {
   const content = await getDynamicContentFromMetafields();
   const now = new Date();
-  
+
   const currentEvent = content.observatoryEvents
     .filter(event => event.isActive)
     .filter(event => {
@@ -182,7 +182,7 @@ export async function getCurrentObservatoryEventFromMetafields(): Promise<Observ
       return now >= startDate && now <= endDate;
     })
     .sort((a, b) => b.priority - a.priority)[0];
-    
+
   return currentEvent || null;
 }
 
@@ -191,7 +191,7 @@ export async function getAlternatingBannersFromMetafields(): Promise<DynamicBann
   const content = await getDynamicContentFromMetafields();
   const now = new Date();
   const dayOfYear = Math.floor((now.getTime() - new Date(now.getFullYear(), 0, 0).getTime()) / (1000 * 60 * 60 * 24));
-  
+
   return content.dynamicBanners
     .filter(banner => banner.isActive)
     .filter(banner => {
@@ -215,7 +215,7 @@ export async function getAlternatingBannersFromMetafields(): Promise<DynamicBann
 // Create sample metafields for testing (using Admin API)
 export async function createSampleMetafields() {
   console.log('📝 Creating sample metafields...');
-  
+
   const sampleData = {
     hero_lohri: {
       title: 'Celebrate Makar Sankranti',
@@ -236,9 +236,9 @@ export async function createSampleMetafields() {
       isActive: true,
       priority: 10
     },
-    banner_free_shipping: {
-      title: 'Free Shipping',
-      description: 'On orders above ₹25,000',
+    banner_insured_delivery: {
+      title: 'Insured Delivery',
+      description: 'All orders are fully insured during transit',
       image: 'https://cdn.shopify.com/s/files/1/0963/2851/5859/files/shipping-banner.jpg',
       ctaText: 'Shop Now',
       ctaLink: '/products',
@@ -247,11 +247,11 @@ export async function createSampleMetafields() {
       scheduleType: 'always'
     }
   };
-  
+
   console.log('📋 Sample metafields created (manual setup required):');
   Object.entries(sampleData).forEach(([key, data]) => {
     console.log(`  - ${key}: ${JSON.stringify(data, null, 2)}`);
   });
-  
+
   return sampleData;
 }

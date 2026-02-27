@@ -8,23 +8,23 @@ export default function OurStory() {
   const storyPoints = [
     {
       icon: Heart,
-      title: "Born from Passion",
-      description: "Founded with a vision to make luxury accessible while staying true to ethical values"
+      title: "Born from Vision",
+      description: "Created to redefine modern fine jewellery through innovation and timeless design."
     },
     {
       icon: Award,
       title: "Unmatched Quality",
-      description: "Every piece crafted with precision and attention to detail"
+      description: "Every piece crafted with precision, expertise, and attention to detail."
     },
     {
       icon: Users,
-      title: "For Everyone",
-      description: "Luxury that's inclusive, accessible, and meaningful"
+      title: "Made to Be Worn",
+      description: "Jewellery designed for everyday life, effortless elegance, and lasting value."
     },
     {
       icon: Leaf,
-      title: "Sustainable Future",
-      description: "Lab-grown diamonds that don't compromise the Earth for beauty"
+      title: "Future-Forward Craft",
+      description: "Lab-grown diamonds perfected through science, designed for modern luxury"
     }
   ];
 
@@ -33,7 +33,7 @@ export default function OurStory() {
       {/* Background Elements */}
       <div className="absolute top-0 right-0 w-96 h-96 bg-classic-green/5 rounded-full blur-3xl" />
       <div className="absolute bottom-0 left-0 w-96 h-96 bg-bronze-gold/5 rounded-full blur-3xl" />
-      
+
       <div className="max-w-7xl mx-auto relative z-10">
         {/* Section Header */}
         <motion.div
@@ -50,7 +50,7 @@ export default function OurStory() {
             Crafting Tomorrow's <span className="text-classic-green">Heirlooms</span>
           </h2>
           <p className="text-lg md:text-xl text-brand-600 max-w-3xl mx-auto font-montserrat leading-relaxed">
-            Where conscious luxury meets timeless elegance, creating pieces that tell your story while protecting our planet
+            Where modern innovation meets timeless elegance, creating pieces that tell your story for generations.
           </p>
         </motion.div>
 
@@ -65,7 +65,7 @@ export default function OurStory() {
           >
             <div className="space-y-6 text-brand-700 text-lg leading-relaxed font-montserrat">
               <p className="text-xl font-medium text-brand-800">
-                When modern customers asked for diamonds they could wear every day, we listened.
+                Modern life called for diamonds that move with you. So we created them.
               </p>
               <p>
                 Solitario was born from a simple idea - diamonds should not live in lockers. They should move with you, become a part of your everyday style, and feel as effortless as they are extraordinary.
@@ -107,7 +107,7 @@ export default function OurStory() {
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
             className="relative"
-          > 
+          >
             <div className="relative rounded-3xl overflow-hidden shadow-2xl bg-gray-900" style={{ aspectRatio: '4/5', maxHeight: '750px' }}>
               <video
                 autoPlay
@@ -119,7 +119,7 @@ export default function OurStory() {
                 <source src="/about/about-video.mp4" type="video/mp4" />
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-              
+
               {/* Floating Badge */}
               <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg z-10">
                 <div className="flex items-center gap-2">
@@ -149,7 +149,7 @@ export default function OurStory() {
               className="group relative rounded-2xl bg-white border border-brand-200 p-6 hover:border-classic-green/40 hover:shadow-xl transition-all duration-500"
             >
               <div className="absolute inset-0 bg-gradient-to-br from-classic-green/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl" />
-              
+
               <div className="relative z-10">
                 <div className="w-12 h-12 bg-classic-green/10 rounded-xl flex items-center justify-center mb-4 group-hover:bg-classic-green/20 transition-colors duration-300">
                   <point.icon className="w-6 h-6 text-classic-green" />

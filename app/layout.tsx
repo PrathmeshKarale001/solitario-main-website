@@ -40,9 +40,10 @@ export const metadata: Metadata = {
   keywords: ['lab grown diamonds', 'diamond jewellery', 'diamond rings', 'luxury jewellery', 'lab created diamonds', 'Solitario'],
   authors: [{ name: 'Solitario' }],
   icons: {
-    icon: '/solitariofavicon.svg',
-    shortcut: '/solitariofavicon.svg',
-    apple: '/solitariofavicon.svg',
+    icon: '/favico.ico',
+    shortcut: '/favico.ico',
+    apple: '/favico.ico',
+
   },
   openGraph: {
     title: 'Solitario - Lab Grown Diamond Jewellery',
@@ -80,7 +81,7 @@ export default function RootLayout({
             gtag('config', 'AW-17875605995');
           `}
         </Script>
-        
+
         <GoogleAnalytics />
         <MetaPixel />
         <ClerkProvider>

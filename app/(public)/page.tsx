@@ -1,6 +1,5 @@
 import dynamic from 'next/dynamic';
 import {
-  Hero,
   ProductCategories,
   ShopByCategoryOriginal,
   LifestyleShowcase,
@@ -35,24 +34,22 @@ const Awards = dynamic(() => import('@/components/home/Awards'), {
 const Testimonials = dynamic(() => import('@/components/home/Testimonials'), {
   loading: () => <div className="h-[70vh] bg-white" />,
 });
-const HeadOffice = dynamic(() => import('@/components/home/HeadOffice'), {
-  loading: () => <div className="h-[50vh] bg-ivory-pearl" />,
-});
+
 
 const menuItems = [
-  { 
-    link: '/products', 
-    text: 'Explore Products', 
+  {
+    link: '/products',
+    text: 'Explore Products',
     image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=300&fit=crop&q=80'
   },
-  { 
-    link: '/about', 
-    text: 'Our Story', 
+  {
+    link: '/about',
+    text: 'Our Story',
     image: 'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=300&fit=crop&q=80'
   },
-  { 
-    link: '/contact', 
-    text: 'Get In Touch', 
+  {
+    link: '/contact',
+    text: 'Get In Touch',
     image: 'https://images.unsplash.com/photo-1573408301185-9146fe634ad0?w=400&h=300&fit=crop&q=80'
   },
 ];
@@ -62,16 +59,16 @@ export default function Home() {
     <div>
       {/* Marketing Login Popup for first-time visitors */}
       <LoginPopup />
-      
+
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
-      
+
       {/* 1a. OFFERS MARQUEE - Continuous offers display */}
       <OffersMarquee />
-      
+
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
-      
+
       {/* 3. PRODUCT COLLECTIONS - Browse & filter products */}
       <div id="explore-section">
         <ProductCategories />
@@ -79,45 +76,44 @@ export default function Home() {
 
       {/* 3a. LIFESTYLE SHOWCASE - Shop by Occasion */}
       <LifestyleShowcase />
-      
+
       {/* 4. PROMO BANNER - Drive urgency/offers (DISABLED) */}
       {/* <PromoBanner1 /> */}
-      
+
       {/* 5. PROMISE - Brand values (kept high for trust) */}
       <Promise />
-      
+
       {/* 5a. UNIFIED OFFERS - Consistent offer messaging across funnel */}
       <UnifiedOfferBanner variant="homepage" />
-      
+
       {/* 6. QUICK NAVIGATION - Easy access to key pages */}
       <section className="relative bg-[#FAF5EF] pt-4 sm:pt-5 md:pt-4">
         <FlowingMenuClient items={menuItems} />
       </section>
-      
+
       {/* 7. LAB GROWN BENEFITS - Key selling point (brief) */}
       <LabGrownBenefits />
-      
+
       {/* 8. SECOND PROMO BANNER - Another conversion opportunity (DISABLED) */}
       {/* <PromoBanner2 /> */}
-      
+
       {/* 9. STORES - Where to buy */}
       <Stores />
-      
+
       {/* 11. BRAND STORY - For interested customers */}
       <BrandStory />
-      
+
       {/* 12. AWARDS & TRUST - Credibility */}
       <Awards />
-      
+
       {/* 13. TESTIMONIALS - Social proof */}
       <Testimonials />
-      
-      {/* 14. HEAD OFFICE - Contact info */}
-      <HeadOffice />
+
+
 
       {/* 10. FAQ - Remove purchase objections */}
       <FAQ />
-      
+
       {/* REMOVED: ScrollReveal (decorative, slows journey to products) */}
     </div>
   );

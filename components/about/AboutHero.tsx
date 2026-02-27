@@ -36,7 +36,7 @@ export default function AboutHero() {
                 if (e.currentTarget.currentTime < 4) {
                   e.currentTarget.currentTime = 4;
                 }
-              } catch {}
+              } catch { }
             }}
           >
             <source src="/about/about-video.mp4" type="video/mp4" />
@@ -70,7 +70,7 @@ export default function AboutHero() {
           >
             <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
               <BlurText
-                text="Designed"
+                text="Modern"
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
@@ -78,25 +78,17 @@ export default function AboutHero() {
                 stepDuration={0.4}
               />
               <BlurText
-                text="for"
+                text="Craftsmanship,"
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
                 delay={100}
                 stepDuration={0.4}
               />
-              <BlurText
-                text="Today"
-                className="font-montserrat font-bold"
-                animateBy="characters"
-                direction="top"
-                delay={150}
-                stepDuration={0.4}
-              />
             </div>
             <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
               <BlurText
-                text="Inspired"
+                text="Refined"
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
@@ -104,7 +96,7 @@ export default function AboutHero() {
                 stepDuration={0.3}
               />
               <BlurText
-                text="by"
+                text="to"
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
@@ -112,7 +104,15 @@ export default function AboutHero() {
                 stepDuration={0.3}
               />
               <BlurText
-                text="Tomorrow"
+                text="the"
+                className="font-montserrat font-bold"
+                animateBy="characters"
+                direction="top"
+                delay={280}
+                stepDuration={0.3}
+              />
+              <BlurText
+                text="Micron."
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"
@@ -131,7 +131,7 @@ export default function AboutHero() {
               textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6)'
             }}
           >
-            Crafting heirlooms for modern and future generations with bespoke designs and unparalleled craftsmanship
+            Designed for people who value depth, modernity, and craftsmanship that lasts.
           </motion.p>
 
           {/* CTA Buttons - Glassmorphism Style */}

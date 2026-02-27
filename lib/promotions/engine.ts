@@ -75,17 +75,33 @@ export async function calculatePromotions(
   const validCoupon = null;
 
   // Apply cart-based rule (BUY 2 GET 1 FREE - lower-priced item free)
-  if (totalItems >= 2) {
+  // This means for every 3 items, the cheapest one is free
+  if (totalItems >= 3) {
     cartRuleApplied = 'BUY2';
-    
-    const itemPrices = input.cartLines.map(line => {
-      const unitPrice = parseFloat(line.merchandise.price.amount);
-      return unitPrice * 100; // Convert to cents
+
+    // Flatten cart into individual items with their prices to handle sorting correctly
+    const allItemPrices: number[] = [];
+    input.cartLines.forEach(line => {
+      const unitPrice = parseFloat(line.merchandise.price.amount) * 100; // Convert to cents/paise
+      for (let i = 0; i < line.quantity; i++) {
+        allItemPrices.push(unitPrice);
+      }
     });
-    const lowestItemPrice = Math.min(...itemPrices);
-    const discountAmount = lowestItemPrice;
+
+    // Sort prices ascending to find the cheapest ones
+    allItemPrices.sort((a, b) => a - b);
+
+    // Calculate number of free items (1 for every 3 items)
+    const freeItemCount = Math.floor(totalItems / 3);
+
+    // Sum the prices of the cheapest 'freeItemCount' items
+    let discountAmount = 0;
+    for (let i = 0; i < freeItemCount; i++) {
+      discountAmount += allItemPrices[i];
+    }
+
     const discountPercent = Math.round((discountAmount / subtotal) * 100);
-    
+
     discounts.push({
       type: 'BUY2',
       percent: discountPercent,

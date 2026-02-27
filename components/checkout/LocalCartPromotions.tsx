@@ -55,7 +55,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
     // Buy 2 Get 1 Free
     // Note: Actual discount calculation happens in the backend
-    if (totalItems >= 2) {
+    if (totalItems >= 3) {
       newMessages.push('🎁 Buy 2 Get 1 Free!');
     }
 
@@ -70,7 +70,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
   const handleApplyCoupon = async (codeOverride?: string) => {
     const codeToApply = codeOverride || couponCode;
     if (!codeToApply.trim()) return;
-    
+
     setIsLoading(true);
     setErrors([]);
 
@@ -93,7 +93,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
       }
 
       // Block ALL coupons from stacking with cart discounts (BUY 2+ offers)
-      if (totalItems >= 2) {
+      if (totalItems >= 3) {
         setErrors(["Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer)."]);
         if (!codeOverride) setAppliedCoupon('');
         return;
@@ -101,11 +101,11 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
       setAppliedCoupon(codeToApply.trim().toUpperCase());
       const couponDiscount = Math.round(subtotal * (data.percentOff / 100));
-      
+
       setDiscount(couponDiscount);
       const discountMsg = `✨ ${data.percentOff}% Discount Applied!`;
       setMessages([discountMsg]);
-      
+
       if (onDiscountApplied) {
         onDiscountApplied(couponDiscount, [discountMsg]);
       }
@@ -132,7 +132,7 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
           <Tag className="w-4 h-4 text-classic-green" />
           <h3 className="font-medium text-sm text-gray-900">Have a Promo Code?</h3>
         </div>
-        
+
         {!appliedCoupon ? (
           <div className="flex gap-2">
             <input
@@ -166,9 +166,9 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
           </div>
         )}
 
-        {totalItems >= 2 && !appliedCoupon && (
+        {totalItems >= 3 && !appliedCoupon && (
           <p className="text-xs text-gray-500 mt-2">
-            Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).
+            Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer).
           </p>
         )}
       </div>

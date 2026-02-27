@@ -72,6 +72,7 @@ export default function Header() {
     pathname === '/about' ||
     pathname === '/stores' ||
     pathname === '/warner-bros' ||
+    pathname?.startsWith('/products/category/') ||
     (pathname === '/products'); // Only products listing, not product detail
   const isAdminPage = pathname?.startsWith('/admin');
   const { itemCount, toggleCart } = useCart();
@@ -112,9 +113,9 @@ export default function Header() {
   // Warner Bros page gets special dark gold theme instead of green and stronger gradient on hero
   const headerClasses = cn(
     'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
-    (isScrolled || !isTransparentHeroPage || isProductDetailPage) 
+    (isScrolled || !isTransparentHeroPage || isProductDetailPage)
       ? isWarnerBrosPage && isScrolled
-        ? 'bg-gradient-to-r from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_4px_20px_rgba(198,166,100,0.3)] border-b border-[#C6A664]/20' 
+        ? 'bg-gradient-to-r from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a] shadow-[0_4px_20px_rgba(198,166,100,0.3)] border-b border-[#C6A664]/20'
         : 'bg-classic-green shadow-md'
       : isWarnerBrosPage
         ? 'bg-transparent bg-gradient-to-b from-black/100 via-black/60 to-transparent'
@@ -163,8 +164,8 @@ export default function Header() {
             </div>
 
             {/* Center Logo - Responsive sizing */}
-            <Link 
-              href="/" 
+            <Link
+              href="/"
               className="absolute left-1/2 -translate-x-1/2 flex items-center"
             >
               <Image
@@ -179,12 +180,12 @@ export default function Header() {
 
             {/* Right Icons - Optimized touch targets for mobile */}
             <div className="flex items-center space-x-1 sm:space-x-2">
-              <BatTransition 
-                isActive={showBatTransition} 
+              <BatTransition
+                isActive={showBatTransition}
                 onComplete={() => {
                   setShowBatTransition(false);
                   router.push('/warner-bros');
-                }} 
+                }}
               />
               {/* Collectibles CTA - Warner Bros */}
               {!isWarnerBrosPage && (
@@ -323,11 +324,11 @@ export default function Header() {
                         className={cn(
                           "flex items-center justify-between py-3.5 px-4 rounded-xl transition-all duration-200 touch-manipulation group",
                           isHighlight && link.label === 'Christmas Sale'
-                            ? "bg-gradient-to-r from-red-500/30 to-green-500/30 text-white border border-red-400/50 animate-pulse" 
-                            : isHighlight 
-                              ? "bg-bronze-gold/20 text-white border border-bronze-gold/30" 
-                              : isActive 
-                                ? "bg-white/15 text-white" 
+                            ? "bg-gradient-to-r from-red-500/30 to-green-500/30 text-white border border-red-400/50 animate-pulse"
+                            : isHighlight
+                              ? "bg-bronze-gold/20 text-white border border-bronze-gold/30"
+                              : isActive
+                                ? "bg-white/15 text-white"
                                 : "text-white/90 hover:bg-white/10 hover:text-white"
                         )}
                       >

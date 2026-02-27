@@ -7,8 +7,8 @@ import Image from 'next/image';
 const benefits = [
   {
     icon: Leaf,
-    title: "Eco-Conscious",
-    description: "Ethically created with zero mining impact on our planet."
+    title: "Unmatched Precision",
+    description: "Expertly cultivated under controlled conditions for absolute perfection."
   },
   {
     icon: Gem,
@@ -37,7 +37,7 @@ export default function LabGrownBenefitsV2() {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="flex flex-col lg:flex-row items-center gap-12">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -78,7 +78,7 @@ export default function LabGrownBenefitsV2() {
                 The Future of <span className="italic text-classic-green">Luxury</span>
               </h2>
               <p className="text-brand-600 font-montserrat leading-relaxed">
-                Experience the perfect union of science and art. Our lab-grown diamonds offer the same brilliance and durability as mined diamonds, but with a lighter footprint on the earth.
+                A modern approach to diamonds designed for today's values, without compromising on beauty or quality.
               </p>
             </motion.div>
 

@@ -77,7 +77,7 @@ export default function CheckoutPage() {
     prepaid: false,
     loading: false,
   });
-  
+
   const [customer, setCustomer] = useState<CustomerForm>({
     firstName: '',
     lastName: '',
@@ -98,7 +98,7 @@ export default function CheckoutPage() {
   const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
   const [isGiftLoading, setIsGiftLoading] = useState(false);
   const [showNewAddressForm, setShowNewAddressForm] = useState(false);
-  
+
   // PIN code auto-fill hook
   const { lookup: lookupPincode, loading: pincodeAutoFillLoading, data: pincodeData, error: pincodeError } = usePincodeLookup();
   const [isCityStateLocked, setIsCityStateLocked] = useState(false);
@@ -113,7 +113,7 @@ export default function CheckoutPage() {
       const userPhone = user.phoneNumbers.find(p => p.id === user.primaryPhoneNumberId)?.phoneNumber || '';
       const firstName = user.firstName || '';
       const lastName = user.lastName || '';
-      
+
       setCustomer(prev => ({
         ...prev,
         firstName: prev.firstName || firstName,
@@ -148,7 +148,7 @@ export default function CheckoutPage() {
         const data = await response.json();
         const addresses = data.addresses || [];
         setSavedAddresses(addresses);
-        
+
         if (addresses.length > 0) {
           // Auto-select default address if exists
           const defaultAddr = addresses.find((addr: SavedAddress) => addr.isDefault);
@@ -251,7 +251,7 @@ export default function CheckoutPage() {
   // Validate form
   const validateForm = (): boolean => {
     const errors: Partial<CustomerForm> = {};
-    
+
     if (!customer.firstName.trim()) errors.firstName = 'First name is required';
     if (!customer.lastName.trim()) errors.lastName = 'Last name is required';
     if (!customer.email.trim()) errors.email = 'Email is required';
@@ -263,7 +263,7 @@ export default function CheckoutPage() {
     if (!customer.state.trim()) errors.state = 'State is required';
     if (!customer.pincode.trim()) errors.pincode = 'PIN code is required';
     else if (!/^\d{6}$/.test(customer.pincode)) errors.pincode = 'Invalid PIN code';
-    
+
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
   };
@@ -278,7 +278,7 @@ export default function CheckoutPage() {
   // Fetch city and state from PIN code
   const fetchCityState = async (pincode: string) => {
     if (!/^\d{6}$/.test(pincode)) return;
-    
+
     const result = await lookupPincode(pincode);
     if (result.success && result.city && result.state) {
       setCustomer(prev => ({
@@ -288,10 +288,10 @@ export default function CheckoutPage() {
       }));
       setIsCityStateLocked(true);
       // Clear city/state errors if they were set
-      setFormErrors(prev => ({ 
-        ...prev, 
-        city: undefined, 
-        state: undefined 
+      setFormErrors(prev => ({
+        ...prev,
+        city: undefined,
+        state: undefined
       }));
     }
   };
@@ -328,13 +328,13 @@ export default function CheckoutPage() {
   // Check pincode serviceability
   const checkPincode = async (pincode: string) => {
     if (!/^\d{6}$/.test(pincode)) return;
-    
+
     setPincodeCheck(prev => ({ ...prev, loading: true, error: undefined }));
-    
+
     try {
       const response = await fetch(`/api/shipping/check-pincode?pincode=${pincode}`);
       const data = await response.json();
-      
+
       if (data.success) {
         setPincodeCheck({
           checked: true,
@@ -344,7 +344,7 @@ export default function CheckoutPage() {
           eta: data.eta,
           loading: false,
         });
-        
+
         if (!data.serviceable) {
           setError('Sorry, delivery is not available to this pincode. Please try a different address.');
         } else {
@@ -378,7 +378,7 @@ export default function CheckoutPage() {
       setError('Please fill all required fields correctly');
       return;
     }
-    
+
     // Check pincode serviceability before payment
     if (!pincodeCheck.checked) {
       await checkPincode(customer.pincode);
@@ -388,17 +388,17 @@ export default function CheckoutPage() {
         return;
       }
     }
-    
+
     if (pincodeCheck.checked && !pincodeCheck.serviceable) {
       setError('Delivery is not available to this pincode. Please use a different address.');
       return;
     }
-    
+
     if (!razorpayLoaded) {
       setError('Payment gateway is still loading. Please wait a moment and try again.');
       return;
     }
-    
+
     // Track Payment Initiate conversion (Google Ads)
     // grandTotal is already in rupees (e.g., 10999 for ₹10,999)
     trackPaymentInitiate(grandTotal);
@@ -408,7 +408,7 @@ export default function CheckoutPage() {
       value: grandTotal,
       currency: 'INR',
     });
-    
+
     setIsProcessing(true);
     setError(null);
 
@@ -430,7 +430,7 @@ export default function CheckoutPage() {
       const prebookingItems = items
         .filter(item => isPrebookingProduct(item.product))
         .map(item => ({ name: item.product.name, quantity: item.quantity }));
-      
+
       const customerName = `${customer.firstName} ${customer.lastName}`;
       const prebookingNotes = formatPrebookingOrderNotes(customerName, prebookingItems);
       const hasPrebookingItems = prebookingItems.length > 0;
@@ -497,7 +497,7 @@ export default function CheckoutPage() {
           try {
             const verifyResponse = await fetch('/api/razorpay/verify-payment', {
               method: 'POST',
-              headers: { 
+              headers: {
                 'Content-Type': 'application/json',
                 ...(user?.id ? { 'x-clerk-user-id': user.id } : {})
               },
@@ -524,8 +524,8 @@ export default function CheckoutPage() {
             if (verifyData.success) {
               // Clear cart and redirect to success page with tracking info
               clearCart();
-              const waybillParam = verifyData.order.delhiveryWaybill 
-                ? `&waybill=${verifyData.order.delhiveryWaybill}` 
+              const waybillParam = verifyData.order.delhiveryWaybill
+                ? `&waybill=${verifyData.order.delhiveryWaybill}`
                 : '';
               // Pass order value for GTM tracking (grandTotal is already in rupees, e.g., 10999 for ₹10,999)
               router.push(`/checkout/success?orderId=${verifyData.order.orderId}&paymentId=${response.razorpay_payment_id}&value=${grandTotal}${waybillParam}`);
@@ -608,7 +608,7 @@ export default function CheckoutPage() {
                 Edit Cart
               </Link>
             </div>
-            
+
             {/* Progress Indicator */}
             <div className="mb-8">
               <div className="flex items-center justify-center space-x-4 md:space-x-8">
@@ -628,7 +628,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
             </div>
-            
+
             <h1 className="font-montserrat font-bold text-3xl md:text-4xl text-gray-900">Secure Checkout</h1>
           </div>
 
@@ -665,9 +665,8 @@ export default function CheckoutPage() {
                         value={customer.firstName}
                         onChange={(e) => handleInputChange('firstName', e.target.value)}
                         placeholder="John"
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.firstName ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                          }`}
                       />
                       {formErrors.firstName && <p className="text-red-500 text-xs mt-1">{formErrors.firstName}</p>}
                     </div>
@@ -678,9 +677,8 @@ export default function CheckoutPage() {
                         value={customer.lastName}
                         onChange={(e) => handleInputChange('lastName', e.target.value)}
                         placeholder="Doe"
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
+                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.lastName ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                          }`}
                       />
                       {formErrors.lastName && <p className="text-red-500 text-xs mt-1">{formErrors.lastName}</p>}
                     </div>
@@ -692,9 +690,8 @@ export default function CheckoutPage() {
                       value={customer.email}
                       onChange={(e) => handleInputChange('email', e.target.value)}
                       placeholder="your.email@example.com"
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                        formErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                      }`}
+                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.email ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                        }`}
                     />
                     {formErrors.email && <p className="text-red-500 text-xs mt-1">{formErrors.email}</p>}
                   </div>
@@ -709,9 +706,8 @@ export default function CheckoutPage() {
                         value={customer.phone}
                         onChange={(e) => handleInputChange('phone', e.target.value.replace(/\D/g, '').slice(0, 10))}
                         placeholder="9876543210"
-                        className={`w-full px-4 py-3 border rounded-r-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                          formErrors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                        }`}
+                        className={`w-full px-4 py-3 border rounded-r-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.phone ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                          }`}
                       />
                     </div>
                     {formErrors.phone && <p className="text-red-500 text-xs mt-1">{formErrors.phone}</p>}
@@ -722,7 +718,7 @@ export default function CheckoutPage() {
               {/* Shipping Address */}
               <div className="bg-white rounded-xl p-6 md:p-8 shadow-sm border border-gray-200">
                 <h2 className="font-montserrat font-bold text-xl text-gray-900 mb-6">Shipping Address</h2>
-                
+
                 {loadingAddresses ? (
                   <div className="p-8 flex items-center justify-center gap-3">
                     <Loader2 className="w-5 h-5 animate-spin text-classic-green" />
@@ -738,11 +734,10 @@ export default function CheckoutPage() {
                           {savedAddresses.map((address) => (
                             <label
                               key={address.id}
-                              className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${
-                                selectedAddressId === address.id && !showNewAddressForm
+                              className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedAddressId === address.id && !showNewAddressForm
                                   ? 'border-classic-green bg-classic-green/5'
                                   : 'border-gray-200 hover:border-gray-300 bg-white'
-                              }`}
+                                }`}
                             >
                               <div className="flex items-start gap-3">
                                 <input
@@ -773,14 +768,13 @@ export default function CheckoutPage() {
                             </label>
                           ))}
                         </div>
-                        
+
                         {/* Add New Address Option */}
                         <label
-                          className={`block p-4 rounded-lg border-2 cursor-pointer transition-all mt-3 ${
-                            showNewAddressForm
+                          className={`block p-4 rounded-lg border-2 cursor-pointer transition-all mt-3 ${showNewAddressForm
                               ? 'border-classic-green bg-classic-green/5'
                               : 'border-gray-200 hover:border-gray-300 bg-white'
-                          }`}
+                            }`}
                         >
                           <div className="flex items-center gap-3">
                             <input
@@ -800,208 +794,204 @@ export default function CheckoutPage() {
                     {showNewAddressForm && (
                       <div className="space-y-4 pt-4 border-t border-gray-200">
                         <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1 *</label>
-                    <input
-                      type="text"
-                      value={customer.address1}
-                      onChange={(e) => handleInputChange('address1', e.target.value)}
-                      placeholder="House/Flat No., Building Name, Street"
-                      className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                        formErrors.address1 ? 'border-red-300 bg-red-50' : 'border-gray-200'
-                      }`}
-                    />
-                    {formErrors.address1 && <p className="text-red-500 text-xs mt-1">{formErrors.address1}</p>}
-                  </div>
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 2</label>
-                    <input
-                      type="text"
-                      value={customer.address2}
-                      onChange={(e) => handleInputChange('address2', e.target.value)}
-                      placeholder="Landmark, Area (optional)"
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all"
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                    {/* PIN Code - First for auto-fill flow */}
-                    <div className="sm:col-span-1">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        PIN Code *
-                        {pincodeAutoFillLoading && (
-                          <span className="ml-2 text-xs text-classic-green font-normal">Fetching...</span>
-                        )}
-                      </label>
-                      <div className="relative">
-                        <input
-                          type="text"
-                          value={customer.pincode}
-                          onChange={(e) => handleInputChange('pincode', e.target.value.replace(/\D/g, '').slice(0, 6))}
-                          onBlur={handlePincodeBlur}
-                          placeholder="400001"
-                          className={`w-full px-4 py-3 pr-24 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${
-                            formErrors.pincode ? 'border-red-300 bg-red-50' : pincodeCheck.checked && pincodeCheck.serviceable ? 'border-green-500 bg-green-50' : 'border-gray-200'
-                          }`}
-                        />
-                        <button
-                          type="button"
-                          onClick={() => fetchCityState(customer.pincode)}
-                          disabled={customer.pincode.length !== 6 || pincodeAutoFillLoading}
-                          className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs font-medium bg-classic-green hover:bg-classic-green/90 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded-md transition-colors flex items-center justify-center min-w-[70px]"
-                          title="Fetch City & State"
-                        >
-                          {pincodeAutoFillLoading ? (
-                            <Loader2 className="w-3 h-3 animate-spin" />
-                          ) : (
-                            'Fetch'
-                          )}
-                        </button>
-                      </div>
-                      {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
-                      {pincodeError && !pincodeAutoFillLoading && (
-                        <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" />
-                          <span>Could not auto-fill. Please enter manually.</span>
-                        </p>
-                      )}
-                      {pincodeData?.success && (
-                        <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
-                          <CheckCircle className="w-3 h-3" />
-                          <span>City & State auto-filled</span>
-                        </p>
-                      )}
-                      {pincodeCheck.checked && (
-                        <div className={`mt-1 text-xs ${pincodeCheck.serviceable ? 'text-green-600' : 'text-red-500'}`}>
-                          {pincodeCheck.serviceable ? (
-                            <div className="space-y-1">
-                              <div className="flex items-center gap-1">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 1 *</label>
+                          <input
+                            type="text"
+                            value={customer.address1}
+                            onChange={(e) => handleInputChange('address1', e.target.value)}
+                            placeholder="House/Flat No., Building Name, Street"
+                            className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.address1 ? 'border-red-300 bg-red-50' : 'border-gray-200'
+                              }`}
+                          />
+                          {formErrors.address1 && <p className="text-red-500 text-xs mt-1">{formErrors.address1}</p>}
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-2">Address Line 2</label>
+                          <input
+                            type="text"
+                            value={customer.address2}
+                            onChange={(e) => handleInputChange('address2', e.target.value)}
+                            placeholder="Landmark, Area (optional)"
+                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all"
+                          />
+                        </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                          {/* PIN Code - First for auto-fill flow */}
+                          <div className="sm:col-span-1">
+                            <label className="block text-sm font-medium text-gray-700 mb-2">
+                              PIN Code *
+                              {pincodeAutoFillLoading && (
+                                <span className="ml-2 text-xs text-classic-green font-normal">Fetching...</span>
+                              )}
+                            </label>
+                            <div className="relative">
+                              <input
+                                type="text"
+                                value={customer.pincode}
+                                onChange={(e) => handleInputChange('pincode', e.target.value.replace(/\D/g, '').slice(0, 6))}
+                                onBlur={handlePincodeBlur}
+                                placeholder="400001"
+                                className={`w-full px-4 py-3 pr-24 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all ${formErrors.pincode ? 'border-red-300 bg-red-50' : pincodeCheck.checked && pincodeCheck.serviceable ? 'border-green-500 bg-green-50' : 'border-gray-200'
+                                  }`}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => fetchCityState(customer.pincode)}
+                                disabled={customer.pincode.length !== 6 || pincodeAutoFillLoading}
+                                className="absolute right-2 top-1/2 -translate-y-1/2 px-3 py-1.5 text-xs font-medium bg-classic-green hover:bg-classic-green/90 disabled:bg-gray-100 disabled:text-gray-400 text-white rounded-md transition-colors flex items-center justify-center min-w-[70px]"
+                                title="Fetch City & State"
+                              >
+                                {pincodeAutoFillLoading ? (
+                                  <Loader2 className="w-3 h-3 animate-spin" />
+                                ) : (
+                                  'Fetch'
+                                )}
+                              </button>
+                            </div>
+                            {formErrors.pincode && <p className="text-red-500 text-xs mt-1">{formErrors.pincode}</p>}
+                            {pincodeError && !pincodeAutoFillLoading && (
+                              <p className="text-amber-600 text-xs mt-1 flex items-center gap-1">
+                                <AlertCircle className="w-3 h-3" />
+                                <span>Could not auto-fill. Please enter manually.</span>
+                              </p>
+                            )}
+                            {pincodeData?.success && (
+                              <p className="text-green-600 text-xs mt-1 flex items-center gap-1">
                                 <CheckCircle className="w-3 h-3" />
-                                <span>Delivery available</span>
-                                {pincodeCheck.prepaid && <span className="ml-1 text-gray-500">• Prepaid ✓</span>}
+                                <span>City & State auto-filled</span>
+                              </p>
+                            )}
+                            {pincodeCheck.checked && (
+                              <div className={`mt-1 text-xs ${pincodeCheck.serviceable ? 'text-green-600' : 'text-red-500'}`}>
+                                {pincodeCheck.serviceable ? (
+                                  <div className="space-y-1">
+                                    <div className="flex items-center gap-1">
+                                      <CheckCircle className="w-3 h-3" />
+                                      <span>Delivery available</span>
+                                      {pincodeCheck.prepaid && <span className="ml-1 text-gray-500">• Prepaid ✓</span>}
+                                    </div>
+                                    {pincodeCheck.eta && (
+                                      <div className="flex items-center gap-1 text-blue-600">
+                                        <span className="font-medium">🚚 {pincodeCheck.eta}</span>
+                                      </div>
+                                    )}
+                                  </div>
+                                ) : (
+                                  <>
+                                    <AlertCircle className="w-3 h-3" />
+                                    <span>Delivery not available to this pincode</span>
+                                  </>
+                                )}
                               </div>
-                              {pincodeCheck.eta && (
-                                <div className="flex items-center gap-1 text-blue-600">
-                                  <span className="font-medium">🚚 {pincodeCheck.eta}</span>
-                                </div>
+                            )}
+                          </div>
+                          {/* City - Auto-filled from PIN code */}
+                          <div className="sm:col-span-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                City *
+                                {pincodeAutoFillLoading && (
+                                  <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
+                                )}
+                              </label>
+                              {isCityStateLocked && (
+                                <button
+                                  type="button"
+                                  onClick={unlockCityState}
+                                  className="text-xs text-classic-green hover:text-classic-green/80 font-medium"
+                                  title="Click to edit manually"
+                                >
+                                  Unlock
+                                </button>
                               )}
                             </div>
-                          ) : (
-                            <>
-                              <AlertCircle className="w-3 h-3" />
-                              <span>Delivery not available to this pincode</span>
-                            </>
-                          )}
+                            <input
+                              type="text"
+                              value={customer.city}
+                              onChange={(e) => handleInputChange('city', e.target.value)}
+                              disabled={isCityStateLocked}
+                              placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
+                              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${isCityStateLocked
+                                  ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
+                                  : formErrors.city
+                                    ? 'border-red-300 bg-red-50 text-gray-800'
+                                    : customer.city && pincodeData?.success
+                                      ? 'border-green-200 bg-green-50/50 text-gray-800'
+                                      : 'border-gray-200 text-gray-800'
+                                }`}
+                            />
+                            {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
+                          </div>
+                          {/* State - Auto-filled from PIN code */}
+                          <div className="sm:col-span-1">
+                            <div className="flex items-center justify-between mb-2">
+                              <label className="block text-sm font-medium text-gray-700">
+                                State *
+                                {pincodeAutoFillLoading && (
+                                  <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
+                                )}
+                              </label>
+                              {isCityStateLocked && (
+                                <button
+                                  type="button"
+                                  onClick={unlockCityState}
+                                  className="text-xs text-classic-green hover:text-classic-green/80 font-medium"
+                                  title="Click to edit manually"
+                                >
+                                  Unlock
+                                </button>
+                              )}
+                            </div>
+                            <input
+                              type="text"
+                              value={customer.state}
+                              onChange={(e) => handleInputChange('state', e.target.value)}
+                              disabled={isCityStateLocked}
+                              placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
+                              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${isCityStateLocked
+                                  ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
+                                  : formErrors.state
+                                    ? 'border-red-300 bg-red-50 text-gray-800'
+                                    : customer.state && pincodeData?.success
+                                      ? 'border-green-200 bg-green-50/50 text-gray-800'
+                                      : 'border-gray-200 text-gray-800'
+                                }`}
+                            />
+                            {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
+                          </div>
                         </div>
-                      )}
-                    </div>
-                    {/* City - Auto-filled from PIN code */}
-                    <div className="sm:col-span-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          City *
-                          {pincodeAutoFillLoading && (
-                            <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
-                          )}
-                        </label>
-                        {isCityStateLocked && (
-                          <button
-                            type="button"
-                            onClick={unlockCityState}
-                            className="text-xs text-classic-green hover:text-classic-green/80 font-medium"
-                            title="Click to edit manually"
-                          >
-                            Unlock
-                          </button>
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        value={customer.city}
-                        onChange={(e) => handleInputChange('city', e.target.value)}
-                        disabled={isCityStateLocked}
-                        placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${
-                          isCityStateLocked 
-                            ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300' 
-                            : formErrors.city 
-                              ? 'border-red-300 bg-red-50 text-gray-800' 
-                              : customer.city && pincodeData?.success 
-                                ? 'border-green-200 bg-green-50/50 text-gray-800' 
-                                : 'border-gray-200 text-gray-800'
-                        }`}
-                      />
-                      {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
-                    </div>
-                    {/* State - Auto-filled from PIN code */}
-                    <div className="sm:col-span-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <label className="block text-sm font-medium text-gray-700">
-                          State *
-                          {pincodeAutoFillLoading && (
-                            <Loader2 className="inline w-3 h-3 ml-2 animate-spin text-classic-green" />
-                          )}
-                        </label>
-                        {isCityStateLocked && (
-                          <button
-                            type="button"
-                            onClick={unlockCityState}
-                            className="text-xs text-classic-green hover:text-classic-green/80 font-medium"
-                            title="Click to edit manually"
-                          >
-                            Unlock
-                          </button>
-                        )}
-                      </div>
-                      <input
-                        type="text"
-                        value={customer.state}
-                        onChange={(e) => handleInputChange('state', e.target.value)}
-                        disabled={isCityStateLocked}
-                        placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
-                        className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${
-                          isCityStateLocked 
-                            ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300' 
-                            : formErrors.state 
-                              ? 'border-red-300 bg-red-50 text-gray-800' 
-                              : customer.state && pincodeData?.success 
-                                ? 'border-green-200 bg-green-50/50 text-gray-800' 
-                                : 'border-gray-200 text-gray-800'
-                        }`}
-                      />
-                      {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}
-                    </div>
-                  </div>
-                  
-                  {/* Delivery Instructions */}
-                  <div className="mt-4 pt-4 border-t border-gray-200">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      <MessageSquare className="w-4 h-4 inline mr-2" />
-                      Delivery Instructions (Optional)
-                    </label>
-                    <textarea
-                      value={customer.deliveryInstructions || ''}
-                      onChange={(e) => handleInputChange('deliveryInstructions', e.target.value)}
-                      placeholder="E.g., Leave at door, Call before delivery, Landmark details..."
-                      rows={2}
-                      className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all resize-none"
-                    />
-                  </div>
 
-                  {/* Alternative Phone */}
-                  <div className="mt-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Alternative Phone Number (Optional)
-                    </label>
-                    <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-classic-green/30 focus-within:border-classic-green transition-all">
-                      <span className="px-3 py-3 bg-gray-50 text-gray-500 border-r border-gray-200 font-montserrat text-sm">+91</span>
-                      <input
-                        type="tel"
-                        value={customer.alternativePhone || ''}
-                        onChange={(e) => handleInputChange('alternativePhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
-                        placeholder="Backup contact number"
-                        className="flex-1 px-4 py-3 focus:outline-none font-montserrat text-gray-800 placeholder:text-gray-400"
-                      />
-                    </div>
-                  </div>
+                        {/* Delivery Instructions */}
+                        <div className="mt-4 pt-4 border-t border-gray-200">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            <MessageSquare className="w-4 h-4 inline mr-2" />
+                            Delivery Instructions (Optional)
+                          </label>
+                          <textarea
+                            value={customer.deliveryInstructions || ''}
+                            onChange={(e) => handleInputChange('deliveryInstructions', e.target.value)}
+                            placeholder="E.g., Leave at door, Call before delivery, Landmark details..."
+                            rows={2}
+                            className="w-full px-4 py-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat text-gray-800 placeholder:text-gray-400 transition-all resize-none"
+                          />
+                        </div>
+
+                        {/* Alternative Phone */}
+                        <div className="mt-4">
+                          <label className="block text-sm font-medium text-gray-700 mb-2">
+                            Alternative Phone Number (Optional)
+                          </label>
+                          <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-classic-green/30 focus-within:border-classic-green transition-all">
+                            <span className="px-3 py-3 bg-gray-50 text-gray-500 border-r border-gray-200 font-montserrat text-sm">+91</span>
+                            <input
+                              type="tel"
+                              value={customer.alternativePhone || ''}
+                              onChange={(e) => handleInputChange('alternativePhone', e.target.value.replace(/\D/g, '').slice(0, 10))}
+                              placeholder="Backup contact number"
+                              className="flex-1 px-4 py-3 focus:outline-none font-montserrat text-gray-800 placeholder:text-gray-400"
+                            />
+                          </div>
+                        </div>
                       </div>
                     )}
                   </>
@@ -1038,39 +1028,40 @@ export default function CheckoutPage() {
                     const isPrebook = isPrebookingProduct(item.product);
                     const itemPrice = getCartItemPrice(item.product);
                     return (
-                    <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
-                      <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
-                        <Image
-                          src={item.product.image}
-                          alt={item.product.name}
-                          fill
-                          className="object-contain p-2"
-                        />
-                        {isPrebook && (
-                          <div className="absolute top-0 right-0 bg-purple-600 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">
-                            Prebook
-                          </div>
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-medium text-sm text-gray-900 line-clamp-2 mb-1">
-                          {item.product.name}
-                        </p>
-                        {isPrebook && (
-                          <span className="inline-flex items-center gap-1 mb-1 px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[9px] font-semibold uppercase tracking-wide rounded">
-                            <Ticket className="w-2.5 h-2.5" />
-                            Prebooking
-                          </span>
-                        )}
-                        <div className="flex items-center justify-between">
-                          <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
-                          <p className={`font-semibold text-sm ${isPrebook ? 'text-purple-600' : 'text-classic-green'}`}>
-                            {formatPrice(itemPrice * item.quantity, item.product.currency)}
+                      <div key={`${item.product.id}-${item.selectedSize}`} className="flex gap-3 pb-4 border-b border-gray-100 last:border-0 last:pb-0">
+                        <div className="relative w-16 h-16 flex-shrink-0 bg-gray-50 rounded-lg overflow-hidden border border-gray-200">
+                          <Image
+                            src={item.product.image}
+                            alt={item.product.name}
+                            fill
+                            className="object-contain p-2"
+                          />
+                          {isPrebook && (
+                            <div className="absolute top-0 right-0 bg-purple-600 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">
+                              Prebook
+                            </div>
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="font-medium text-sm text-gray-900 line-clamp-2 mb-1">
+                            {item.product.name}
                           </p>
+                          {isPrebook && (
+                            <span className="inline-flex items-center gap-1 mb-1 px-1.5 py-0.5 bg-purple-100 text-purple-700 text-[9px] font-semibold uppercase tracking-wide rounded">
+                              <Ticket className="w-2.5 h-2.5" />
+                              Prebooking
+                            </span>
+                          )}
+                          <div className="flex items-center justify-between">
+                            <p className="text-xs text-gray-500">Qty: {item.quantity}</p>
+                            <p className={`font-semibold text-sm ${isPrebook ? 'text-purple-600' : 'text-classic-green'}`}>
+                              {formatPrice(itemPrice * item.quantity, item.product.currency)}
+                            </p>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  );})}
+                    );
+                  })}
 
                   {/* Gift Item Display - Clean, Minimal Design */}
                   {hasGift && (
@@ -1142,7 +1133,7 @@ export default function CheckoutPage() {
                         <div>
                           <p className="font-semibold mb-1">Prebooking Order - Warner Bros Collection</p>
                           <p className="text-purple-600 text-[11px]">
-                            This order includes prebooking items at ₹{PREBOOK_PRICE.toLocaleString('en-IN')}/item. 
+                            This order includes prebooking items at ₹{PREBOOK_PRICE.toLocaleString('en-IN')}/item.
                             Full payment will be collected upon product availability.
                           </p>
                         </div>
@@ -1177,7 +1168,7 @@ export default function CheckoutPage() {
                       )}
                     </span>
                   </div>
-                  <p className="text-xs text-gray-500">Free shipping on orders above ₹5,000</p>
+
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">GST (Included)</span>
                     <span className="font-medium text-gray-900">
@@ -1234,7 +1225,7 @@ export default function CheckoutPage() {
 
           {/* Product Recommendations */}
           <div className="mt-16">
-            <ProductRecommendations 
+            <ProductRecommendations
               title="Products you may like"
               limit={4}
               maxPrice={15000}

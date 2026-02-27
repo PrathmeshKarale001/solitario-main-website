@@ -34,7 +34,7 @@ export default function LabGrownDiamondsPage() {
             fill
             className="object-cover object-center hidden md:block"
             priority
-            quality={85}
+            quality={90}
             sizes="100vw"
           />
           {/* Mobile hero image */}
@@ -66,85 +66,53 @@ export default function LabGrownDiamondsPage() {
             >
               <div className="flex items-center justify-center gap-2 md:gap-4 lg:gap-5 mb-2 md:mb-3 flex-wrap">
                 <BlurText
-                  text="Why"
-                  className="font-montserrat font-bold italic"
+                  text="Lab-Grown"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={50}
                   stepDuration={0.4}
                 />
                 <BlurText
-                  text="Lab"
-                  className="font-montserrat font-bold"
-                  animateBy="characters"
-                  direction="top"
-                  delay={100}
-                  stepDuration={0.4}
-                />
-                <BlurText
-                  text="Grown"
-                  className="font-montserrat font-bold"
+                  text="Diamonds,"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={150}
                   stepDuration={0.4}
                 />
-                <motion.span
-                  className="relative inline-block"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.8, delay: 0.6 }}
-                >
-                  <Diamond className="w-12 h-12 md:w-16 md:h-16 lg:w-20 lg:h-20 text-bronze-gold drop-shadow-[0_0_30px_rgba(172,136,75,0.4)]" />
-                </motion.span>
-                <BlurText
-                  text="Diamonds"
-                  className="font-montserrat font-bold"
-                  animateBy="characters"
-                  direction="top"
-                  delay={200}
-                  stepDuration={0.4}
-                />
               </div>
               <div className="flex items-center justify-center gap-1 md:gap-3 flex-wrap">
                 <BlurText
-                  text="Are"
-                  className="font-montserrat font-bold"
+                  text="The"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={100}
                   stepDuration={0.3}
                 />
                 <BlurText
-                  text="The"
-                  className="font-montserrat font-bold"
+                  text="Future"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={130}
                   stepDuration={0.3}
                 />
                 <BlurText
-                  text="Future"
-                  className="font-montserrat font-bold"
+                  text="of"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={160}
                   stepDuration={0.3}
                 />
                 <BlurText
-                  text="of"
-                  className="font-montserrat font-bold"
+                  text="Luxury"
+                  className="font-montserrat font-semibold"
                   animateBy="characters"
                   direction="top"
                   delay={190}
-                  stepDuration={0.3}
-                />
-                <BlurText
-                  text="Luxury"
-                  className="font-montserrat font-bold"
-                  animateBy="characters"
-                  direction="top"
-                  delay={220}
                   stepDuration={0.4}
                 />
               </div>
@@ -159,7 +127,7 @@ export default function LabGrownDiamondsPage() {
                 textShadow: '0 2px 8px rgba(0, 0, 0, 0.8), 0 4px 16px rgba(0, 0, 0, 0.6)'
               }}
             >
-              A luxury that doesn't cost the Earth
+              Pure brilliance, perfected through innovation.
             </motion.p>
 
             {/* CTA Buttons - Glassmorphism Style */}
@@ -209,13 +177,13 @@ export default function LabGrownDiamondsPage() {
               The Brilliance That Paves To A <span className="text-classic-green">Brighter World</span>
             </h2>
             <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
-              For centuries, the pursuit of natural diamonds has cast a looming shadow on our planet. Beneath their sparkling allure lay tales of environmental degradation, exploitation, and blood-stained histories.
+              For centuries, diamonds have symbolised rarity and timeless beauty. Today, innovation has redefined what luxury can be.
             </p>
             <p className="text-base md:text-lg text-brand-700 mb-6 leading-relaxed font-montserrat">
-              Welcome to the world of lab-grown diamonds — a triumph of science and innovation. These magnificent wonders are cultivated in controlled lab environments, channeling the genius of human innovation to recreate nature's dazzling brilliance.
+              Lab-grown diamonds are created in controlled environments using advanced technology that replicates the natural diamond-growing process. The result is a diamond with the same optical, physical, and chemical properties as mined diamonds.
             </p>
             <p className="text-base md:text-lg text-brand-800 leading-relaxed font-montserrat font-medium">
-              As modern consumers increasingly opt for these exceptional gems, a new age of elegance dawns — affordable luxury without compromise.
+              A new era of brilliance has arrived, where exceptional beauty meets modern progress, without compromise.
             </p>
           </motion.div>
         </div>
@@ -232,10 +200,10 @@ export default function LabGrownDiamondsPage() {
               viewport={{ once: true }}
             >
               <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
-                Born From <span className="text-classic-green">Vision</span>
+                Built on <span className="text-classic-green">Modern Values</span>
               </h2>
               <p className="text-base md:text-lg text-brand-700 mb-8 leading-relaxed font-montserrat">
-                Solitario was born from the vision to meet the desires of modern customers seeking exceptional luxury. We believe in creating timeless pieces that bring joy for generations to come.
+                We created Solitario to bring clarity to diamond jewellery: grown diamonds, modern craft, and a more responsible origin. Clean design. Precise finishing. No compromises where they matter.
               </p>
 
               {/* Vision Card */}
@@ -251,7 +219,7 @@ export default function LabGrownDiamondsPage() {
                   <div>
                     <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-2">Our Vision</h3>
                     <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
-                      Solitario envisions a world where ethics and beauty combine seamlessly. Our jewelry reflects the mindful values of a transformed luxury industry.
+                      Solitario envisions a world where ethics and beauty combine seamlessly. Our jewellery reflects mindful values shaping a transformed luxury industry and a legacy beyond convention.
                     </p>
                   </div>
                 </div>
@@ -270,7 +238,7 @@ export default function LabGrownDiamondsPage() {
                   <div>
                     <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-2">Our Mission</h3>
                     <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
-                      We pioneer innovative jewelry for a future built on quality and craftsmanship. Our mission is to craft adornments that enhance beauty with exceptional value.
+                      In a world where values evolve, we pioneer sustainable jewellery rooted in unwavering ethics. Our mission is to craft adornments that spark feeling, enhance beauty, and honour integrity through modern design.
                     </p>
                   </div>
                 </div>
@@ -351,13 +319,13 @@ export default function LabGrownDiamondsPage() {
               <div className="grid grid-cols-2 gap-4">
                 <div className="rounded-xl bg-brand-50 border border-brand-200 p-4">
                   <Diamond className="w-8 h-8 text-classic-green mb-3" />
-                  <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-1">100% Real</h4>
-                  <p className="text-brand-600 text-sm font-montserrat">Identical properties to mined diamonds</p>
+                  <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-1">Chemically identical</h4>
+                  <p className="text-brand-600 text-sm font-montserrat">A real diamond, grown differently</p>
                 </div>
                 <div className="rounded-xl bg-brand-50 border border-brand-200 p-4">
                   <Leaf className="w-8 h-8 text-classic-green mb-3" />
-                  <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-1">Lab-Created</h4>
-                  <p className="text-brand-600 text-sm font-montserrat">Advanced technology & precision</p>
+                  <h4 className="text-lg font-montserrat font-bold text-brand-800 mb-1">Conscious by Design</h4>
+                  <p className="text-brand-600 text-sm font-montserrat">A more considered alternative to traditional mining</p>
                 </div>
               </div>
             </motion.div>
@@ -366,120 +334,57 @@ export default function LabGrownDiamondsPage() {
       </section>
 
       {/* 4Cs Section */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <motion.div
-              initial={{ opacity: 0, x: -40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
-                The 4Cs, <span className="text-classic-green">Elevated</span>
-              </h2>
-              <p className="text-base md:text-lg text-brand-700 mb-8 font-montserrat">
-                A diamond's journey is guided by the timeless 4Cs. Our lab-grown diamonds honor these standards while delivering a responsible future for luxury.
-              </p>
-
-              <div className="space-y-4">
-                {[
-                  { icon: Scissors, title: 'Cut', desc: 'Heart of the sparkle — light dances through precision-cut facets for unmatched brilliance.' },
-                  { icon: Palette, title: 'Colour', desc: 'Near-colourless to colourless grades that showcase pure, luminous beauty.' },
-                  { icon: Search, title: 'Clarity', desc: 'Minimal inclusions for a captivating, flawless look — refined by technology.' },
-                  { icon: Scale, title: 'Carat', desc: 'Presence with purpose — select the size that fits your style and values.' },
-                ].map((item, idx) => (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: idx * 0.1 }}
-                    viewport={{ once: true }}
-                    className="flex gap-4 items-start"
-                  >
-                    <div className="w-10 h-10 rounded-full bg-classic-green/10 flex items-center justify-center flex-shrink-0">
-                      <item.icon className="w-5 h-5 text-classic-green" />
-                    </div>
-                    <div>
-                      <h3 className="text-lg font-montserrat font-bold text-classic-green mb-1">{item.title}</h3>
-                      <p className="text-brand-600 text-sm font-montserrat">{item.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-
-            <motion.div
-              initial={{ opacity: 0, x: 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
-              viewport={{ once: true }}
-              className="grid grid-cols-2 gap-4"
-            >
-              {[
-                { src: '/diamonds/cut.png', label: 'Cut drives brilliance' },
-                { src: '/diamonds/color.png', label: 'Colour spectrum D–J' },
-                { src: '/diamonds/clarity.png', label: 'Clarity scale SI2 to FL' },
-                { src: '/diamonds/dia_hand.jpg', label: 'Elegance in motion' },
-              ].map((item, idx) => (
-                <motion.div
-                  key={item.src}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: idx * 0.1 }}
-                  viewport={{ once: true }}
-                  className="rounded-2xl bg-brand-50 border border-brand-200 p-4 overflow-hidden"
-                >
-                  <Image
-                    src={item.src}
-                    alt={item.label}
-                    width={300}
-                    height={200}
-                    className="w-full h-40 object-contain mb-3"
-                  />
-                  <p className="text-brand-600 text-sm font-montserrat text-center">{item.label}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-      </section>
-
-      {/* Diamond Gallery - Every Diamond Holds Wonder */}
-      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-white">
+      <section className="py-24 px-4 sm:px-6 lg:px-8 bg-gradient-to-b from-brand-50 to-white">
         <div className="max-w-7xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 40 }}
+            initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7 }}
             viewport={{ once: true }}
-            className="text-center mb-12"
+            className="text-center mb-16"
           >
             <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-brand-800 mb-4" style={{ letterSpacing: '-0.02em' }}>
-              Every Diamond Holds <span className="text-classic-green">Wonder</span>
+              The 4Cs, <span className="text-classic-green">Elevated</span>
             </h2>
-            <p className="text-base md:text-lg text-brand-700 max-w-3xl mx-auto font-montserrat">
-              Explore the facets of Solitario lab-grown diamonds — crafted for brilliance, clarity, and a conscious footprint.
+            <p className="text-base md:text-lg text-brand-700 max-w-2xl mx-auto font-montserrat">
+              A diamond&apos;s journey is guided by the timeless 4Cs. Our lab-grown diamonds honor these standards while delivering a responsible future for luxury.
             </p>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {['/diamonds/dia1.jpg', '/diamonds/dia2.jpg', '/diamonds/dia3.jpg', '/diamonds/dia4.jpg'].map((src, idx) => (
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6">
+            {[
+              { icon: Scissors, title: 'Cut', desc: 'Heart of the sparkle. Light dances through precision-cut facets for unmatched brilliance.', src: '/diamonds/dia1.jpg' },
+              { icon: Palette, title: 'Colour', desc: 'Near-colourless to colourless grades that showcase pure, luminous beauty.', src: '/diamonds/dia2.jpg' },
+              { icon: Search, title: 'Clarity', desc: 'Minimal inclusions for a captivating, flawless look, refined by technology.', src: '/diamonds/dia3.jpg' },
+              { icon: Scale, title: 'Carat', desc: 'Presence with purpose. Select the size that fits your style and values.', src: '/diamonds/dia4.jpg' },
+            ].map((item, idx) => (
               <motion.div
-                key={src}
-                initial={{ opacity: 0, y: 20 }}
+                key={item.title}
+                initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
+                transition={{ duration: 0.6, delay: idx * 0.12 }}
                 viewport={{ once: true }}
-                className="relative rounded-2xl overflow-hidden"
+                className="group relative bg-white rounded-2xl border border-brand-200 overflow-hidden shadow-sm hover:shadow-xl hover:border-classic-green/30 transition-all duration-500"
               >
-                <Image
-                  src={src}
-                  alt={`Diamond detail ${idx + 1}`}
-                  width={400}
-                  height={400}
-                  className="w-full object-cover"
-                />
+                <div className="relative overflow-hidden">
+                  <Image
+                    src={item.src}
+                    alt={item.title}
+                    width={400}
+                    height={400}
+                    className="w-full h-auto object-contain group-hover:scale-105 transition-transform duration-700"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+                  <div className="absolute bottom-3 left-3">
+                    <div className="w-9 h-9 rounded-full bg-white/90 backdrop-blur-sm flex items-center justify-center shadow-md">
+                      <item.icon className="w-4 h-4 text-classic-green" />
+                    </div>
+                  </div>
+                </div>
+                <div className="p-4 md:p-5">
+                  <h3 className="text-base md:text-lg font-montserrat font-bold text-brand-800 mb-1.5">{item.title}</h3>
+                  <p className="text-brand-600 text-xs md:text-sm font-montserrat leading-relaxed">{item.desc}</p>
+                </div>
               </motion.div>
             ))}
           </div>

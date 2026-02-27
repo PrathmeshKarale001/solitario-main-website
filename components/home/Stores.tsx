@@ -1,130 +1,140 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, lazy, Suspense } from 'react';
 import { motion } from 'framer-motion';
-import { MapPin, Globe, ArrowRight } from 'lucide-react';
-import Link from 'next/link';
+import { MapPin, ArrowRight } from 'lucide-react';
 import Image from 'next/image';
 
-const FEATURED_STORES = [
+// Lazy load modal — only imported when user clicks
+const StoreLocatorModal = lazy(() => import('./StoreLocatorModal'));
+
+const REGION_CARDS = [
   {
-    id: 'spain',
-    name: 'Solitario Spain',
-    location: 'Spain',
-    country: 'Europe',
-    image: '/solitario/stores/spain.jpg',
-    mobileImage: '/solitario/stores/spain.jpg',
-    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Spain'),
+    id: 'india' as const,
+    name: 'Solitario India',
+    subtitle: '40+ Stores',
+    image: '/images/Stores/IndiaStore.jpeg',
   },
   {
-    id: 'malaysia',
+    id: 'malaysia' as const,
     name: 'Solitario Malaysia',
-    location: 'Malaysia',
-    country: 'Asia Pacific',
-    image: '/solitario/stores/malaysia.jpg',
-    mobileImage: '/images/Stores/3.jpg',
-    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Malaysia'),
+    subtitle: '2 Stores',
+    image: '/images/Stores/MalaysiaStore.jpeg',
   },
   {
-    id: 'dubai',
+    id: 'dubai' as const,
     name: 'Solitario Dubai',
-    location: 'Dubai, UAE',
-    country: 'Middle East',
-    image: '/solitario/stores/dubai.jpg',
-    mobileImage: '/solitario/stores/dubai.jpg',
-    mapLink: 'https://maps.google.com/?q=' + encodeURIComponent('Solitario Dubai Dubai, UAE'),
+    subtitle: '1 Store',
+    image: '/images/Stores/DubaiStore.jpeg',
+  },
+  {
+    id: 'spain' as const,
+    name: 'Solitario Spain',
+    subtitle: '53+ Touch Points',
+    image: '/images/Stores/SpainStore.jpeg',
   },
 ];
 
-export default function Stores() {
-  const [isMobile, setIsMobile] = useState(false);
+type Region = 'india' | 'malaysia' | 'dubai' | 'spain';
 
+export default function Stores() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [hasOpenedModal, setHasOpenedModal] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
+
+  // Lock body scroll when modal is open
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
+    if (isModalOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [isModalOpen]);
+
+  const openModal = (region: Region) => {
+    setSelectedRegion(region);
+    setHasOpenedModal(true);
+    setIsModalOpen(true);
+  };
 
   return (
-    <section className="py-8 sm:py-10 md:py-14 px-4 sm:px-6 lg:px-8 bg-white">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-8 sm:mb-12 md:mb-16"
-        >
-          <span className="inline-block text-classic-green text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham mb-2 sm:mb-4">
-            Global Presence
-          </span>
-          <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-brand-800 mb-2 sm:mb-4">
-            Visit Our <span className="text-classic-green">Stores</span>
-          </h2>
-          <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
-            Experience the brilliance of lab-grown diamonds in person at our stores worldwide.
-          </p>
-        </motion.div>
-
-        {/* Store Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {FEATURED_STORES.map((store, idx) => (
-            <motion.div
-              key={store.id}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: idx * 0.1 }}
-              className="group relative rounded-2xl sm:rounded-3xl overflow-hidden block"
-            >
-              {/* Image */}
-              <div className="relative aspect-[4/5] overflow-hidden">
-                <Image
-                  src={isMobile ? (store as any).mobileImage : store.image}
-                  alt={store.name}
-                  fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                
-                {/* Country Badge */}
-                <div className="absolute top-3 sm:top-4 left-3 sm:left-4">
-                  <span className="inline-flex items-center gap-1 px-2 sm:px-3 py-1 bg-bronze-gold/90 text-white text-[10px] sm:text-xs font-gotham uppercase tracking-wider rounded-full">
-                    <Globe className="w-2.5 h-2.5 sm:w-3 sm:h-3" /> {store.country}
-                  </span>
-                </div>
-              </div>
-
-              {/* Content Overlay */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
-                <h3 className="text-lg sm:text-xl md:text-2xl font-montserrat font-bold text-white mb-1 sm:mb-2">{store.name}</h3>
-                <div className="flex items-center gap-2 text-white/70 text-xs sm:text-sm font-montserrat">
-                  <MapPin className="w-3 h-3 sm:w-4 sm:h-4 text-bronze-gold" />
-                  {store.location}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* View All Link */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className="text-center mt-8 sm:mt-10 md:mt-12"
-        >
-          <Link
-            href="/stores"
-            className="inline-flex items-center gap-2 px-4 sm:px-6 py-2 sm:py-3 text-white font-gotham uppercase tracking-[0.2em] text-[10px] sm:text-xs md:text-sm rounded-lg bg-classic-green hover:bg-classic-green/90 transition-all duration-500 hover:scale-105 touch-manipulation"
+    <>
+      <section className="py-8 sm:py-10 md:py-14 px-4 sm:px-6 lg:px-8 bg-white">
+        <div className="max-w-7xl mx-auto">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-8 sm:mb-12 md:mb-16"
           >
-            View All Stores <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
-          </Link>
-        </motion.div>
-      </div>
-    </section>
+            <span className="inline-block text-classic-green text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] font-gotham mb-2 sm:mb-4">
+              Global Presence
+            </span>
+            <h2 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-montserrat font-bold text-brand-800 mb-2 sm:mb-4">
+              Visit Our <span className="text-classic-green">Stores</span>
+            </h2>
+            <p className="text-xs sm:text-sm md:text-base text-brand-600 max-w-xl mx-auto font-montserrat hidden sm:block">
+              Experience the brilliance of lab-grown diamonds in person at our stores worldwide.
+            </p>
+          </motion.div>
+
+          {/* 4 Region Cards */}
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 md:gap-6">
+            {REGION_CARDS.map((region, idx) => (
+              <motion.button
+                key={region.id}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: idx * 0.1 }}
+                onClick={() => openModal(region.id)}
+                className="group relative rounded-2xl sm:rounded-3xl overflow-hidden text-left cursor-pointer border-2 border-transparent hover:border-classic-green/30 transition-all duration-500"
+              >
+                {/* Image */}
+                <div className="relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src={region.image}
+                    alt={region.name}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-700"
+                    sizes="(max-width: 768px) 50vw, 25vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+                </div>
+
+                {/* Content Overlay */}
+                <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-5">
+                  <h3 className="text-base sm:text-lg md:text-xl font-montserrat font-bold text-white mb-0.5 sm:mb-1">{region.name}</h3>
+                  <div className="flex items-center gap-1.5 text-white/60 text-[10px] sm:text-xs font-montserrat">
+                    <MapPin className="w-3 h-3 text-bronze-gold" />
+                    {region.subtitle}
+                  </div>
+                  {/* Hover arrow */}
+                  <div className="mt-2 opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <span className="inline-flex items-center gap-1.5 text-white text-[10px] sm:text-xs font-gotham uppercase tracking-wider">
+                      Explore <ArrowRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              </motion.button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Lazy-loaded Modal — only rendered after first click */}
+      {hasOpenedModal && (
+        <Suspense fallback={null}>
+          <StoreLocatorModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            initialRegion={selectedRegion}
+          />
+        </Suspense>
+      )}
+    </>
   );
 }

@@ -11,28 +11,28 @@ const categories = [
     name: 'Rings',
     subtitle: 'Shop Collection',
     image: '/category-home/Ring.png',
-    href: '/products?category=rings',
+    href: '/products/category/rings',
   },
   {
     id: 'earrings',
     name: 'Earrings',
     subtitle: 'Shop Collection',
     image: '/category-home/Earrings.png',
-    href: '/products?category=earrings',
+    href: '/products/category/earrings',
   },
   {
     id: 'bracelets',
     name: 'Bracelets',
     subtitle: 'Shop Collection',
     image: '/category-home/Bracelet.png',
-    href: '/products?category=bracelets',
+    href: '/products/category/bracelets',
   },
   {
     id: 'necklaces',
     name: 'Necklaces',
     subtitle: 'Shop Collection',
     image: '/category-home/Necklace.png',
-    href: '/products?category=necklaces',
+    href: '/products/category/necklaces',
   },
 ];
 
@@ -41,7 +41,7 @@ export default function ShopByCategoryOriginal() {
     <section className="py-20 sm:py-24 bg-gradient-to-b from-black to-gray-900 relative overflow-hidden">
       {/* Background Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-64 bg-bronze-gold/5 rounded-full blur-[100px] pointer-events-none" />
-      
+
       <div className="container mx-auto px-4 sm:px-6 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -74,7 +74,7 @@ export default function ShopByCategoryOriginal() {
                 <div className="relative h-full bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-6 transition-all duration-500 hover:bg-white/10 hover:border-bronze-gold/30 hover:shadow-[0_0_30px_rgba(184,134,11,0.1)]">
                   {/* Hover Accent */}
                   <div className="absolute inset-0 rounded-2xl bg-gradient-to-b from-transparent to-bronze-gold/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                  
+
                   {/* Top Header */}
                   <div className="flex justify-between items-start mb-6 relative z-10">
                     <span className="text-[10px] uppercase tracking-widest text-white/50 font-gotham group-hover:text-bronze-gold transition-colors">

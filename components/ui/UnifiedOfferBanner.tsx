@@ -1,6 +1,6 @@
 'use client';
 
-import { Gift, Truck, Shield, Percent } from 'lucide-react';
+import { Shield, Percent } from 'lucide-react';
 
 // Unified Offer Communication Component
 // Client Feedback: Align offer messaging between homepage and checkout for consistency
@@ -13,11 +13,6 @@ interface Offer {
 
 const offers: Offer[] = [
   {
-    icon: <Truck className="w-5 h-5" />,
-    title: 'Free Shipping',
-    description: 'On orders above ₹50,000',
-  },
-  {
     icon: <Shield className="w-5 h-5" />,
     title: 'Lifetime Exchange',
     description: 'On all lab-grown diamonds',
@@ -26,11 +21,6 @@ const offers: Offer[] = [
     icon: <Percent className="w-5 h-5" />,
     title: 'No Cost EMI',
     description: 'Available on orders above ₹25,000',
-  },
-  {
-    icon: <Gift className="w-5 h-5" />,
-    title: 'Free Gift Wrapping',
-    description: 'Luxury packaging included',
   },
 ];
 
@@ -48,8 +38,8 @@ export default function UnifiedOfferBanner({ variant = 'homepage', className = '
             Your Benefits
           </h3>
         )}
-        
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           {offers.map((offer, index) => (
             <div
               key={index}

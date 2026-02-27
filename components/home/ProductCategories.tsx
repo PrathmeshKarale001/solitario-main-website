@@ -78,7 +78,7 @@ export default function ProductCategories() {
             Find Your Perfect Lab Grown Diamond
           </h2>
           <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto font-montserrat hidden sm:block">
-            The Finest Materials, Each Piece Radiates Luxury
+            Jewellery that feels elevated, every day.
           </p>
         </motion.div>
 
@@ -90,8 +90,8 @@ export default function ProductCategories() {
                 key={category.id}
                 onClick={() => setActiveCategory(category.slug)}
                 className={`flex-shrink-0 px-3 sm:px-5 py-1.5 sm:py-2 font-gotham text-[10px] sm:text-xs uppercase tracking-wider transition-all duration-300 rounded-full touch-manipulation min-h-[44px] min-w-[44px] flex items-center justify-center ${activeCategory === category.slug
-                    ? 'bg-bronze-gold text-white shadow-luxury-lg'
-                    : 'bg-gray-100 text-gray-700 hover:bg-bronze-gold/10 hover:text-bronze-gold'
+                  ? 'bg-bronze-gold text-white shadow-luxury-lg'
+                  : 'bg-gray-100 text-gray-700 hover:bg-bronze-gold/10 hover:text-bronze-gold'
                   }`}
               >
                 {category.label}
@@ -189,8 +189,8 @@ export default function ProductCategories() {
                         });
                       }}
                       className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${isPrebookingProduct(product)
-                          ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
-                          : 'bg-classic-green hover:bg-classic-green/90'
+                        ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
+                        : 'bg-classic-green hover:bg-classic-green/90'
                         }`}
                     >
                       {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}

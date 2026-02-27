@@ -39,61 +39,84 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // New hero images - Desktop: 1600x700px, Mobile: 1080x1350px (4:5)
-  // Using optimized WebP format for 86.7% size reduction with maintained quality
+  // New hero images - Banner 1-8 for Desktop, Mobile 1-8 for Mobile
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277230.webp',
-      mobileSrc: '/images/home-hero/Mobile_Banner_1.webp',
+      src: '/images/home-hero/Banner 1.jpg',
+      mobileSrc: '/images/home-hero/Mobile 1.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277231.webp',
-      mobileSrc: '/images/home-hero/Mobile_Banner_2.webp',
+      src: '/images/home-hero/Banner 2.jpg',
+      mobileSrc: '/images/home-hero/Mobile 2.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277232.webp',
-      mobileSrc: '/images/home-hero/Mobile_Banner_3.webp',
+      src: '/images/home-hero/Banner 3.jpg',
+      mobileSrc: '/images/home-hero/Mobile 3.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
       type: 'image' as const,
-      src: '/images/home-hero/Home_Herofeb 1171277233.webp',
-      mobileSrc: '/images/home-hero/Mobile_Banner_4.webp',
+      src: '/images/home-hero/Banner 4.jpg',
+      mobileSrc: '/images/home-hero/Mobile 4.jpg',
       pos: 'object-cover',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
     {
-      type: 'video' as const,
-      src: '/product-hero-assets/Lab Grown Diamond  Jewellery  Lab Cultured Diamonds  Engineered Diamonds (3).mp4',
+      type: 'image' as const,
+      src: '/images/home-hero/Banner 5.jpg',
+      mobileSrc: '/images/home-hero/Mobile 5.jpg',
       pos: 'object-cover',
-      poster: '/images/home-hero/Home_Herofeb 1171277230.webp',
-      ctaText: 'Explore Collection',
+      ctaText: 'Shop Now',
       ctaLink: '/products'
-    }
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/Banner 6.jpg',
+      mobileSrc: '/images/home-hero/Mobile 6.jpg',
+      pos: 'object-cover',
+      ctaText: 'Shop Now',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/Banner 7.jpg',
+      mobileSrc: '/images/home-hero/Mobile 7.jpg',
+      pos: 'object-cover',
+      ctaText: 'Shop Now',
+      ctaLink: '/products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/home-hero/Banner 8.jpg',
+      mobileSrc: '/images/home-hero/Mobile 8.jpeg',
+      pos: 'object-cover',
+      ctaText: 'Shop Now',
+      ctaLink: '/products'
+    },
   ];
 
-  // Mobile fallback media - Mobile_Banner images for mobile viewport
-  // Using optimized WebP format for 86.7% size reduction
+  // Mobile fallback media - Mobile 1-8 images for mobile viewport
   const defaultFallbackMediaMobile = [
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_1.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_2.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_3.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_4.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_5.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_6.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile_Banner_7.webp', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 1.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 2.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 3.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 4.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 5.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 8.jpeg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
   ];
 
   useEffect(() => {
@@ -172,7 +195,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     ctaLink?: string;
   };
 
-  const heroPosterFallback = '/images/home-hero/Home_Herofeb 1171277230.webp';
+  const heroPosterFallback = '/images/home-hero/Banner 1.jpg';
 
   // Use mobile-specific media array on mobile devices (fallback)
   const staticMedia = fallbackMedia || (isMobile ? defaultFallbackMediaMobile : defaultFallbackMedia);
@@ -181,7 +204,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     dynamicMedia && dynamicMedia.length > 0
       ? [...dynamicMedia, ...staticMedia]
       : staticMedia;
-  
+
   // Helper to get the correct source based on device
   const getMediaSrc = (media: MediaItem) => {
     if (isMobile && media.mobileSrc) {
@@ -189,7 +212,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     }
     return media.src;
   };
-  
+
   // Navigate to previous/next slide
   const goToPrevious = () => {
     setIsTransitioning(true);
@@ -198,7 +221,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       setIsTransitioning(false);
     }, 300);
   };
-  
+
   const goToNext = () => {
     setIsTransitioning(true);
     setTimeout(() => {
@@ -243,7 +266,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
         }
       }
     }
-    
+
     // Pause other videos
     videoRefs.current.forEach((video, index) => {
       if (video && index !== currentIndex) {
@@ -261,8 +284,8 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const currentMedia = mediaToUse[currentIndex];
 
   return (
-    <section 
-      ref={sectionRef} 
+    <section
+      ref={sectionRef}
       className="relative w-full overflow-hidden bg-[#1a1a1a]"
       style={{
         // Desktop: 1600x700 ratio = 43.75% | Mobile: 4:5 ratio = 125%
@@ -298,7 +321,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                     <video
                       ref={(el) => { videoRefs.current[index] = el; }}
                       src={media.src}
-                      poster={'poster' in media && media.poster ? media.poster : heroPosterFallback}
+                      poster={'poster' in media && (media as MediaItem).poster ? (media as MediaItem).poster as string : heroPosterFallback}
                       muted
                       playsInline
                       preload="metadata"
@@ -307,7 +330,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
                     />
                   ) : (
                     <Image
-                      src={'poster' in media && media.poster ? media.poster : heroPosterFallback}
+                      src={'poster' in media && (media as MediaItem).poster ? (media as MediaItem).poster as string : heroPosterFallback}
                       alt=""
                       fill
                       className="object-cover object-center"
@@ -390,12 +413,11 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
               className="group min-w-[44px] min-h-[44px] flex items-center justify-center touch-manipulation p-0 bg-transparent border-none"
               aria-label={`Go to slide ${index + 1}`}
             >
-              <div 
-                className={`h-1 rounded-full transition-all duration-300 ${
-                  index === currentIndex
-                    ? 'w-4 bg-white'
-                    : 'w-1 bg-white/40 group-hover:bg-white/60'
-                }`}
+              <div
+                className={`h-1 rounded-full transition-all duration-300 ${index === currentIndex
+                  ? 'w-4 bg-white'
+                  : 'w-1 bg-white/40 group-hover:bg-white/60'
+                  }`}
               />
             </button>
           ))}

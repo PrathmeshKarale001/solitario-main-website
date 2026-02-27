@@ -23,16 +23,13 @@ export default function BrandStory() {
             </h2>
             <div className="space-y-3 sm:space-y-4 md:space-y-6 text-xs sm:text-sm md:text-base text-brand-700 leading-relaxed">
               <p>
-                Solitario saw an opportunity when customers asked for timeless sustainable luxury. 
-                We believe in crafting heirloom pieces that leave a positive footprint for the next generation.
+                Solitario was born from a vision to redefine modern luxury. We craft heirloom-worthy pieces using advanced diamond technology, delivering exceptional brilliance with uncompromising quality.
               </p>
               <p>
-                Our lab-grown diamonds offer all the beauty and brilliance of traditional diamonds, 
-                minus the environmental impact. Each piece is a testament to our commitment to 
-                sustainable luxury and ethical craftsmanship.
+                Our lab-grown diamonds possess the same optical, physical, and chemical properties as mined diamonds, perfected through precision and innovation.
               </p>
               <p className="font-semibold text-classic-green">
-                We bling better. Our jewellery doesn't cost the Earth.
+                Luxury, reimagined for a new generation.
               </p>
             </div>
             <Link href="/about">
@@ -61,11 +58,12 @@ export default function BrandStory() {
                 alt="Model wearing modern jewelry"
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-700"
+                style={{ objectPosition: '80% center' }}
               />
               {/* Overlay gradient for better text readability if needed */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             </div>
-            
+
             {/* Decorative Elements - Smaller on mobile */}
             <div className="absolute -top-4 -right-4 sm:-top-8 sm:-right-8 w-20 h-20 sm:w-40 sm:h-40 border-2 border-classic-green/30 rounded-lg -z-10 shadow-brand" />
             <div className="absolute -bottom-4 -left-4 sm:-bottom-8 sm:-left-8 w-20 h-20 sm:w-40 sm:h-40 border-2 border-classic-green/20 rounded-lg -z-10 shadow-brand" />

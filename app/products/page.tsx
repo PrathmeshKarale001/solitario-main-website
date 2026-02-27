@@ -12,38 +12,17 @@ import ProductListView from '@/components/products/ProductListView';
 import { Section, Container, QuickLookModal } from '@/components/ui';
 import { DCBannerSlider } from '@/components/home';
 import DynamicShopHero from '@/components/products/DynamicShopHero';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 const PRODUCTS_PER_PAGE = 12;
 const LOAD_MORE_THRESHOLD = 12;
 
-// Hero images - Desktop versions (new Shop images first, then existing last)
-const HERO_IMAGES_DESKTOP = [
-    // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
-  { src: '/images/home-hero/newhero/2nd.png', pos: 'object-center' },
-  { src: '/images/Shop/shop1desk.jpeg', pos: 'object-[50%_0%]' },
-  { src: '/images/Shop/2.webp', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/3.webp', pos: 'object-[50%_25%]' },
-];
-
-// Hero images - Mobile versions
-const HERO_IMAGES_MOBILE = [
-  // { src: '/images/banners/dc/dc7.jpg', pos: 'object-center' },
-  { src: '/images/home-hero/newhero/2ndMobile.png', pos: 'object-center' },
-  { src: '/images/Shop/shop1mobile.jpeg', pos: 'object-[50%_20%]' },
-  { src: '/images/Shop/ShopMobile2.webp', pos: 'object-[50%_20%]' },
-];
 
 function ProductsPageContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get('category');
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const imageIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const productsRef = useRef<HTMLDivElement>(null);
-  
+
   const [activeCategory, setActiveCategory] = useState(categoryParam || 'all');
   const [sortBy, setSortBy] = useState('relevance');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -60,34 +39,28 @@ function ProductsPageContent() {
   const [showMobileSort, setShowMobileSort] = useState(false);
   const sentinelRef = useRef<HTMLDivElement>(null);
 
-  // Mount check to prevent SSR issues
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
   // Load products using React Query for automatic caching and deduplication
   const { data: productsData, isLoading: isLoadingProducts } = useQuery({
     queryKey: ['products'],
     queryFn: async () => {
       console.log('🔄 Starting products fetch...');
       const response = await fetch('/api/products');
-      
+
       if (!response.ok) {
         console.error('❌ Failed to fetch products:', response.status);
         throw new Error('Failed to fetch products');
       }
-      
+
       const data = await response.json();
-      
+
       if (!data.products || !Array.isArray(data.products)) {
         console.error('❌ Invalid products data:', data);
         throw new Error('Invalid products data');
       }
-      
+
       console.log(`✅ Loaded ${data.products.length} products`);
       return data.products;
     },
-    enabled: mounted, // Only fetch when mounted
     staleTime: 5 * 60 * 1000, // 5 minutes - data stays fresh
     gcTime: 30 * 60 * 1000, // 30 minutes - cache time
   });
@@ -102,8 +75,6 @@ function ProductsPageContent() {
     }
   }, [productsData, isLoadingProducts]);
 
-  // Get current hero images based on viewport
-  const heroImages = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
 
   // Filter and sort products
   const filteredAndSortedProducts: Product[] = useMemo(() => {
@@ -152,11 +123,11 @@ function ProductsPageContent() {
           { min: 75000, max: 100000 },
           { min: 100000, max: Infinity }
         ];
-        
+
         const sortedByRanges: Product[] = [];
-        
+
         priceRanges.forEach(range => {
-          const rangeProducts = productList.filter(product => 
+          const rangeProducts = productList.filter(product =>
             product.price >= range.min && product.price < range.max
           );
           // Consistent shuffle using product ID hash - same order for all users
@@ -167,7 +138,7 @@ function ProductsPageContent() {
           });
           sortedByRanges.push(...shuffledRangeProducts);
         });
-        
+
         productList = sortedByRanges;
         break;
       case 'price-low':
@@ -213,7 +184,7 @@ function ProductsPageContent() {
           setIsLoadingMore(true);
           // Simulate loading delay for better UX
           await new Promise(resolve => setTimeout(resolve, 500));
-          
+
           setDisplayedProducts(prev => {
             const currentLength = prev.length;
             const nextBatch = filteredAndSortedProducts.slice(
@@ -221,15 +192,15 @@ function ProductsPageContent() {
               currentLength + LOAD_MORE_THRESHOLD
             );
             const newProducts = [...prev, ...nextBatch];
-            
+
             // Check if there are more products to load
             if (newProducts.length >= filteredAndSortedProducts.length) {
               setHasMore(false);
             }
-            
+
             return newProducts;
           });
-          
+
           setIsLoadingMore(false);
         }
       },
@@ -249,34 +220,6 @@ function ProductsPageContent() {
     }
   }, [categoryParam]);
 
-  // Detect mobile viewport - only after mount
-  useEffect(() => {
-    if (!mounted) return;
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
-  }, [mounted]);
-
-  // Start cycling images - only after mount
-  useEffect(() => {
-    if (!mounted) return;
-    const images = isMobile ? HERO_IMAGES_MOBILE : HERO_IMAGES_DESKTOP;
-    imageIntervalRef.current = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % images.length);
-    }, 6000);
-
-    return () => {
-      if (imageIntervalRef.current) clearInterval(imageIntervalRef.current);
-    };
-  }, [isMobile, mounted]);
-
-  // Reset index when viewport changes
-  useEffect(() => {
-    if (!mounted) return;
-    setCurrentImageIndex(0);
-  }, [isMobile, mounted]);
-
 
   // Calculate category counts for sidebar
   const categoryCounts = useMemo(() => {
@@ -291,7 +234,7 @@ function ProductsPageContent() {
   // Load more products manually (fallback)
   const loadMore = () => {
     if (!hasMore || isLoadingMore) return;
-    
+
     setIsLoadingMore(true);
     setTimeout(() => {
       setDisplayedProducts(prev => {
@@ -301,19 +244,19 @@ function ProductsPageContent() {
           currentLength + LOAD_MORE_THRESHOLD
         );
         const newProducts = [...prev, ...nextBatch];
-        
+
         if (newProducts.length >= filteredAndSortedProducts.length) {
           setHasMore(false);
         }
-        
+
         return newProducts;
       });
       setIsLoadingMore(false);
     }, 500);
   };
 
-  // Show simple loading screen until mounted (prevents SSR render issues)
-  if (!mounted) {
+  // Show simple loading screen until data is ready (prevents SSR render issues)
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="flex flex-col items-center gap-4">
@@ -452,10 +395,10 @@ function ProductsPageContent() {
                   )}
                 </div>
               )}
-              
+
               {/* Sentinel for intersection observer */}
               <div ref={sentinelRef} className="h-10" />
-              
+
               {/* End of products message */}
               {!hasMore && displayedProducts.length > 0 && (
                 <div className="mt-8 text-center text-gray-500 font-montserrat text-sm">
@@ -588,11 +531,10 @@ function ProductsPageContent() {
                       setSortBy(option.value);
                       setShowMobileSort(false);
                     }}
-                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${
-                      sortBy === option.value
-                        ? 'bg-classic-green/10 text-classic-green font-medium'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${sortBy === option.value
+                      ? 'bg-classic-green/10 text-classic-green font-medium'
+                      : 'text-gray-700 hover:bg-gray-50'
+                      }`}
                   >
                     {option.label}
                   </button>

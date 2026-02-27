@@ -55,10 +55,7 @@ const faqCategories: FAQCategory[] = [
         question: 'How long does shipping take?',
         answer: 'Standard shipping takes 5-7 business days within India. Express shipping (2-3 business days) is available for an additional fee. International shipping takes 7-14 business days depending on the destination.'
       },
-      {
-        question: 'Do you offer free shipping?',
-        answer: 'Yes! We offer free standard shipping on all orders above ₹50,000 within India. Orders below this amount have a flat shipping fee of ₹500.'
-      },
+
       {
         question: 'Can I track my order?',
         answer: 'Absolutely! Once your order is shipped, you will receive a tracking number via email and SMS. You can track your order status in real-time through our website or the courier partner\'s website.'
@@ -146,8 +143,8 @@ export default function FAQPage() {
   const [openItems, setOpenItems] = useState<string[]>([]);
 
   const toggleItem = (question: string) => {
-    setOpenItems(prev => 
-      prev.includes(question) 
+    setOpenItems(prev =>
+      prev.includes(question)
         ? prev.filter(q => q !== question)
         : [...prev, question]
     );
@@ -161,12 +158,12 @@ export default function FAQPage() {
     )
   })).filter(category => category.faqs.length > 0);
 
-  const currentCategory = searchQuery 
-    ? filteredCategories 
+  const currentCategory = searchQuery
+    ? filteredCategories
     : faqCategories.filter(c => c.id === activeCategory);
 
   // Prepare FAQ items for schema
-  const allFAQItems = faqCategories.flatMap(category => 
+  const allFAQItems = faqCategories.flatMap(category =>
     category.faqs.map(faq => ({
       question: faq.question,
       answer: faq.answer
@@ -190,7 +187,7 @@ export default function FAQPage() {
             <p className="text-white/80 font-montserrat text-sm md:text-lg mb-6 md:mb-8 px-4">
               Find answers to common questions about our products, shipping, and services
             </p>
-            
+
             {/* Search */}
             <div className="relative max-w-xl mx-auto">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-400" />
@@ -222,11 +219,10 @@ export default function FAQPage() {
                     <button
                       key={category.id}
                       onClick={() => setActiveCategory(category.id)}
-                      className={`flex items-center gap-2 px-5 py-3 rounded-xl font-montserrat text-sm transition-all ${
-                        activeCategory === category.id
+                      className={`flex items-center gap-2 px-5 py-3 rounded-xl font-montserrat text-sm transition-all ${activeCategory === category.id
                           ? 'bg-classic-green text-white shadow-brand'
                           : 'bg-white text-brand-600 border border-brand-200 hover:border-classic-green'
-                      }`}
+                        }`}
                     >
                       <Icon className="w-4 h-4" />
                       {category.title}
@@ -261,9 +257,8 @@ export default function FAQPage() {
                         <span className="font-montserrat text-brand-800 font-medium pr-4">
                           {faq.question}
                         </span>
-                        <ChevronDown className={`w-5 h-5 text-brand-400 flex-shrink-0 transition-transform ${
-                          openItems.includes(faq.question) ? 'rotate-180' : ''
-                        }`} />
+                        <ChevronDown className={`w-5 h-5 text-brand-400 flex-shrink-0 transition-transform ${openItems.includes(faq.question) ? 'rotate-180' : ''
+                          }`} />
                       </button>
                       <AnimatePresence>
                         {openItems.includes(faq.question) && (

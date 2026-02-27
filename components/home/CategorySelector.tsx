@@ -10,13 +10,13 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 const categories = [
   { id: 'all', name: 'All Products', path: '/products' },
-  { id: 'rings', name: 'Rings', path: '/products?category=rings' },
-  { id: 'earrings', name: 'Earrings', path: '/products?category=earrings' },
-  { id: 'necklaces', name: 'Necklaces', path: '/products?category=necklaces' },
-  { id: 'bracelets', name: 'Bracelets', path: '/products?category=bracelets' },
-  { id: 'pendants', name: 'Pendants', path: '/products?category=pendants' },
-  { id: 'engagement', name: 'Engagement Rings', path: '/products?category=engagement' },
-  { id: 'wedding', name: 'Wedding Bands', path: '/products?category=wedding' },
+  { id: 'rings', name: 'Rings', path: '/products/category/rings' },
+  { id: 'earrings', name: 'Earrings', path: '/products/category/earrings' },
+  { id: 'necklaces', name: 'Necklaces', path: '/products/category/necklaces' },
+  { id: 'bracelets', name: 'Bracelets', path: '/products/category/bracelets' },
+  { id: 'pendants', name: 'Pendants', path: '/products/category/pendants' },
+  { id: 'engagement', name: 'Engagement Rings', path: '/products/category/engagement' },
+  { id: 'wedding', name: 'Wedding Bands', path: '/products/category/wedding' },
 ];
 
 export default function CategorySelector() {
@@ -37,14 +37,14 @@ export default function CategorySelector() {
           <span className="text-white font-medium hidden sm:block">
             Shop by Category:
           </span>
-          
+
           <div className="relative w-full sm:w-80">
             <button
               onClick={() => setIsOpen(!isOpen)}
               className="w-full bg-white rounded-lg px-4 py-3 flex items-center justify-between hover:bg-ivory-pearl transition-colors shadow-md"
             >
               <span className="font-medium text-brand-900">{selected.name}</span>
-              <ChevronDown 
+              <ChevronDown
                 className={`w-5 h-5 text-brand-600 transition-transform ${isOpen ? 'rotate-180' : ''}`}
               />
             </button>
@@ -53,11 +53,11 @@ export default function CategorySelector() {
               {isOpen && (
                 <>
                   {/* Backdrop */}
-                  <div 
+                  <div
                     className="fixed inset-0 z-40"
                     onClick={() => setIsOpen(false)}
                   />
-                  
+
                   {/* Dropdown */}
                   <motion.div
                     initial={{ opacity: 0, y: -10 }}
@@ -71,11 +71,10 @@ export default function CategorySelector() {
                         <button
                           key={category.id}
                           onClick={() => handleSelect(category)}
-                          className={`w-full px-4 py-3 text-left hover:bg-ivory-pearl transition-colors ${
-                            selected.id === category.id 
-                              ? 'bg-classic-green/10 text-classic-green font-medium' 
+                          className={`w-full px-4 py-3 text-left hover:bg-ivory-pearl transition-colors ${selected.id === category.id
+                              ? 'bg-classic-green/10 text-classic-green font-medium'
                               : 'text-brand-900'
-                          }`}
+                            }`}
                         >
                           {category.name}
                         </button>

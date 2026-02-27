@@ -19,9 +19,9 @@ const certifications = [
     pdfLink: '/certifications/IGI  Certification.pdf.pdf',
   },
   {
-    name: 'SGLP Certified',
-    fullName: 'SGL Precious Metals',
-    description: 'Our diamonds are also certified by SGLP, ensuring the highest standards of quality and authenticity. Each piece comes with comprehensive documentation.',
+    name: 'SGL Certified',
+    fullName: 'SGL Labs',
+    description: 'Our diamonds are also certified by SGL, ensuring the highest standards of quality and authenticity. Each piece comes with comprehensive documentation.',
     features: ['Diamond Authentication', 'Quality Verification', 'Detailed Grading Report', 'Authenticity Certificate'],
     logo: '/images/certifications/sgl.png',
     pdfLink: '/certifications/SGLP Certification.pdf',
@@ -74,7 +74,7 @@ export default function CertificationsPage() {
               Certifications & Quality
             </h1>
             <p className="text-white/80 font-montserrat text-lg">
-              Every piece of Solitario jewellery comes with internationally recognized 
+              Every piece of Solitario jewellery comes with internationally recognized
               certifications, ensuring authenticity and quality you can trust.
             </p>
           </motion.div>

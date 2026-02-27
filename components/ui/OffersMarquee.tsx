@@ -10,7 +10,7 @@ interface Offer {
 }
 
 const defaultOffers: Offer[] = [
-  { id: '1', text: 'Free Shipping on Orders Above ₹5,000', icon: 'gift' },
+  { id: '1', text: 'Insured & Secure Delivery on All Orders', icon: 'gift' },
   { id: '2', text: 'Get 20% Off on Your First Purchase', icon: 'tag' },
   { id: '3', text: 'Buy 2+ Items & Get a Free Diamond Gift', icon: 'sparkles' },
   { id: '4', text: 'Flat 20% Off on Lab-Grown Diamonds', icon: 'trending' },
@@ -45,7 +45,7 @@ export default function OffersMarquee({ offers = defaultOffers }: { offers?: Off
       {/* Gradient overlays for fade effect */}
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-classic-green to-transparent z-10 pointer-events-none" />
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-classic-green to-transparent z-10 pointer-events-none" />
-      
+
       {/* Marquee content */}
       <div
         className={`flex gap-8 ${isPaused ? '' : 'animate-marquee'}`}

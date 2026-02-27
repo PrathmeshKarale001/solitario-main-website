@@ -10,7 +10,6 @@ const FOUNDERS = [
     name: 'Ricky Vasandani',
     title: 'Chief Executive Officer',
     image: '/about/IMG_0061.webp',
-    signature: '/images/Signatures/ricky-vasandani-png.png',
     bio: 'Born in Africa, Ricky is a visionary entrepreneur who has lived across four continents of the world. Hailing from a family that has successfully scaled a legacy diamond jewellery business over decades, Ricky brings his acumen in the diamond jewellery business to the fore with Solitario Diamonds. His business ventures in the Sports and F&B domains are a major success story in Spain. Ricky drives the day-to-day business at Solitario Diamonds with unmatched expertise in Marketing & Operations. ',
   },
   {
@@ -18,7 +17,6 @@ const FOUNDERS = [
     name: 'Dr. Vivek Anand Oberoi',
     title: 'Co-Founder',
     image: '/about/vivek-oberoi.jpg',
-    signature: '/images/Signatures/vivek-oberoi-signature.png',
     bio: 'Dr. Vivek Anand Oberoi is a distinguished actor, entrepreneur, and philanthropist. With 47 films across seven languages and an Emmy nomination for "Inside Edge," Vivek brings exceptional entrepreneurial acumen to Solitario. Recognized as one of the Top 40 Philanthropists globally, he shapes strategies that enhance profitability while aligning with ethical business conduct and social impact.',
   },
 ];
@@ -66,10 +64,10 @@ export default function Founders() {
             Our Founders
           </span>
           <h2 className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold text-classic-green mb-4" style={{ letterSpacing: '-0.02em' }}>
-            Shine with <span className="text-bronze-gold">Solitario</span>
+            Founded with <span className="text-bronze-gold">Intent</span>
           </h2>
           <p className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto font-montserrat">
-            Visionaries committed to revolutionizing the diamond industry through sustainable practices and ethical business.
+            Visionaries committed to revolutionizing the diamond industry.
           </p>
         </motion.div>
 
@@ -107,18 +105,7 @@ export default function Founders() {
                   <p className="text-gray-600 text-sm leading-relaxed font-montserrat mb-4">
                     {founder.bio}
                   </p>
-                  {/* Signature */}
-                  {founder.signature && (
-                    <div className="mt-auto pt-4">
-                      <Image
-                        src={founder.signature}
-                        alt={`${founder.name} Signature`}
-                        width={150}
-                        height={60}
-                        className="brightness-0 opacity-70"
-                      />
-                    </div>
-                  )}
+
                 </div>
               </div>
             </motion.div>
@@ -149,7 +136,7 @@ export default function Founders() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="relative rounded-2xl overflow-hidden bg-white border border-gray-200 hover:border-bronze-gold/30 shadow-lg transition-all duration-500 group text-center p-6"
+              className="relative rounded-2xl overflow-hidden bg-white border border-gray-200 shadow-lg text-center p-6"
             >
               {/* Image */}
               <div className="relative w-32 h-32 mx-auto mb-4 rounded-full overflow-hidden border-2 border-bronze-gold/30">
@@ -157,9 +144,8 @@ export default function Founders() {
                   src={member.image}
                   alt={member.name}
                   fill
-                  className={`object-cover group-hover:scale-110 transition-transform duration-500 ${
-                    member.id === 'kamini' ? 'scale-150 object-top' : ''
-                  }`}
+                  className={`object-cover ${member.id === 'kamini' ? 'scale-150 object-top' : ''
+                    }`}
                 />
               </div>
 
@@ -170,14 +156,14 @@ export default function Founders() {
               <p className="text-bronze-gold font-gotham uppercase tracking-wider text-xs mb-3">
                 {member.title}
               </p>
-              
+
               {/* Bio */}
               {member.bio && (
                 <p className="text-gray-600 text-sm leading-relaxed font-montserrat mb-4">
                   {member.bio}
                 </p>
               )}
-              
+
               <a
                 href={`mailto:${member.email}`}
                 className="inline-flex items-center gap-2 text-gray-500 hover:text-bronze-gold text-sm font-montserrat transition-colors duration-300"

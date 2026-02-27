@@ -180,9 +180,9 @@ function CartSidebarContent() {
       if (response.ok) {
         const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
 
-        // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
-        if (totalItems >= 2) {
-          setCouponError("Coupons cannot be combined with cart discounts (BUY 2 or BUY 3+ offers).");
+        // Block ALL coupons from stacking with cart discounts (Buy 2 Get 1 Free)
+        if (totalItems >= 3) {
+          setCouponError("Coupons cannot be combined with the Buy 2 Get 1 Free offer.");
           setAppliedCoupon(null);
           setCouponDiscount(0);
           setIsValidating(false);
@@ -398,12 +398,14 @@ function CartSidebarContent() {
             {items.length > 0 && (
               <div className="border-t border-brand-200 p-6 space-y-4 bg-gradient-to-b from-white to-gray-50/30">
                 {/* Active Offers */}
-                <div className="space-y-1.5">
-                  <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-[11px]">
-                    <Gift size={12} className="flex-shrink-0" />
-                    <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
+                {itemCount >= 3 && (
+                  <div className="space-y-1.5">
+                    <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-1.5 rounded-lg text-[11px]">
+                      <Gift size={12} className="flex-shrink-0" />
+                      <span className="font-gotham font-semibold">BUY 2 GET 1 FREE</span>
+                    </div>
                   </div>
-                </div>
+                )}
 
                 {/* Promo Code Section - Enhanced Design */}
                 <div className="relative">
