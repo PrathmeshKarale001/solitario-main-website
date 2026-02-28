@@ -2,13 +2,27 @@ import { MetadataRoute } from 'next';
 
 const BASE_URL = 'https://thesolitario.com';
 
-// Static pages
+// All public static pages
 const staticPages = [
-  '',
-  '/products',
-  '/about',
-  '/contact',
-  '/stores',
+  { path: '', priority: 1, changeFrequency: 'daily' as const },
+  { path: '/products', priority: 0.9, changeFrequency: 'daily' as const },
+  { path: '/about', priority: 0.8, changeFrequency: 'monthly' as const },
+  { path: '/contact', priority: 0.7, changeFrequency: 'monthly' as const },
+  { path: '/stores', priority: 0.8, changeFrequency: 'monthly' as const },
+  { path: '/lab-grown-diamonds', priority: 0.8, changeFrequency: 'monthly' as const },
+  { path: '/certifications', priority: 0.7, changeFrequency: 'monthly' as const },
+  { path: '/sustainability', priority: 0.7, changeFrequency: 'monthly' as const },
+  { path: '/franchise', priority: 0.6, changeFrequency: 'monthly' as const },
+  { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
+  { path: '/blog', priority: 0.7, changeFrequency: 'weekly' as const },
+  { path: '/warner-bros', priority: 0.7, changeFrequency: 'weekly' as const },
+  { path: '/christmas-sale', priority: 0.6, changeFrequency: 'weekly' as const },
+  { path: '/wishlist', priority: 0.3, changeFrequency: 'weekly' as const },
+  { path: '/regulatory-disclosures', priority: 0.4, changeFrequency: 'yearly' as const },
+  { path: '/privacy-policy', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/terms', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/returns', priority: 0.3, changeFrequency: 'yearly' as const },
+  { path: '/shipping', priority: 0.3, changeFrequency: 'yearly' as const },
 ];
 
 // Product categories
@@ -57,10 +71,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // Static pages
   const staticUrls: MetadataRoute.Sitemap = staticPages.map((page) => ({
-    url: `${BASE_URL}${page}`,
+    url: `${BASE_URL}${page.path}`,
     lastModified: new Date(),
-    changeFrequency: page === '' ? 'daily' as const : 'weekly' as const,
-    priority: page === '' ? 1 : 0.9,
+    changeFrequency: page.changeFrequency,
+    priority: page.priority,
   }));
 
   // Category pages

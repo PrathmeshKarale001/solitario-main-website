@@ -2,6 +2,10 @@
 
 import { Product } from '@/lib/data';
 
+const BRAND_NAME = 'The Solitario - Lab Grown Jewellery';
+const CANONICAL_URL = 'https://thesolitario.com';
+const PHONE = '+91 98765 43210';
+
 interface ProductJsonLdProps {
   product: Product;
   url: string;
@@ -16,7 +20,7 @@ export default function ProductJsonLd({ product, url }: ProductJsonLdProps) {
     image: product.image,
     brand: {
       '@type': 'Brand',
-      name: 'Solitario',
+      name: BRAND_NAME,
     },
     offers: {
       '@type': 'Offer',
@@ -26,17 +30,10 @@ export default function ProductJsonLd({ product, url }: ProductJsonLdProps) {
       availability: 'https://schema.org/InStock',
       seller: {
         '@type': 'Organization',
-        name: 'Solitario',
+        name: BRAND_NAME,
       },
     },
     category: product.category,
-    ...(product.featured && {
-      aggregateRating: {
-        '@type': 'AggregateRating',
-        ratingValue: '4.8',
-        reviewCount: '127',
-      },
-    }),
   };
 
   return (
@@ -52,9 +49,9 @@ export function OrganizationJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'Solitario',
-    url: 'https://thesolitario.com',
-    logo: 'https://thesolitario.com/logo.svg',
+    name: BRAND_NAME,
+    url: CANONICAL_URL,
+    logo: `${CANONICAL_URL}/logo.svg`,
     description: "India's most loved new-age diamond jewellery brand. Sustainable luxury with lab-grown diamonds.",
     foundingDate: '1984',
     sameAs: [
@@ -64,7 +61,7 @@ export function OrganizationJsonLd() {
     ],
     contactPoint: {
       '@type': 'ContactPoint',
-      telephone: '+91-XXXXXXXXXX',
+      telephone: PHONE,
       contactType: 'customer service',
       availableLanguage: ['English', 'Hindi'],
     },
@@ -108,13 +105,13 @@ export function WebsiteJsonLd() {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Solitario',
-    url: 'https://thesolitario.com',
+    name: BRAND_NAME,
+    url: CANONICAL_URL,
     potentialAction: {
       '@type': 'SearchAction',
       target: {
         '@type': 'EntryPoint',
-        urlTemplate: 'https://thesolitario.com/products?search={search_term_string}',
+        urlTemplate: `${CANONICAL_URL}/products?search={search_term_string}`,
       },
       'query-input': 'required name=search_term_string',
     },

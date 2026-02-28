@@ -16,7 +16,7 @@ import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
   loading: () => <div className="h-[40vh] bg-[#FAF5EF]" />,
 });
-const LabGrownBenefits = dynamic(() => import('@/components/home-v2/LabGrownBenefits'), {
+const LabGrownBenefits = dynamic(() => import('@/components/home/LabGrownBenefits'), {
   loading: () => <div className="h-[60vh] bg-gradient-to-b from-white to-ivory-pearl/30" />,
 });
 const Stores = dynamic(() => import('@/components/home/Stores'), {

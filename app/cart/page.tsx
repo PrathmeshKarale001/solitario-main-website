@@ -9,7 +9,7 @@ import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
 import { isPrebookingProduct, getCartItemPrice } from '@/lib/prebooking';
 import { Section, Container } from '@/components/ui';
-import ProductRecommendations from '@/components/product/ProductRecommendations';
+import ProductRecommendations from '@/components/products/ProductRecommendations';
 import { useWishlist } from '@/lib/wishlist-context';
 import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';

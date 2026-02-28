@@ -11,7 +11,7 @@ import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { isPrebookingProduct, getCartItemPrice, formatPrebookingOrderNotes, PREBOOK_PRICE } from '@/lib/prebooking';
 import { Container } from '@/components/ui';
-import ProductRecommendations from '@/components/product/ProductRecommendations';
+import ProductRecommendations from '@/components/products/ProductRecommendations';
 import { LocalCartPromotions } from '@/components/checkout/LocalCartPromotions';
 import Script from 'next/script';
 import { trackPaymentInitiate } from '@/lib/gtm-conversions';
@@ -735,8 +735,8 @@ export default function CheckoutPage() {
                             <label
                               key={address.id}
                               className={`block p-4 rounded-lg border-2 cursor-pointer transition-all ${selectedAddressId === address.id && !showNewAddressForm
-                                  ? 'border-classic-green bg-classic-green/5'
-                                  : 'border-gray-200 hover:border-gray-300 bg-white'
+                                ? 'border-classic-green bg-classic-green/5'
+                                : 'border-gray-200 hover:border-gray-300 bg-white'
                                 }`}
                             >
                               <div className="flex items-start gap-3">
@@ -772,8 +772,8 @@ export default function CheckoutPage() {
                         {/* Add New Address Option */}
                         <label
                           className={`block p-4 rounded-lg border-2 cursor-pointer transition-all mt-3 ${showNewAddressForm
-                              ? 'border-classic-green bg-classic-green/5'
-                              : 'border-gray-200 hover:border-gray-300 bg-white'
+                            ? 'border-classic-green bg-classic-green/5'
+                            : 'border-gray-200 hover:border-gray-300 bg-white'
                             }`}
                         >
                           <div className="flex items-center gap-3">
@@ -912,12 +912,12 @@ export default function CheckoutPage() {
                               disabled={isCityStateLocked}
                               placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
                               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${isCityStateLocked
-                                  ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
-                                  : formErrors.city
-                                    ? 'border-red-300 bg-red-50 text-gray-800'
-                                    : customer.city && pincodeData?.success
-                                      ? 'border-green-200 bg-green-50/50 text-gray-800'
-                                      : 'border-gray-200 text-gray-800'
+                                ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
+                                : formErrors.city
+                                  ? 'border-red-300 bg-red-50 text-gray-800'
+                                  : customer.city && pincodeData?.success
+                                    ? 'border-green-200 bg-green-50/50 text-gray-800'
+                                    : 'border-gray-200 text-gray-800'
                                 }`}
                             />
                             {formErrors.city && <p className="text-red-500 text-xs mt-1">{formErrors.city}</p>}
@@ -949,12 +949,12 @@ export default function CheckoutPage() {
                               disabled={isCityStateLocked}
                               placeholder={isCityStateLocked ? "Auto-filled from PIN code" : "Enter PIN code to auto-fill"}
                               className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green font-montserrat transition-all ${isCityStateLocked
-                                  ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
-                                  : formErrors.state
-                                    ? 'border-red-300 bg-red-50 text-gray-800'
-                                    : customer.state && pincodeData?.success
-                                      ? 'border-green-200 bg-green-50/50 text-gray-800'
-                                      : 'border-gray-200 text-gray-800'
+                                ? 'bg-gray-100 text-gray-600 cursor-not-allowed border-gray-300'
+                                : formErrors.state
+                                  ? 'border-red-300 bg-red-50 text-gray-800'
+                                  : customer.state && pincodeData?.success
+                                    ? 'border-green-200 bg-green-50/50 text-gray-800'
+                                    : 'border-gray-200 text-gray-800'
                                 }`}
                             />
                             {formErrors.state && <p className="text-red-500 text-xs mt-1">{formErrors.state}</p>}

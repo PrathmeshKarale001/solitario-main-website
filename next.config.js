@@ -41,7 +41,7 @@ const nextConfig = {
       {
         source: '/:path*',
         headers: [
-          { key: 'X-Frame-Options', value: 'DENY' },
+          { key: 'X-Frame-Options', value: 'SAMEORIGIN' },
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'X-XSS-Protection', value: '1; mode=block' },
@@ -50,8 +50,8 @@ const nextConfig = {
           { key: 'Cross-Origin-Opener-Policy', value: 'same-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(self)' },
           // Content Security Policy - Google Ads, GA, Meta Pixel, Conversions API
-          { 
-            key: 'Content-Security-Policy', 
+          {
+            key: 'Content-Security-Policy',
             value: [
               "default-src 'self'",
               // script-src: Google (GTM, Analytics, Ads, gtag) + Meta Pixel + app scripts
@@ -69,7 +69,7 @@ const nextConfig = {
               "object-src 'none'",
               "base-uri 'self'",
               "form-action 'self'",
-              "frame-ancestors 'none'",
+              "frame-ancestors 'self'",
               "upgrade-insecure-requests",
             ].join('; ')
           },

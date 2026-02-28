@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import {
   AboutHero,
   OurStory,
@@ -8,6 +9,17 @@ import {
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 
+export const metadata: Metadata = {
+  title: 'About Us — Our Story & Mission',
+  description: 'Discover the story behind The Solitario — India\'s most loved new-age diamond jewellery brand. Crafting sustainable luxury with lab-grown diamonds since 1984.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About The Solitario — Our Story & Mission',
+    description: 'Crafting sustainable luxury with lab-grown diamonds since 1984.',
+    url: 'https://thesolitario.com/about',
+  },
+};
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-brand-50">
@@ -16,7 +28,7 @@ export default function AboutPage() {
       <VisionMission />
       <Founders />
       <Promise />
-      
+
       {/* CTA Section - Light Theme - Compact */}
       <section className="py-8 sm:py-10 md:py-12 lg:py-14 px-3 sm:px-4 bg-classic-green">
         <div className="max-w-3xl sm:max-w-4xl mx-auto text-center">
@@ -24,7 +36,7 @@ export default function AboutPage() {
             Ready to Discover Your <span className="text-bronze-gold">Perfect Piece</span>?
           </h2>
           <p className="text-xs sm:text-sm md:text-base text-white/80 mb-4 sm:mb-6 md:mb-8 font-montserrat hidden sm:block">
-            Explore our collection of ethically crafted lab-grown diamond jewellery 
+            Explore our collection of ethically crafted lab-grown diamond jewellery
             and find the piece that tells your story.
           </p>
           <div className="flex flex-wrap gap-2 sm:gap-3 md:gap-4 justify-center">

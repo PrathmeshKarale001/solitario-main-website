@@ -35,23 +35,51 @@ const montserrat = Montserrat({
 })
 
 export const metadata: Metadata = {
-  title: 'Solitario - Lab Grown Diamond Jewellery | Modern Luxury',
+  metadataBase: new URL('https://thesolitario.com'),
+  title: {
+    default: 'The Solitario — Lab Grown Diamond Jewellery | Modern Luxury',
+    template: '%s | The Solitario',
+  },
   description: 'India\'s most loved new-age diamond jewellery brand. Discover timeless, modern luxury with lab-grown diamonds. Crafted for modern and future generations.',
-  keywords: ['lab grown diamonds', 'diamond jewellery', 'diamond rings', 'luxury jewellery', 'lab created diamonds', 'Solitario'],
-  authors: [{ name: 'Solitario' }],
+  keywords: ['lab grown diamonds', 'diamond jewellery', 'diamond rings', 'luxury jewellery', 'lab created diamonds', 'The Solitario', 'lab grown diamond jewellery India'],
+  authors: [{ name: 'The Solitario' }],
+  creator: 'The Solitario',
+  publisher: 'The Solitario',
+  alternates: {
+    canonical: '/',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
-    icon: '/favico.ico',
-    shortcut: '/favico.ico',
-    apple: '/favico.ico',
-
+    icon: [
+      { url: '/favicon.ico', sizes: 'any' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
+    shortcut: '/favicon.ico',
+    apple: '/apple-icon.png',
   },
   openGraph: {
-    title: 'Solitario - Lab Grown Diamond Jewellery',
-    description: 'Discover our collection of exquisitely crafted lab-grown diamond jewellery. Modern luxury, timeless elegance.',
+    title: 'The Solitario — Lab Grown Diamond Jewellery',
+    description: 'Discover exquisitely crafted lab-grown diamond jewellery. Modern luxury, timeless elegance.',
     url: 'https://thesolitario.com',
-    siteName: 'Solitario',
+    siteName: 'The Solitario',
     locale: 'en_IN',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'The Solitario — Lab Grown Diamond Jewellery',
+    description: 'India\'s most loved new-age diamond jewellery brand. Modern luxury with lab-grown diamonds.',
   },
 }
 

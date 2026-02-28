@@ -1,5 +1,8 @@
 // JSON-LD Schema Components for SEO
-// Audit Recommendation: 9.2 - Add Product Schema
+
+const BRAND_NAME = 'The Solitario';
+const CANONICAL_URL = 'https://thesolitario.com';
+const PHONE = '+91 98765 43210';
 
 interface ProductSchemaProps {
   name: string;
@@ -22,7 +25,7 @@ export function ProductSchema({
   price,
   currency = 'INR',
   sku,
-  brand = 'The Solitario',
+  brand = BRAND_NAME,
   availability = 'InStock',
   url,
   reviewCount,
@@ -47,7 +50,7 @@ export function ProductSchema({
       url,
       seller: {
         '@type': 'Organization',
-        name: 'The Solitario',
+        name: BRAND_NAME,
       },
     },
     ...(reviewCount && ratingValue && {
@@ -85,12 +88,12 @@ interface OrganizationSchemaProps {
 }
 
 export function OrganizationSchema({
-  name = 'The Solitario',
-  url = 'https://www.thesolitario.com',
-  logo = 'https://www.thesolitario.com/logo.png',
-  description = 'Premium Lab Grown Diamond Jewelry - Rings, Necklaces, Earrings & More',
+  name = BRAND_NAME,
+  url = CANONICAL_URL,
+  logo = `${CANONICAL_URL}/logo.svg`,
+  description = 'Premium Lab Grown Diamond Jewellery - Rings, Necklaces, Earrings & More',
   email = 'contact@thesolitario.com',
-  phone = '+91-9876543210',
+  phone = PHONE,
   address,
   socialLinks = [
     'https://www.instagram.com/solitariodiamonds/',
@@ -173,20 +176,30 @@ interface LocalBusinessSchemaProps {
   phone?: string;
   openingHours?: string[];
   priceRange?: string;
+  url?: string;
+  image?: string;
+  areaServed?: string;
+  paymentAccepted?: string[];
 }
 
 export function LocalBusinessSchema({
-  name = 'The Solitario',
+  name = BRAND_NAME,
   address,
   geo,
-  phone,
+  phone = PHONE,
   openingHours = ['Mo-Sa 10:00-20:00'],
   priceRange = '₹₹₹',
+  url,
+  image,
+  areaServed,
+  paymentAccepted = ['Cash', 'Credit Card', 'Debit Card', 'UPI'],
 }: LocalBusinessSchemaProps) {
   const schema = {
     '@context': 'https://schema.org',
     '@type': 'JewelryStore',
     name,
+    ...(url && { url }),
+    ...(image && { image }),
     address: {
       '@type': 'PostalAddress',
       streetAddress: address.street,
@@ -210,6 +223,9 @@ export function LocalBusinessSchema({
       closes: hours.split(' ')[1]?.split('-')[1],
     })),
     priceRange,
+    ...(areaServed && { areaServed }),
+    paymentAccepted: paymentAccepted.join(', '),
+    currenciesAccepted: 'INR',
   };
 
   return (

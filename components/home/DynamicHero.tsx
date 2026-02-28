@@ -39,7 +39,8 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const videoRefs = useRef<(HTMLVideoElement | null)[]>([]);
   const sectionRef = useRef<HTMLElement>(null);
 
-  // New hero images - Banner 1-8 for Desktop, Mobile 1-8 for Mobile
+  // New hero images - Desktop: 1600x700px, Mobile: 1080x1350px (4:5)
+  // Using optimized WebP format for 86.7% size reduction with maintained quality
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
@@ -105,6 +106,14 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
+    {
+      type: 'video' as const,
+      src: '/images/home-hero/Banner 8.mp4',
+      mobileSrc: '/images/home-hero/Mobile 8.mp4',
+      pos: 'object-cover',
+      ctaText: 'Shop Now',
+      ctaLink: '/products'
+    },
   ];
 
   // Mobile fallback media - Mobile 1-8 images for mobile viewport
@@ -117,6 +126,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     { type: 'image' as const, src: '/images/home-hero/Mobile 6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
     { type: 'image' as const, src: '/images/home-hero/Mobile 7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
     { type: 'image' as const, src: '/images/home-hero/Mobile 8.jpeg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'video' as const, src: '/images/home-hero/Mobile 8.mp4', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
   ];
 
   useEffect(() => {

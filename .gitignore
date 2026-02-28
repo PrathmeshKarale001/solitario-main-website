@@ -30,6 +30,13 @@ playwright.config.ts
 .DS_Store
 *.pem
 *.new
+*.log
+
+# auto-generated files
+public/pdf.worker.min.mjs
+
+# unused files archive
+/_unused/
 
 # debug
 npm-debug.log*

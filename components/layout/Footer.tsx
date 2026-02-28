@@ -145,6 +145,11 @@ export default function Footer() {
                   Blog
                 </Link>
               </li>
+              <li>
+                <Link href="/regulatory-disclosures" className="text-sm text-ivory-pearl/80 hover:text-bronze-gold transition-colors">
+                  Regulatory Disclosures
+                </Link>
+              </li>
             </ul>
           </div>
 

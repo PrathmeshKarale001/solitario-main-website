@@ -1,61 +1,110 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Sparkles, Leaf, Brain } from 'lucide-react';
-import { LAB_GROWN_BENEFITS } from '@/lib/constants';
-import { Section, Container, Card } from '@/components/ui';
+import { Gem, Leaf, ShieldCheck, Zap } from 'lucide-react';
+import Image from 'next/image';
 
-const iconMap = {
-  sparkles: Sparkles,
-  leaf: Leaf,
-  brain: Brain,
-};
+const benefits = [
+  {
+    icon: Leaf,
+    title: "Unmatched Precision",
+    description: "Expertly cultivated under controlled conditions for absolute perfection."
+  },
+  {
+    icon: Gem,
+    title: "Pure Brilliance",
+    description: "Identical optical, physical, and chemical properties to mined diamonds."
+  },
+  {
+    icon: ShieldCheck,
+    title: "Certified Quality",
+    description: "Every diamond comes with certification from leading gemological institutes."
+  },
+  {
+    icon: Zap,
+    title: "Future Forward",
+    description: "Advanced technology meeting timeless luxury."
+  }
+];
 
-export default function LabGrownBenefits() {
+export default function LabGrownBenefitsV2() {
   return (
-    <Section variant="light" padding="sm">
-      <Container>
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="text-center mb-6 sm:mb-8 md:mb-12"
-        >
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-montserrat font-bold mb-2 sm:mb-4 text-classic-green">Luxury, Reimagined</h2>
-          <p className="text-xs sm:text-sm md:text-lg text-gray-700 max-w-md sm:max-w-2xl mx-auto hidden sm:block">
-            All the beauty, minus the baggage. Lab-grown diamonds are the elegant evolution of fine jewellery.
-          </p>
-        </motion.div>
+    <section className="bg-[#FAF5EF] py-10 relative overflow-hidden">
+      {/* Background Pattern - Light theme */}
+      <div className="absolute inset-0 opacity-30" style={{
+        backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23146552' fill-opacity='0.15'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`
+      }} />
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
-          {LAB_GROWN_BENEFITS.map((benefit, index) => {
-            const Icon = iconMap[benefit.icon as keyof typeof iconMap];
-            
-            return (
-              <motion.div
-                key={benefit.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.4, delay: index * 0.1 }}
-              >
-                <Card variant="elevated" className="p-4 sm:p-6 md:p-8 text-center h-full hover:shadow-xl transition-shadow duration-300">
-                  <div className="mb-3 sm:mb-4 md:mb-6 flex justify-center">
-                    <div className="w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 bg-gradient-to-br from-bronze-gold to-soft-bronze rounded-full flex items-center justify-center">
-                      <Icon className="w-6 h-6 sm:w-8 sm:h-8 md:w-10 md:h-10 text-white" />
-                    </div>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="flex flex-col lg:flex-row items-center gap-12">
+          <motion.div
+            initial={{ opacity: 0, x: -30 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            className="lg:w-1/2"
+          >
+            <div className="relative aspect-square max-w-lg mx-auto flex items-center justify-center">
+              {/* Logo Frame with solid background */}
+              <div className="relative w-3/4 aspect-square bg-classic-green rounded-2xl shadow-2xl flex items-center justify-center p-8">
+                <Image
+                  src="/logo.svg"
+                  alt="Solitario Logo"
+                  width={300}
+                  height={100}
+                  className="w-full h-auto brightness-0 invert"
+                />
+              </div>
+              {/* Badge */}
+              <div className="absolute -bottom-6 -right-6 w-32 h-32 bg-[#FAF5EF] border border-bronze-gold/30 rounded-full flex items-center justify-center z-20 shadow-xl">
+                <div className="text-center text-brand-800">
+                  <span className="block text-2xl font-bold font-montserrat font-bold">100%</span>
+                  <span className="text-[10px] uppercase font-gotham tracking-wider">Conflict Free</span>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+
+          <div className="lg:w-1/2">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="mb-10"
+            >
+              <span className="text-classic-green font-gotham text-xs uppercase tracking-[0.3em] mb-4 block">
+                Why Lab Grown?
+              </span>
+              <h2 className="text-4xl md:text-5xl font-montserrat font-bold text-brand-800 mb-5">
+                The Future of <span className="italic text-classic-green">Luxury</span>
+              </h2>
+              <p className="text-brand-600 font-montserrat leading-relaxed">
+                A modern approach to diamonds designed for today's values, without compromising on beauty or quality.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              {benefits.map((item, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                  className="flex gap-4"
+                >
+                  <div className="flex-shrink-0 w-12 h-12 rounded-full bg-classic-green/10 border border-classic-green/20 flex items-center justify-center">
+                    <item.icon className="w-5 h-5 text-classic-green" />
                   </div>
-                  <h3 className="text-sm sm:text-base md:text-lg font-montserrat font-bold mb-2 sm:mb-4 text-classic-green">{benefit.title}</h3>
-                  <p className="text-xs sm:text-sm text-gray-600 leading-relaxed">{benefit.description}</p>
-                </Card>
-              </motion.div>
-            );
-          })}
+                  <div>
+                    <h3 className="text-brand-800 font-montserrat font-bold text-lg mb-2">{item.title}</h3>
+                    <p className="text-brand-600 text-sm leading-relaxed">{item.description}</p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
         </div>
-      </Container>
-    </Section>
+      </div>
+    </section>
   );
 }
-
-

@@ -41,7 +41,7 @@ export const LazyProductDetail = dynamic(
 
 // Lazy loaded ProductRecommendations
 export const LazyProductRecommendations = dynamic(
-  () => import('@/components/product/ProductRecommendations').then((mod) => mod.default),
+  () => import('@/components/products/ProductRecommendations').then((mod) => mod.default),
   {
     loading: () => <LoadingSkeleton height="h-64" />,
   }
