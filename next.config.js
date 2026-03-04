@@ -35,6 +35,12 @@ const nextConfig = {
     // View Transitions API for smooth page transitions
     viewTransition: true,
   },
+  // Modular imports — tree-shake lucide-react to only bundle used icons
+  modularizeImports: {
+    'lucide-react': {
+      transform: 'lucide-react/dist/esm/icons/{{ kebabCase member }}',
+    },
+  },
   // Security headers - Audit Recommendation 4.1
   async headers() {
     return [

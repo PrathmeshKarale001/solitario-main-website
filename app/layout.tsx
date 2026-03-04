@@ -37,7 +37,7 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL('https://thesolitario.com'),
   title: {
-    default: 'The Solitario — Lab Grown Diamond Jewellery | Modern Luxury',
+    default: 'The Solitario - Lab Grown Diamond Jewellery | Modern Luxury',
     template: '%s | The Solitario',
   },
   description: 'India\'s most loved new-age diamond jewellery brand. Discover timeless, modern luxury with lab-grown diamonds. Crafted for modern and future generations.',
@@ -69,7 +69,7 @@ export const metadata: Metadata = {
     apple: '/apple-icon.png',
   },
   openGraph: {
-    title: 'The Solitario — Lab Grown Diamond Jewellery',
+    title: 'The Solitario - Lab Grown Diamond Jewellery',
     description: 'Discover exquisitely crafted lab-grown diamond jewellery. Modern luxury, timeless elegance.',
     url: 'https://thesolitario.com',
     siteName: 'The Solitario',
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'The Solitario — Lab Grown Diamond Jewellery',
+    title: 'The Solitario - Lab Grown Diamond Jewellery',
     description: 'India\'s most loved new-age diamond jewellery brand. Modern luxury with lab-grown diamonds.',
   },
 }
@@ -91,6 +91,17 @@ export default function RootLayout({
   return (
     <html lang="en" className={montserrat.variable} style={{ '--font-playfair': 'var(--font-montserrat)', '--font-gotham': 'var(--font-montserrat)', '--font-didot': 'var(--font-montserrat)' } as React.CSSProperties} suppressHydrationWarning>
       <head>
+        {/* Preconnect to critical domains — reduces connection setup time for LCP */}
+        <link rel="preconnect" href="https://cdn.shopify.com" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+
+        {/* DNS prefetch for analytics/tracking domains — non-blocking early resolution */}
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
+        <link rel="dns-prefetch" href="https://www.google-analytics.com" />
+        <link rel="dns-prefetch" href="https://connect.facebook.net" />
+        <link rel="dns-prefetch" href="https://us.i.posthog.com" />
+
         <OrganizationJsonLd />
         <WebsiteJsonLd />
       </head>

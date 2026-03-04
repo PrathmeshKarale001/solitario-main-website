@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import crypto from 'crypto';
 import logger from '@/lib/logger';
+import { sendShippingNotification } from '@/lib/email';
 
 const SHOPIFY_WEBHOOK_SECRET = process.env.SHOPIFY_WEBHOOK_SECRET || '';
 
@@ -110,7 +111,45 @@ async function handleOrderFulfilled(payload: any) {
     orderNumber: payload.order_number,
     fulfillmentStatus: payload.fulfillment_status,
   });
-  // Fulfillment tracking handled by Delhivery integration
+
+  // Send shipping notification email to customer
+  try {
+    const customerEmail = payload.email || payload.contact_email;
+    const customerName = payload.shipping_address?.first_name
+      ? `${payload.shipping_address.first_name} ${payload.shipping_address.last_name || ''}`.trim()
+      : payload.customer?.first_name
+        ? `${payload.customer.first_name} ${payload.customer.last_name || ''}`.trim()
+        : 'Valued Customer';
+    const orderId = payload.name || `#${payload.order_number}`;
+
+    // Extract tracking info from fulfillments
+    const fulfillment = payload.fulfillments?.[0];
+    const trackingNumber = fulfillment?.tracking_number || fulfillment?.tracking_numbers?.[0] || '';
+    const carrier = fulfillment?.tracking_company || 'Delhivery';
+
+    if (customerEmail && trackingNumber) {
+      const result = await sendShippingNotification(
+        customerEmail,
+        customerName,
+        orderId,
+        trackingNumber,
+        carrier
+      );
+      if (result.success) {
+        logger.log(`[Order Fulfilled] Shipping notification sent to ${customerEmail}`);
+      } else {
+        logger.error('[Order Fulfilled] Failed to send shipping notification:', result.error);
+      }
+    } else {
+      logger.log('[Order Fulfilled] Skipping email — missing email or tracking number', {
+        hasEmail: !!customerEmail,
+        hasTracking: !!trackingNumber,
+      });
+    }
+  } catch (emailError) {
+    // Don't fail the webhook if email fails
+    logger.error('[Order Fulfilled] Email error (non-fatal):', emailError);
+  }
 }
 
 async function handleOrderCancelled(payload: any) {

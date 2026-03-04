@@ -24,7 +24,7 @@ export default function AboutHero() {
         className="absolute inset-0 z-0"
         style={{ y: backgroundY }}
       >
-        <div className="absolute inset-0" style={{ filter: 'blur(80px)', WebkitFilter: 'blur(80px)' }}>
+        <div className="absolute inset-0" style={{ filter: 'blur(30px)', WebkitFilter: 'blur(30px)' }}>
           <video
             autoPlay
             loop
@@ -33,8 +33,8 @@ export default function AboutHero() {
             className="absolute inset-0 w-full h-full object-cover scale-150"
             onLoadedMetadata={e => {
               try {
-                if (e.currentTarget.currentTime < 4) {
-                  e.currentTarget.currentTime = 4;
+                if (e.currentTarget.currentTime < 5) {
+                  e.currentTarget.currentTime = 5;
                 }
               } catch { }
             }}

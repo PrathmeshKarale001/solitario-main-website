@@ -6,13 +6,13 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
-import { 
-  ChevronLeft, 
-  Package, 
-  Truck, 
-  CheckCircle, 
-  Clock, 
-  MapPin, 
+import {
+  ChevronLeft,
+  Package,
+  Truck,
+  CheckCircle,
+  Clock,
+  MapPin,
   Phone,
   Copy,
   Check,
@@ -63,37 +63,7 @@ interface Order {
   estimatedDelivery?: string;
 }
 
-// Mock order data
-const mockOrder: Order = {
-  id: '1',
-  orderNumber: 'SOL-2024-001',
-  date: '2024-12-01',
-  status: 'shipped',
-  subtotal: 125000,
-  shipping: 0,
-  tax: 22500,
-  total: 147500,
-  items: [
-    { 
-      id: '1', 
-      name: 'Solitaire Diamond Ring', 
-      image: '/images/products/imgi_8_IZRG0086_AP.png', 
-      price: 125000, 
-      quantity: 1,
-      variant: 'Size 6'
-    }
-  ],
-  shippingAddress: {
-    name: 'John Doe',
-    phone: '+91 98765 43210',
-    address: '123, Diamond Heights, Bandra West',
-    city: 'Mumbai',
-    state: 'Maharashtra',
-    pincode: '400050',
-  },
-  trackingNumber: 'SOLI1234567890',
-  estimatedDelivery: '2024-12-08',
-};
+
 
 const statusSteps = [
   { key: 'processing', label: 'Order Placed', icon: Package },
@@ -134,7 +104,7 @@ export default function OrderDetailPage() {
         setLoading(false);
       }
     };
-    
+
     if (isLoaded && isSignedIn && params.id) {
       fetchOrder();
     }
@@ -160,7 +130,7 @@ export default function OrderDetailPage() {
     return statusSteps.findIndex(s => s.key === status);
   };
 
-  if (status === 'loading' || loading) {
+  if (!isLoaded || loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-24 flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-bronze-gold"></div>
@@ -209,7 +179,7 @@ export default function OrderDetailPage() {
                 </h1>
                 <p className="text-brand-500 font-montserrat">Placed on {formatDate(order.date)}</p>
               </div>
-              <button 
+              <button
                 onClick={() => window.open(`/api/account/orders/${encodeURIComponent(order.id)}/invoice`, '_blank')}
                 className="mt-4 md:mt-0 inline-flex items-center gap-2 px-4 py-2 bg-brand-100 text-brand-700 rounded-lg hover:bg-brand-200 transition-colors font-montserrat text-sm"
               >
@@ -230,31 +200,29 @@ export default function OrderDetailPage() {
                 <div className="relative">
                   {/* Progress Line */}
                   <div className="absolute top-5 left-5 right-5 h-0.5 bg-brand-200">
-                    <div 
+                    <div
                       className="h-full bg-classic-green transition-all duration-500"
                       style={{ width: `${(currentStatusIndex / (statusSteps.length - 1)) * 100}%` }}
                     />
                   </div>
-                  
+
                   {/* Steps */}
                   <div className="relative flex justify-between">
                     {statusSteps.map((step, index) => {
                       const isCompleted = index <= currentStatusIndex;
                       const isCurrent = index === currentStatusIndex;
                       const StepIcon = step.icon;
-                      
+
                       return (
                         <div key={step.key} className="flex flex-col items-center">
-                          <div className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-colors ${
-                            isCompleted 
-                              ? 'bg-classic-green text-white' 
+                          <div className={`w-10 h-10 rounded-full flex items-center justify-center z-10 transition-colors ${isCompleted
+                              ? 'bg-classic-green text-white'
                               : 'bg-brand-100 text-brand-400'
-                          } ${isCurrent ? 'ring-4 ring-classic-green/20' : ''}`}>
+                            } ${isCurrent ? 'ring-4 ring-classic-green/20' : ''}`}>
                             <StepIcon className="w-5 h-5" />
                           </div>
-                          <p className={`mt-2 text-sm font-montserrat ${
-                            isCompleted ? 'text-brand-800' : 'text-brand-400'
-                          }`}>
+                          <p className={`mt-2 text-sm font-montserrat ${isCompleted ? 'text-brand-800' : 'text-brand-400'
+                            }`}>
                             {step.label}
                           </p>
                         </div>
@@ -266,18 +234,33 @@ export default function OrderDetailPage() {
                 {/* Tracking Info */}
                 {order.trackingNumber && (
                   <div className="mt-6 pt-6 border-t border-brand-100">
-                    <div className="flex items-center justify-between">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                       <div>
                         <p className="text-sm text-brand-500 font-montserrat">Tracking Number</p>
-                        <p className="font-gotham text-brand-800">{order.trackingNumber}</p>
+                        <p className="font-gotham text-brand-800 tracking-wider">{order.trackingNumber}</p>
+                        {order.trackingCompany && (
+                          <p className="text-xs text-brand-500 font-montserrat mt-0.5">Carrier: {order.trackingCompany}</p>
+                        )}
                       </div>
-                      <button
-                        onClick={copyTrackingNumber}
-                        className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-100 text-brand-600 rounded-lg hover:bg-brand-200 transition-colors text-sm font-montserrat"
-                      >
-                        {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                        {copied ? 'Copied!' : 'Copy'}
-                      </button>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={copyTrackingNumber}
+                          className="inline-flex items-center gap-2 px-3 py-1.5 bg-brand-100 text-brand-600 rounded-lg hover:bg-brand-200 transition-colors text-sm font-montserrat"
+                        >
+                          {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                          {copied ? 'Copied!' : 'Copy'}
+                        </button>
+                        {order.trackingUrl && (
+                          <a
+                            href={order.trackingUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-1.5 bg-classic-green text-white rounded-lg text-sm font-montserrat hover:bg-classic-green/90 transition-colors"
+                          >
+                            Track Package
+                          </a>
+                        )}
+                      </div>
                     </div>
                     {order.estimatedDelivery && (
                       <p className="mt-2 text-sm text-classic-green font-montserrat">
@@ -292,8 +275,8 @@ export default function OrderDetailPage() {
 
             {/* Real-time Delhivery Tracking */}
             {order.trackingNumber && (
-              <LazyTrackingTimeline 
-                waybill={order.trackingNumber} 
+              <LazyTrackingTimeline
+                waybill={order.trackingNumber}
                 orderStatus={order.status}
               />
             )}

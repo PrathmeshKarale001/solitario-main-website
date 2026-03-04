@@ -63,7 +63,24 @@ export default function Home() {
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
 
-      {/* 1a. OFFERS MARQUEE - Continuous offers display */}
+      {/* SEO: Server-rendered H1 + content for crawlers. Visually hidden but accessible. */}
+      <div className="sr-only" aria-hidden="false">
+        <h1>The Solitario — Lab Grown Diamond Jewellery | Modern Luxury</h1>
+        <p>
+          Welcome to The Solitario, India&apos;s most loved new-age diamond jewellery brand.
+          Since 1984, we have been crafting exquisite lab-grown diamond jewellery that combines
+          timeless elegance with sustainable luxury. Our collection features stunning diamond rings,
+          necklaces, earrings, bracelets, and pendants, all created with certified lab-grown diamonds
+          that are optically, chemically, and physically identical to mined diamonds.
+          At The Solitario, we believe that luxury should be both beautiful and responsible.
+          Our lab-grown diamonds have a significantly lower environmental impact while delivering
+          the same brilliance, fire, and sparkle you expect from the finest diamonds.
+          Every piece of The Solitario jewellery comes with an international certification of authenticity.
+          Visit our stores across India or shop online to discover premium diamond jewellery
+          for engagements, weddings, anniversaries, and everyday luxury. Experience the future
+          of sustainable diamond jewellery with The Solitario.
+        </p>
+      </div>
       <OffersMarquee />
 
       {/* 2. SHOP BY CATEGORY - Immediate product access */}

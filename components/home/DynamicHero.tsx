@@ -12,6 +12,7 @@ interface DynamicHeroProps {
     src: string;
     mobileSrc?: string;
     pos?: string;
+    alt?: string;
     title?: string;
     subtitle?: string;
     description?: string;
@@ -47,6 +48,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 1.jpg',
       mobileSrc: '/images/home-hero/Mobile 1.jpg',
       pos: 'object-cover',
+      alt: 'The Solitario lab grown diamond solitaire ring collection',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -55,6 +57,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 2.jpg',
       mobileSrc: '/images/home-hero/Mobile 2.jpg',
       pos: 'object-cover',
+      alt: 'Elegant diamond pendant necklaces by The Solitario',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -63,6 +66,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 3.jpg',
       mobileSrc: '/images/home-hero/Mobile 3.jpg',
       pos: 'object-cover',
+      alt: 'Lab grown diamond earrings and studs collection',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -71,6 +75,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 4.jpg',
       mobileSrc: '/images/home-hero/Mobile 4.jpg',
       pos: 'object-cover',
+      alt: 'The Solitario premium diamond bracelets and bangles',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -79,6 +84,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 5.jpg',
       mobileSrc: '/images/home-hero/Mobile 5.jpg',
       pos: 'object-cover',
+      alt: 'Sustainable luxury diamond jewellery crafted with care',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -87,6 +93,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 6.jpg',
       mobileSrc: '/images/home-hero/Mobile 6.jpg',
       pos: 'object-cover',
+      alt: 'The Solitario engagement rings and wedding bands',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -95,6 +102,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 7.jpg',
       mobileSrc: '/images/home-hero/Mobile 7.jpg',
       pos: 'object-cover',
+      alt: 'Modern lab grown diamond jewellery for every occasion',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -103,6 +111,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 8.jpg',
       mobileSrc: '/images/home-hero/Mobile 8.jpeg',
       pos: 'object-cover',
+      alt: 'The Solitario new arrivals — latest diamond jewellery designs',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -111,6 +120,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
       src: '/images/home-hero/Banner 8.mp4',
       mobileSrc: '/images/home-hero/Mobile 8.mp4',
       pos: 'object-cover',
+      alt: 'The Solitario diamond jewellery showcase video',
       ctaText: 'Shop Now',
       ctaLink: '/products'
     },
@@ -118,15 +128,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
 
   // Mobile fallback media - Mobile 1-8 images for mobile viewport
   const defaultFallbackMediaMobile = [
-    { type: 'image' as const, src: '/images/home-hero/Mobile 1.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 2.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 3.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 4.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 5.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 6.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 7.jpg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'image' as const, src: '/images/home-hero/Mobile 8.jpeg', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
-    { type: 'video' as const, src: '/images/home-hero/Mobile 8.mp4', pos: 'object-cover', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 1.jpg', pos: 'object-cover', alt: 'The Solitario lab grown diamond solitaire ring collection', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 2.jpg', pos: 'object-cover', alt: 'Elegant diamond pendant necklaces by The Solitario', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 3.jpg', pos: 'object-cover', alt: 'Lab grown diamond earrings and studs collection', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 4.jpg', pos: 'object-cover', alt: 'The Solitario premium diamond bracelets and bangles', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 5.jpg', pos: 'object-cover', alt: 'Sustainable luxury diamond jewellery crafted with care', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 6.jpg', pos: 'object-cover', alt: 'The Solitario engagement rings and wedding bands', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 7.jpg', pos: 'object-cover', alt: 'Modern lab grown diamond jewellery for every occasion', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'image' as const, src: '/images/home-hero/Mobile 8.jpeg', pos: 'object-cover', alt: 'The Solitario new arrivals — latest diamond jewellery designs', ctaText: 'Shop Now', ctaLink: '/products' },
+    { type: 'video' as const, src: '/images/home-hero/Mobile 8.mp4', pos: 'object-cover', alt: 'The Solitario diamond jewellery showcase video', ctaText: 'Shop Now', ctaLink: '/products' },
   ];
 
   useEffect(() => {
@@ -197,6 +207,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     src: string;
     mobileSrc?: string;
     pos?: string;
+    alt?: string;
     poster?: string;
     title?: string;
     subtitle?: string;
@@ -353,9 +364,10 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
               ) : (
                 <Image
                   src={getMediaSrc(media)}
-                  alt="Solitario Jewelry Collection"
+                  alt={(media as MediaItem).alt || 'The Solitario lab grown diamond jewellery'}
                   fill
                   priority={index === 0}
+                  fetchPriority={index === 0 ? 'high' : undefined}
                   quality={index === 0 ? 90 : 85}
                   sizes="100vw"
                   className={`${media.pos ?? 'object-cover'} object-center`}
