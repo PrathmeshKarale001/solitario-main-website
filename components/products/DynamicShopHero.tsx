@@ -54,7 +54,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/category-page-banner/Banner - Bracelet.jpg.jpeg',
+      src: '/images/category-page-banner/Web Banner - Bracelet.webp',
       pos: 'object-center',
       title: '',
       subtitle: '',
@@ -64,7 +64,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
+      src: '/images/category-page-banner/Web Banner - Necklace.webp',
       pos: 'object-center',
       title: '',
       subtitle: '',
@@ -74,7 +74,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/category-page-banner/Banner - Earrings.jpg.jpeg',
+      src: '/images/category-page-banner/Web Banner - earrings.webp',
       pos: 'object-center',
       title: '',
       subtitle: '',
@@ -85,7 +85,7 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
 
     {
       type: 'image' as const,
-      src: '/images/category-page-banner/Banner - Rings.jpg.jpeg',
+      src: '/images/category-page-banner/Web Banner - Rings.webp',
       pos: 'object-center',
       title: '',
       subtitle: '',
@@ -120,7 +120,47 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
       description: '',
       ctaText: 'Shop Collection',
       ctaLink: '#products'
-    }
+    },
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Mobile Banner - Bracelet.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Mobile Banner - necklace.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Mobile Banner - Earrings.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Mobile Banner - Rings.webp',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
   ];
 
   useEffect(() => {

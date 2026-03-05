@@ -30,8 +30,6 @@ function ProductsPageContent() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
@@ -65,15 +63,9 @@ function ProductsPageContent() {
     gcTime: 30 * 60 * 1000, // 30 minutes - cache time
   });
 
-  // Update local state when React Query data changes
-  useEffect(() => {
-    if (productsData) {
-      setProducts(productsData);
-      setLoading(false);
-    } else if (isLoadingProducts) {
-      setLoading(true);
-    }
-  }, [productsData, isLoadingProducts]);
+  // Use cached data directly — no separate state needed
+  const products: Product[] = productsData || [];
+  const loading = isLoadingProducts && products.length === 0;
 
 
   // Filter and sort products

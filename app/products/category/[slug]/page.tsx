@@ -3,7 +3,8 @@
 import { useState, useEffect, useRef, useMemo, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useParams } from 'next/navigation';
-import { ChevronLeft, ChevronRight, SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { SlidersHorizontal, ArrowUpDown, X } from 'lucide-react';
 import { Product } from '@/lib/data';
 import ProductFilters from '@/components/products/ProductFilters';
 import ProductGrid from '@/components/products/ProductGrid';
@@ -12,7 +13,7 @@ import { Section, Container, QuickLookModal } from '@/components/ui';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const PRODUCTS_PER_PAGE = 12;
+
 
 // Category configuration with hero images and metadata
 const CATEGORY_CONFIG: Record<string, {
@@ -25,36 +26,36 @@ const CATEGORY_CONFIG: Record<string, {
   rings: {
     title: 'Rings',
     description: 'Discover our stunning collection of lab-grown diamond rings, from elegant solitaires to intricate designs.',
-    heroDesktop: '/images/category-page-banner/Banner - Rings.jpg.jpeg',
-    heroMobile: '/images/category-page-banner/Banner - Rings.jpg.jpeg',
+    heroDesktop: '/images/category-page-banner/Web Banner - Rings.webp',
+    heroMobile: '/images/category-page-banner/Mobile Banner - Rings.webp',
     heroPosition: 'object-[50%_30%]',
   },
   earrings: {
     title: 'Earrings',
     description: 'Elevate your style with our exquisite lab-grown diamond earrings, crafted for modern elegance.',
-    heroDesktop: '/images/category-page-banner/Banner- Earrings.jpg.jpeg',
-    heroMobile: '/images/category-page-banner/Banner- Earrings.jpg.jpeg',
+    heroDesktop: '/images/category-page-banner/Web Banner - earrings.webp',
+    heroMobile: '/images/category-page-banner/Mobile Banner - Earrings.webp',
     heroPosition: 'object-[50%_20%]',
   },
   pendants: {
     title: 'Pendants',
     description: 'Adorn yourself with our beautiful lab-grown diamond pendants, perfect for every occasion.',
-    heroDesktop: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
-    heroMobile: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
+    heroDesktop: '/images/category-page-banner/Web Banner - Necklace.webp',
+    heroMobile: '/images/category-page-banner/Mobile Banner - necklace.webp',
     heroPosition: 'object-[50%_25%]',
   },
   necklaces: {
     title: 'Necklaces',
     description: 'Explore our collection of stunning lab-grown diamond necklaces, designed to captivate.',
-    heroDesktop: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
-    heroMobile: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
+    heroDesktop: '/images/category-page-banner/Web Banner - Necklace.webp',
+    heroMobile: '/images/category-page-banner/Mobile Banner - necklace.webp',
     heroPosition: 'object-[50%_20%]',
   },
   bracelets: {
     title: 'Bracelets',
     description: 'Complete your look with our elegant lab-grown diamond bracelets, crafted with precision.',
-    heroDesktop: '/images/category-page-banner/Banner - Bracelet.jpg.jpeg',
-    heroMobile: '/images/category-page-banner/Banner - Bracelet.jpg.jpeg',
+    heroDesktop: '/images/category-page-banner/Web Banner - Bracelet.webp',
+    heroMobile: '/images/category-page-banner/Mobile Banner - Bracelet.webp',
     heroPosition: 'object-[50%_30%]',
   },
 };
@@ -79,34 +80,33 @@ function CategoryPageContent() {
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
   const [showFeaturedOnly, setShowFeaturedOnly] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMobileSort, setShowMobileSort] = useState(false);
 
-  // Fetch products for this category
-  useEffect(() => {
-    const loadProducts = async () => {
-      try {
-        setLoading(true);
-        const response = await fetch('/api/products');
-        const data = await response.json();
-        // Filter by category
-        const categoryProducts = (data.products || []).filter(
-          (p: Product) => p.category.toLowerCase() === slug?.toLowerCase()
-        );
-        setProducts(categoryProducts);
-      } catch (error) {
-        console.error('Failed to load products:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    if (slug) {
-      loadProducts();
-    }
-  }, [slug]);
+  // Use React Query with shared cache key — same as shop page
+  // Products cached for 5 min, so back-navigation from PDP is instant
+  const { data: allProducts, isLoading: isLoadingProducts } = useQuery({
+    queryKey: ['products'],
+    queryFn: async () => {
+      const response = await fetch('/api/products');
+      if (!response.ok) throw new Error('Failed to fetch products');
+      const data = await response.json();
+      if (!data.products || !Array.isArray(data.products)) throw new Error('Invalid products data');
+      return data.products as Product[];
+    },
+    staleTime: 5 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
+  });
+
+  // Filter to current category from cached data
+  const products = useMemo(() => {
+    if (!allProducts) return [];
+    return allProducts.filter(
+      (p: Product) => p.category.toLowerCase() === slug?.toLowerCase()
+    );
+  }, [allProducts, slug]);
+
+  const loading = isLoadingProducts && products.length === 0;
 
   // Detect mobile viewport
   useEffect(() => {
@@ -188,23 +188,7 @@ function CategoryPageContent() {
     return productList;
   }, [products, searchQuery, priceRange, showFeaturedOnly, sortBy]);
 
-  // Pagination calculations
-  const totalPages = Math.ceil(filteredAndSortedProducts.length / PRODUCTS_PER_PAGE);
-  const paginatedProducts = useMemo(() => {
-    const startIndex = (currentPage - 1) * PRODUCTS_PER_PAGE;
-    return filteredAndSortedProducts.slice(startIndex, startIndex + PRODUCTS_PER_PAGE);
-  }, [filteredAndSortedProducts, currentPage]);
 
-  // Reset to page 1 when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery, priceRange, showFeaturedOnly, sortBy]);
-
-  // Scroll to products section when page changes
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-    productsRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
 
   const heroImage = isMobile ? categoryConfig.heroMobile : categoryConfig.heroDesktop;
 
@@ -290,14 +274,9 @@ function CategoryPageContent() {
               <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-6">
                 <div>
                   <p className="text-gray-600 font-montserrat text-sm sm:text-base">
-                    Showing <span className="font-semibold text-classic-green">{paginatedProducts.length}</span> of {filteredAndSortedProducts.length} {categoryConfig.title.toLowerCase()}
+                    Showing <span className="font-semibold text-classic-green">{filteredAndSortedProducts.length}</span> {categoryConfig.title.toLowerCase()}
                   </p>
                 </div>
-                {totalPages > 1 && (
-                  <p className="text-xs sm:text-sm text-gray-500 font-montserrat">
-                    Page {currentPage} of {totalPages}
-                  </p>
-                )}
               </div>
 
               {loading ? (
@@ -320,33 +299,12 @@ function CategoryPageContent() {
                   </button>
                 </div>
               ) : viewMode === 'grid' ? (
-                <ProductGrid products={paginatedProducts} onQuickView={setSelectedProduct} />
+                <ProductGrid products={filteredAndSortedProducts} onQuickView={setSelectedProduct} />
               ) : (
-                <ProductListView products={paginatedProducts} onQuickView={setSelectedProduct} />
+                <ProductListView products={filteredAndSortedProducts} onQuickView={setSelectedProduct} />
               )}
 
-              {/* Pagination */}
-              {totalPages > 1 && (
-                <div className="mt-8 flex items-center justify-center gap-2">
-                  <button
-                    onClick={() => handlePageChange(currentPage - 1)}
-                    disabled={currentPage === 1}
-                    className="p-2 rounded-lg border border-gray-200 hover:border-classic-green hover:text-classic-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <ChevronLeft className="w-5 h-5" />
-                  </button>
-                  <span className="px-4 py-2 text-sm font-montserrat text-gray-600">
-                    {currentPage} / {totalPages}
-                  </span>
-                  <button
-                    onClick={() => handlePageChange(currentPage + 1)}
-                    disabled={currentPage === totalPages}
-                    className="p-2 rounded-lg border border-gray-200 hover:border-classic-green hover:text-classic-green disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                  >
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-                </div>
-              )}
+
             </div>
           </div>
         </Container>
