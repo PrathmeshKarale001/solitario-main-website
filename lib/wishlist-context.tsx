@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect, useCallback, useRef, ReactNode } from 'react';
 import { Product } from './data';
 import { toast } from '@/components/providers/Toaster';
 
@@ -27,7 +27,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   // Fetch fresh product data from API
   const fetchFreshProducts = useCallback(async (handles: string[]): Promise<Product[]> => {
     if (handles.length === 0) return [];
-    
+
     try {
       const response = await fetch('/api/products/by-handles', {
         method: 'POST',
@@ -52,7 +52,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const loadWishlist = async () => {
       let storedIds: string[] = [];
-      
+
       try {
         const stored = localStorage.getItem(WISHLIST_STORAGE_KEY);
         if (stored) {
@@ -78,18 +78,18 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
         if (storedIds.length > 0) {
           // Fetch fresh product data with current prices
           const freshProducts = await fetchFreshProducts(storedIds);
-          
+
           // Only keep products that still exist
           const validProducts = storedIds
             .map(id => freshProducts.find(p => p.id === id))
             .filter((p): p is Product => p !== undefined);
-          
+
           setWishlist(validProducts);
         }
       } catch (error) {
         console.error('Failed to load wishlist from localStorage:', error);
       }
-      
+
       setIsHydrated(true);
     };
 
@@ -109,32 +109,39 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   }, [wishlist, isHydrated]);
 
   // Function to manually refresh prices
+  const isRefreshingRef = useRef(false);
   const refreshPrices = useCallback(async () => {
-    if (wishlist.length === 0) return;
-    
-    // Prevent duplicate calls
-    if (isRefreshing) return;
-    
-    setIsRefreshing(true);
-    try {
-      const handles = wishlist.map(p => p.id);
-      const freshProducts = await fetchFreshProducts(handles);
+    // Use ref to prevent duplicate calls — survives re-renders
+    if (isRefreshingRef.current) return;
 
-      setWishlist(prevWishlist => 
-        prevWishlist.map(item => {
-          const freshProduct = freshProducts.find(p => p.id === item.id);
-          if (freshProduct) {
-            return freshProduct;
-          }
-          return item;
+    // Read current wishlist from state at call time
+    setWishlist(prevWishlist => {
+      if (prevWishlist.length === 0) return prevWishlist;
+
+      isRefreshingRef.current = true;
+      setIsRefreshing(true);
+
+      const handles = prevWishlist.map(p => p.id);
+      fetchFreshProducts(handles)
+        .then(freshProducts => {
+          setWishlist(prev =>
+            prev.map(item => {
+              const freshProduct = freshProducts.find(p => p.id === item.id);
+              return freshProduct || item;
+            })
+          );
         })
-      );
-    } catch (error) {
-      console.error('Error refreshing prices:', error);
-    } finally {
-      setIsRefreshing(false);
-    }
-  }, [wishlist, fetchFreshProducts, isRefreshing]);
+        .catch(error => {
+          console.error('Error refreshing prices:', error);
+        })
+        .finally(() => {
+          isRefreshingRef.current = false;
+          setIsRefreshing(false);
+        });
+
+      return prevWishlist; // Don't change state in this outer call
+    });
+  }, [fetchFreshProducts]);
 
   const addToWishlist = (product: Product) => {
     setWishlist((prev) => {
@@ -144,7 +151,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
       }
       return [...prev, product];
     });
-    
+
     // Show toast outside of state setter to avoid duplicate calls
     const isAlreadyInWishlist = wishlist.some((p) => p.id === product.id);
     if (isAlreadyInWishlist) {
@@ -161,11 +168,11 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const removeFromWishlist = (productId: string) => {
     // Get product name before removing
     const product = wishlist.find((p) => p.id === productId);
-    
+
     setWishlist((prev) => {
       return prev.filter((p) => p.id !== productId);
     });
-    
+
     // Show toast outside of state setter to avoid duplicate calls
     if (product) {
       toast.success('Removed from wishlist', {
@@ -181,7 +188,7 @@ export function WishlistProvider({ children }: { children: ReactNode }) {
   const clearWishlist = () => {
     const hasItems = wishlist.length > 0;
     setWishlist([]);
-    
+
     // Show toast outside of state setter to avoid duplicate calls
     if (hasItems) {
       toast.success('Wishlist cleared');

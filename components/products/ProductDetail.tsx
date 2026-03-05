@@ -10,6 +10,7 @@ import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
 import { useCart } from '@/lib/cart-context';
+import { useWishlist } from '@/lib/wishlist-context';
 import { NearestStore } from '@/components/stores';
 import { trackPageView, trackAddToCart } from '@/lib/gtm-conversions';
 import { trackMetaViewContent, trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
@@ -24,7 +25,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [activeTab, setActiveTab] = useState<'description' | 'information' | 'reviews'>('description');
-  const [isWishlisted, setIsWishlisted] = useState(false);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const [zoomLevel, setZoomLevel] = useState(1);
   const [lightboxPosition, setLightboxPosition] = useState({ x: 0, y: 0 });
@@ -49,15 +49,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const imageRef = useRef<HTMLDivElement>(null);
   const lightboxRef = useRef<HTMLDivElement>(null);
   const { addToCart: addToCartContext } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const isWishlisted = isInWishlist(product.id);
 
-  // Check wishlist status after hydration to prevent SSR mismatch
+  // Check wishlist status is now handled by useWishlist context automatically
   useEffect(() => {
-    // Check if product is in wishlist from localStorage
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    const isInWishlist = wishlist.some((item: Product) => item.id === product.id);
-    setIsWishlisted(isInWishlist);
-
-    // Track page view conversion (Google Ads)
     trackPageView();
 
     // Track ViewContent (Meta Pixel)
@@ -134,10 +130,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   };
 
   const toggleWishlist = () => {
-    const newWishlisted = !isWishlisted;
-    setIsWishlisted(newWishlisted);
-    // Track AddToWishlist (Meta Pixel) — only when adding, not removing
-    if (newWishlisted) {
+    if (isWishlisted) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+      // Track AddToWishlist (Meta Pixel)
       trackMetaAddToWishlist({
         content_ids: [product.id],
         content_name: product.name,

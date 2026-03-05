@@ -54,8 +54,8 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/2.webp',
-      pos: 'object-[50%_20%]',
+      src: '/images/category-page-banner/Banner - Bracelet.jpg.jpeg',
+      pos: 'object-center',
       title: '',
       subtitle: '',
       description: '',
@@ -64,14 +64,39 @@ export default function DynamicShopHero({ fallbackMedia }: DynamicShopHeroProps)
     },
     {
       type: 'image' as const,
-      src: '/images/Shop/3.webp',
-      pos: 'object-[50%_25%]',
+      src: '/images/category-page-banner/Banner - Necklace.jpg.jpeg',
+      pos: 'object-center',
       title: '',
       subtitle: '',
       description: '',
       ctaText: 'Shop Collection',
       ctaLink: '#products'
-    }
+    },
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Banner - Earrings.jpg.jpeg',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+
+    {
+      type: 'image' as const,
+      src: '/images/category-page-banner/Banner - Rings.jpg.jpeg',
+      pos: 'object-center',
+      title: '',
+      subtitle: '',
+      description: '',
+      ctaText: 'Shop Collection',
+      ctaLink: '#products'
+    },
+
+
+
+
   ];
 
   // Mobile fallback media - using optimized WebP images

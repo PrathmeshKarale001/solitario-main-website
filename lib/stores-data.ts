@@ -28,6 +28,7 @@ export interface SpainDistributor {
   website: string;
   ctaLink?: string;
   ctaLabel?: string;
+  figmaLink?: string;
   touchPoints: SpainTouchPoint[];
 }
 
@@ -640,7 +641,7 @@ export const MALAYSIA_STORES: StoreLocation[] = [
     lng: 101.7181,
     mapLink: 'https://share.google/TiRuLMObZQNujjmkQ',
     email: 'seibu@thesolitario.com',
-    image: '/images/Stores/3.jpg',
+    image: '/images/Stores/MalaysiaStore1.webp',
   },
   {
     id: 'starhill-malaysia',
@@ -694,8 +695,9 @@ export const SPAIN_DISTRIBUTORS: SpainDistributor[] = [
   {
     name: 'Geresa',
     website: 'https://www.grupocadarso.com/marcas/solitario/',
-    ctaLink: '#', // Placeholder — Figma link to be provided
-    ctaLabel: 'Ver catálogo Geresa',
+    // ctaLink: '#', // Temporarily hidden
+    // ctaLabel: 'Ver catálogo Geresa',
+    // figmaLink: '#', // Temporarily hidden
     touchPoints: [
       { name: 'Monument Hotel', address: 'Pg de Grácia 75, 08008 L\'Eixample, Barcelona', mapQuery: 'Pg. de Gràcia, 75, Barcelona' },
       { name: 'Joyería Trias', address: 'Plaça Creu, 22, 8700, Igualada', mapQuery: 'Plaça de la Creu, 22, Igualada' },
@@ -716,8 +718,8 @@ export const SPAIN_DISTRIBUTORS: SpainDistributor[] = [
   {
     name: 'Ele Ka',
     website: 'https://eleka.es/es-ES/joyeria/colecciones/amor-by-solitario/58/',
-    ctaLink: '#', // Placeholder — link to be provided
-    ctaLabel: 'Ver catálogo Ele Ka',
+    // ctaLink: '#', // Temporarily hidden
+    // ctaLabel: 'Ver catálogo Ele Ka',
     touchPoints: [
       { name: 'Joiera Margarita Hidalgo', address: 'Rambla, 168A, 08201, Sabadell', mapQuery: 'Rambla, 168A, Sabadell', phone: '937 263 101' },
       { name: 'Joyería Calvo', address: 'Teresa Herrera 2-4, 15004 (Plaza de Lugo), La Coruña, A Coruña', mapQuery: 'Joyería Calvo Plaza de Lugo', phone: '881 019 229' },

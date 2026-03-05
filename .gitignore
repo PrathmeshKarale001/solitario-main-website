@@ -27,6 +27,7 @@ playwright.config.ts
 /build
 
 # misc
+.gsd-template
 .DS_Store
 *.pem
 *.new

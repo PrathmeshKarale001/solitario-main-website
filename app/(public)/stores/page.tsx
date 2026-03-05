@@ -466,14 +466,26 @@ export default function StoresPage() {
                                 </p>
                                 <h3 className="text-xl font-montserrat font-bold text-brand-800">{distributor.name}</h3>
                               </div>
-                              <a
-                                href={distributor.website}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="inline-flex items-center gap-1.5 text-classic-green text-sm font-montserrat font-semibold hover:underline"
-                              >
-                                <Globe className="w-3.5 h-3.5" /> {t('website', spainLang)}
-                              </a>
+                              <div className="flex items-center gap-3 flex-wrap">
+                                <a
+                                  href={distributor.website}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="inline-flex items-center gap-1.5 text-classic-green text-sm font-montserrat font-semibold hover:underline"
+                                >
+                                  <Globe className="w-3.5 h-3.5" /> {t('website', spainLang)}
+                                </a>
+                                {distributor.figmaLink && (
+                                  <a
+                                    href={distributor.figmaLink}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="inline-flex items-center gap-1.5 text-brand-600 text-sm font-montserrat font-semibold hover:text-classic-green transition-colors"
+                                  >
+                                    Figma Link <ExternalLink className="w-3.5 h-3.5" />
+                                  </a>
+                                )}
+                              </div>
                             </div>
                           </div>
 

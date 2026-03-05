@@ -42,7 +42,7 @@ const faqCategories: FAQCategory[] = [
       },
       {
         question: 'Are lab grown diamonds certified?',
-        answer: 'Yes, all our lab grown diamonds are certified by reputable gemological laboratories like IGI (International Gemological Institute). Each diamond comes with a detailed grading report.'
+        answer: 'Yes, all our lab grown diamonds are certified by reputable gemological laboratories like SGL (Solitaire Gemological Laboratories) and IGI (International Gemological Institute). Each diamond comes with a detailed grading report.'
       },
     ]
   },
@@ -220,8 +220,8 @@ export default function FAQPage() {
                       key={category.id}
                       onClick={() => setActiveCategory(category.id)}
                       className={`flex items-center gap-2 px-5 py-3 rounded-xl font-montserrat text-sm transition-all ${activeCategory === category.id
-                          ? 'bg-classic-green text-white shadow-brand'
-                          : 'bg-white text-brand-600 border border-brand-200 hover:border-classic-green'
+                        ? 'bg-classic-green text-white shadow-brand'
+                        : 'bg-white text-brand-600 border border-brand-200 hover:border-classic-green'
                         }`}
                     >
                       <Icon className="w-4 h-4" />
