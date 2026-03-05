@@ -52,7 +52,7 @@ export function OrganizationJsonLd() {
     name: BRAND_NAME,
     url: CANONICAL_URL,
     logo: `${CANONICAL_URL}/logo.svg`,
-    description: "India's most loved new-age diamond jewellery brand. Sustainable luxury with lab-grown diamonds.",
+    description: "India's most loved lab grown diamond jewellery brand.",
     foundingDate: '1984',
     sameAs: [
       'https://www.instagram.com/solitariodiamonds/',

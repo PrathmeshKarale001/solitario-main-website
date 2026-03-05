@@ -119,7 +119,7 @@ export default function HeadOffice() {
                 <div>
                   <h4 className="text-brand-800 font-gotham text-sm sm:text-base mb-1">Business Hours</h4>
                   <p className="text-brand-600 text-xs sm:text-sm font-montserrat">
-                    Mon - Sat: 10:00 AM - 7:00 PM
+                    Mon - Fri: 10:00 AM - 6:00 PM
                   </p>
                 </div>
               </div>

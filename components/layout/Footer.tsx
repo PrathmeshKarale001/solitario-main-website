@@ -71,7 +71,7 @@ export default function Footer() {
               />
             </Link>
             <p className="text-sm text-ivory-pearl/80 mb-4">
-              India's most loved new-age diamond jewellery brand. Luxury that doesn't cost the Earth.
+              India's most loved lab grown diamond jewellery brand.
             </p>
             <div className="flex space-x-4">
               <a

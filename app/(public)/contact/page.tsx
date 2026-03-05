@@ -63,10 +63,10 @@ export default function ContactPage() {
               </div>
               <h3 className="text-lg font-montserrat font-bold text-brand-800 mb-2">Email</h3>
               <a
-                href="mailto:paymentdesk@thesolitario.com"
+                href="mailto:info@thesolitario.com"
                 className="text-brand-600 text-sm font-montserrat hover:text-classic-green transition-colors"
               >
-                paymentdesk@thesolitario.com
+                info@thesolitario.com
               </a>
             </motion.div>
 
@@ -102,8 +102,11 @@ export default function ContactPage() {
                 <MapPin className="w-6 h-6 text-classic-green" />
               </div>
               <h3 className="text-lg font-montserrat font-bold text-brand-800 mb-2">Locations</h3>
-              <p className="text-brand-600 text-sm font-montserrat">
+              <p className="text-brand-600 text-sm font-montserrat mb-1">
                 India | Spain | Malaysia | Dubai
+              </p>
+              <p className="text-brand-500 text-xs font-montserrat">
+                Our HO Address
               </p>
             </motion.div>
           </div>
@@ -183,7 +186,7 @@ export default function ContactPage() {
                   <div>
                     <h3 className="font-montserrat font-semibold text-brand-800 mb-1">Business Hours</h3>
                     <p className="text-brand-600 text-sm font-montserrat leading-relaxed">
-                      Mon – Sat: 10:00 AM – 7:00 PM IST
+                      Mon – Fri: 10:00 AM – 6:00 PM IST
                     </p>
                   </div>
                 </div>

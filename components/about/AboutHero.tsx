@@ -112,7 +112,7 @@ export default function AboutHero() {
                 stepDuration={0.3}
               />
               <BlurText
-                text="Micron."
+                text="Micron"
                 className="font-montserrat font-bold"
                 animateBy="characters"
                 direction="top"

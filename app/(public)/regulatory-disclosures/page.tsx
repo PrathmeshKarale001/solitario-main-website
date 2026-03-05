@@ -28,8 +28,15 @@ const corporateGovernanceData = {
     'CSR Projects': [] as { name: string; pdf: string }[],
 };
 
-// Statutory Policies placeholder
-const statutoryPoliciesData: Record<string, { name: string; pdf: string }[]> = {};
+// Statutory Policies data with actual PDFs
+const statutoryPoliciesData: Record<string, { name: string; pdf: string }[]> = {
+    'CSR Policy': [
+        {
+            name: 'CSR Policy',
+            pdf: 'Regulatory Disclosures/Statutory Policies/CSR Policy.pdf',
+        },
+    ],
+};
 
 function getPdfApiUrl(filePath: string): string {
     return `/api/pdf?file=${encodeURIComponent(filePath)}`;
@@ -77,8 +84,8 @@ export default function RegulatoryDisclosuresPage() {
                             setActivePdf(null);
                         }}
                         className={`px-6 py-3 rounded-lg font-montserrat font-semibold text-sm md:text-base transition-all duration-300 border-2 ${activeTab === 'corporate-governance'
-                                ? 'bg-classic-green text-white border-classic-green shadow-md'
-                                : 'bg-white text-brand-800 border-brand-200 hover:border-classic-green/50'
+                            ? 'bg-classic-green text-white border-classic-green shadow-md'
+                            : 'bg-white text-brand-800 border-brand-200 hover:border-classic-green/50'
                             }`}
                     >
                         Corporate Governance
@@ -89,8 +96,8 @@ export default function RegulatoryDisclosuresPage() {
                             setActivePdf(null);
                         }}
                         className={`px-6 py-3 rounded-lg font-montserrat font-semibold text-sm md:text-base transition-all duration-300 border-2 ${activeTab === 'statutory-policies'
-                                ? 'bg-classic-green text-white border-classic-green shadow-md'
-                                : 'bg-white text-brand-800 border-brand-200 hover:border-classic-green/50'
+                            ? 'bg-classic-green text-white border-classic-green shadow-md'
+                            : 'bg-white text-brand-800 border-brand-200 hover:border-classic-green/50'
                             }`}
                     >
                         Statutory Policies
@@ -127,8 +134,8 @@ export default function RegulatoryDisclosuresPage() {
                                                             key={idx}
                                                             onClick={() => openPdf(doc.pdf, doc.name)}
                                                             className={`w-full flex items-center gap-2 px-3 py-2.5 rounded-lg text-left text-sm transition-colors ${activePdf === doc.pdf
-                                                                    ? 'bg-classic-green/10 text-classic-green font-medium'
-                                                                    : 'text-brand-700 hover:bg-brand-50'
+                                                                ? 'bg-classic-green/10 text-classic-green font-medium'
+                                                                : 'text-brand-700 hover:bg-brand-50'
                                                                 }`}
                                                         >
                                                             <FileText className="w-4 h-4 flex-shrink-0" />

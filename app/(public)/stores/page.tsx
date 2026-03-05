@@ -58,7 +58,7 @@ function StoreCard({ store, idx }: { store: StoreLocation; idx: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.4, delay: Math.min(idx * 0.03, 0.3) }}
-      className="rounded-2xl bg-white border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-5 transition-all duration-500"
+      className="rounded-2xl bg-white border border-brand-200 hover:border-classic-green/30 hover:shadow-brand-lg p-5 transition-all duration-500 flex flex-col h-full"
     >
       {store.image && (
         <div className="relative rounded-xl overflow-hidden mb-4 aspect-[4/3]">
@@ -66,7 +66,7 @@ function StoreCard({ store, idx }: { store: StoreLocation; idx: number }) {
         </div>
       )}
       <h3 className="text-lg font-montserrat font-bold text-brand-800 mb-3">{store.name}</h3>
-      <div className="space-y-2.5">
+      <div className="space-y-2.5 flex-1">
         <div className="flex items-start gap-2.5">
           <MapPin className="w-4 h-4 text-classic-green flex-shrink-0 mt-0.5" />
           <div>

@@ -119,14 +119,6 @@ export default function OurStory() {
                 <source src="/about/about-video.mp4" type="video/mp4" />
               </video>
               <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent pointer-events-none" />
-
-              {/* Floating Badge */}
-              <div className="absolute top-6 right-6 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 shadow-lg z-10">
-                <div className="flex items-center gap-2">
-                  <Leaf className="w-4 h-4 text-classic-green" />
-                  <span className="text-sm font-gotham text-brand-800 uppercase tracking-wider">Sustainable</span>
-                </div>
-              </div>
             </div>
           </motion.div>
         </div>
