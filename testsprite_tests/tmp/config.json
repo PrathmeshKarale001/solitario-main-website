@@ -1,0 +1,32 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:3000",
+  "backendAuthType": "basic token",
+  "backendUsername": "test",
+  "backendPassword": "Test@EOD",
+  "executionArgs": {
+    "projectName": "solitario-main-website",
+    "projectPath": "c:\\Users\\user\\Downloads\\solitario-main-website",
+    "testIds": [
+      "TC001",
+      "TC002",
+      "TC003",
+      "TC004",
+      "TC005",
+      "TC006",
+      "TC007",
+      "TC008",
+      "TC009",
+      "TC010"
+    ],
+    "additionalInstruction": "Re-run all 10 backend API tests with the fixed test scripts. TC002 and TC007 have been updated to use correct response keys.",
+    "serverMode": "development",
+    "envs": {
+      "API_KEY": "sk-user-VXDBytT-zacw8RUKgirAcvZ3G-32Q9gBkpIhbcZU0ryjPmpKI49XC7ujMHIwxIUBWOLDxadv3Fk7yV3WkHRE_rvqqMWK2-KeJkni_QLD91V5zomj-_mlSMKRRtoy23fbPdQ"
+    }
+  },
+  "serverPort": 59987,
+  "proxy": "http://0cf7e548-062a-4234-b8d0-0b0c01528049:h4I2XMxmCGvP9uYSGfN9tBTB9Shw55Kj@tun.testsprite.com:8080"
+}

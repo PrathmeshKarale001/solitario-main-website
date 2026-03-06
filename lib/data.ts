@@ -1,6 +1,7 @@
 // Real Solitario Product Data from https://thesolitario.com
 export interface Product {
   id: string;
+  handle?: string; // Shopify product handle (URL slug)
   name: string;
   category: string;
   price: number;

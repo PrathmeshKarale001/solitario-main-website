@@ -1,0 +1,3028 @@
+[
+  {
+    "id": "TC001",
+    "title": "Homepage loads and displays hero banner and key promotional content",
+    "description": "Verifies the homepage renders and shows the hero and promotional sections a shopper expects on first load.",
+    "category": "Homepage",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Shop\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Featured\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Lab\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Sustainability\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC002",
+    "title": "Browse featured product collections section is visible and interactive",
+    "description": "Verifies the featured product collections section is present and a product card can be interacted with.",
+    "category": "Homepage",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Featured\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Featured\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Featured products\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible \"Product card\""
+      }
+    ]
+  },
+  {
+    "id": "TC003",
+    "title": "Clicking a product card from homepage navigates to product detail page (PDP)",
+    "description": "Verifies selecting a product from the homepage takes the user to a product details page.",
+    "category": "Homepage",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Featured\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible \"Product card\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to cart\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC004",
+    "title": "Homepage quick navigation to Shop listing page",
+    "description": "Verifies the user can start shopping from homepage and reach the products listing page.",
+    "category": "Homepage",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Shop\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shop\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Products\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC005",
+    "title": "Homepage navigation to campaign/collection landing (Warner Bros)",
+    "description": "Verifies the homepage allows navigation into a campaign landing page.",
+    "category": "Homepage",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Warner\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Warner Bros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/warner-bros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Warner Bros\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC006",
+    "title": "Homepage navigation to informational page (Lab-Grown Diamonds)",
+    "description": "Verifies the user can navigate from homepage to the Lab-Grown Diamonds info page.",
+    "category": "Homepage",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Lab\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Lab Grown Diamonds\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/lab-grown-diamonds\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Lab\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC007",
+    "title": "Open Shop page and verify product grid is visible",
+    "description": "Verifies that the Shop page loads and displays a product grid of items.",
+    "category": "Product Browsing (Shop)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Shop\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC008",
+    "title": "Filter products by a category and see the list update",
+    "description": "Verifies that selecting a category filter updates the visible product list.",
+    "category": "Product Browsing (Shop)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"category filter\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"category filter\" control"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first available category option in the category list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC009",
+    "title": "Clear category filter and return to broader product results",
+    "description": "Verifies that clearing/removing the active category filter restores a broader set of products.",
+    "category": "Product Browsing (Shop)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"category filter\" control"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first available category option in the category list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"active filter\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Clear\" or \"All\" in the category filters"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC010",
+    "title": "Open a product detail page from a product card",
+    "description": "Verifies that clicking a product card navigates to the product detail page.",
+    "category": "Product Browsing (Shop)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible product card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product title\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to cart\" button is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC011",
+    "title": "Search for a non-existent product and see 'No products found'",
+    "description": "Verifies that searching with zero matches shows a visible empty-state message.",
+    "category": "Product Browsing (Shop)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"search\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"search\" field or \"Search\" button"
+      },
+      {
+        "type": "action",
+        "description": "Type \"zzzz-no-match-test\" into the search input"
+      },
+      {
+        "type": "action",
+        "description": "Press \"Enter\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No products found\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC012",
+    "title": "Search with an empty query does not show 'No products found' error state",
+    "description": "Verifies that submitting an empty search does not incorrectly show the zero-results message.",
+    "category": "Product Browsing (Shop)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"search\" field or \"Search\" button"
+      },
+      {
+        "type": "action",
+        "description": "Press \"Enter\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No products found\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC013",
+    "title": "Search is resilient to leading/trailing spaces and still returns a valid state",
+    "description": "Verifies that a spaced query is handled gracefully and results page remains usable.",
+    "category": "Product Browsing (Shop)",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"search\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"search\" field or \"Search\" button"
+      },
+      {
+        "type": "action",
+        "description": "Type \"   ring   \" into the search input"
+      },
+      {
+        "type": "action",
+        "description": "Press \"Enter\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC014",
+    "title": "Infinite scroll loads more products when scrolling down",
+    "description": "Verifies that additional products load when the user scrolls near the bottom of the Shop page.",
+    "category": "Product Browsing (Shop)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the bottom of the product list"
+      },
+      {
+        "type": "action",
+        "description": "Wait for the product list to update"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC015",
+    "title": "Open PDP from Products listing and verify core product information is visible",
+    "description": "Ensures a shopper can open a product detail page from the shop listing and see essential product details.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product title\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product price\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to Cart\" button is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC016",
+    "title": "View product images in the gallery on the PDP",
+    "description": "Validates that the PDP image gallery is present and can be interacted with to view different product images.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product image gallery\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on a different thumbnail image in the gallery"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Main product image\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on another thumbnail image in the gallery"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Main product image\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC017",
+    "title": "Read product description and specifications on the PDP",
+    "description": "Ensures that product description and specification sections are visible and readable on the PDP.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product description\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to \"Product specifications\" section"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Product specifications\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Specifications\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC018",
+    "title": "Select a product variant (size/color) and verify selection is reflected",
+    "description": "Validates that a shopper can select a variant option and the PDP reflects the selected variant state.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Variant selector\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Select the second available option from the \"Variant\" dropdown"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Selected variant\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to Cart\" button is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC019",
+    "title": "Add an in-stock variant to cart and verify cart reflects the added item",
+    "description": "Ensures that adding a product from the PDP results in a visible confirmation and the cart shows the item.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "action",
+        "description": "Select the first available option from the \"Variant\" dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Add to Cart\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Added to cart\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon in the header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cart\""
+      }
+    ]
+  },
+  {
+    "id": "TC020",
+    "title": "Add to cart from PDP and verify cart line item details are visible",
+    "description": "Validates that the cart page shows a line item corresponding to the product added from the PDP.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Add to Cart\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon in the header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Cart line item\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Checkout\" button is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC021",
+    "title": "Attempt to add an out-of-stock variant and verify error and disabled Add to Cart",
+    "description": "Ensures selecting a zero-inventory variant prevents adding to cart and shows an out-of-stock message.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Variant selector\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Select the option labeled \"Out of stock\" from the \"Variant\" dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Add to Cart\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Out of stock\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to Cart (disabled)\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC022",
+    "title": "Buy Now is present on PDP and routes shopper toward checkout flow",
+    "description": "Verifies that the Buy Now action exists on the PDP and transitions the shopper toward checkout.",
+    "category": "Product Detail Page (PDP)",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product card in the product listing"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Buy Now\" button is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Buy Now\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      }
+    ]
+  },
+  {
+    "id": "TC023",
+    "title": "Add a product to cart from product detail page and proceed to checkout",
+    "description": "Verifies a shopper can add a product to the cart, see it on the cart page, and transition into checkout.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cart\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify at least one cart item is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      }
+    ]
+  },
+  {
+    "id": "TC024",
+    "title": "Cart page displays items and an order summary after adding an item",
+    "description": "Verifies the cart page shows cart items and a visible total/summary once an item has been added.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/cart\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a cart item title is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC025",
+    "title": "Increase item quantity in cart and see total recalculated",
+    "description": "Verifies increasing quantity updates the displayed quantity and triggers a visible cart total change.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Total\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"+\" quantity control for the cart item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart item quantity value is visible and reflects an increased quantity"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the order total value is visible and reflects an updated amount"
+      }
+    ]
+  },
+  {
+    "id": "TC026",
+    "title": "Decrease item quantity in cart and see total recalculated",
+    "description": "Verifies decreasing quantity updates the displayed quantity and triggers a visible cart total change.",
+    "category": "Shopping Cart",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"+\" quantity control for the cart item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart item quantity value is visible and reflects a quantity greater than 1"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"-\" quantity control for the cart item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the cart item quantity value is visible and reflects a decreased quantity"
+      }
+    ]
+  },
+  {
+    "id": "TC027",
+    "title": "Remove an item from the cart",
+    "description": "Verifies a shopper can remove a cart line item and it no longer appears in the cart list.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify at least one cart item is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Remove\" for the cart item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the removed cart item is no longer visible"
+      }
+    ]
+  },
+  {
+    "id": "TC028",
+    "title": "Proceed to checkout from cart with items present",
+    "description": "Verifies the Proceed to Checkout action is available and takes the shopper to checkout when the cart has items.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Proceed to Checkout\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      }
+    ]
+  },
+  {
+    "id": "TC029",
+    "title": "Attempt to set quantity exceeding available inventory shows validation and prevents update",
+    "description": "Verifies the cart prevents setting a quantity beyond stock and displays the specified validation message.",
+    "category": "Shopping Cart",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Click into the quantity input for the cart item"
+      },
+      {
+        "type": "action",
+        "description": "Type \"999\" into the quantity input for the cart item"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Quantity exceeds available stock\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC030",
+    "title": "Empty cart state messaging and disabled checkout action after removing all items",
+    "description": "Verifies the cart shows an empty state and prevents checkout when no items are in the cart.",
+    "category": "Shopping Cart",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list to open its product detail page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on the cart icon or \"View Cart\" link to go to the cart page"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Remove\" for the cart item"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Your cart\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"empty\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Proceed to Checkout\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC031",
+    "title": "Successful checkout with serviceable pincode, coupon applied, and payment success redirect",
+    "description": "Verifies the happy-path checkout flow from cart to successful payment and visible confirmation on the success page.",
+    "category": "Checkout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Full name\" with \"Test Customer\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Phone\" with \"9999999999\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Pincode\" with \"110001\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Serviceable\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC032",
+    "title": "Continue after address entry shows ETA/serviceability before payment",
+    "description": "Verifies that using the Continue step after address entry results in a visible serviceability/ETA result before paying.",
+    "category": "Checkout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Address line 1\" with \"123 Test Street\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"City\" with \"New Delhi\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"State\" with \"Delhi\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Continue\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"ETA\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC033",
+    "title": "Apply valid coupon code updates checkout totals/discount display",
+    "description": "Verifies that applying a coupon shows a visible discount or applied-coupon confirmation in checkout.",
+    "category": "Checkout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Pincode\" with \"110001\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Coupon code\" with \"TEST10\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Coupon applied\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Discount\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC034",
+    "title": "Invalid coupon shows visible error message and does not show applied state",
+    "description": "Verifies that an invalid coupon code produces a user-visible error message.",
+    "category": "Checkout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Coupon code\" with \"INVALIDCOUPON\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Coupon applied\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC035",
+    "title": "Attempt to pay with missing required address fields shows validation messages",
+    "description": "Verifies client-side validation prevents payment initiation when required address fields are missing.",
+    "category": "Checkout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Pay\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Razorpay\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC036",
+    "title": "Non-serviceable pincode shows not-serviceable message and blocks payment",
+    "description": "Verifies that entering a non-serviceable pincode shows a visible not-serviceable state and prevents paying.",
+    "category": "Checkout",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /cart"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Proceed to Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Fill \"Pincode\" with \"000000\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Continue\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Not serviceable\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Pay\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Not serviceable\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC037",
+    "title": "Failed checkout page shows retry option navigates back to checkout payment step",
+    "description": "Verifies the user can retry payment from the failed page using a visible retry option.",
+    "category": "Checkout",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /checkout/failed"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Payment failed\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Retry\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Retry\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/checkout"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Pay\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC038",
+    "title": "Add a product to wishlist from Products and verify it appears in Wishlist with a visible price",
+    "description": "Verifies a user can add a product to the wishlist from the Products page and see it listed on the Wishlist page with a visible price.",
+    "category": "Wishlist",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Products\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to Wishlist\" on the first visible product card"
+      },
+      {
+        "type": "action",
+        "description": "Click on the \"Wishlist\" link in the site navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/wishlist\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Wishlist item\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Price\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC039",
+    "title": "Submit contact form successfully with valid details",
+    "description": "Verifies a user can submit the contact form and sees a visible confirmation message.",
+    "category": "Contact Form",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"test.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Hello, I have a question about a product.\" into the message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Thank you\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"message\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC040",
+    "title": "Email required validation when email is blank",
+    "description": "Verifies inline validation appears when submitting without an email.",
+    "category": "Contact Form",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Need help with sizing.\" into the message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC041",
+    "title": "Email format validation when email is invalid",
+    "description": "Verifies an invalid email format shows an inline validation error and does not show success confirmation.",
+    "category": "Contact Form",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"not-an-email\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Checking if invalid email is caught.\" into the message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"valid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"email\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC042",
+    "title": "Message required validation when message is blank",
+    "description": "Verifies inline validation appears when submitting without a message.",
+    "category": "Contact Form",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"test.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Message\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC043",
+    "title": "Name required validation when name is blank",
+    "description": "Verifies inline validation appears when submitting without a name.",
+    "category": "Contact Form",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"test.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"I forgot to enter my name.\" into the message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"required\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC044",
+    "title": "Successful submission resets form fields (post-submit UX)",
+    "description": "Verifies that after a successful submit, the page shows confirmation and the form is no longer prompting for the same input (reset or disabled state).",
+    "category": "Contact Form",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Test User\" into the name field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"test.user@example.com\" into the email field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Please confirm you received this inquiry.\" into the message field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Submit\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Thank you\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Submit\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC045",
+    "title": "Contact page loads and form is visible",
+    "description": "Verifies the contact page renders the inquiry form elements a user needs to submit a request.",
+    "category": "Contact Form",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /contact"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Contact\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Name\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Email\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Message\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Submit\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC046",
+    "title": "Signed-in user can open Account Dashboard and see overview content",
+    "description": "Verifies an authenticated user can access /account and see the profile overview area.",
+    "category": "Account Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Account\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Profile\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Order History\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC047",
+    "title": "Signed-in user can view Order History list from Account Dashboard",
+    "description": "Verifies an authenticated user can open Order History from /account and see past orders list area.",
+    "category": "Account Dashboard",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Order History\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Order History\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Orders\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC048",
+    "title": "Signed-in user can open Addresses section from Account Dashboard",
+    "description": "Verifies an authenticated user can navigate to the Addresses area within the account dashboard.",
+    "category": "Account Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Addresses\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Addresses\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add Address\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC049",
+    "title": "Signed-in user can open Payment Methods section from Account Dashboard",
+    "description": "Verifies an authenticated user can navigate to Payment Methods within /account.",
+    "category": "Account Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Payment Methods\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Payment Methods\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add Payment Method\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC050",
+    "title": "Signed-in user can access Wishlist from Account area (if linked)",
+    "description": "Verifies an authenticated user can reach wishlist content from the account dashboard navigation (or direct link in account).",
+    "category": "Account Dashboard",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Wishlist\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/wishlist\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Wishlist\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC051",
+    "title": "After successful sign-in, user can return to Account Dashboard from homepage navigation",
+    "description": "Verifies the user can sign in, land on a signed-in state, and reach /account via a visible navigation entry rather than direct URL navigation.",
+    "category": "Account Dashboard",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Click the site logo or \"Home\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/\""
+      },
+      {
+        "type": "action",
+        "description": "Click \"Account\" in the header navigation"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      }
+    ]
+  },
+  {
+    "id": "TC052",
+    "title": "Account Dashboard shows quick stats area on initial load",
+    "description": "Verifies the account landing view presents an overview area with quick stats/summary information (presence check).",
+    "category": "Account Dashboard",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email or username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/account\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Overview\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Orders\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Addresses\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC053",
+    "title": "Admin user can access Admin Panel dashboard",
+    "description": "Verifies an authenticated admin can reach /admin and see the key metrics dashboard UI.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/admin\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Orders\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC054",
+    "title": "Admin dashboard shows key metrics section(s)",
+    "description": "Verifies the admin dashboard renders visible key metrics content (not a blank or partial page).",
+    "category": "Admin Panel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Key Metrics\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"dashboard metrics\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC055",
+    "title": "Admin can navigate to Orders list from Admin Panel",
+    "description": "Verifies the Orders section can be opened from the admin navigation and shows an orders list UI.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Orders\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Orders\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"orders list\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC056",
+    "title": "Admin can open an order details view",
+    "description": "Verifies an admin can open an individual order from the Orders list and see order details UI.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Orders\""
+      },
+      {
+        "type": "action",
+        "description": "Click the first order in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Order Details\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC057",
+    "title": "Admin can update order status and see it saved",
+    "description": "Verifies an admin can change an order status in the order details view and sees a visible confirmation or updated status state.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Orders\""
+      },
+      {
+        "type": "action",
+        "description": "Click the first order in the list"
+      },
+      {
+        "type": "action",
+        "description": "Select a different option from the \"Order Status\" dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Saved\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC058",
+    "title": "Admin order status change persists on returning to the order details",
+    "description": "Verifies the updated order status remains visible after leaving and re-opening the same order details within the session.",
+    "category": "Admin Panel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_USER}}\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"{{LOGIN_PASSWORD}}\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Orders\""
+      },
+      {
+        "type": "action",
+        "description": "Click the first order in the list"
+      },
+      {
+        "type": "action",
+        "description": "Select a different option from the \"Order Status\" dropdown"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Save\" button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Saved\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click \"Orders\""
+      },
+      {
+        "type": "action",
+        "description": "Click the first order in the list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify the selected order status is visible in the \"Order Status\" field"
+      }
+    ]
+  },
+  {
+    "id": "TC059",
+    "title": "Non-admin user is denied access to Admin Panel",
+    "description": "Verifies an authenticated non-admin user cannot view the admin UI and sees an access denied/role-check failure message.",
+    "category": "Admin Panel",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"nonadmin.user@example.com\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Access denied\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Dashboard\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC060",
+    "title": "Non-admin user does not see admin navigation options on /admin",
+    "description": "Verifies that when access is denied, admin navigation items like Orders/Products/Promotions are not rendered.",
+    "category": "Admin Panel",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /sign-in"
+      },
+      {
+        "type": "action",
+        "description": "Type \"nonadmin.user@example.com\" into the email/username field"
+      },
+      {
+        "type": "action",
+        "description": "Type \"WrongPassword123!\" into the password field"
+      },
+      {
+        "type": "action",
+        "description": "Click the \"Sign in\" button"
+      },
+      {
+        "type": "action",
+        "description": "Navigate to /admin"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Access denied\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Orders\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Products\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Promotions\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC061",
+    "title": "Open Store Locator page and confirm core UI loads",
+    "description": "Verifies the /stores page loads and shows the store search interface and map area.",
+    "category": "Store Locator",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Stores\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"City\" search field is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Store\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Map\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC062",
+    "title": "Search by city and see stores list with embedded map",
+    "description": "Verifies searching a supported city shows at least one store result and the map section remains visible.",
+    "category": "Store Locator",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Mumbai\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Stores list\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Map\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No stores found\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC063",
+    "title": "Open a store from results and view store details",
+    "description": "Verifies selecting a store result opens details including address and hours.",
+    "category": "Store Locator",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Delhi\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first store in the stores list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Address\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Hours\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Get Directions\" link is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC064",
+    "title": "Search for a city outside coverage shows 'No stores found'",
+    "description": "Verifies an unsupported city search returns an explicit empty-state message.",
+    "category": "Store Locator",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Atlantis\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No stores found\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Stores list\" is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC065",
+    "title": "Change search city after seeing results updates the results state",
+    "description": "Verifies that a second search can transition from results to empty state (or vice versa) without a page reload.",
+    "category": "Store Locator",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Bengaluru\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Stores list\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Nowhere City\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"No stores found\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC066",
+    "title": "Selecting a store highlights/show details without leaving the /stores page",
+    "description": "Verifies store selection displays details while staying on the store locator route.",
+    "category": "Store Locator",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Pune\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first store in the stores list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Store details\" section is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/stores\""
+      }
+    ]
+  },
+  {
+    "id": "TC067",
+    "title": "Get Directions link is present and appears actionable in store details",
+    "description": "Verifies the selected store details include a visible Get Directions call-to-action.",
+    "category": "Store Locator",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Type \"Hyderabad\" into the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first store in the stores list"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Get Directions\" link is visible"
+      },
+      {
+        "type": "action",
+        "description": "Scroll to the \"Get Directions\" link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Directions\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC068",
+    "title": "Empty search submission does not break the page",
+    "description": "Verifies submitting an empty city search keeps the page stable and does not show a crash state.",
+    "category": "Store Locator",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /stores"
+      },
+      {
+        "type": "action",
+        "description": "Click on the city search field"
+      },
+      {
+        "type": "action",
+        "description": "Press Enter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"City\" search field is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Map\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify page title contains \"Stores\""
+      }
+    ]
+  },
+  {
+    "id": "TC069",
+    "title": "Open Warner Bros landing and confirm core campaign content is visible",
+    "description": "Verifies the /warner-bros landing page loads and shows key Warner Bros campaign elements for discovery.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/warner-bros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Warner Bros\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"hero banner\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"brand filters\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"WB floating button\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC070",
+    "title": "Filter the collection using the DC brand filter",
+    "description": "Verifies selecting the DC brand filter updates the visible product collection on the landing page.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"brand filters\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"DC\" brand filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"DC\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"filtered product collection\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC071",
+    "title": "Open a product from DC filtered results and reach the product detail page",
+    "description": "Verifies a user can drill into a product from the filtered Warner Bros collection and land on a product detail page.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"DC\" brand filter"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first visible product card"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products/\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"Add to cart\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC072",
+    "title": "WB floating button provides access to the Warner Bros collection",
+    "description": "Verifies the persistent floating WB button is clickable and routes the user toward shopping the Warner Bros collection.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"WB floating button\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"WB\" floating button"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"collection=warnerbros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC073",
+    "title": "Fallback link routes to Warner Bros collection when floating WB button is not available",
+    "description": "Verifies a visible fallback link exists and can be used to reach the Warner Bros collection page as an alternative navigation path.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"fallback link to shop collection\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shop collection\" fallback link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"/products\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"collection=warnerbros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"alternative Warner Bros collection content\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC074",
+    "title": "Warner Bros collection page shows alternate content when reached via fallback link",
+    "description": "Verifies that the /products page with the warnerbros collection query displays campaign-relevant alternative content and products.",
+    "category": "Warner Bros Collectibles Landing",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /warner-bros"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Shop collection\" fallback link"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify URL contains \"collection=warnerbros\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Warner Bros\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product grid\" is visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify element \"product card\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC075",
+    "title": "Buy 2 Get 1 Free auto-applies in cart and carries through to checkout summary",
+    "description": "Verifies the Buy 2 Get 1 Free promotion is automatically applied after three eligible items are in the cart and remains reflected at checkout.",
+    "category": "Promotions & Coupons",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Continue shopping\" (or \"Back to products\")"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC076",
+    "title": "Buy 2 Get 1 Free shows a reduced subtotal in cart when three items are present",
+    "description": "Verifies the cart visually indicates a reduced subtotal/discount line item once the Buy 2 Get 1 Free threshold is met.",
+    "category": "Promotions & Coupons",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Increase quantity\" for the cart item (set quantity to 3)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a \"Discount\" line (or \"Savings\") is visible in the cart totals"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC077",
+    "title": "Buy 2 Get 1 Free does not apply when fewer than three items are in the cart",
+    "description": "Verifies the promotion is not shown/applied when the cart does not meet the eligibility threshold.",
+    "category": "Promotions & Coupons",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Increase quantity\" for the cart item (set quantity to 2)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is not visible"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify a \"Discount\" line (or \"Savings\") is not visible"
+      }
+    ]
+  },
+  {
+    "id": "TC078",
+    "title": "Invalid coupon code on checkout shows validation error and does not apply discount",
+    "description": "Verifies that entering an invalid coupon code displays an error and does not change the order summary.",
+    "category": "Promotions & Coupons",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"INVALID-CODE-123\" into the coupon/discount code field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\" (or \"Apply coupon\")"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid\" or \"Coupon code is not valid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC079",
+    "title": "Expired coupon code on checkout shows error and discount is not applied",
+    "description": "Verifies that an expired coupon code is rejected and the order summary does not show a discount.",
+    "category": "Promotions & Coupons",
+    "priority": "High",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"EXPIRED-COUPON\" into the coupon/discount code field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\" (or \"Apply coupon\")"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Expired\" or \"Coupon has expired\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC080",
+    "title": "Submitting an empty coupon field on checkout prompts a visible validation message",
+    "description": "Verifies user cannot apply an empty coupon and receives a visible prompt/error.",
+    "category": "Promotions & Coupons",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\" (or \"Apply coupon\")"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Enter a code\" or \"Please enter a coupon code\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC081",
+    "title": "Coupon entry is trimmed/handled when user includes leading/trailing spaces (invalid case)",
+    "description": "Verifies that a coupon with surrounding spaces is handled gracefully and shows an error if it is not a valid code.",
+    "category": "Promotions & Coupons",
+    "priority": "Low",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "action",
+        "description": "Type \"   INVALID-CODE-123   \" into the coupon/discount code field"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Apply\" (or \"Apply coupon\")"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Invalid\" or \"Coupon code is not valid\" is visible"
+      }
+    ]
+  },
+  {
+    "id": "TC082",
+    "title": "Buy 2 Get 1 Free remains visible on checkout after navigating from cart",
+    "description": "Verifies that when the promotion is visible in cart, it is still visible in checkout order summary after proceeding through the UI.",
+    "category": "Promotions & Coupons",
+    "priority": "Medium",
+    "steps": [
+      {
+        "type": "action",
+        "description": "Navigate to /products"
+      },
+      {
+        "type": "action",
+        "description": "Click on the first product in the product list"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Add to cart\""
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Cart\" in the site header"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Increase quantity\" for the cart item (set quantity to 3)"
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is visible"
+      },
+      {
+        "type": "action",
+        "description": "Click on \"Checkout\""
+      },
+      {
+        "type": "assertion",
+        "description": "Verify text \"Buy 2 Get 1 Free\" is visible"
+      }
+    ]
+  }
+]

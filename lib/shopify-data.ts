@@ -6,27 +6,27 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   const firstVariant = product.variants.edges[0]?.node;
   const price = firstVariant ? parseFloat(firstVariant.price.amount) : 0;
   const compareAtPrice = firstVariant?.compareAtPrice ? parseFloat(firstVariant.compareAtPrice.amount) : undefined;
-  
+
   // Convert currency code to symbol (INR -> ₹)
   const currencyCode = firstVariant?.price.currencyCode || 'INR';
   const currency = currencyCode === 'INR' ? '₹' : currencyCode;
   const image = product.images.edges[0]?.node.url || '/images/placeholder.svg';
-  
+
   // Get ALL images from Shopify
   const images = product.images.edges.map(edge => edge.node.url);
-  
+
   // Keep HTML for parsing specifications - use descriptionHtml if available
   const description = product.descriptionHtml || product.description || '';
 
   // Use productType directly as category (already normalized from upload)
   const category = product.productType.toLowerCase().replace(/\s+/g, '-') || 'jewellery';
-  
+
   // Get SKU from first variant
   const sku = firstVariant?.sku || product.handle.toUpperCase();
-  
+
   // Get stock availability from variant
   const inStock = firstVariant?.availableForSale ?? true;
-  
+
   // Check if product is featured (based on tags or collections)
   const featuredTags = ['featured', 'bestseller', 'best-seller', 'best seller'];
   const isFeatured =
@@ -44,9 +44,9 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   const isChristmasProduct = product.collections?.edges?.some((collection: any) => {
     const title = collection.node.title?.toLowerCase().trim() || '';
     const handle = collection.node.handle?.toLowerCase().trim() || '';
-    return title.includes('christmas') || handle.includes('christmas') || 
-           title.includes('holiday') || handle.includes('holiday') ||
-           title.includes('festive') || handle.includes('festive');
+    return title.includes('christmas') || handle.includes('christmas') ||
+      title.includes('holiday') || handle.includes('holiday') ||
+      title.includes('festive') || handle.includes('festive');
   }) ?? false;
 
   // Extract collection information for the product
@@ -58,6 +58,7 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
 
   return {
     id: product.handle, // Use handle as a more URL-friendly ID
+    handle: product.handle, // Also expose handle explicitly for API consumers
     name: product.title,
     category,
     price,
@@ -80,7 +81,7 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
 export async function fetchShopifyProducts(first = 250): Promise<Product[]> {
   try {
     console.log(`🔍 Fetching ${first} products from Shopify...`);
-    
+
     const result = await shopifyStorefrontFetch<{ products: { edges: Array<{ node: ShopifyProduct }> } }>(
       GET_PRODUCTS_QUERY,
       { first } // Remove after and query parameters to get all products
@@ -206,7 +207,7 @@ export async function getProducts(useShopify = true): Promise<Product[]> {
     }
     console.warn('Falling back to local products due to Shopify fetch failure');
   }
-  
+
   // Fallback to local data
   const { PRODUCTS } = await import('./data');
   return PRODUCTS;
@@ -221,7 +222,7 @@ export async function getProductByHandle(handle: string, useShopify = true): Pro
     }
     console.warn(`Falling back to local product ${handle} due to Shopify fetch failure`);
   }
-  
+
   // Fallback to local data
   const { PRODUCTS } = await import('./data');
   return PRODUCTS.find(p => p.id === handle) || null;
@@ -236,7 +237,7 @@ export async function getCollectionProducts(handle: string, useShopify = true): 
     }
     console.warn(`Falling back to local collection products ${handle} due to Shopify fetch failure`);
   }
-  
+
   // Fallback: filter local products by category (handle as category)
   const { PRODUCTS } = await import('./data');
   return PRODUCTS.filter(p => p.category === handle);
@@ -257,19 +258,19 @@ export async function getRecommendationProducts({
   useShopify?: boolean;
 }): Promise<Product[]> {
   console.log('🔍 Fetching recommendations via API endpoint...');
-  
+
   try {
     // Build query parameters
     const params = new URLSearchParams({
       maxPrice: maxPrice.toString(),
       limit: limit.toString(),
     });
-    
+
     if (category) params.append('category', category);
     if (currentProductId) params.append('currentProductId', currentProductId);
 
     console.log('🚀 Calling /api/recommendations with params:', params.toString());
-    
+
     const response = await fetch(`/api/recommendations?${params.toString()}`, {
       method: 'GET',
       headers: {
@@ -283,7 +284,7 @@ export async function getRecommendationProducts({
     }
 
     const data = await response.json();
-    
+
     if (data.error) {
       console.error('❌ API returned error:', data.error);
       return [];
@@ -292,7 +293,7 @@ export async function getRecommendationProducts({
     const products = data.products || [];
     console.log(`✅ Received ${products.length} recommendations from API`);
     console.log('🎯 Products:', products.map((p: any) => `${p.name} - ₹${p.price}`));
-    
+
     return products;
   } catch (error) {
     console.error('❌ Error fetching recommendations:', error);

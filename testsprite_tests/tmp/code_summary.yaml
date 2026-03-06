@@ -1,0 +1,306 @@
+version: "2"
+type: backend
+tech_stack:
+  - TypeScript
+  - Next.js 16 (API Routes)
+  - Shopify Storefront API (GraphQL)
+  - Shopify Admin API
+  - Clerk v6 (Authentication)
+  - Razorpay (Payments)
+  - Delhivery (Shipping)
+  - Resend (Email)
+  - Zod (Validation)
+features:
+  - name: Products API
+    description: Fetches products from Shopify with filtering, caching, and category support
+    files:
+      - app/api/products/route.ts
+      - app/api/products/[handle]/route.ts
+      - app/api/products/by-handles/route.ts
+      - app/api/products/gift/route.ts
+    endpoints:
+      - method: GET
+        path: /api/products
+        description: List all products with optional category/collection/limit filters
+        auth_required: false
+        response_schema:
+          "200": "{ products: Product[] }"
+          "500": "{ products: [], error: string }"
+      - method: GET
+        path: /api/products/[handle]
+        description: Get a single product by its handle
+        auth_required: false
+        response_schema:
+          "200": "{ product: Product }"
+          "404": "{ error: string }"
+      - method: POST
+        path: /api/products/by-handles
+        description: Get multiple products by their handles
+        auth_required: false
+        response_schema:
+          "200": "{ products: Product[] }"
+      - method: GET
+        path: /api/products/gift
+        description: Get the gift product
+        auth_required: false
+        response_schema:
+          "200": "{ product: Product }"
+    depends_on: []
+  - name: Contact Form API
+    description: Contact form submission with Zod validation, rate limiting, and input sanitization
+    files:
+      - app/api/contact/route.ts
+    endpoints:
+      - method: POST
+        path: /api/contact
+        description: Submit a contact form inquiry
+        auth_required: false
+        request_schema:
+          body:
+            name: string
+            email: string
+            phone: string (optional)
+            subject: string
+            message: string
+        response_schema:
+          "200": "{ success: true, message: string }"
+          "400": "{ error: string }"
+          "429": "{ error: string }"
+          "500": "{ error: string }"
+    depends_on: []
+  - name: Authentication API
+    description: Authentication endpoints using Clerk v6 and NextAuth
+    files:
+      - app/api/auth/[...nextauth]/route.ts
+      - app/api/auth/health/route.ts
+      - app/api/auth/signup/route.ts
+    endpoints:
+      - method: GET
+        path: /api/auth/health
+        description: Health check for the authentication system
+        auth_required: false
+        response_schema:
+          "200": "{ status: string }"
+      - method: POST
+        path: /api/auth/signup
+        description: User signup endpoint
+        auth_required: false
+        response_schema:
+          "200": "{ success: boolean }"
+    depends_on: []
+  - name: User Account API
+    description: Manage user profile, addresses, and order history
+    files:
+      - app/api/account/profile/route.ts
+      - app/api/account/addresses/route.ts
+      - app/api/account/orders/route.ts
+    endpoints:
+      - method: GET
+        path: /api/account/profile
+        description: Get current user profile
+        auth_required: true
+        response_schema:
+          "200": "{ profile: UserProfile }"
+          "401": "{ error: string }"
+      - method: GET
+        path: /api/account/addresses
+        description: Get user saved addresses
+        auth_required: true
+        response_schema:
+          "200": "{ addresses: Address[] }"
+      - method: GET
+        path: /api/account/orders
+        description: Get user order history
+        auth_required: true
+        response_schema:
+          "200": "{ orders: Order[] }"
+    depends_on:
+      - Authentication API
+  - name: Payments API (Razorpay)
+    description: Razorpay payment order creation and signature verification
+    files:
+      - app/api/razorpay/create-order/route.ts
+      - app/api/razorpay/verify-payment/route.ts
+      - app/api/razorpay/webhook/route.ts
+    endpoints:
+      - method: POST
+        path: /api/razorpay/create-order
+        description: Create a Razorpay order for payment
+        auth_required: true
+        request_schema:
+          body:
+            amount: number
+            currency: string
+        response_schema:
+          "200": "{ orderId: string, amount: number }"
+          "500": "{ error: string }"
+      - method: POST
+        path: /api/razorpay/verify-payment
+        description: Verify Razorpay payment signature
+        auth_required: true
+        request_schema:
+          body:
+            razorpay_order_id: string
+            razorpay_payment_id: string
+            razorpay_signature: string
+        response_schema:
+          "200": "{ success: boolean }"
+          "400": "{ error: string }"
+      - method: POST
+        path: /api/razorpay/webhook
+        description: Razorpay webhook to receive payment events
+        auth_required: false
+        response_schema:
+          "200": "{ status: string }"
+    depends_on:
+      - Authentication API
+  - name: Shipping API (Delhivery)
+    description: Shipping-related endpoints for pincode check, order creation, and tracking
+    files:
+      - app/api/shipping/check-pincode/route.ts
+      - app/api/shipping/create-order/route.ts
+      - app/api/shipping/track/route.ts
+      - app/api/shipping/warehouses/route.ts
+    endpoints:
+      - method: GET
+        path: /api/shipping/check-pincode
+        description: Check if a pincode is serviceable for delivery
+        auth_required: false
+        response_schema:
+          "200": "{ serviceable: boolean, estimatedDays: number }"
+      - method: POST
+        path: /api/shipping/create-order
+        description: Create a shipping order with Delhivery
+        auth_required: true
+        response_schema:
+          "200": "{ waybill: string, status: string }"
+      - method: GET
+        path: /api/shipping/track
+        description: Track a shipment by waybill number
+        auth_required: false
+        response_schema:
+          "200": "{ tracking: TrackingInfo }"
+      - method: GET
+        path: /api/shipping/warehouses
+        description: Get list of available warehouses
+        auth_required: false
+        response_schema:
+          "200": "{ warehouses: Warehouse[] }"
+    depends_on: []
+  - name: Coupons & Promotions API
+    description: Coupon validation and user coupon management
+    files:
+      - app/api/coupons/validate/route.ts
+      - app/api/coupons/my-coupons/route.ts
+    endpoints:
+      - method: POST
+        path: /api/coupons/validate
+        description: Validate a coupon code
+        auth_required: true
+        request_schema:
+          body:
+            code: string
+        response_schema:
+          "200": "{ valid: boolean, discount: number }"
+          "400": "{ error: string }"
+      - method: GET
+        path: /api/coupons/my-coupons
+        description: Get user available coupons
+        auth_required: true
+        response_schema:
+          "200": "{ coupons: Coupon[] }"
+    depends_on:
+      - Authentication API
+  - name: Pincode Serviceability API
+    description: Check delivery serviceability by pincode
+    files:
+      - app/api/pincode/route.ts
+    endpoints:
+      - method: GET
+        path: /api/pincode
+        description: Check pincode serviceability
+        auth_required: false
+        response_schema:
+          "200": "{ available: boolean }"
+    depends_on: []
+  - name: Pricing API
+    description: Get product pricing information
+    files:
+      - app/api/pricing/route.ts
+    endpoints:
+      - method: GET
+        path: /api/pricing
+        description: Get pricing for products
+        auth_required: false
+        response_schema:
+          "200": "{ prices: PriceInfo[] }"
+    depends_on: []
+  - name: Product Recommendations API
+    description: Get product recommendations
+    files:
+      - app/api/recommendations/route.ts
+    endpoints:
+      - method: GET
+        path: /api/recommendations
+        description: Get product recommendations for a given product
+        auth_required: false
+        response_schema:
+          "200": "{ products: Product[] }"
+    depends_on:
+      - Products API
+  - name: Webhooks
+    description: Incoming webhooks from Clerk and Shopify
+    files:
+      - app/api/webhooks/clerk/route.ts
+      - app/api/webhooks/shopify/route.ts
+    endpoints:
+      - method: POST
+        path: /api/webhooks/clerk
+        description: Clerk webhook for user events
+        auth_required: false
+        response_schema:
+          "200": "{ received: true }"
+      - method: POST
+        path: /api/webhooks/shopify
+        description: Shopify webhook for order fulfillment events
+        auth_required: false
+        response_schema:
+          "200": "{ received: true }"
+    depends_on: []
+  - name: Order Submission API
+    description: Submit a completed order
+    files:
+      - app/api/submit-order/route.ts
+    endpoints:
+      - method: POST
+        path: /api/submit-order
+        description: Submit a complete order after payment verification
+        auth_required: true
+        response_schema:
+          "200": "{ orderId: string, success: true }"
+          "400": "{ error: string }"
+    depends_on:
+      - Payments API (Razorpay)
+      - Shipping API (Delhivery)
+  - name: Admin API
+    description: Admin endpoints for promotions, product uploads, and variant management
+    files:
+      - app/api/admin/promotions/route.ts
+      - app/api/admin/bulk-upload-products/route.ts
+      - app/api/admin/update-variant-price/route.ts
+    endpoints:
+      - method: GET
+        path: /api/admin/promotions
+        description: Get all promotions
+        auth_required: true
+        response_schema:
+          "200": "{ promotions: Promotion[] }"
+      - method: POST
+        path: /api/admin/promotions
+        description: Create a new promotion
+        auth_required: true
+        response_schema:
+          "200": "{ promotion: Promotion }"
+    depends_on:
+      - Authentication API
+known_limitations: []

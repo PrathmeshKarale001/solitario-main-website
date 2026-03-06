@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "get_products_api_should_return_filtered_and_paginated_results",
+    "description": "Test GET /api/products with category filters, limit parameter, and collection filtering. Verify products are returned with correct structure and GIFT products are excluded."
+  },
+  {
+    "id": "TC002",
+    "title": "get_product_handle_api_should_return_product_details_or_404",
+    "description": "Test GET /api/products/[handle] returns detailed product info for valid handles and 404 for invalid handles."
+  },
+  {
+    "id": "TC003",
+    "title": "post_contact_api_should_accept_valid_inquiry_and_reject_invalid",
+    "description": "Test POST /api/contact with valid payload (name, email, subject, message) returns success, and invalid payloads return 400."
+  },
+  {
+    "id": "TC004",
+    "title": "get_shipping_check_pincode_should_validate_and_return_serviceability",
+    "description": "Test GET /api/shipping/check-pincode with valid 6-digit pincode returns serviceability info, invalid/missing pincode returns 400."
+  },
+  {
+    "id": "TC005",
+    "title": "get_auth_health_should_return_system_status",
+    "description": "Test GET /api/auth/health returns status ok with environment variable check results and timestamp."
+  },
+  {
+    "id": "TC006",
+    "title": "post_products_by_handles_should_return_multiple_products_or_reject_invalid",
+    "description": "Test POST /api/products/by-handles with valid handles array returns products with found/requested counts, empty array returns 400, and more than 50 handles returns 400."
+  },
+  {
+    "id": "TC007",
+    "title": "get_recommendations_api_should_return_filtered_product_suggestions",
+    "description": "Test GET /api/recommendations with maxPrice, limit, and category params returns shuffled product suggestions with correct structure."
+  },
+  {
+    "id": "TC008",
+    "title": "get_dynamic_content_api_should_return_hero_sections_or_reject_invalid_type",
+    "description": "Test GET /api/dynamic-content with type=home-hero returns success with data array, missing type returns 400, invalid type returns 400."
+  },
+  {
+    "id": "TC009",
+    "title": "get_gift_product_api_should_return_gift_product_data",
+    "description": "Test GET /api/products/gift returns gift product with name, image, and price fields always present (with fallback)."
+  },
+  {
+    "id": "TC010",
+    "title": "get_shipping_track_api_should_require_waybill_parameter",
+    "description": "Test GET /api/shipping/track without waybill returns 400 with error message. Validates input validation is working."
+  }
+]
