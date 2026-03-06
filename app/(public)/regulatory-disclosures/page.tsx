@@ -25,7 +25,10 @@ const corporateGovernanceData = {
             pdf: 'Regulatory Disclosures/Corporate Governance/General Meeting Notices/Extra Ordinary General Meetings/FY 2025-26/Notice of EGM - 16.01.2026.pdf',
         },
     ],
-    'CSR Projects': [] as { name: string; pdf: string }[],
+    'CSR Projects': [{
+        name: 'CSR Policy',
+        pdf: 'Regulatory Disclosures/Statutory Policies/CSR Policy.pdf',
+    }] as { name: string; pdf: string }[],
 };
 
 // Statutory Policies data with actual PDFs

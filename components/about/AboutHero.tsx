@@ -51,12 +51,13 @@ export default function AboutHero() {
         className="relative z-10 text-center px-4 pt-24 md:pt-32"
         style={{ y: textY }}
       >
+
         <div className="max-w-5xl mx-auto">
           <motion.span
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
-            className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4"
+            className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham font-bold mb-4"
           >
             Our Story
           </motion.span>
