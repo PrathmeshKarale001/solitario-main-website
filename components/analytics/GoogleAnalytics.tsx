@@ -13,9 +13,9 @@ export default function GoogleAnalytics() {
     <>
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="lazyOnload"
+        strategy="afterInteractive"
       />
-      <Script id="google-analytics" strategy="lazyOnload">
+      <Script id="google-analytics" strategy="afterInteractive">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -85,6 +85,38 @@ export const trackWishlistAdd = (productId: string, productName: string) => {
         item_id: productId,
         item_name: productName,
       }],
+    });
+  }
+};
+
+// E-commerce purchase tracking (for conversion measurement)
+export const trackPurchase = (
+  transactionId: string,
+  value: number,
+  items: Array<{ item_id: string; item_name: string; price: number; quantity: number }>,
+  currency: string = 'INR'
+) => {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'purchase', {
+      transaction_id: transactionId,
+      value,
+      currency,
+      items,
+    });
+  }
+};
+
+// Checkout funnel tracking
+export const trackBeginCheckout = (
+  value: number,
+  items: Array<{ item_id: string; item_name: string; price: number; quantity: number }>,
+  currency: string = 'INR'
+) => {
+  if (typeof window !== 'undefined' && (window as any).gtag) {
+    (window as any).gtag('event', 'begin_checkout', {
+      value,
+      currency,
+      items,
     });
   }
 };

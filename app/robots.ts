@@ -22,8 +22,18 @@ export default function robots(): MetadataRoute.Robots {
                     '/sign-in/',
                     '/sign-up/',
                     '/auth/',
+                    '/account/',
                 ],
             },
+            // Block AI scrapers from indexing content
+            { userAgent: 'GPTBot', disallow: ['/'] },
+            { userAgent: 'ChatGPT-User', disallow: ['/'] },
+            { userAgent: 'CCBot', disallow: ['/'] },
+            { userAgent: 'anthropic-ai', disallow: ['/'] },
+            { userAgent: 'Claude-Web', disallow: ['/'] },
+            { userAgent: 'Google-Extended', disallow: ['/'] },
+            { userAgent: 'FacebookBot', disallow: ['/'] },
+            { userAgent: 'Bytespider', disallow: ['/'] },
         ],
         sitemap: 'https://thesolitario.com/sitemap.xml',
     };

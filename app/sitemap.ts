@@ -15,6 +15,7 @@ const staticPages = [
   { path: '/franchise', priority: 0.6, changeFrequency: 'monthly' as const },
   { path: '/faq', priority: 0.6, changeFrequency: 'monthly' as const },
   { path: '/blog', priority: 0.7, changeFrequency: 'weekly' as const },
+  { path: '/diy-recipes', priority: 0.6, changeFrequency: 'weekly' as const },
   { path: '/warner-bros', priority: 0.7, changeFrequency: 'weekly' as const },
   { path: '/christmas-sale', priority: 0.6, changeFrequency: 'weekly' as const },
   { path: '/wishlist', priority: 0.3, changeFrequency: 'weekly' as const },
@@ -37,6 +38,7 @@ const categories = [
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   // Fetch products for dynamic URLs
   let productUrls: MetadataRoute.Sitemap = [];
+  let blogUrls: MetadataRoute.Sitemap = [];
 
   // Dynamic product URLs are best-effort. During CI/build the API may not be reachable and
   // we must not fail or hang the build.
@@ -67,6 +69,33 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     } finally {
       clearTimeout(timeout);
     }
+
+    // Fetch blog posts for dynamic URLs
+    const blogController = new AbortController();
+    const blogTimeout = setTimeout(() => blogController.abort(), 2500);
+
+    try {
+      const blogResponse = await fetch(`${productsApiBaseUrl}/api/blog`, {
+        next: { revalidate: 3600 },
+        signal: blogController.signal,
+      });
+
+      if (blogResponse.ok) {
+        const blogData = (await blogResponse.json()) as { posts?: Array<{ slug: string; updatedAt?: string }> };
+        const posts = Array.isArray(blogData.posts) ? blogData.posts : [];
+
+        blogUrls = posts.map((post) => ({
+          url: `${BASE_URL}/blog/${post.slug}`,
+          lastModified: post.updatedAt ? new Date(post.updatedAt) : new Date(),
+          changeFrequency: 'weekly' as const,
+          priority: 0.6,
+        }));
+      }
+    } catch {
+      // Ignore: blog sitemap is best-effort.
+    } finally {
+      clearTimeout(blogTimeout);
+    }
   }
 
   // Static pages
@@ -85,5 +114,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticUrls, ...categoryUrls, ...productUrls];
+  return [...staticUrls, ...categoryUrls, ...productUrls, ...blogUrls];
 }
+

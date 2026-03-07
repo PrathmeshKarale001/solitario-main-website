@@ -36,6 +36,9 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://thesolitario.com'),
+  verification: {
+    google: 'xUFl2vc34O49CIjWhqmHX4-vYIQVoWlYIY2FI6zE9ZM',
+  },
   title: {
     default: 'The Solitario - Lab Grown Diamond Jewellery | Modern Luxury',
     template: '%s | The Solitario',
