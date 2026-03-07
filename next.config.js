@@ -115,6 +115,45 @@ const nextConfig = {
     }
     return config;
   },
+  // 301 redirects for old/legacy URLs found as 404s in Google Search Console
+  async redirects() {
+    return [
+      // Old collection pages → new category pages
+      { source: '/collection-rings', destination: '/products/category/rings', permanent: true },
+      { source: '/collection-rings/', destination: '/products/category/rings', permanent: true },
+      { source: '/collection-earrings', destination: '/products/category/earrings', permanent: true },
+      { source: '/collection-earrings/', destination: '/products/category/earrings', permanent: true },
+      { source: '/collection-pendants', destination: '/products/category/pendants', permanent: true },
+      { source: '/collection-pendants/', destination: '/products/category/pendants', permanent: true },
+      { source: '/collections', destination: '/products', permanent: true },
+      { source: '/collections/', destination: '/products', permanent: true },
+
+      // Old landing pages → stores/lab-grown-diamonds
+      { source: '/lab-grown-diamonds-goa', destination: '/stores', permanent: true },
+      { source: '/lab-grown-diamonds-goa/', destination: '/stores', permanent: true },
+      { source: '/lab-grown-diamonds-goa//', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-goa', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-goa/', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-goa//', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-hyderabad', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-hyderabad/', destination: '/stores', permanent: true },
+      { source: '/lp/lab-grown-diamonds-hyderabad//', destination: '/stores', permanent: true },
+      { source: '/lp/:slug*', destination: '/stores', permanent: true },
+
+      // Old page names → new equivalents
+      { source: '/contact-us', destination: '/contact', permanent: true },
+      { source: '/contact-us/', destination: '/contact', permanent: true },
+      { source: '/authenticity', destination: '/certifications', permanent: true },
+      { source: '/authenticity/', destination: '/certifications', permanent: true },
+      { source: '/retail-store', destination: '/stores', permanent: true },
+      { source: '/retail-store/', destination: '/stores', permanent: true },
+
+      // Old blog slugs → blog home
+      { source: '/blog/lab-vs-mined', destination: '/blog', permanent: true },
+      { source: '/end-of-year-reflections', destination: '/blog', permanent: true },
+      { source: '/end-of-year-reflections/', destination: '/blog', permanent: true },
+    ];
+  },
 }
 
 // Optional: run with ANALYZE=true next build to open bundle analyzer
