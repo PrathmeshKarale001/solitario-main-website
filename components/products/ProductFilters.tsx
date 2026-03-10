@@ -22,6 +22,7 @@ export interface ProductFiltersProps {
   showFeaturedOnly: boolean;
   onFeaturedToggle: (show: boolean) => void;
   productCounts?: Record<string, number>;
+  hideCategories?: boolean;
 }
 
 export default function ProductFilters({
@@ -36,6 +37,7 @@ export default function ProductFilters({
   showFeaturedOnly,
   onFeaturedToggle,
   productCounts = {},
+  hideCategories = false,
 }: ProductFiltersProps) {
   const [maxPrice, setMaxPrice] = useState(priceRange[1]);
   const [expandedSections, setExpandedSections] = useState({
@@ -49,7 +51,7 @@ export default function ProductFilters({
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  
+
   const sortOptions = [
     { value: 'relevance', label: 'Relevance' },
     { value: 'featured', label: 'Featured First' },
@@ -158,74 +160,76 @@ export default function ProductFilters({
         </div>
       </div>
 
-      {/* Categories Section */}
-      <div className="border-b border-gray-200 pb-6">
-        <button
-          onClick={() => toggleSection('categories')}
-          className="flex items-center justify-between w-full mb-4"
-        >
-          <h3 className="font-montserrat font-bold text-lg text-gray-900">Categories</h3>
-          {expandedSections.categories ? (
-            <ChevronUp className="w-4 h-4 text-gray-500" />
-          ) : (
-            <ChevronDown className="w-4 h-4 text-gray-500" />
-          )}
-        </button>
-        {expandedSections.categories && (
-          <div className="space-y-2">
-            {/* All category first */}
-            <button
-              onClick={() => onCategoryChange('all')}
-              className={cn(
-                'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
-                activeCategory === 'all'
-                  ? 'bg-classic-green/10 text-classic-green font-medium'
-                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-              )}
-            >
-              <span className="flex items-center gap-2">
-                <span className={cn(
-                  'w-1.5 h-1.5 rounded-full',
-                  activeCategory === 'all' ? 'bg-classic-green' : 'bg-gray-300'
-                )} />
-                All
-              </span>
-              {productCounts['all'] !== undefined && (
-                <span className="text-xs text-gray-400">
-                  {productCounts['all']}
+      {/* Categories Section - hidden on individual category pages */}
+      {!hideCategories && (
+        <div className="border-b border-gray-200 pb-6">
+          <button
+            onClick={() => toggleSection('categories')}
+            className="flex items-center justify-between w-full mb-4"
+          >
+            <h3 className="font-montserrat font-bold text-lg text-gray-900">Categories</h3>
+            {expandedSections.categories ? (
+              <ChevronUp className="w-4 h-4 text-gray-500" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-gray-500" />
+            )}
+          </button>
+          {expandedSections.categories && (
+            <div className="space-y-2">
+              {/* All category first */}
+              <button
+                onClick={() => onCategoryChange('all')}
+                className={cn(
+                  'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
+                  activeCategory === 'all'
+                    ? 'bg-classic-green/10 text-classic-green font-medium'
+                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                )}
+              >
+                <span className="flex items-center gap-2">
+                  <span className={cn(
+                    'w-1.5 h-1.5 rounded-full',
+                    activeCategory === 'all' ? 'bg-classic-green' : 'bg-gray-300'
+                  )} />
+                  All
                 </span>
-              )}
-            </button>
-            {/* Dynamic categories from actual products */}
-            {Object.entries(productCounts)
-              .filter(([slug]) => slug !== 'all' && productCounts[slug] > 0)
-              .sort((a, b) => b[1] - a[1]) // Sort by count descending
-              .map(([slug, count]) => (
-                <button
-                  key={slug}
-                  onClick={() => onCategoryChange(slug)}
-                  className={cn(
-                    'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
-                    activeCategory === slug
-                      ? 'bg-classic-green/10 text-classic-green font-medium'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                  )}
-                >
-                  <span className="flex items-center gap-2">
-                    <span className={cn(
-                      'w-1.5 h-1.5 rounded-full',
-                      activeCategory === slug ? 'bg-classic-green' : 'bg-gray-300'
-                    )} />
-                    {capitalize(slug.replace(/-/g, ' '))}
-                  </span>
+                {productCounts['all'] !== undefined && (
                   <span className="text-xs text-gray-400">
-                    {count}
+                    {productCounts['all']}
                   </span>
-                </button>
-              ))}
-          </div>
-        )}
-      </div>
+                )}
+              </button>
+              {/* Dynamic categories from actual products */}
+              {Object.entries(productCounts)
+                .filter(([slug]) => slug !== 'all' && productCounts[slug] > 0)
+                .sort((a, b) => b[1] - a[1]) // Sort by count descending
+                .map(([slug, count]) => (
+                  <button
+                    key={slug}
+                    onClick={() => onCategoryChange(slug)}
+                    className={cn(
+                      'flex items-center justify-between w-full py-2 px-3 rounded-lg text-sm font-montserrat transition-all',
+                      activeCategory === slug
+                        ? 'bg-classic-green/10 text-classic-green font-medium'
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    )}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span className={cn(
+                        'w-1.5 h-1.5 rounded-full',
+                        activeCategory === slug ? 'bg-classic-green' : 'bg-gray-300'
+                      )} />
+                      {capitalize(slug.replace(/-/g, ' '))}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {count}
+                    </span>
+                  </button>
+                ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* View Mode Section */}
       <div>

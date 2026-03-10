@@ -74,7 +74,7 @@ function CategoryPageContent() {
   const [isMobile, setIsMobile] = useState(false);
   const productsRef = useRef<HTMLDivElement>(null);
 
-  const [sortBy, setSortBy] = useState('featured');
+  const [sortBy, setSortBy] = useState('relevance');
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [searchQuery, setSearchQuery] = useState('');
   const [priceRange, setPriceRange] = useState<[number, number]>([0, 500000]);
@@ -193,7 +193,7 @@ function CategoryPageContent() {
   const heroImage = isMobile ? categoryConfig.heroMobile : categoryConfig.heroDesktop;
 
   return (
-    <div>
+    <div className="pt-20">
       {/* Hero Section - matches home hero container sizing */}
       <section className="relative w-full overflow-hidden bg-[#1a1a1a]">
         <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
@@ -264,6 +264,7 @@ function CategoryPageContent() {
                   showFeaturedOnly={showFeaturedOnly}
                   onFeaturedToggle={setShowFeaturedOnly}
                   productCounts={{ [slug]: products.length }}
+                  hideCategories={true}
                 />
               </div>
             </aside>
@@ -369,6 +370,7 @@ function CategoryPageContent() {
                   showFeaturedOnly={showFeaturedOnly}
                   onFeaturedToggle={setShowFeaturedOnly}
                   productCounts={{ [slug]: products.length }}
+                  hideCategories={true}
                 />
               </div>
               <div className="sticky bottom-0 bg-white border-t border-gray-200 p-4">
