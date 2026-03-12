@@ -1,12 +1,12 @@
 'use client';
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { leadCaptureSchema, LeadCaptureFormData } from '@/lib/validations';
 import { toast } from '@/components/providers/Toaster';
 import { trackMetaLead } from '@/components/analytics/MetaPixel';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import {
   TrendingUp,
   Shield,
@@ -24,6 +24,13 @@ import Image from 'next/image';
 
 // Force dynamic rendering for this page
 export const dynamic = 'force-dynamic';
+
+const HERO_BANNERS = [
+  '/images/lead-capture/lead-capture-01comp.png',
+  '/images/lead-capture/lead-capture-02comp.png',
+  '/images/lead-capture/lead-capture-03comp.png',
+  '/images/lead-capture/lead-capture-04comp.png',
+];
 
 const INVESTMENT_OPTIONS = [
   '₹50L – ₹1 Cr',
@@ -92,7 +99,20 @@ const staggerContainer = {
 export default function LeadCapturePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [currentSlide, setCurrentSlide] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+
+  // Auto-advance slider
+  const nextSlide = useCallback(() => {
+    setCurrentSlide((prev) => (prev + 1) % HERO_BANNERS.length);
+  }, []);
+
+  useEffect(() => {
+    if (isPaused) return;
+    const timer = setInterval(nextSlide, 4500);
+    return () => clearInterval(timer);
+  }, [isPaused, nextSlide]);
 
   const {
     register,
@@ -166,25 +186,56 @@ export default function LeadCapturePage() {
         </div>
       </header>
 
-      {/* ===== SECTION 1: HERO BANNER ===== */}
-      <section className="pt-14 md:pt-16">
-        <div className="relative w-full aspect-[16/9] md:aspect-[16/7] lg:aspect-[16/6] bg-brand-800 overflow-hidden">
-          <Image
-            src="/images/lead-capture/hero-banner.jpg"
-            alt="Solitario Franchise Investment Opportunity"
-            fill
-            className="object-cover"
-            priority
-            quality={85}
-            sizes="100vw"
-          />
-          {/* Subtle gradient for polish */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent" />
+      {/* ===== SECTION 1: HERO BANNER SLIDER ===== */}
+      <section className="pt-24 md:pt-32 pb-4 px-4 md:px-8">
+        <div
+          className="max-w-5xl mx-auto relative group"
+          onMouseEnter={() => setIsPaused(true)}
+          onMouseLeave={() => setIsPaused(false)}
+        >
+          <div className="relative w-full aspect-[16/9] rounded-2xl md:rounded-3xl bg-brand-800 overflow-hidden shadow-2xl border border-brand-100/10">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentSlide}
+                initial={{ opacity: 0, scale: 1.01 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.99 }}
+                transition={{ duration: 0.7, ease: 'easeInOut' }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={HERO_BANNERS[currentSlide]}
+                  alt={`Solitario Franchise Opportunity ${currentSlide + 1}`}
+                  fill
+                  className="object-cover"
+                  priority={currentSlide === 0}
+                  quality={95}
+                  sizes="(max-width: 1280px) 100vw, 1024px"
+                />
+              </motion.div>
+            </AnimatePresence>
+
+            {/* Dot Indicators */}
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-[2] flex items-center gap-2.5">
+              {HERO_BANNERS.map((_, idx) => (
+                <button
+                  key={idx}
+                  onClick={() => setCurrentSlide(idx)}
+                  aria-label={`Go to slide ${idx + 1}`}
+                  className={`rounded-full transition-all duration-300 ${
+                    idx === currentSlide
+                      ? 'w-8 h-2.5 bg-white shadow-lg'
+                      : 'w-2.5 h-2.5 bg-white/40 hover:bg-white/70 backdrop-blur-sm'
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ===== SECTION 2: LEAD CAPTURE FORM ===== */}
-      <section ref={formRef} id="enquiry-form" className="relative z-10 px-4 -mt-6 md:-mt-10">
+      <section ref={formRef} id="enquiry-form" className="relative z-10 px-4 py-8 md:py-12">
         <div className="max-w-xl mx-auto">
           <motion.div
             initial="hidden"
@@ -195,11 +246,11 @@ export default function LeadCapturePage() {
             className="bg-white rounded-2xl shadow-brand-lg border border-brand-100 overflow-hidden"
           >
             {/* Form Header */}
-            <div className="bg-gradient-brand px-6 py-5 text-center">
+            <div className="bg-gradient-brand px-6 py-6 text-center">
               <h1 className="text-lg md:text-xl font-montserrat font-bold text-white tracking-tight">
                 Interested in a Solitario Franchise?
               </h1>
-              <p className="text-white/80 text-xs md:text-sm font-montserrat mt-1">
+              <p className="text-white/80 text-xs md:text-sm font-montserrat mt-1.5">
                 Fill in your details and our team will reach out to you
               </p>
             </div>
