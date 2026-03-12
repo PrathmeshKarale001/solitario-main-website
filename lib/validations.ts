@@ -48,6 +48,21 @@ export const contactSchema = z.object({
 
 export type ContactFormData = z.infer<typeof contactSchema>;
 
+// Lead capture form schema (Performance Marketing)
+export const leadCaptureSchema = z.object({
+  name: nameSchema,
+  phone: phoneSchema,
+  email: emailSchema,
+  city: z.string().min(2, 'City is required').max(100, 'City name too long'),
+  investmentInterest: z.enum(
+    ['₹50L – ₹1 Cr', '₹1 Cr – ₹2 Cr', '₹2 Cr – ₹5 Cr', '₹5 Cr+'],
+    { message: 'Please select an investment range' }
+  ),
+  message: z.string().max(500, 'Message too long').optional(),
+});
+
+export type LeadCaptureFormData = z.infer<typeof leadCaptureSchema>;
+
 // Login schema
 export const loginSchema = z.object({
   email: emailSchema,
