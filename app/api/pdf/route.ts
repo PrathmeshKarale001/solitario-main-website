@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { readFile } from 'fs/promises';
-import path from 'path';
+
+// Use Edge Runtime to avoid bundling the entire public/ directory
+// into a serverless function (which caused the 300MB+ size limit error)
+export const runtime = 'edge';
 
 export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
@@ -16,17 +18,24 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid file path' }, { status: 403 });
     }
 
-    const absolutePath = path.join(process.cwd(), 'public', decodedPath);
-
     try {
-        const fileBuffer = await readFile(absolutePath);
+        // Construct the public URL and fetch the file
+        const origin = request.nextUrl.origin;
+        const publicUrl = `${origin}/${encodeURI(decodedPath)}`;
+        const response = await fetch(publicUrl);
+
+        if (!response.ok) {
+            return NextResponse.json({ error: 'File not found' }, { status: 404 });
+        }
+
+        const fileBuffer = await response.arrayBuffer();
 
         return new NextResponse(fileBuffer, {
             status: 200,
             headers: {
                 'Content-Type': 'application/pdf',
                 'Content-Disposition': 'inline',
-                'Content-Length': fileBuffer.length.toString(),
+                'Content-Length': fileBuffer.byteLength.toString(),
                 'Cache-Control': 'public, max-age=86400',
             },
         });

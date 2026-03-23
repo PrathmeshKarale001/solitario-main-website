@@ -445,18 +445,16 @@ export default function GeresaPage() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: i * 0.15 }}
-                className={`rounded-2xl p-7 border ${
-                  card.highlighted
-                    ? 'border-bronze-gold/30 bg-bronze-gold/5'
-                    : 'border-white/10 bg-white/5'
-                }`}
+                className={`rounded-2xl p-7 border ${card.highlighted
+                  ? 'border-bronze-gold/30 bg-bronze-gold/5'
+                  : 'border-white/10 bg-white/5'
+                  }`}
               >
                 <span
-                  className={`inline-block px-3 py-1 rounded-full text-[10px] font-gotham uppercase tracking-widest mb-4 ${
-                    card.highlighted
-                      ? 'bg-bronze-gold/20 text-bronze-gold'
-                      : 'bg-white/10 text-white/60'
-                  }`}
+                  className={`inline-block px-3 py-1 rounded-full text-[10px] font-gotham uppercase tracking-widest mb-4 ${card.highlighted
+                    ? 'bg-bronze-gold/20 text-bronze-gold'
+                    : 'bg-white/10 text-white/60'
+                    }`}
                 >
                   {card.label}
                 </span>
@@ -497,7 +495,7 @@ export default function GeresaPage() {
             className="rounded-3xl overflow-hidden border border-white/10 aspect-video w-full max-w-4xl mx-auto"
           >
             <iframe
-              src="https://www.youtube.com/embed/VIDEO_ID_HERE?rel=0&modestbranding=1"
+              src="https://www.youtube.com/embed/ckUDvR_kiSA?si=cD37ZzRF072hmSk-"
               title="Proceso CVD — Cómo se crean los diamantes de laboratorio Solitario"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
@@ -554,18 +552,16 @@ export default function GeresaPage() {
                   <button
                     key={c.id}
                     onClick={() => setActiveC(activeC === c.id ? null : c.id)}
-                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-montserrat font-semibold transition-all border ${
-                      activeC === c.id
-                        ? 'bg-brand-900 text-white border-brand-900 shadow-sm'
-                        : 'bg-white text-brand-600 border-brand-200 hover:border-brand-400'
-                    }`}
+                    className={`flex items-center gap-2 px-4 py-2.5 rounded-full text-sm font-montserrat font-semibold transition-all border ${activeC === c.id
+                      ? 'bg-brand-900 text-white border-brand-900 shadow-sm'
+                      : 'bg-white text-brand-600 border-brand-200 hover:border-brand-400'
+                      }`}
                   >
                     <span>{c.emoji}</span>
                     {c.label}
                     <ChevronDown
-                      className={`w-3.5 h-3.5 transition-transform ${
-                        activeC === c.id ? 'rotate-180' : ''
-                      }`}
+                      className={`w-3.5 h-3.5 transition-transform ${activeC === c.id ? 'rotate-180' : ''
+                        }`}
                     />
                   </button>
                 ))}
