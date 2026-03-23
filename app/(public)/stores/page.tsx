@@ -476,14 +476,12 @@ export default function StoresPage() {
                                   <Globe className="w-3.5 h-3.5" /> {t('website', spainLang)}
                                 </a>
                                 {distributor.figmaLink && (
-                                  <a
+                                  <Link
                                     href={distributor.figmaLink}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="inline-flex items-center gap-1.5 text-brand-600 text-sm font-montserrat font-semibold hover:text-classic-green transition-colors"
+                                    className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg bg-classic-green/10 border border-classic-green/25 text-classic-green text-xs font-gotham font-bold uppercase tracking-wider hover:bg-classic-green hover:text-white transition-all duration-300"
                                   >
-                                    Figma Link <ExternalLink className="w-3.5 h-3.5" />
-                                  </a>
+                                    Solitario España <ArrowRight className="w-3.5 h-3.5" />
+                                  </Link>
                                 )}
                               </div>
                             </div>

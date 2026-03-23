@@ -697,7 +697,7 @@ export const SPAIN_DISTRIBUTORS: SpainDistributor[] = [
     website: 'https://www.grupocadarso.com/marcas/solitario/',
     // ctaLink: '#', // Temporarily hidden
     // ctaLabel: 'Ver catálogo Geresa',
-    // figmaLink: '#', // Temporarily hidden
+    figmaLink: '/geresa', // Redirects to Solitario Spain landing page
     touchPoints: [
       { name: 'Monument Hotel', address: 'Pg de Grácia 75, 08008 L\'Eixample, Barcelona', mapQuery: 'Pg. de Gràcia, 75, Barcelona' },
       { name: 'Joyería Trias', address: 'Plaça Creu, 22, 8700, Igualada', mapQuery: 'Plaça de la Creu, 22, Igualada' },

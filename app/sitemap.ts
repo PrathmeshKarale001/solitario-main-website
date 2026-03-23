@@ -26,6 +26,15 @@ const staticPages = [
   { path: '/shipping', priority: 0.3, changeFrequency: 'yearly' as const },
 ];
 
+// Static blog post pages (all 5 real posts)
+const blogPostPages = [
+  { slug: 'diamond-clarity-guide', date: '2025-03-01' },
+  { slug: 'lab-grown-diamonds-last-forever', date: '2025-02-01' },
+  { slug: '14k-vs-18k-gold-diamond-jewellery', date: '2025-01-01' },
+  { slug: 'diamond-earrings-face-shape-guide', date: '2024-12-01' },
+  { slug: 'lifetime-diamond-exchange-policy', date: '2024-11-01' },
+];
+
 // Product categories
 const categories = [
   'rings',
@@ -114,6 +123,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.7,
   }));
 
-  return [...staticUrls, ...categoryUrls, ...productUrls, ...blogUrls];
+  // Blog post static URLs
+  const blogPostUrls: MetadataRoute.Sitemap = blogPostPages.map((post) => ({
+    url: `${BASE_URL}/blog/${post.slug}`,
+    lastModified: new Date(post.date),
+    changeFrequency: 'monthly' as const,
+    priority: 0.75,
+  }));
+
+  return [...staticUrls, ...categoryUrls, ...blogPostUrls, ...productUrls, ...blogUrls];
 }
 

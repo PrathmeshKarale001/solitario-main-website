@@ -161,12 +161,21 @@ function ProductsPageContent() {
     return productList;
   }, [products, activeCategory, searchQuery, priceRange, showFeaturedOnly, sortBy]);
 
-  // Update displayed products when filters change
+  // Update displayed products when filters/sort change.
+  // We compare a stable string key (joined IDs) to avoid re-running on every
+  // array reference change — which is what caused the "Maximum update depth" loop.
+  const filteredIdsKey = filteredAndSortedProducts.map((p) => p.id).join(',');
+  const prevFilteredKey = useRef<string>('');
+
   useEffect(() => {
+    if (filteredIdsKey === prevFilteredKey.current) return; // nothing changed
+    prevFilteredKey.current = filteredIdsKey;
+
     const initialLoad = Math.min(LOAD_MORE_THRESHOLD, filteredAndSortedProducts.length);
     setDisplayedProducts(filteredAndSortedProducts.slice(0, initialLoad));
     setHasMore(filteredAndSortedProducts.length > initialLoad);
-  }, [filteredAndSortedProducts]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredIdsKey]);
 
   // Intersection Observer for infinite scroll
   useEffect(() => {
