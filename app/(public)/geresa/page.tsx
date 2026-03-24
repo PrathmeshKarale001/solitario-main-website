@@ -494,16 +494,27 @@ export default function GeresaPage() {
             transition={{ duration: 0.8 }}
             className="rounded-3xl overflow-hidden border border-white/10 aspect-video w-full max-w-4xl mx-auto"
           >
-            <iframe
-              src="https://www.youtube.com/embed/ckUDvR_kiSA?si=cD37ZzRF072hmSk-"
-              title="Proceso CVD — Cómo se crean los diamantes de laboratorio Solitario"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="w-full h-full"
-            />
+            <video
+              controls
+              preload="metadata"
+              playsInline
+              poster="https://res.cloudinary.com/dlxfsjx9t/video/upload/so_0,w_1280,q_auto,f_jpg/v1774355844/LabGrownGeres_hkmu6k.jpg"
+              className="w-full h-full object-cover"
+            >
+              {/* Optimised Cloudinary sources — auto quality + format */}
+              <source
+                src="https://res.cloudinary.com/dlxfsjx9t/video/upload/q_auto,f_auto,w_1280/v1774355844/LabGrownGeres_hkmu6k.webm"
+                type="video/webm"
+              />
+              <source
+                src="https://res.cloudinary.com/dlxfsjx9t/video/upload/q_auto,w_1280/v1774355844/LabGrownGeres_hkmu6k.mp4"
+                type="video/mp4"
+              />
+              Tu navegador no soporta vídeo HTML5.
+            </video>
           </motion.div>
           <p className="text-white/25 font-montserrat text-xs text-center mt-3">
-            Proceso CVD con subtítulos en español
+            Diamantes cultivados en laboratorio — Proceso CVD
           </p>
         </div>
       </section>
