@@ -9,7 +9,7 @@ export const revalidate = 300; // 5 minutes
 
 // In-memory cache for development (bypasses Next.js cache limitations in dev mode)
 let cachedProducts: { products: any[]; timestamp: number } | null = null;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+const CACHE_DURATION = 2 * 60 * 1000; // 2 minutes - shorter to show new products faster
 
 export async function GET(req: NextRequest) {
   try {

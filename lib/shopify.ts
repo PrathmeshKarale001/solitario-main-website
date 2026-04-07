@@ -172,8 +172,7 @@ export async function shopifyStorefrontFetch<T = any>(
         'X-Shopify-Storefront-Access-Token': STOREFRONT_TOKEN,
       },
       body: JSON.stringify({ query, variables }),
-      cache: 'force-cache',
-      next: { revalidate: 300 }, // Cache for 5 minutes - balance freshness with performance
+      cache: 'no-store', // Always fetch fresh data - the API route layer handles caching
     }
   );
 

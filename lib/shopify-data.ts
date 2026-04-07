@@ -77,41 +77,64 @@ export function mapShopifyProductToLocal(product: ShopifyProduct): Product {
   };
 }
 
-// Fetch all products from Shopify
+// Fetch all products from Shopify (with pagination to get ALL products)
 export async function fetchShopifyProducts(first = 250): Promise<Product[]> {
   try {
-    console.log(`🔍 Fetching ${first} products from Shopify...`);
+    console.log(`🔍 Fetching products from Shopify (page size: ${first})...`);
 
-    const result = await shopifyStorefrontFetch<{ products: { edges: Array<{ node: ShopifyProduct }> } }>(
-      GET_PRODUCTS_QUERY,
-      { first } // Remove after and query parameters to get all products
-    );
+    let allProducts: Product[] = [];
+    let hasNextPage = true;
+    let cursor: string | null = null;
+    let pageCount = 0;
 
-    console.log('📡 Shopify API Response:', {
-      hasErrors: !!result.errors,
-      errors: result.errors,
-      hasData: !!result.data,
-      productCount: result.data?.products?.edges?.length || 0
-    });
+    while (hasNextPage) {
+      pageCount++;
+      const variables: Record<string, any> = { first };
+      if (cursor) {
+        variables.after = cursor;
+      }
 
-    if (result.errors) {
-      console.error('❌ Shopify GraphQL errors:', result.errors);
-      return [];
+      const result = await shopifyStorefrontFetch<{ products: { edges: Array<{ node: ShopifyProduct }>; pageInfo: { hasNextPage: boolean; endCursor: string } } }>(
+        GET_PRODUCTS_QUERY,
+        variables
+      );
+
+      console.log(`📡 Shopify API Response (page ${pageCount}):`, {
+        hasErrors: !!result.errors,
+        errors: result.errors,
+        hasData: !!result.data,
+        productCount: result.data?.products?.edges?.length || 0
+      });
+
+      if (result.errors) {
+        console.error('❌ Shopify GraphQL errors:', result.errors);
+        break;
+      }
+
+      if (!result.data?.products?.edges) {
+        console.error('❌ No products data in Shopify response');
+        break;
+      }
+
+      const pageProducts = result.data.products.edges.map(edge => {
+        return mapShopifyProductToLocal(edge.node);
+      });
+
+      allProducts = [...allProducts, ...pageProducts];
+
+      // Check pagination
+      hasNextPage = result.data.products.pageInfo?.hasNextPage ?? false;
+      cursor = result.data.products.pageInfo?.endCursor ?? null;
+
+      // Safety: max 10 pages (2500 products)
+      if (pageCount >= 10) {
+        console.warn('⚠️ Reached maximum pagination limit (10 pages)');
+        break;
+      }
     }
 
-    if (!result.data?.products?.edges) {
-      console.error('❌ No products data in Shopify response');
-      return [];
-    }
-
-    const products = result.data.products.edges.map(edge => {
-      const mapped = mapShopifyProductToLocal(edge.node);
-      // Removed per-product logging to improve performance
-      return mapped;
-    });
-
-    console.log(`✅ Successfully fetched and mapped ${products.length} products from Shopify`);
-    return products;
+    console.log(`✅ Successfully fetched and mapped ${allProducts.length} products from Shopify (${pageCount} page(s))`);
+    return allProducts;
   } catch (error) {
     console.error('❌ Error fetching Shopify products:', error);
     return [];
