@@ -274,12 +274,22 @@ export default function CheckoutPage() {
   const shipping = 0;
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const discountedTotal = total - (promotionDiscount / 100);
-  // Use Shopify-authoritative total when festival offer is active (survives page refresh)
+
+  // Festival discount: always compute locally so total is correct even if Shopify API failed
+  // festivalDiscount (from API) takes priority; local 10% is the guaranteed fallback
+  const localFestivalDiscount = festivalActive ? Math.round(total * 0.1) : 0;
+  const effectiveFestivalDiscount = festivalActive
+    ? (festivalDiscount > 0 ? festivalDiscount : localFestivalDiscount)
+    : 0;
+
+  // Use Shopify-authoritative total when available, otherwise deduct 10% locally
   const grandTotal = Math.max(
     0,
-    festivalActive && festivalShopifyTotal != null
-      ? festivalShopifyTotal                // Shopify computed total (has 10% + free diamond)
-      : discountedTotal + shipping           // Regular total with local promo discounts
+    festivalActive
+      ? (festivalShopifyTotal != null
+          ? festivalShopifyTotal               // Shopify computed total (has 10% + free diamond)
+          : discountedTotal - effectiveFestivalDiscount + shipping) // Local fallback
+      : discountedTotal + shipping             // Regular total with local promo discounts
   );
 
   // Validate form
@@ -1231,12 +1241,12 @@ export default function CheckoutPage() {
                     </div>
                   )}
                   {/* Festival 10% discount line */}
-                  {festivalActive && festivalOfferApplied && festivalDiscount > 0 && (
+                  {festivalActive && effectiveFestivalDiscount > 0 && (
                     <div className="flex items-center justify-between text-amber-600">
                       <span className="font-medium flex items-center gap-1">
                         <Sparkles size={12} /> Akshaya Tritiya 10%
                       </span>
-                      <span className="font-medium">-{formatPrice(festivalDiscount, '₹')}</span>
+                      <span className="font-medium">-{formatPrice(effectiveFestivalDiscount, '₹')}</span>
                     </div>
                   )}
                   {/* Festival free diamond line */}

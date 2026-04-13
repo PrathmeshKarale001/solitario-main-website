@@ -168,59 +168,77 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
   return (
     <div className="space-y-4">
-      {/* Coupon Input */}
-      <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
-        <div className="flex items-center gap-2 mb-3">
-          <Tag className="w-4 h-4 text-classic-green" />
-          <h3 className="font-medium text-sm text-gray-900">Have a Promo Code?</h3>
+      {/* When festival is active — replace coupon UI entirely with offer banner */}
+      {festivalActive ? (
+        <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg px-4 py-3">
+          <Sparkles className="w-4 h-4 text-amber-600 flex-shrink-0 mt-0.5" />
+          <div>
+            <p className="text-sm font-semibold text-amber-800">{FESTIVAL_OFFER.label} is active</p>
+            <p className="text-xs text-amber-700 mt-0.5">
+              Your <strong>10% discount + Free Premium Diamond</strong> is applied automatically.
+              Promo code entry is disabled during the festival.
+            </p>
+          </div>
         </div>
-
-        {!appliedCoupon ? (
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={couponCode}
-              onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
-              placeholder="Enter promo code"
-              className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green"
-              disabled={isLoading}
-            />
-            <button
-              onClick={() => handleApplyCoupon()}
-              disabled={isLoading || !couponCode.trim()}
-              className="px-4 py-2 bg-classic-green hover:bg-classic-green/90 text-white text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-            >
-              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apply'}
-            </button>
+      ) : (
+        // Regular coupon input (only shown when festival is NOT active)
+        <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <div className="flex items-center gap-2 mb-3">
+            <Tag className="w-4 h-4 text-classic-green" />
+            <h3 className="font-medium text-sm text-gray-900">Have a Promo Code?</h3>
           </div>
-        ) : (
-          <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-classic-green/30">
-            <div className="flex items-center gap-2">
-              <Tag className="w-4 h-4 text-classic-green" />
-              <span className="text-sm font-medium text-gray-900">{appliedCoupon}</span>
+
+          {!appliedCoupon ? (
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={couponCode}
+                onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                placeholder="Enter promo code"
+                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-classic-green/30 focus:border-classic-green"
+                disabled={isLoading}
+              />
+              <button
+                onClick={() => handleApplyCoupon()}
+                disabled={isLoading || !couponCode.trim()}
+                className="px-4 py-2 bg-classic-green hover:bg-classic-green/90 text-white text-sm font-medium rounded-lg disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Apply'}
+              </button>
             </div>
-            <button
-              onClick={handleRemoveCoupon}
-              className="text-xs text-gray-600 hover:text-red-600 transition-colors"
-            >
-              Remove
-            </button>
-          </div>
-        )}
+          ) : (
+            <div className="flex items-center justify-between bg-white rounded-lg p-3 border border-classic-green/30">
+              <div className="flex items-center gap-2">
+                <Tag className="w-4 h-4 text-classic-green" />
+                <span className="text-sm font-medium text-gray-900">{appliedCoupon}</span>
+              </div>
+              <button
+                onClick={handleRemoveCoupon}
+                className="text-xs text-gray-600 hover:text-red-600 transition-colors"
+              >
+                Remove
+              </button>
+            </div>
+          )}
 
-        {/* Festival offer is active — block coupon input */}
-        {festivalActive && (
-          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-800">
-            <Sparkles className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
-            <span>Promo codes are disabled during the <strong>{FESTIVAL_OFFER.label}</strong>. Your 10% discount is applied automatically.</span>
-          </div>
-        )}
-        {!festivalActive && totalItems >= 3 && !appliedCoupon && (
-          <p className="text-xs text-gray-500 mt-2">
-            Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer).
-          </p>
-        )}
-      </div>
+          {totalItems >= 3 && !appliedCoupon && (
+            <p className="text-xs text-gray-500 mt-2">
+              Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer).
+            </p>
+          )}
+
+          {/* Errors */}
+          {errors.length > 0 && (
+            <div className="mt-2 space-y-2">
+              {errors.map((error, index) => (
+                <div key={index} className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg p-2">
+                  <span className="text-xs text-red-700">{error}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Messages */}
       {messages.length > 0 && (
@@ -237,19 +255,6 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
         </div>
       )}
 
-      {/* Errors */}
-      {errors.length > 0 && (
-        <div className="space-y-2">
-          {errors.map((error, index) => (
-            <div
-              key={index}
-              className="flex items-start gap-2 bg-red-50 border border-red-200 rounded-lg p-3"
-            >
-              <span className="text-sm text-red-700">{error}</span>
-            </div>
-          ))}
-        </div>
-      )}
 
       {/* Gift Notice */}
       {showGift && (
