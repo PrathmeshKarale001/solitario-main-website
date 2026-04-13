@@ -24,99 +24,89 @@ import { useWishlist } from '@/lib/wishlist-context';
 import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
 import { trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 import { getActiveFestival, FestivalConfig } from '@/lib/festival-config';
-import { CATEGORIES } from '@/lib/constants';
 import ProductFilters from '@/components/products/ProductFilters';
 
 const LOAD_MORE_THRESHOLD = 12;
 
-// ─── Animated floating particle ────────────────────────────────────────────
-function FloatingParticle({ delay, x, y }: { delay: number; x: string; y: string }) {
-  return (
-    <motion.div
-      className="absolute w-1 h-1 rounded-full bg-bronze-gold/40 pointer-events-none"
-      style={{ left: x, top: y }}
-      animate={{ y: [0, -30, 0], opacity: [0.3, 0.7, 0.3] }}
-      transition={{ duration: 4 + delay, repeat: Infinity, delay, ease: 'easeInOut' }}
-    />
-  );
-}
 
-// ─── Hero banner driven by FestivalConfig ──────────────────────────────────
 function FestivalHero({ festival }: { festival: FestivalConfig }) {
-  const particles = useMemo(
-    () =>
-      Array.from({ length: 18 }, (_, i) => ({
-        id: i,
-        delay: (i * 0.37) % 5,
-        x: `${(i * 19 + 5) % 100}%`,
-        y: `${(i * 31 + 10) % 100}%`,
-      })),
-    []
-  );
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  const hasImage = !!festival.heroImage;
 
   return (
-    <section className="relative min-h-[55vh] md:min-h-[65vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-classic-green via-[#0d4a3a] to-[#0a3528]">
-      {/* Subtle radial glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(200,184,154,0.15)_0%,transparent_70%)]" />
-
-      {/* Floating particles */}
-      {particles.map((p) => (
-        <FloatingParticle key={p.id} delay={p.delay} x={p.x} y={p.y} />
-      ))}
-
-      {/* Decorative corner accents */}
-      <div className="absolute top-8 left-8 w-16 h-16 border-l-2 border-t-2 border-bronze-gold/30 rounded-tl-lg" />
-      <div className="absolute top-8 right-8 w-16 h-16 border-r-2 border-t-2 border-bronze-gold/30 rounded-tr-lg" />
-      <div className="absolute bottom-12 left-8 w-16 h-16 border-l-2 border-b-2 border-bronze-gold/30 rounded-bl-lg" />
-      <div className="absolute bottom-12 right-8 w-16 h-16 border-r-2 border-b-2 border-bronze-gold/30 rounded-br-lg" />
-
-      {/* Content */}
-      <div className="relative z-10 text-center text-white px-6 max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-        >
-          {/* Festival badge pill */}
-          <div className="flex justify-center mb-6">
-            <span className="inline-flex items-center gap-2 bg-bronze-gold/20 border border-bronze-gold/40 text-bronze-gold px-5 py-2 rounded-full font-gotham text-xs uppercase tracking-widest backdrop-blur-sm">
-              <Sparkles className="w-3.5 h-3.5" />
-              {festival.tagline}
-              <Sparkles className="w-3.5 h-3.5" />
-            </span>
-          </div>
-
-          {/* Big emoji + tagline */}
-          {festival.emoji && (
-            <div className="text-5xl md:text-7xl mb-4 animate-pulse" style={{ animationDuration: '3s' }}>
-              {festival.emoji}
-            </div>
+    <section className="relative w-full overflow-hidden bg-[#1a1a1a]">
+      <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
+        <div className="absolute inset-0">
+          {hasImage ? (
+            <Image
+              src={festival.heroImage!}
+              alt={festival.tagline}
+              fill
+              className="object-cover object-center"
+              priority
+              quality={90}
+              sizes="100vw"
+            />
+          ) : (
+            /* Fallback gradient when no image configured */
+            <div className="w-full h-full bg-gradient-to-br from-classic-green via-[#0d4a3a] to-[#0a3528]" />
           )}
+          {/* Gradient overlay — bottom-heavy like earrings hero */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
+        </div>
 
-          <h1 className="text-3xl sm:text-4xl md:text-6xl font-montserrat font-bold mb-4 text-ivory-pearl leading-tight">
-            {festival.heading}
-          </h1>
-
-          <p className="text-base md:text-xl text-ivory-pearl/75 font-montserrat max-w-2xl mx-auto mb-8 leading-relaxed">
-            {festival.subtitle}
-          </p>
-
-          {/* Scroll-down hint */}
+        {/* Dramatic top-left tagline (like "DRAMATIC. DELICATE. DIVINE.") */}
+        {festival.heroTagline && (
           <motion.div
-            animate={{ y: [0, 6, 0] }}
-            transition={{ repeat: Infinity, duration: 1.8, ease: 'easeInOut' }}
-            className="flex justify-center"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="absolute top-8 left-8 md:top-12 md:left-12 z-10"
           >
-            <div className="flex flex-col items-center gap-1 text-ivory-pearl/40 text-xs font-gotham uppercase tracking-wider">
-              <span>Scroll to explore</span>
-              <ChevronRight className="w-4 h-4 rotate-90" />
-            </div>
+            <p className="text-white/50 font-gotham text-xs md:text-sm uppercase tracking-[0.3em]">
+              {festival.heroTagline}
+            </p>
           </motion.div>
-        </motion.div>
-      </div>
+        )}
 
-      {/* Bottom fade */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white to-transparent" />
+        {/* Bottom-center text — same position as category page */}
+        <div className="absolute inset-0 z-10 flex items-end justify-center pb-12 md:pb-16">
+          <div className="text-center px-4">
+            {/* Breadcrumb */}
+            <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4 font-montserrat">
+              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <span>/</span>
+              <span className="text-white">{festival.tagline}</span>
+            </nav>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
+            >
+              {festival.heading}
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto"
+            >
+              {festival.subtitle}
+            </motion.p>
+          </div>
+        </div>
+      </div>
     </section>
   );
 }

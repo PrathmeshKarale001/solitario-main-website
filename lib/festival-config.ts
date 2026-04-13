@@ -32,12 +32,16 @@ export interface FestivalConfig {
   ctaLink: string;
   /** Festival emoji for badge flair */
   emoji?: string;
-  /** Max products to show (default: 4) */
+  /** Max products to show on homepage (default: 4) */
   maxProducts?: number;
   /** Optional: auto-activate on this date (ISO string) */
   startDate?: string;
   /** Optional: auto-deactivate after this date (ISO string) */
   endDate?: string;
+  /** Hero background image path for the /festival page */
+  heroImage?: string;
+  /** Short dramatic tagline shown on hero image (e.g. 'AUSPICIOUS. ETERNAL. DIVINE.') */
+  heroTagline?: string;
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -58,6 +62,8 @@ export const FESTIVALS: FestivalConfig[] = [
     maxProducts: 4,
     startDate: '2026-04-10T00:00:00+05:30',
     endDate: '2026-04-30T23:59:59+05:30',
+    heroImage: '/images/banners/akshay-tritiya.jpeg',
+    heroTagline: 'AUSPICIOUS. ETERNAL. DIVINE.',
   },
 
   // ── TEMPLATES — Uncomment & fill in for the next event ─────────
