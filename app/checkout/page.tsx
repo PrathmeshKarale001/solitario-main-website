@@ -18,6 +18,7 @@ import { trackPaymentInitiate } from '@/lib/gtm-conversions';
 import { trackMetaAddPaymentInfo } from '@/components/analytics/MetaPixel';
 import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
+import FestivalGiftItem from '@/components/cart/FestivalGiftItem';
 
 // Declare Razorpay on window
 declare global {
@@ -1140,27 +1141,8 @@ export default function CheckoutPage() {
                       ) : null}
                     </div>
                   )}
-                  {/* Festival Gift Item — shown when Akshaya Tritiya offer is active */}
-                  {festivalActive && (
-                    <div className="flex gap-3 pb-4 border-b border-amber-100 last:border-0 last:pb-0 relative">
-                      <div className="relative w-16 h-16 flex-shrink-0 bg-amber-50 rounded-lg overflow-hidden border border-amber-200 flex items-center justify-center">
-                        <span className="text-2xl">💎</span>
-                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">Gift</div>
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-1.5 mb-1">
-                          <Sparkles size={12} className="text-amber-500 shrink-0" />
-                          <p className="font-medium text-sm text-gray-900 line-clamp-1">Premium Diamond</p>
-                        </div>
-                        <div className="flex items-center justify-between">
-                          <span className="text-[9px] font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-1.5 py-0.5 rounded-full border border-amber-100">
-                            🪷 Akshaya Tritiya Gift
-                          </span>
-                          <span className="text-xs font-bold text-amber-600">FREE</span>
-                        </div>
-                      </div>
-                    </div>
-                  )}
+                  {/* Festival Gift Item — Premium Diamond (real Shopify product) */}
+                  {festivalActive && <FestivalGiftItem variant="checkout" />}
                 </div>
 
                 {/* Promotions */}

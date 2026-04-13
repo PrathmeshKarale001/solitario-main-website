@@ -17,6 +17,7 @@ import { useRouter } from 'next/navigation';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
 import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
+import FestivalGiftItem from '@/components/cart/FestivalGiftItem';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
@@ -516,26 +517,8 @@ export default function CartPage() {
                 </div>
               )}
 
-              {/* Festival Gift Item — Premium Diamond (shown when festival offer is active) */}
-              {festivalActive && (
-                <div className="flex gap-3 md:gap-6 p-4 md:p-5 bg-gradient-to-r from-amber-50 to-yellow-50 border border-amber-200 rounded-xl relative transition-all duration-300">
-                  {/* Gift badge */}
-                  <div className="relative w-20 h-20 md:w-24 md:h-24 flex-shrink-0 bg-white rounded-xl overflow-hidden border-2 border-amber-300 flex items-center justify-center shadow-sm">
-                    <span className="text-4xl">💎</span>
-                    <div className="absolute top-0 right-0 bg-amber-500 text-white text-[9px] px-2 py-0.5 font-bold uppercase rounded-bl-xl">Gift</div>
-                  </div>
-                  <div className="flex-1 min-w-0 flex flex-col justify-center">
-                    <div className="flex items-center gap-1.5 mb-1">
-                      <Gift size={16} className="text-amber-500 shrink-0" />
-                      <h3 className="font-montserrat font-bold text-sm text-amber-900">{FESTIVAL_OFFER.giftProductName}</h3>
-                    </div>
-                    <p className="text-xs text-amber-700 mb-2">Free with your Akshaya Tritiya order</p>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-gotham font-bold text-amber-700 tracking-wider uppercase bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300">🪷 FREE GIFT</span>
-                    </div>
-                  </div>
-                </div>
-              )}
+              {/* Festival Gift Item — Premium Diamond */}
+              {festivalActive && <FestivalGiftItem variant="cart" />}
 
 
               {savedForLater.length > 0 && (
