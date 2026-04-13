@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2, ChevronRight, Ticket } from 'lucide-react';
+import { X, ShoppingBag, Minus, Plus, Trash2, Tag, Gift, Loader2, ChevronRight, Ticket, Sparkles } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
@@ -12,6 +12,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { CartErrorBoundary } from '@/components/ui/ErrorBoundary';
 import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
+import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
 
 function CartSidebarContent() {
   const { items, isCartOpen, closeCart, updateQuantity, removeFromCart, total, itemCount } = useCart();
@@ -54,6 +55,8 @@ function CartSidebarContent() {
     messages: string[];
   } | null>(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
+
+  const festivalActive = isFestivalOfferActive();
 
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
@@ -388,6 +391,24 @@ function CartSidebarContent() {
                           </div>
                         </>
                       ) : null}
+                    </div>
+                  )}
+
+                  {/* Festival Gift Item — Premium Diamond */}
+                  {festivalActive && (
+                    <div className="flex gap-3 pb-4 border-b border-amber-100 last:border-0 relative">
+                      <div className="relative w-16 h-16 flex-shrink-0 bg-amber-50 rounded-xl overflow-hidden border-2 border-amber-200 flex items-center justify-center">
+                        <span className="text-2xl">💎</span>
+                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[7px] px-1.5 py-0.5 font-bold uppercase rounded-bl-lg">Gift</div>
+                      </div>
+                      <div className="flex-1 flex flex-col justify-center">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Sparkles size={12} className="text-amber-500 shrink-0" />
+                          <h4 className="font-montserrat font-bold text-body-sm text-amber-900">{FESTIVAL_OFFER.giftProductName}</h4>
+                        </div>
+                        <p className="text-[10px] text-amber-700 mb-1.5">Akshaya Tritiya gift</p>
+                        <span className="text-[9px] font-gotham font-bold text-amber-700 tracking-wider uppercase bg-amber-100 px-2 py-0.5 rounded-full border border-amber-200 w-fit">🪷 FREE GIFT</span>
+                      </div>
                     </div>
                   )}
                 </div>

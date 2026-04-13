@@ -1141,10 +1141,10 @@ export default function CheckoutPage() {
                     </div>
                   )}
                   {/* Festival Gift Item — shown when Akshaya Tritiya offer is active */}
-                  {festivalActive && festivalOfferApplied && (
+                  {festivalActive && (
                     <div className="flex gap-3 pb-4 border-b border-amber-100 last:border-0 last:pb-0 relative">
                       <div className="relative w-16 h-16 flex-shrink-0 bg-amber-50 rounded-lg overflow-hidden border border-amber-200 flex items-center justify-center">
-                        <Gift size={24} className="text-amber-500" />
+                        <span className="text-2xl">💎</span>
                         <div className="absolute top-0 right-0 bg-amber-500 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">Gift</div>
                       </div>
                       <div className="flex-1 min-w-0">
