@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { clerkClient } from '@clerk/nextjs/server';
 import { syncUserWithShopify } from '@/lib/shopify-sync';
+import { createWelcomeDiscount } from '@/lib/shopify-discount';
+import { sendWelcomeEmail } from '@/lib/emails/welcome';
 import { Webhook } from 'svix';
 
 // Clerk webhook secret - add this to .env.local
@@ -20,7 +22,7 @@ export async function POST(request: NextRequest) {
 
     // Get the raw body
     const body = await request.text();
-    
+
     // Create a new Svix instance with your secret
     const wh = new Webhook(WEBHOOK_SECRET);
 
@@ -43,27 +45,45 @@ export async function POST(request: NextRequest) {
 
     if (eventType === 'user.created') {
       const userData = evt.data;
-      
-      console.log('[Webhook] New user signed up:', userData.email_addresses[0]?.email_address);
+      const email = userData.email_addresses[0]?.email_address;
 
-      // Sync to Shopify
+      console.log('[Webhook] New user signed up:', email);
+
+      if (!email) {
+        console.warn('[Webhook] No email address on new user, skipping sync & discount');
+        return NextResponse.json({ success: true });
+      }
+
+      // 1. Sync to Shopify customer
       try {
-        const email = userData.email_addresses[0]?.email_address;
-        if (!email) {
-          throw new Error('No email address found');
-        }
-
         await syncUserWithShopify(
           userData.id,
           email,
           userData.first_name,
           userData.last_name
         );
-
         console.log('[Webhook] Successfully synced new user to Shopify');
       } catch (error) {
         console.error('[Webhook] Failed to sync to Shopify:', error);
-        // Don't fail the webhook, just log the error
+        // Don't fail the webhook — continue to discount step
+      }
+
+      // 2. Create a unique Shopify welcome discount code and email it to the user
+      try {
+        const discount = await createWelcomeDiscount(userData.id);
+        console.log('[Webhook] Created welcome discount code:', discount.code);
+
+        await sendWelcomeEmail({
+          email,
+          firstName: userData.first_name || undefined,
+          code: discount.code,
+          expiresAt: discount.expiresAt,
+          percentOff: discount.percentOff,
+        });
+        console.log('[Webhook] Sent welcome discount email to:', email);
+      } catch (error) {
+        // Log but don't fail — signup must never be blocked by our promo system
+        console.error('[Webhook] Failed to create/send welcome discount:', error);
       }
     }
 

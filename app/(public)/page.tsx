@@ -87,7 +87,7 @@ export default function Home() {
       <OffersMarquee />
 
       {/* AKSHAYA TRITIYA PROMO BANNER */}
-      <a href="/products" className="block w-full">
+      <a href="/festival" className="block w-full">
         <img
           src="/images/banners/akshay-tritiya.jpeg"
           alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 guests receive a diamond for free. Shop Now"

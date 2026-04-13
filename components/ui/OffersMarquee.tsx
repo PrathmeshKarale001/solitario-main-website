@@ -12,8 +12,6 @@ interface Offer {
 const defaultOffers: Offer[] = [
   { id: '1', text: 'Insured & Secure Delivery on All Orders', icon: 'gift' },
   { id: '2', text: 'Get 20% Off on Your First Purchase', icon: 'tag' },
-  { id: '3', text: 'Buy 2+ Items & Get a Free Diamond Gift', icon: 'sparkles' },
-  { id: '4', text: 'Flat 20% Off on Lab-Grown Diamonds', icon: 'trending' },
   { id: '5', text: 'Exclusive Designs - Limited Stock Available', icon: 'sparkles' },
   { id: '6', text: 'Easy EMI Options Available', icon: 'tag' },
 ];
