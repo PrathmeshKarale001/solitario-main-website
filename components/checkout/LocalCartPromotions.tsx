@@ -53,21 +53,53 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
   const calculateAutomaticPromotions = async () => {
     setMessages([]);
     setShowGift(false);
-    let calculatedDiscount = 0;
     const newMessages: string[] = [];
 
-    // Buy 2 Get 1 Free
-    // Note: Actual discount calculation happens in the backend
-    if (totalItems >= 3) {
-      newMessages.push('🎁 Buy 2 Get 1 Free!');
+    if (totalItems < 3 || subtotal <= 0) {
+      setDiscount(0);
+      setMessages([]);
+      if (onDiscountApplied) onDiscountApplied(0, []);
+      return;
     }
 
-    setDiscount(calculatedDiscount);
+    // Call pricing API to get the actual BUY2 discount amount
+    try {
+      const response = await fetch('/api/pricing/quote', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // Provide a minimal cartLines from subtotal so engine can compute cheapest item
+          // We pass totalItems count at equal price so it gets correct floor division
+          cartLines: [
+            {
+              id: 'auto',
+              quantity: totalItems,
+              merchandise: {
+                id: 'auto',
+                title: 'Item',
+                price: { amount: String((subtotal / totalItems / 100).toFixed(2)), currencyCode: 'INR' },
+              },
+            },
+          ],
+        }),
+      });
+      if (response.ok) {
+        const data = await response.json();
+        const buy2Discount = data.pricing?.discounts?.find((d: any) => d.type === 'BUY2');
+        const discountAmt = buy2Discount ? buy2Discount.amount * 100 : 0; // convert rupees back to paise
+        if (buy2Discount) newMessages.push('🎁 Buy 2 Get 1 Free applied!');
+        setDiscount(discountAmt);
+        setMessages(newMessages);
+        if (onDiscountApplied) onDiscountApplied(discountAmt, newMessages);
+        return;
+      }
+    } catch {}
+
+    // Fallback: just show the message, no amount
+    newMessages.push('🎁 Buy 2 Get 1 Free!');
+    setDiscount(0);
     setMessages(newMessages);
-
-    if (onDiscountApplied) {
-      onDiscountApplied(calculatedDiscount, newMessages);
-    }
+    if (onDiscountApplied) onDiscountApplied(0, newMessages);
   };
 
   const handleApplyCoupon = async (codeOverride?: string) => {

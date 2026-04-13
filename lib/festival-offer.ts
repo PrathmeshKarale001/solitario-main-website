@@ -28,7 +28,7 @@ export const FESTIVAL_OFFER = {
   giftProductName: 'Premium Diamond',
 
   /** Festival active window */
-  startDate: new Date('2026-04-29T00:00:00+05:30'),
+  startDate: new Date('2026-04-13T00:00:00+05:30'),
   endDate: new Date('2026-04-30T23:59:59+05:30'),
 
   /** Display label for UI banners */

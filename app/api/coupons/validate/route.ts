@@ -19,6 +19,18 @@ export async function POST(request: NextRequest) {
 
     const code = couponCode.toUpperCase();
 
+    // -- Festival offer shortcut: TRITIYA10 is always 10% off during the active window --
+    // This avoids dependency on Shopify Admin API returning the right percentage format.
+    const { isFestivalOfferActive, FESTIVAL_OFFER } = await import('@/lib/festival-offer');
+    if (code === FESTIVAL_OFFER.discountCode && isFestivalOfferActive()) {
+      return NextResponse.json({
+        success: true,
+        percentOff: FESTIVAL_OFFER.discountPercent,
+        code,
+        source: 'FESTIVAL',
+      });
+    }
+
     // 1. Try Shopify Admin API first (for discount codes created in Shopify)
     try {
       const shopifyDiscount = await validateShopifyDiscountCode(code);
