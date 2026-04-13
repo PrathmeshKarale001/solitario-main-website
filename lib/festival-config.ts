@@ -59,7 +59,7 @@ export const FESTIVALS: FestivalConfig[] = [
     ctaText: 'Shop Akshaya Tritiya',
     ctaLink: '/festival',
     emoji: '🪷',
-    maxProducts: 4,
+    maxProducts: 6,
     startDate: '2026-04-10T00:00:00+05:30',
     endDate: '2026-04-30T23:59:59+05:30',
     heroImage: '/images/banners/akshay-tritiya.jpeg',

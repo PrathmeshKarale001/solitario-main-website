@@ -13,31 +13,37 @@ import { useCart } from '@/lib/cart-context';
 import { useWishlist } from '@/lib/wishlist-context';
 import { isPrebookingProduct, getProductDisplayPrice, getProductButtonText } from '@/lib/prebooking';
 import { trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
-import { getActiveFestival, type FestivalConfig } from '@/lib/festival-config';
+import { getActiveFestival } from '@/lib/festival-config';
 
 export default function FestivalCollection() {
-  const [festival, setFestival] = useState<FestivalConfig | null>(null);
+  const [festival] = useState(() => getActiveFestival());
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const { addToCart } = useCart();
   const { wishlist, addToWishlist, removeFromWishlist } = useWishlist();
 
   useEffect(() => {
-    const activeFestival = getActiveFestival();
-    setFestival(activeFestival);
-
-    if (!activeFestival) {
+    if (!festival) {
       setLoading(false);
       return;
     }
 
     const fetchProducts = async () => {
       try {
-        const res = await fetch(
-          `/api/products?collection=${activeFestival.collectionHandle}&limit=${activeFestival.maxProducts || 4}`
-        );
+        // Fetch all products, then filter by collection handle client-side
+        // This ensures we get results even if the cache is stale
+        const res = await fetch('/api/products');
         const data = await res.json();
-        setProducts(data.products || []);
+        const allProducts: Product[] = data.products || [];
+
+        // Filter products belonging to this festival's Shopify collection
+        const festivalProducts = allProducts.filter((product: any) =>
+          product.collections?.some(
+            (col: any) => col.handle === festival.collectionHandle
+          )
+        );
+
+        setProducts(festivalProducts.slice(0, festival.maxProducts || 4));
       } catch (error) {
         console.error('Failed to load festival products:', error);
         setProducts([]);
@@ -46,30 +52,16 @@ export default function FestivalCollection() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [festival]);
 
-  // Don't render anything if no active festival or no products
-  if (!festival || (!loading && products.length === 0)) return null;
-
-  const { theme } = festival;
+  // Don't render if no active festival or no products loaded
+  if (!festival) return null;
+  if (!loading && products.length === 0) return null;
 
   return (
-    <Section
-      variant="light"
-      padding="sm"
-      className="py-6 sm:py-8 md:py-10 relative overflow-hidden"
-      style={{ background: theme.bgGradient || undefined }}
-    >
-      {/* Decorative corner sparkle */}
-      <div
-        className="absolute top-0 right-0 w-48 h-48 opacity-[0.04] pointer-events-none"
-        style={{
-          background: `radial-gradient(circle at top right, ${theme.accent}, transparent 70%)`,
-        }}
-      />
-
+    <Section variant="light" padding="sm" className="py-6 sm:py-8 md:py-10">
       <Container>
-        {/* Header */}
+        {/* Header — same style as ProductCategories */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -77,31 +69,26 @@ export default function FestivalCollection() {
           transition={{ duration: 0.4 }}
           className="mb-3 sm:mb-6 md:mb-8 text-center"
         >
-          {/* Tagline with festival emoji */}
-          <span
-            className="text-[10px] sm:text-xs uppercase tracking-[0.2em] font-gotham mb-2 inline-flex items-center gap-1.5"
-            style={{ color: theme.taglineColor }}
-          >
-            {festival.emoji && <span className="text-sm">{festival.emoji}</span>}
-            {festival.tagline}
-            {festival.emoji && <span className="text-sm">{festival.emoji}</span>}
-          </span>
 
           <h2
-            className="text-xl sm:text-2xl md:text-4xl font-montserrat font-bold mb-2 sm:mb-4"
-            style={{ color: theme.headingColor, letterSpacing: '-0.02em' }}
+            className="text-2xl sm:text-3xl md:text-5xl font-montserrat font-bold text-classic-green mb-2 sm:mb-3 flex items-center justify-center gap-2"
+            style={{ letterSpacing: '-0.02em' }}
           >
-            {festival.heading}
+            {festival.emoji && <span className="text-2xl sm:text-3xl md:text-4xl">{festival.emoji}</span>}
+            {festival.tagline}
+            {festival.emoji && <span className="text-2xl sm:text-3xl md:text-4xl">{festival.emoji}</span>}
           </h2>
-
-          <p className="text-xs sm:text-sm text-gray-600 max-w-md mx-auto font-montserrat hidden sm:block">
+          <p className="text-sm sm:text-base md:text-lg text-gray-700 font-montserrat font-medium mb-1 sm:mb-2">
+            {festival.heading}
+          </p>
+          <p className="text-xs sm:text-sm text-gray-500 max-w-md mx-auto font-montserrat hidden sm:block">
             {festival.subtitle}
           </p>
         </motion.div>
 
-        {/* Product Grid */}
+        {/* Product Grid — identical card design to ProductCategories */}
         {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 mb-6 sm:mb-10">
             {[...Array(festival.maxProducts || 4)].map((_, i) => (
               <div key={i} className="animate-pulse">
                 <div className="bg-gray-200 rounded-xl aspect-square mb-3" />
@@ -111,7 +98,7 @@ export default function FestivalCollection() {
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-10">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 sm:gap-6 mb-6 sm:mb-10">
             {products.map((product, index) => {
               const categoryLabel =
                 CATEGORIES.find((c) => c.slug === product.category)?.label || product.category;
@@ -126,10 +113,9 @@ export default function FestivalCollection() {
                   transition={{ duration: 0.3, delay: index * 0.05 }}
                   className="group"
                 >
-                  <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 hover:shadow-lg transition-all duration-300"
-                    style={{ '--hover-border': `${theme.accent}4D` } as React.CSSProperties}
-                  >
-                    {/* Image Container */}
+                  {/* Card — same as ProductCategories */}
+                  <div className="relative bg-white rounded-xl overflow-hidden border border-gray-200 hover:border-classic-green/30 hover:shadow-lg transition-all duration-300">
+                    {/* Image */}
                     <Link href={`/products/${product.id}`} className="block">
                       <div className="relative aspect-square bg-gradient-to-br from-gray-50 to-white overflow-hidden">
                         <Image
@@ -140,21 +126,11 @@ export default function FestivalCollection() {
                           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 20vw"
                         />
 
-                        {/* Festival Badge */}
-                        <div
-                          className="absolute top-3 left-3 px-3 py-1 rounded-full shadow-sm flex items-center gap-1"
-                          style={{ background: theme.accent, color: '#fff' }}
-                        >
-                          <Sparkles className="w-3 h-3" />
-                          <span className="text-[10px] uppercase tracking-wider font-gotham">
-                            {festival.tagline.split(' ')[0]}
-                          </span>
-                        </div>
-
-                        {/* Category Badge */}
-                        <div className="absolute bottom-3 left-3 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm">
-                          <span className="text-[10px] uppercase tracking-wider font-gotham text-gray-700">
-                            {categoryLabel}
+                        {/* Festival Badge — uses bronze-gold like category badge */}
+                        <div className="absolute top-3 left-3 bg-bronze-gold px-3 py-1 rounded-full shadow-sm flex items-center gap-1">
+                          <Sparkles className="w-3 h-3 text-white" />
+                          <span className="text-[10px] uppercase tracking-wider font-gotham text-white">
+                            {festival.tagline.split(' ').slice(0, 2).join(' ')}
                           </span>
                         </div>
 
@@ -185,22 +161,18 @@ export default function FestivalCollection() {
                       </div>
                     </Link>
 
-                    {/* Product Info */}
+                    {/* Product Info — same as ProductCategories */}
                     <div className="p-4">
                       <Link href={`/products/${product.id}`}>
-                        <h3 className="font-montserrat font-bold text-sm sm:text-base text-gray-900 line-clamp-1 mb-2 transition-colors min-h-[1.5rem]"
-                          style={{ '--tw-text-opacity': 1 } as React.CSSProperties}
-                        >
+                        <h3 className="font-montserrat font-bold text-sm sm:text-base text-gray-900 line-clamp-1 mb-2 group-hover:text-classic-green transition-colors min-h-[1.5rem]">
                           {product.name}
                         </h3>
                       </Link>
-                      <p className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${isPrebookingProduct(product) ? 'text-purple-600' : ''}`}
-                        style={!isPrebookingProduct(product) ? { color: theme.accent } : undefined}
-                      >
+                      <p className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'}`}>
                         {isPrebookingProduct(product) ? getProductDisplayPrice(product) : formatPrice(product.price, product.currency)}
                       </p>
 
-                      {/* Add to Cart Button */}
+                      {/* Add to Cart — same as ProductCategories */}
                       <button
                         onClick={(e) => {
                           e.preventDefault();
@@ -215,15 +187,8 @@ export default function FestivalCollection() {
                         }}
                         className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${isPrebookingProduct(product)
                           ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
-                          : ''
+                          : 'bg-classic-green hover:bg-classic-green/90'
                           }`}
-                        style={!isPrebookingProduct(product) ? { background: theme.accent } : undefined}
-                        onMouseEnter={(e) => {
-                          if (!isPrebookingProduct(product)) e.currentTarget.style.background = theme.accentHover;
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isPrebookingProduct(product)) e.currentTarget.style.background = theme.accent;
-                        }}
                       >
                         {isPrebookingProduct(product) ? <Ticket className="w-4 h-4" /> : <ShoppingCart className="w-4 h-4" />}
                         {getProductButtonText(product, false)}
@@ -236,7 +201,7 @@ export default function FestivalCollection() {
           </div>
         )}
 
-        {/* CTA Button */}
+        {/* CTA — same bronze-gold as ProductCategories "View All" */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -246,10 +211,7 @@ export default function FestivalCollection() {
         >
           <Link
             href={festival.ctaLink}
-            className="inline-flex items-center gap-2 text-white px-5 sm:px-8 py-2.5 sm:py-3 font-gotham text-[10px] sm:text-xs uppercase tracking-wider rounded-full transition-all touch-manipulation"
-            style={{ background: theme.accent }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = theme.accentHover)}
-            onMouseLeave={(e) => (e.currentTarget.style.background = theme.accent)}
+            className="inline-flex items-center gap-2 bg-bronze-gold text-white px-5 sm:px-8 py-2.5 sm:py-3 font-gotham text-[10px] sm:text-xs uppercase tracking-wider rounded-full hover:bg-bronze-gold/90 transition-all touch-manipulation"
           >
             {festival.ctaText}
             <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4" />
