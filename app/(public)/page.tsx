@@ -12,6 +12,9 @@ import OffersMarquee from '@/components/ui/OffersMarquee';
 const LoginPopup = dynamic(() => import('@/components/home/LoginPopup'));
 import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
+// Festival collection — auto-shows when a festival is active in festival-config.ts
+const FestivalCollection = dynamic(() => import('@/components/home/FestivalCollection'));
+
 // Lazy load below-fold components for better performance and reduced initial bundle
 const FlowingMenuClient = dynamic(() => import('@/components/home/FlowingMenuClient'), {
   loading: () => <div className="h-[40vh] bg-[#FAF5EF]" />,
@@ -83,8 +86,21 @@ export default function Home() {
       </div>
       <OffersMarquee />
 
+      {/* AKSHAYA TRITIYA PROMO BANNER */}
+      <a href="/products" className="block w-full">
+        <img
+          src="/images/banners/akshay-tritiya.jpeg"
+          alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 guests receive a diamond for free. Shop Now"
+          className="w-full h-auto"
+          loading="eager"
+        />
+      </a>
+
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
+
+      {/* 2a. FESTIVAL COLLECTION — Auto-renders when active in lib/festival-config.ts */}
+      <FestivalCollection />
 
       {/* 3. PRODUCT COLLECTIONS - Browse & filter products */}
       <div id="explore-section">
