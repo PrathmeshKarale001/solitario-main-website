@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package, Ticket } from 'lucide-react';
+import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package, Ticket, Sparkles } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { isPrebookingProduct, getCartItemPrice, formatPrebookingOrderNotes, PREBOOK_PRICE } from '@/lib/prebooking';
@@ -17,6 +17,7 @@ import Script from 'next/script';
 import { trackPaymentInitiate } from '@/lib/gtm-conversions';
 import { trackMetaAddPaymentInfo } from '@/components/analytics/MetaPixel';
 import { usePincodeLookup } from '@/hooks/usePincodeLookup';
+import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
 
 // Declare Razorpay on window
 declare global {
@@ -104,6 +105,33 @@ export default function CheckoutPage() {
   const [isCityStateLocked, setIsCityStateLocked] = useState(false);
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
+
+  // ── Akshaya Tritiya Festival Offer (persisted from cart) ────────────────────
+  const festivalActive = isFestivalOfferActive();
+  const [festivalOfferApplied, setFestivalOfferApplied] = useState(false);
+  const [festivalDiscount, setFestivalDiscount] = useState(0); // rupees
+  const [festivalShopifyTotal, setFestivalShopifyTotal] = useState<number | null>(null);
+  const [festivalLoading, setFestivalLoading] = useState(false);
+
+  // Re-apply festival offer on checkout mount (ensures discount survives navigation)
+  useEffect(() => {
+    if (!festivalActive || items.length === 0) return;
+    setFestivalLoading(true);
+    fetch('/api/cart/apply-festival-offer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.success) {
+          setFestivalOfferApplied(true);
+          setFestivalDiscount(Math.round(data.discountAmount ?? 0));
+          setFestivalShopifyTotal(data.shopifyTotal ?? null);
+        }
+      })
+      .catch(() => {})
+      .finally(() => setFestivalLoading(false));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Auto-fill user info and load saved addresses
   useEffect(() => {
@@ -246,7 +274,13 @@ export default function CheckoutPage() {
   const shipping = 0;
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const discountedTotal = total - (promotionDiscount / 100);
-  const grandTotal = Math.max(0, discountedTotal + shipping);
+  // Use Shopify-authoritative total when festival offer is active (survives page refresh)
+  const grandTotal = Math.max(
+    0,
+    festivalActive && festivalShopifyTotal != null
+      ? festivalShopifyTotal                // Shopify computed total (has 10% + free diamond)
+      : discountedTotal + shipping           // Regular total with local promo discounts
+  );
 
   // Validate form
   const validateForm = (): boolean => {
@@ -1096,6 +1130,27 @@ export default function CheckoutPage() {
                       ) : null}
                     </div>
                   )}
+                  {/* Festival Gift Item — shown when Akshaya Tritiya offer is active */}
+                  {festivalActive && festivalOfferApplied && (
+                    <div className="flex gap-3 pb-4 border-b border-amber-100 last:border-0 last:pb-0 relative">
+                      <div className="relative w-16 h-16 flex-shrink-0 bg-amber-50 rounded-lg overflow-hidden border border-amber-200 flex items-center justify-center">
+                        <Gift size={24} className="text-amber-500" />
+                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[6px] px-1 py-0.5 font-bold uppercase rounded-bl">Gift</div>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-1.5 mb-1">
+                          <Sparkles size={12} className="text-amber-500 shrink-0" />
+                          <p className="font-medium text-sm text-gray-900 line-clamp-1">Premium Diamond</p>
+                        </div>
+                        <div className="flex items-center justify-between">
+                          <span className="text-[9px] font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-1.5 py-0.5 rounded-full border border-amber-100">
+                            🪷 Akshaya Tritiya Gift
+                          </span>
+                          <span className="text-xs font-bold text-amber-600">FREE</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
                 </div>
 
                 {/* Promotions */}
@@ -1109,6 +1164,23 @@ export default function CheckoutPage() {
                       setPromotionMessages(filteredMessages);
                     }}
                   />
+                  {/* Festival Offer Banner */}
+                  {festivalActive && (
+                    <div className="mb-3">
+                      <div className="flex items-center gap-2 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-white px-3 py-2.5 rounded-lg text-xs">
+                        <Sparkles size={14} className="flex-shrink-0" />
+                        <div>
+                          <span className="font-gotham font-bold block">🪷 Akshaya Tritiya Offer</span>
+                          <span className="opacity-90">10% off + Free Premium Diamond</span>
+                        </div>
+                        {festivalLoading && <Loader2 size={12} className="ml-auto animate-spin" />}
+                      </div>
+                      {festivalOfferApplied && (
+                        <p className="text-[10px] text-green-600 font-medium mt-1 px-1">✓ Offer applied to your order</p>
+                      )}
+                    </div>
+                  )}
+
                   {promotionMessages.length > 0 && (
                     <div className="mt-4 space-y-2">
                       {promotionMessages.map((msg, idx) => (
@@ -1156,6 +1228,24 @@ export default function CheckoutPage() {
                       <span className="font-medium">
                         -{formatPrice(promotionDiscount / 100, '₹')}
                       </span>
+                    </div>
+                  )}
+                  {/* Festival 10% discount line */}
+                  {festivalActive && festivalOfferApplied && festivalDiscount > 0 && (
+                    <div className="flex items-center justify-between text-amber-600">
+                      <span className="font-medium flex items-center gap-1">
+                        <Sparkles size={12} /> Akshaya Tritiya 10%
+                      </span>
+                      <span className="font-medium">-{formatPrice(festivalDiscount, '₹')}</span>
+                    </div>
+                  )}
+                  {/* Festival free diamond line */}
+                  {festivalActive && festivalOfferApplied && (
+                    <div className="flex items-center justify-between text-amber-600">
+                      <span className="font-medium flex items-center gap-1">
+                        <Gift size={12} /> Premium Diamond Gift
+                      </span>
+                      <span className="font-medium">FREE</span>
                     </div>
                   )}
                   <div className="flex items-center justify-between">

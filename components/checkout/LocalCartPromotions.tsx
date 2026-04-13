@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Tag, Gift, Sparkles, Loader2 } from 'lucide-react';
-
+import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
 import { useAdmin } from '@/lib/admin-context';
 
 interface LocalCartPromotionsProps {
@@ -19,6 +19,9 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
   const [messages, setMessages] = useState<string[]>([]);
   const [errors, setErrors] = useState<string[]>([]);
   const [showGift, setShowGift] = useState(false);
+
+  // Festival offer active — coupon entry is blocked to prevent stacking
+  const festivalActive = isFestivalOfferActive();
 
   // Load coupon from localStorage on mount and validate it
   useEffect(() => {
@@ -88,6 +91,13 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
 
       if (!response.ok) {
         setErrors([data.error || 'Invalid coupon code']);
+        if (!codeOverride) setAppliedCoupon('');
+        return;
+      }
+
+      // Block ALL coupons from stacking with Akshaya Tritiya festival offer
+      if (festivalActive) {
+        setErrors([`${FESTIVAL_OFFER.label} is already active. Promo codes cannot be stacked with the festival offer.`]);
         if (!codeOverride) setAppliedCoupon('');
         return;
       }
@@ -166,7 +176,14 @@ export function LocalCartPromotions({ totalItems, subtotal, onDiscountApplied }:
           </div>
         )}
 
-        {totalItems >= 3 && !appliedCoupon && (
+        {/* Festival offer is active — block coupon input */}
+        {festivalActive && (
+          <div className="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2 text-xs text-amber-800">
+            <Sparkles className="w-3.5 h-3.5 text-amber-600 flex-shrink-0" />
+            <span>Promo codes are disabled during the <strong>{FESTIVAL_OFFER.label}</strong>. Your 10% discount is applied automatically.</span>
+          </div>
+        )}
+        {!festivalActive && totalItems >= 3 && !appliedCoupon && (
           <p className="text-xs text-gray-500 mt-2">
             Coupons cannot be combined with cart discounts (Buy 2 Get 1 Free offer).
           </p>

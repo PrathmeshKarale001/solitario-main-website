@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket, Sparkles } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
@@ -11,11 +11,12 @@ import { isPrebookingProduct, getCartItemPrice } from '@/lib/prebooking';
 import { Section, Container } from '@/components/ui';
 import ProductRecommendations from '@/components/products/ProductRecommendations';
 import { useWishlist } from '@/lib/wishlist-context';
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '@clerk/nextjs';
 import { useRouter } from 'next/navigation';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
+import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
@@ -70,6 +71,48 @@ export default function CartPage() {
 
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
+
+  // ── Akshaya Tritiya Festival Offer ───────────────────────────────────────────
+  const festivalActive = isFestivalOfferActive();
+  const [festivalOfferApplied, setFestivalOfferApplied] = useState(false);
+  const [festivalDiscount, setFestivalDiscount] = useState(0); // in rupees
+  const [festivalShopifyTotal, setFestivalShopifyTotal] = useState<number | null>(null);
+  const [festivalLoading, setFestivalLoading] = useState(false);
+  const [festivalError, setFestivalError] = useState<string | null>(null);
+
+  const applyFestivalOffer = useCallback(async () => {
+    if (!festivalActive || festivalLoading || festivalOfferApplied) return;
+    setFestivalLoading(true);
+    setFestivalError(null);
+    try {
+      const res = await fetch('/api/cart/apply-festival-offer', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        setFestivalOfferApplied(true);
+        setFestivalDiscount(Math.round(data.discountAmount ?? 0));
+        setFestivalShopifyTotal(data.shopifyTotal ?? null);
+      } else if (res.status === 400 && data.error?.includes('No active cart')) {
+        // Cart not yet synced — retry after a short delay
+        setTimeout(applyFestivalOffer, 2000);
+      } else {
+        setFestivalError(data.error ?? 'Could not apply offer');
+      }
+    } catch {
+      setFestivalError('Network error applying offer');
+    } finally {
+      setFestivalLoading(false);
+    }
+  }, [festivalActive, festivalLoading, festivalOfferApplied]);
+
+  // Auto-apply festival offer when cart has items
+  useEffect(() => {
+    if (festivalActive && items.length > 0 && !festivalOfferApplied) {
+      applyFestivalOffer();
+    }
+  }, [items.length, festivalActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function fetchGift() {
@@ -526,6 +569,28 @@ export default function CartPage() {
                 <h2 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 {/* Active Offers */}
+                {/* Akshaya Tritiya Festival Banner */}
+                {festivalActive && (
+                  <div className="mb-4">
+                    <div className="flex items-center gap-2 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-white px-3 py-2.5 rounded-lg text-xs">
+                      <Sparkles size={14} className="flex-shrink-0 shrink-0" />
+                      <div>
+                        <span className="font-gotham font-bold block">🪷 Akshaya Tritiya Offer</span>
+                        <span className="opacity-90">10% off + Free Premium Diamond</span>
+                      </div>
+                      {festivalLoading && <Loader2 size={12} className="ml-auto animate-spin" />}
+                    </div>
+                    {festivalOfferApplied && (
+                      <p className="text-[10px] text-green-600 font-medium mt-1 px-1">
+                        ✓ Offer applied to your order
+                      </p>
+                    )}
+                    {festivalError && (
+                      <p className="text-[10px] text-red-500 mt-1 px-1">{festivalError}</p>
+                    )}
+                  </div>
+                )}
+
                 {itemCount >= 3 && (
                   <div className="space-y-2 mb-6">
                     <div className="offer-banner flex items-center gap-2 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-3 py-2 rounded-lg text-xs">
@@ -612,6 +677,24 @@ export default function CartPage() {
                         </div>
                       ))}
 
+                      {/* Festival offer discount line */}
+                      {festivalActive && festivalOfferApplied && festivalDiscount > 0 && (
+                        <div className="flex items-center justify-between text-amber-600">
+                          <span className="font-montserrat flex items-center gap-1">
+                            <Sparkles size={12} /> Akshaya Tritiya 10% Off
+                          </span>
+                          <span className="font-gotham font-bold">-{formatPrice(festivalDiscount)}</span>
+                        </div>
+                      )}
+                      {festivalActive && festivalOfferApplied && (
+                        <div className="flex items-center justify-between text-amber-600">
+                          <span className="font-montserrat flex items-center gap-1">
+                            <Gift size={12} /> Premium Diamond Gift
+                          </span>
+                          <span className="font-gotham font-bold">FREE</span>
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between">
                         <span className="text-brand-600 font-montserrat">Shipping</span>
                         <span className="font-gotham text-classic-green">FREE</span>
@@ -635,6 +718,24 @@ export default function CartPage() {
                         </div>
                       )}
 
+                      {/* Festival offer discount line (fallback when promotionPricing not loaded) */}
+                      {festivalActive && festivalOfferApplied && festivalDiscount > 0 && (
+                        <div className="flex items-center justify-between text-amber-600">
+                          <span className="font-montserrat flex items-center gap-1">
+                            <Sparkles size={12} /> Akshaya Tritiya 10% Off
+                          </span>
+                          <span className="font-gotham font-bold">-{formatPrice(festivalDiscount)}</span>
+                        </div>
+                      )}
+                      {festivalActive && festivalOfferApplied && (
+                        <div className="flex items-center justify-between text-amber-600">
+                          <span className="font-montserrat flex items-center gap-1">
+                            <Gift size={12} /> Premium Diamond Gift
+                          </span>
+                          <span className="font-gotham font-bold">FREE</span>
+                        </div>
+                      )}
+
                       <div className="flex items-center justify-between">
                         <span className="text-brand-600 font-montserrat">Shipping</span>
                         <span className="font-gotham text-classic-green">FREE</span>
@@ -643,10 +744,16 @@ export default function CartPage() {
                   )}
                 </div>
 
-                <div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
+<div className="flex items-center justify-between pt-4 border-t border-brand-300 mb-2">
                   <span className="font-montserrat font-bold text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
-                    {formatPrice(promotionPricing ? promotionPricing.total : grandTotal)}
+                    {formatPrice(
+                      festivalActive && festivalShopifyTotal != null
+                        ? festivalShopifyTotal
+                        : promotionPricing
+                          ? promotionPricing.total
+                          : grandTotal
+                    )}
                   </span>
                 </div>
                 <p className="text-body-sm text-brand-500 font-montserrat mb-6">(Prices include GST)</p>
