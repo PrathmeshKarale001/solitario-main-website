@@ -73,7 +73,6 @@ function CartSidebarContent() {
   } | null>(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  const festivalActive = isFestivalOfferActive();
 
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
