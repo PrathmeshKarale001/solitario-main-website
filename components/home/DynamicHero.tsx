@@ -45,6 +45,15 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
+      src: '/images/home-hero/Akshay_Tritiya_Banner_1600x700.jpeg',
+      mobileSrc: '/images/home-hero/Akshay_Tritiya_Banner_1080x1350.jpeg',
+      pos: 'object-cover',
+      alt: 'The Solitario lab grown diamond solitaire ring collection',
+      ctaText: 'Shop Now',
+      ctaLink: '/festival'
+    },
+    {
+      type: 'image' as const,
       src: '/images/home-hero/Banner 1.jpg',
       mobileSrc: '/images/home-hero/Mobile 1.jpg',
       pos: 'object-cover',
@@ -128,6 +137,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
 
   // Mobile fallback media - Mobile 1-8 images for mobile viewport
   const defaultFallbackMediaMobile = [
+    { type: 'image' as const, src: '/images/home-hero/Akshay_Tritiya_Banner_1080x1350.jpeg', pos: 'object-cover', alt: 'The Solitario lab grown diamond solitaire ring collection', ctaText: 'Shop Now', ctaLink: '/products' },
     { type: 'image' as const, src: '/images/home-hero/Mobile 1.jpg', pos: 'object-cover', alt: 'The Solitario lab grown diamond solitaire ring collection', ctaText: 'Shop Now', ctaLink: '/products' },
     { type: 'image' as const, src: '/images/home-hero/Mobile 2.jpg', pos: 'object-cover', alt: 'Elegant diamond pendant necklaces by The Solitario', ctaText: 'Shop Now', ctaLink: '/products' },
     { type: 'image' as const, src: '/images/home-hero/Mobile 3.jpg', pos: 'object-cover', alt: 'Lab grown diamond earrings and studs collection', ctaText: 'Shop Now', ctaLink: '/products' },
