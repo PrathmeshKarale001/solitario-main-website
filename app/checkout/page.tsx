@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
-import { ChevronLeft, Lock, CreditCard, Smartphone, Loader2, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package, Ticket, Sparkles } from 'lucide-react';
+import { ChevronLeft, Lock, CreditCard, Smartphone, CheckCircle, AlertCircle, ShieldCheck, Gift, Edit, MessageSquare, TruckIcon, Package, Ticket, Sparkles } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { formatPrice } from '@/lib/utils';
 import { isPrebookingProduct, getCartItemPrice, formatPrebookingOrderNotes, PREBOOK_PRICE } from '@/lib/prebooking';
@@ -107,32 +107,12 @@ export default function CheckoutPage() {
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
 
-  // ── Akshaya Tritiya Festival Offer (persisted from cart) ────────────────────
+  // ── Akshaya Tritiya Festival Offer ─────────────────────────────────────────
+  // The local cart doesn't create a Shopify cart session, so we derive the
+  // discount directly from the cart total (10% off) rather than calling the
+  // Shopify cart API (which requires a cart-id cookie we never set).
   const festivalActive = isFestivalOfferActive();
-  const [festivalOfferApplied, setFestivalOfferApplied] = useState(false);
-  const [festivalDiscount, setFestivalDiscount] = useState(0); // rupees
-  const [festivalShopifyTotal, setFestivalShopifyTotal] = useState<number | null>(null);
-  const [festivalLoading, setFestivalLoading] = useState(false);
-
-  // Re-apply festival offer on checkout mount (ensures discount survives navigation)
-  useEffect(() => {
-    if (!festivalActive || items.length === 0) return;
-    setFestivalLoading(true);
-    fetch('/api/cart/apply-festival-offer', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-    })
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.success) {
-          setFestivalOfferApplied(true);
-          setFestivalDiscount(Math.round(data.discountAmount ?? 0));
-          setFestivalShopifyTotal(data.shopifyTotal ?? null);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setFestivalLoading(false));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const festivalOfferApplied = festivalActive && items.length > 0;
 
   // Auto-fill user info and load saved addresses
   useEffect(() => {
@@ -276,21 +256,14 @@ export default function CheckoutPage() {
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const discountedTotal = total - (promotionDiscount / 100);
 
-  // Festival discount: always compute locally so total is correct even if Shopify API failed
-  // festivalDiscount (from API) takes priority; local 10% is the guaranteed fallback
-  const localFestivalDiscount = festivalActive ? Math.round(total * 0.1) : 0;
-  const effectiveFestivalDiscount = festivalActive
-    ? (festivalDiscount > 0 ? festivalDiscount : localFestivalDiscount)
-    : 0;
+  // Festival discount: 10% off cart total during Akshaya Tritiya
+  const effectiveFestivalDiscount = festivalActive ? Math.round(total * 0.1) : 0;
 
-  // Use Shopify-authoritative total when available, otherwise deduct 10% locally
   const grandTotal = Math.max(
     0,
     festivalActive
-      ? (festivalShopifyTotal != null
-          ? festivalShopifyTotal               // Shopify computed total (has 10% + free diamond)
-          : discountedTotal - effectiveFestivalDiscount + shipping) // Local fallback
-      : discountedTotal + shipping             // Regular total with local promo discounts
+      ? discountedTotal - effectiveFestivalDiscount + shipping
+      : discountedTotal + shipping
   );
 
   // Validate form
@@ -1165,7 +1138,6 @@ export default function CheckoutPage() {
                           <span className="font-gotham font-bold block">🪷 Akshaya Tritiya Offer</span>
                           <span className="opacity-90">10% off + Free Premium Diamond</span>
                         </div>
-                        {festivalLoading && <Loader2 size={12} className="ml-auto animate-spin" />}
                       </div>
                       {festivalOfferApplied && (
                         <p className="text-[10px] text-green-600 font-medium mt-1 px-1">✓ Offer applied to your order</p>
