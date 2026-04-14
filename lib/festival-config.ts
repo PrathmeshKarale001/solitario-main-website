@@ -61,7 +61,7 @@ export const FESTIVALS: FestivalConfig[] = [
     collectionHandle: 'akshaya-tritiya-2026',
     tagline: 'Akshaya Tritiya Special',
     heading: 'Celebrate Prosperity with Lab Grown Diamonds',
-    subtitle: 'Auspicious pieces handcrafted for new beginnings. First 101 guests receive a diamond free.',
+    subtitle: 'Auspicious pieces handcrafted for new beginnings. First 101 customers receive a diamond free.',
     ctaText: 'Shop Akshaya Tritiya',
     ctaLink: '/festival',
     emoji: '🪷',

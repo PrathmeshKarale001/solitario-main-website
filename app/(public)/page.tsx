@@ -93,7 +93,7 @@ export default function Home() {
         <a href="/festival" className="block w-full">
           <img
             src="/images/banners/akshay-tritiya.jpeg"
-            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 guests receive a diamond for free. Shop Now"
+            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 customers receive a diamond for free. Shop Now"
             className="w-full h-auto"
             loading="eager"
           />
