@@ -40,6 +40,12 @@ export interface FestivalConfig {
   endDate?: string;
   /** Hero background image path for the /festival page */
   heroImage?: string;
+  /** Mobile hero background image path */
+  mobileHeroImage?: string;
+  /** Multi-banner support: array of images */
+  heroImages?: string[];
+  /** Multi-banner support: array of mobile images */
+  mobileHeroImages?: string[];
   /** Short dramatic tagline shown on hero image (e.g. 'AUSPICIOUS. ETERNAL. DIVINE.') */
   heroTagline?: string;
 }
@@ -62,7 +68,20 @@ export const FESTIVALS: FestivalConfig[] = [
     maxProducts: 6,
     startDate: '2026-04-10T00:00:00+05:30',
     endDate: '2026-04-30T23:59:59+05:30',
-    heroImage: '/images/banners/akshay-tritiya.jpeg',
+    heroImage: '/images/akshaya-tritiya/Akshay_Tritiya_All_Web.jpg.jpeg',
+    mobileHeroImage: '/images/akshaya-tritiya/Akshay_Tritiya_All_Mobile.jpg.jpeg',
+    heroImages: [
+      '/images/akshaya-tritiya/Akshay_Tritiya_All_Web.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Blue_Web.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Green_Web.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Red_Web.jpg.jpeg',
+    ],
+    mobileHeroImages: [
+      '/images/akshaya-tritiya/Akshay_Tritiya_All_Mobile.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Blue_Mobile.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Green_Mobile.jpg.jpeg',
+      '/images/akshaya-tritiya/Akshay_Tritiya_Red_Mobile.jpg.jpeg',
+    ],
     heroTagline: 'AUSPICIOUS. ETERNAL. DIVINE.',
   },
 

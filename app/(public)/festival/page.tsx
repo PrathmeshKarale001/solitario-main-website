@@ -31,6 +31,7 @@ const LOAD_MORE_THRESHOLD = 12;
 
 function FestivalHero({ festival }: { festival: FestivalConfig }) {
   const [isMobile, setIsMobile] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -39,31 +40,67 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
     return () => window.removeEventListener('resize', check);
   }, []);
 
-  const hasImage = !!festival.heroImage;
+  // Multi-banner slider logic
+  const banners = (isMobile ? festival.mobileHeroImages : festival.heroImages) ||
+    (festival.heroImage ? [isMobile && festival.mobileHeroImage ? festival.mobileHeroImage : festival.heroImage] : []);
+  const hasSlider = banners.length > 1;
+
+  useEffect(() => {
+    if (!hasSlider) return;
+    const timer = setInterval(() => {
+      setCurrentIndex((prev) => (prev + 1) % banners.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [hasSlider, banners.length]);
 
   return (
     <section className="relative w-full overflow-hidden bg-[#1a1a1a]">
       <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
         <div className="absolute inset-0">
-          {hasImage ? (
-            <Image
-              src={festival.heroImage!}
-              alt={festival.tagline}
-              fill
-              className="object-cover object-center"
-              priority
-              quality={90}
-              sizes="100vw"
-            />
-          ) : (
-            /* Fallback gradient when no image configured */
-            <div className="w-full h-full bg-gradient-to-br from-classic-green via-[#0d4a3a] to-[#0a3528]" />
-          )}
+          <AnimatePresence mode="wait">
+            {banners.length > 0 ? (
+              <motion.div
+                key={`${currentIndex}-${isMobile}`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 1 }}
+                className="absolute inset-0"
+              >
+                <Image
+                  src={banners[currentIndex]}
+                  alt={festival.tagline}
+                  fill
+                  className="object-cover object-center"
+                  priority
+                  quality={90}
+                  sizes="100vw"
+                />
+              </motion.div>
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-classic-green via-[#0d4a3a] to-[#0a3528]" />
+            )}
+          </AnimatePresence>
           {/* Gradient overlay — bottom-heavy like earrings hero */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* Dramatic top-left tagline (like "DRAMATIC. DELICATE. DIVINE.") */}
+        {/* Slider Dots */}
+        {hasSlider && (
+          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+            {banners.map((_, idx) => (
+              <button
+                key={idx}
+                onClick={() => setCurrentIndex(idx)}
+                className={`w-2 h-2 rounded-full transition-all duration-300 ${currentIndex === idx ? 'bg-white w-6' : 'bg-white/40'
+                  }`}
+                aria-label={`Go to slide ${idx + 1}`}
+              />
+            ))}
+          </div>
+        )}
+
+        {/* Dramatic top-left tagline */}
         {festival.heroTagline && (
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -77,12 +114,12 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
           </motion.div>
         )}
 
-        {/* Bottom-center text — same position as category page */}
+        {/* Bottom-center text */}
         <div className="absolute inset-0 z-10 flex items-end justify-center pb-12 md:pb-16">
           <div className="text-center px-4">
             {/* Breadcrumb */}
             <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4 font-montserrat">
-              <Link href="/" className="hover:text-white transition-colors">Home</Link>
+              <Link href="/" className="hover:text-white transition-colors underline-offset-4 hover:underline">Home</Link>
               <span>/</span>
               <span className="text-white">{festival.tagline}</span>
             </nav>
@@ -91,7 +128,7 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
+              className="text-4xl md:text-5xl lg:text-5xl font-montserrat font-bold text-white mb-4 drop-shadow-lg"
             >
               {festival.heading}
             </motion.h1>
@@ -100,7 +137,7 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto"
+              className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto drop-shadow-md"
             >
               {festival.subtitle}
             </motion.p>
@@ -112,8 +149,8 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
 }
 
 // ─── Main page content ─────────────────────────────────────────────────────
-function FestivalPageContent() {
-  const festival = useMemo(() => getActiveFestival(), []);
+export function FestivalPageContent({ festivalOverride }: { festivalOverride?: FestivalConfig }) {
+  const festival = useMemo(() => festivalOverride || getActiveFestival(), [festivalOverride]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [displayedProducts, setDisplayedProducts] = useState<Product[]>([]);
@@ -287,7 +324,7 @@ function FestivalPageContent() {
                   sortBy={sortBy}
                   onSortChange={setSortBy}
                   viewMode={viewMode}
-                  onViewModeChange={() => {}}
+                  onViewModeChange={() => { }}
                   searchQuery={searchQuery}
                   onSearchChange={setSearchQuery}
                   priceRange={priceRange}
@@ -401,9 +438,8 @@ function FestivalPageContent() {
                                 aria-label={isInWishlist ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
                               >
                                 <Heart
-                                  className={`w-4 h-4 transition-colors ${
-                                    isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'
-                                  }`}
+                                  className={`w-4 h-4 transition-colors ${isInWishlist ? 'fill-red-500 text-red-500' : 'text-gray-600'
+                                    }`}
                                 />
                               </button>
                             </div>
@@ -417,9 +453,8 @@ function FestivalPageContent() {
                               </h3>
                             </Link>
                             <p
-                              className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${
-                                isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'
-                              }`}
+                              className={`font-gotham text-base sm:text-lg font-semibold mb-3 min-h-[1.75rem] ${isPrebookingProduct(product) ? 'text-purple-600' : 'text-classic-green'
+                                }`}
                             >
                               {isPrebookingProduct(product)
                                 ? getProductDisplayPrice(product)
@@ -437,11 +472,10 @@ function FestivalPageContent() {
                                   currency: product.currency || 'INR',
                                 });
                               }}
-                              className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${
-                                isPrebookingProduct(product)
-                                  ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
-                                  : 'bg-classic-green hover:bg-classic-green/90'
-                              }`}
+                              className={`w-full flex items-center justify-center gap-2 text-white py-2.5 rounded-lg font-gotham text-xs uppercase tracking-wider transition-all active:scale-95 ${isPrebookingProduct(product)
+                                ? 'bg-gradient-to-r from-purple-600 to-purple-500 hover:from-purple-700 hover:to-purple-600'
+                                : 'bg-classic-green hover:bg-classic-green/90'
+                                }`}
                             >
                               {isPrebookingProduct(product) ? (
                                 <Ticket className="w-4 h-4" />
@@ -550,7 +584,7 @@ function FestivalPageContent() {
                   sortBy={sortBy}
                   onSortChange={setSortBy}
                   viewMode={viewMode}
-                  onViewModeChange={() => {}}
+                  onViewModeChange={() => { }}
                   searchQuery={searchQuery}
                   onSearchChange={setSearchQuery}
                   priceRange={priceRange}
@@ -614,11 +648,10 @@ function FestivalPageContent() {
                       setSortBy(opt.value);
                       setShowMobileSort(false);
                     }}
-                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${
-                      sortBy === opt.value
-                        ? 'bg-classic-green/10 text-classic-green font-semibold'
-                        : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`w-full text-left py-3 px-4 rounded-lg text-sm font-montserrat transition-all ${sortBy === opt.value
+                      ? 'bg-classic-green/10 text-classic-green font-semibold'
+                      : 'text-gray-700 hover:bg-gray-50'
+                      }`}
                   >
                     {opt.value === sortBy && <span className="mr-2">✓</span>}
                     {opt.label}

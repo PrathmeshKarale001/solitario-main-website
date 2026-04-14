@@ -136,15 +136,15 @@ export default function RootLayout({
                 <WishlistProvider>
                   <CartProvider>
                     <ShopifyCartProvider>
-                      <div suppressHydrationWarning>
-                        <Header />
-                        <main id="main-content">
-                          {children}
-                        </main>
-                        <Footer />
-                        <LazyCartSidebar />
-                        <LazyWarnerBrosFloatingButton />
-                      </div>
+                    <Header />
+                    <main id="main-content" suppressHydrationWarning>
+                      <Suspense fallback={null}>
+                        {children}
+                      </Suspense>
+                    </main>
+                    <Footer />
+                    <LazyCartSidebar />
+                    <LazyWarnerBrosFloatingButton />
                     </ShopifyCartProvider>
                   </CartProvider>
                 </WishlistProvider>
