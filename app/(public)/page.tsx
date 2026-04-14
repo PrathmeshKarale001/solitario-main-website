@@ -1,4 +1,6 @@
 import dynamic from 'next/dynamic';
+import Link from 'next/link';
+import { MapPin, Gift } from 'lucide-react';
 import {
   ProductCategories,
   ShopByCategoryOriginal,
@@ -86,15 +88,36 @@ export default function Home() {
       </div>
       <OffersMarquee />
 
-      {/* AKSHAYA TRITIYA PROMO BANNER */}
-      <a href="/festival" className="block w-full">
-        <img
-          src="/images/banners/akshay-tritiya.jpeg"
-          alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 guests receive a diamond for free. Shop Now"
-          className="w-full h-auto"
-          loading="eager"
-        />
-      </a>
+      {/* AKSHAYA TRITIYA PROMO BANNER & OFFLINE CALLOUT */}
+      <div className="w-full">
+        <a href="/festival" className="block w-full">
+          <img
+            src="/images/banners/akshay-tritiya.jpeg"
+            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 guests receive a diamond for free. Shop Now"
+            className="w-full h-auto"
+            loading="eager"
+          />
+        </a>
+        
+        {/* Offline Conversion Callout */}
+        <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-b border-amber-200 py-3.5 px-4 sm:px-6">
+          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center sm:text-left">
+            <div className="flex items-center justify-center gap-2.5">
+              <Gift className="text-amber-600 shrink-0 hidden sm:block" size={22} />
+              <p className="text-gray-800 font-medium text-[15px] sm:text-base leading-snug">
+                Prefer to shop in-store? Visit any Solitario boutique to claim your <span className="font-bold text-amber-700">Free Premium Diamond</span> this Akshaya Tritiya.
+              </p>
+            </div>
+            <Link 
+              href="/stores" 
+              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-2 border-2 border-classic-green text-sm font-bold rounded-full text-classic-green hover:bg-classic-green hover:text-white transition-all duration-300 w-full sm:w-auto whitespace-nowrap uppercase tracking-wider"
+            >
+              <MapPin size={16} />
+              Find a Store
+            </Link>
+          </div>
+        </div>
+      </div>
 
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
