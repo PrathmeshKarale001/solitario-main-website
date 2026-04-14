@@ -670,7 +670,7 @@ export default function CartPage() {
                           <p className="text-[10px] text-amber-700 font-medium">Akshaya Tritiya Special Offer</p>
                         </div>
                         <button
-                          onClick={() => handleApplyCoupon(null, FESTIVAL_OFFER.discountCode)}
+                          onClick={() => validateCoupon(FESTIVAL_OFFER.discountCode)}
                           className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-md active:scale-95"
                         >
                           APPLY
