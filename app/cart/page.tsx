@@ -263,10 +263,11 @@ export default function CartPage() {
     }
   };
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (couponInput.trim()) {
-      validateCoupon(couponInput.trim().toUpperCase());
+  const handleApplyCoupon = (e: React.FormEvent | null, code?: string) => {
+    if (e) e.preventDefault();
+    const couponToApply = code || couponInput.trim();
+    if (couponToApply) {
+      validateCoupon(couponToApply.toUpperCase());
     }
   };
 
@@ -661,7 +662,7 @@ export default function CartPage() {
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
-                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Summer Offer Released</span>
+                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Offer For You</span>
                       </div>
                       <div className="flex items-center justify-between">
                         <div>

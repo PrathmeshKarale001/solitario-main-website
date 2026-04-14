@@ -231,10 +231,11 @@ function CartSidebarContent() {
     }
   };
 
-  const handleApplyCoupon = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (couponInput.trim()) {
-      validateCoupon(couponInput.trim().toUpperCase());
+  const handleApplyCoupon = (e: React.FormEvent | null, code?: string) => {
+    if (e) e.preventDefault();
+    const couponToApply = code || couponInput.trim();
+    if (couponToApply) {
+      validateCoupon(couponToApply.toUpperCase());
     }
   };
 
