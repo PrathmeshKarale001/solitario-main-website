@@ -60,7 +60,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
   ];
 
   return (
-    <>
+    <div className="bg-white min-h-screen">
       <ProductSchema
         name={product.name}
         description={product.description}
@@ -86,7 +86,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
       <ProductErrorBoundary>
         <LazyProductDetail product={product} />
       </ProductErrorBoundary>
-    </>
+    </div>
   );
 }
 

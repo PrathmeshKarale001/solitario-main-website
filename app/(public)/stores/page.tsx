@@ -12,6 +12,7 @@ import {
   INDIA_OWN_STORES,
   INDIA_SIS_SHOPPERS_STOP,
   INDIA_SIS_JUST_IN_TIME,
+  INDIA_SIS_BROADWAY,
   MALAYSIA_STORES,
   DUBAI_STORES,
   SPAIN_DISTRIBUTORS,
@@ -44,7 +45,7 @@ function t(key: string, lang: SpainLang): string {
 
 // Region cards config
 const REGIONS: { id: Region; label: string; subtitle: string; image: string }[] = [
-  { id: 'india', label: 'Solitario India', subtitle: `${INDIA_OWN_STORES.length + INDIA_SIS_SHOPPERS_STOP.length + INDIA_SIS_JUST_IN_TIME.length}+ Stores`, image: '/images/Stores/IndiaStore.jpeg' },
+  { id: 'india', label: 'Solitario India', subtitle: `${INDIA_OWN_STORES.length + INDIA_SIS_SHOPPERS_STOP.length + INDIA_SIS_JUST_IN_TIME.length + INDIA_SIS_BROADWAY.length}+ Stores`, image: '/images/Stores/IndiaStore.jpeg' },
   { id: 'malaysia', label: 'Solitario Malaysia', subtitle: `${MALAYSIA_STORES.length} Stores`, image: '/images/Stores/MalaysiaStore.jpeg' },
   { id: 'dubai', label: 'Solitario Dubai', subtitle: `${DUBAI_STORES.length} Store`, image: '/images/Stores/DubaiStore.jpeg' },
   { id: 'spain', label: 'Solitario Spain', subtitle: `${SPAIN_DISTRIBUTORS.reduce((sum, d) => sum + d.touchPoints.length, 0)}+ Touch Points`, image: '/images/Stores/SpainStore.jpeg' },
@@ -367,16 +368,32 @@ export default function StoresPage() {
                           </div>
 
                           {/* Just In Time */}
-                          <div>
-                            <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-5 flex items-center gap-2">
-                              <Clock className="w-5 h-5 text-classic-green" /> Just In Time
-                            </h3>
-                            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-                              {INDIA_SIS_JUST_IN_TIME.map((store, idx) => (
-                                <StoreCard key={store.id} store={store} idx={idx} />
-                              ))}
+                          {INDIA_SIS_JUST_IN_TIME.length > 0 && (
+                            <div className="mb-10">
+                              <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-5 flex items-center gap-2">
+                                <Clock className="w-5 h-5 text-classic-green" /> Just In Time
+                              </h3>
+                              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                {INDIA_SIS_JUST_IN_TIME.map((store, idx) => (
+                                  <StoreCard key={store.id} store={store} idx={idx} />
+                                ))}
+                              </div>
                             </div>
-                          </div>
+                          )}
+
+                          {/* Broadway */}
+                          {INDIA_SIS_BROADWAY.length > 0 && (
+                            <div>
+                              <h3 className="text-xl font-montserrat font-bold text-brand-800 mb-5 flex items-center gap-2">
+                                <ShoppingBag className="w-5 h-5 text-classic-green" /> Broadway
+                              </h3>
+                              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+                                {INDIA_SIS_BROADWAY.map((store, idx) => (
+                                  <StoreCard key={store.id} store={store} idx={idx} />
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </motion.div>
                       )}
                     </AnimatePresence>

@@ -98,18 +98,18 @@ export default function Home() {
             loading="eager"
           />
         </a>
-        
+
         {/* Offline Conversion Callout */}
         <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-b border-amber-200 py-3.5 px-4 sm:px-6">
           <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center sm:text-left">
             <div className="flex items-center justify-center gap-2.5">
               <Gift className="text-amber-600 shrink-0 hidden sm:block" size={22} />
-              <p className="text-gray-800 font-medium text-[15px] sm:text-base leading-snug">
-                Prefer to shop in-store? Visit any Solitario boutique to claim your <span className="font-bold text-amber-700">Free Premium Diamond</span> this Akshaya Tritiya (Limited from 17-19th April).
+              <p className="text-gray-800 font-medium text-xs sm:text-sm md:text-base leading-snug">
+                Visit Solitario boutiques this Akshaya Tritiya (17-19 Apr) & claim your <span className="font-bold text-amber-700">Free Premium Diamond</span>.
               </p>
             </div>
-            <Link 
-              href="/stores" 
+            <Link
+              href="/stores"
               className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-2 border-2 border-classic-green text-sm font-bold rounded-full text-classic-green hover:bg-classic-green hover:text-white transition-all duration-300 w-full sm:w-auto whitespace-nowrap uppercase tracking-wider"
             >
               <MapPin size={16} />

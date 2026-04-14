@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Linkedin, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck, Ticket } from 'lucide-react';
+import { ShoppingCart, Heart, Share2, Star, Check, Package, Truck, RotateCcw, Facebook, Instagram, Linkedin, Mail, X, ZoomIn, ZoomOut, Maximize2, ChevronLeft, ChevronRight, Tag, Gift, MapPin, ShieldCheck, Award, Loader2, Clock, BadgeCheck, Ticket, Sparkles } from 'lucide-react';
 import { Product } from '@/lib/data';
 import { formatPrice } from '@/lib/utils';
 import { Section, Container } from '@/components/ui';
@@ -15,6 +15,7 @@ import { NearestStore } from '@/components/stores';
 import { trackPageView, trackAddToCart } from '@/lib/gtm-conversions';
 import { trackMetaViewContent, trackMetaAddToCart, trackMetaAddToWishlist } from '@/components/analytics/MetaPixel';
 import { isPrebookingProduct, getProductDisplayPrice, PREBOOK_PRICE } from '@/lib/prebooking';
+import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
 
 interface ProductDetailProps {
   product: Product;
@@ -311,19 +312,19 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   return (
     <div className="bg-white">
       {/* Hero Section - Compact with brand pattern */}
-      <section className="relative h-[20vh] min-h-[180px] flex items-end overflow-hidden bg-classic-green">
+      <section className="relative h-[20vh] min-h-[180px] flex items-end overflow-hidden bg-white border-b border-brand-200">
         {/* Brand Pattern Background */}
         <div className="absolute inset-0 z-0">
           {/* Diamond pattern overlay */}
           <div
-            className="absolute inset-0 opacity-10"
+            className="absolute inset-0 opacity-5"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23ffffff' fill-opacity='0.4'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0L60 30L30 60L0 30L30 0z' fill='%23146552' fill-opacity='0.4'/%3E%3C/svg%3E")`,
               backgroundSize: '30px 30px',
             }}
           />
           {/* Gradient overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-classic-green via-classic-green/95 to-teal/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-white via-white/80 to-transparent" />
         </div>
 
         {/* Content */}
@@ -335,7 +336,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             className="max-w-4xl"
           >
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs text-white/70 font-montserrat mb-3">
+            <nav className="flex items-center gap-2 text-xs text-brand-600 font-montserrat mb-3">
               <Link href="/" className="hover:text-bronze-gold transition-colors">Home</Link>
               <span>/</span>
               <Link href="/products" className="hover:text-bronze-gold transition-colors">Shop</Link>
@@ -344,11 +345,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 {product.category}
               </Link>
               <span>/</span>
-              <span className="text-white">{product.name}</span>
+              <span className="text-brand-800">{product.name}</span>
             </nav>
 
             {/* Product Title - 10% smaller */}
-            <h1 className="font-montserrat font-bold text-xl md:text-2xl lg:text-3xl text-white leading-tight" style={{ letterSpacing: '-0.02em' }}>
+            <h1 className="font-montserrat font-bold text-xl md:text-2xl lg:text-3xl text-brand-800 leading-tight" style={{ letterSpacing: '-0.02em' }}>
               {product.name.toUpperCase()}
             </h1>
           </motion.div>
@@ -356,7 +357,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </section>
 
       {/* Product Main Section */}
-      <Section variant="light" padding="sm">
+      <Section variant="light" padding="sm" className="bg-white">
         <Container>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 lg:gap-10">
             {/* Product Images */}
@@ -588,7 +589,41 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               )}
 
               {/* Promotions Callout - Single Line Design */}
-              <div className="space-y-2">
+              <div className="space-y-3">
+                {/* Akshaya Tritiya Offer Highlight */}
+                {isFestivalOfferActive() && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="relative overflow-hidden group bg-gradient-to-r from-amber-600 via-orange-500 to-amber-600 p-[1px] rounded-xl shadow-lg"
+                  >
+                    <div className="bg-white/95 rounded-[11px] px-4 py-3.5 flex items-center justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-amber-100 rounded-full flex items-center justify-center text-amber-600 group-hover:scale-110 transition-transform shadow-inner">
+                          <Ticket className="w-5 h-5" />
+                        </div>
+                        <div>
+                          <p className="text-[10px] uppercase tracking-widest font-gotham text-amber-600 font-bold mb-0.5">
+                            {FESTIVAL_OFFER.label}
+                          </p>
+                          <p className="text-sm font-montserrat font-bold text-gray-900 leading-tight">
+                            {FESTIVAL_OFFER.tagline}
+                          </p>
+                        </div>
+                      </div>
+                      <div className="flex flex-col items-end">
+                        <div className="bg-amber-100 text-amber-700 text-[10px] font-bold px-2 py-1 rounded uppercase font-gotham border border-amber-200">
+                          {FESTIVAL_OFFER.discountCode}
+                        </div>
+                      </div>
+                    </div>
+                    {/* Animated shine effect */}
+                    <div className="absolute inset-0 pointer-events-none overflow-hidden rounded-xl">
+                      <div className="absolute top-0 -left-[100%] w-1/2 h-full bg-gradient-to-r from-transparent via-white/50 to-transparent skew-x-[-25deg] animate-[offer-shine_4s_infinite]" />
+                    </div>
+                  </motion.div>
+                )}
+
                 <div className="offer-banner flex items-center gap-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white px-4 py-3 rounded-lg shadow-sm">
                   <Gift size={16} className="flex-shrink-0" />
                   <span className="font-gotham text-sm font-semibold tracking-wide">BUY 2 GET 1 FREE</span>
@@ -597,7 +632,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
               {/* Specifications - Keep at top after promotions */}
               {specifications.length > 0 && (
-                <div className="bg-brand-50 border border-bronze-gold/20 rounded-xl p-4">
+                <div className="bg-white border border-brand-200 rounded-xl p-4">
                   <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-3 flex items-center gap-2">
                     <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
                     Specifications
@@ -777,6 +812,20 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                     </button>
                   )}
                 </div>
+                
+                {/* Akshaya Tritiya Bonus Reinforcement */}
+                {isFestivalOfferActive() && (
+                  <motion.div 
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="flex justify-center items-center gap-2 py-2 px-4 bg-amber-50 rounded-lg border border-amber-100"
+                  >
+                    <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
+                    <span className="text-[11px] md:text-xs font-montserrat font-semibold text-amber-800 uppercase tracking-wider">
+                      + Free Premium Diamond included
+                    </span>
+                  </motion.div>
+                )}
 
                 {/* Nearest Store CTA */}
                 <NearestStore compact={true} />
@@ -824,7 +873,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </Section>
 
       {/* Product Details Tabs - Reduced gap */}
-      <Section variant="light" padding="sm" className="bg-brand-50 pt-0">
+      <Section variant="light" padding="sm" className="bg-white pt-0">
         <Container>
           <div className="max-w-5xl mx-auto">
             {/* Tabs */}
@@ -868,7 +917,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
                   {/* Specifications - Highlighted in Description Tab */}
                   {specifications.length > 0 && (
-                    <div className="mb-6 bg-brand-50 border border-bronze-gold/20 rounded-xl p-5">
+                    <div className="mb-6 bg-white border border-brand-200 rounded-xl p-5">
                       <h4 className="font-gotham text-sm uppercase tracking-wider text-bronze-gold mb-4 flex items-center gap-2">
                         <span className="w-2 h-2 bg-bronze-gold rounded-full"></span>
                         Specifications
@@ -1040,7 +1089,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       </Section>
 
       {/* Features Section - Horizontal Scroll Loop */}
-      <Section variant="light" padding="sm" className="bg-brand-50 py-6 sm:py-8 overflow-hidden">
+      <Section variant="light" padding="sm" className="bg-white py-6 sm:py-8 overflow-hidden border-t border-brand-100">
         <Container className="relative">
           <div
             className="overflow-hidden"

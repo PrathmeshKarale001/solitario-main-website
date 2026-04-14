@@ -13,7 +13,7 @@ export interface StoreLocation {
   mapLink: string;
   image?: string;
   email?: string;
-  type?: 'store' | 'sis-shoppers-stop' | 'sis-just-in-time';
+  type?: 'store' | 'sis-shoppers-stop' | 'sis-just-in-time' | 'sis-broadway';
 }
 
 export interface SpainTouchPoint {
@@ -563,20 +563,10 @@ export const INDIA_SIS_SHOPPERS_STOP: StoreLocation[] = [
     mapLink: 'https://maps.google.com/?q=South+City+Mall+Kolkata',
     type: 'sis-shoppers-stop',
   },
-  {
-    id: 'study-by-janak-delhi',
-    name: 'Study by Janak Delhi',
-    address: 'Study by Janak, N-9, South Extension, Part 1',
-    city: 'Delhi',
-    country: 'India',
-    region: 'India',
-    phone: '+91 788 788 3444',
-    hours: '10:00 AM - 11:00 PM',
-    lat: 28.5706,
-    lng: 77.2144,
-    mapLink: 'https://maps.google.com/?q=Study+by+Janak+Delhi',
-    type: 'sis-shoppers-stop',
-  },
+];
+
+// India SIS - Broadway
+export const INDIA_SIS_BROADWAY: StoreLocation[] = [
   {
     id: 'broadway-ambience-delhi',
     name: 'Broadway Ambience Mall Delhi',
@@ -589,41 +579,12 @@ export const INDIA_SIS_SHOPPERS_STOP: StoreLocation[] = [
     lat: 28.5244,
     lng: 77.1586,
     mapLink: 'https://maps.google.com/?q=Ambience+Mall+Vasant+Kunj',
-    type: 'sis-shoppers-stop',
+    type: 'sis-broadway',
   },
 ];
 
 // India SIS - Just In Time
-export const INDIA_SIS_JUST_IN_TIME: StoreLocation[] = [
-  {
-    id: 'just-in-time-aundh',
-    name: 'Just In Time Aundh',
-    address: 'Just In Time, Society, ITI Rd, Ward No. 8, Pushpak Park, Aundh',
-    city: 'Pune',
-    country: 'India',
-    region: 'India',
-    phone: '+91 788 788 3444',
-    hours: '10:00 AM - 11:00 PM',
-    lat: 18.5590,
-    lng: 73.8073,
-    mapLink: 'https://maps.google.com/?q=Just+In+Time+Aundh',
-    type: 'sis-just-in-time',
-  },
-  {
-    id: 'just-in-time-mg-road',
-    name: 'Just In Time MG Road',
-    address: '270, MG Road, near Bata Chowk, Camp',
-    city: 'Pune',
-    country: 'India',
-    region: 'India',
-    phone: '+91 788 788 3444',
-    hours: '10:00 AM - 11:00 PM',
-    lat: 18.5196,
-    lng: 73.8553,
-    mapLink: 'https://maps.google.com/?q=Just+In+Time+MG+Road+Pune',
-    type: 'sis-just-in-time',
-  },
-];
+export const INDIA_SIS_JUST_IN_TIME: StoreLocation[] = [];
 
 // ==================== MALAYSIA STORES ====================
 
@@ -773,6 +734,7 @@ export const ALL_STORES: StoreLocation[] = [
   ...INDIA_OWN_STORES,
   ...INDIA_SIS_SHOPPERS_STOP,
   ...INDIA_SIS_JUST_IN_TIME,
+  ...INDIA_SIS_BROADWAY,
   ...MALAYSIA_STORES,
   ...DUBAI_STORES,
 ];
