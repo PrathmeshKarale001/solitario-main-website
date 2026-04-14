@@ -25,6 +25,8 @@ function CartSidebarContent() {
   const [couponDiscount, setCouponDiscount] = useState(0);
   const [showApplied, setShowApplied] = useState(false);
 
+  const festivalActive = isFestivalOfferActive();
+
   // Load coupon from localStorage on mount
   useEffect(() => {
     const savedCoupon = localStorage.getItem('applied_coupon');
@@ -34,6 +36,20 @@ function CartSidebarContent() {
       setCouponInput(savedCoupon);
     }
   }, []);
+
+  // Auto-apply TRITIYA10 festival offer
+  useEffect(() => {
+    if (festivalActive && items.length > 0 && !appliedCoupon && !isValidating && !couponError) {
+      // Small delay to ensure state and context are settled
+      const timer = setTimeout(() => {
+        if (!appliedCoupon) {
+          console.log('Auto-applying festival coupon TRITIYA10');
+          validateCoupon(FESTIVAL_OFFER.discountCode);
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [festivalActive, items.length, appliedCoupon]);
 
   // Helper to set coupon with localStorage persistence
   const setAppliedCoupon = (code: string) => {
@@ -475,6 +491,32 @@ function CartSidebarContent() {
                         </motion.p>
                       )}
                     </form>
+                  )}
+
+                  {/* Available Offers / Promotions */}
+                  {festivalActive && !appliedCoupon && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-3 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-3.5 h-3.5 text-amber-600 animate-pulse" />
+                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Offer for you</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs font-bold text-brand-800">10% OFF + Free Diamond</p>
+                          <p className="text-[10px] text-amber-700">Akshaya Tritiya Special</p>
+                        </div>
+                        <button
+                          onClick={() => validateCoupon(FESTIVAL_OFFER.discountCode)}
+                          className="bg-amber-600 hover:bg-amber-700 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg transition-colors shadow-sm"
+                        >
+                          Apply {FESTIVAL_OFFER.discountCode}
+                        </button>
+                      </div>
+                    </motion.div>
                   )}
                 </div>
 

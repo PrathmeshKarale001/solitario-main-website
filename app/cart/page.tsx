@@ -93,8 +93,15 @@ export default function CartPage() {
       const data = await res.json();
       if (res.ok && data.success) {
         setFestivalOfferApplied(true);
-        setFestivalDiscount(Math.round(data.discountAmount ?? 0));
-        setFestivalShopifyTotal(data.shopifyTotal ?? null);
+        // Sync with standard coupon state
+        setAppliedCouponState(FESTIVAL_OFFER.discountCode);
+        setShowApplied(true);
+        setCouponInput(FESTIVAL_OFFER.discountCode);
+        localStorage.setItem('applied_coupon', FESTIVAL_OFFER.discountCode);
+
+        if (data.shopifyTotal !== undefined) {
+          setFestivalShopifyTotal(data.shopifyTotal);
+        }
       } else if (res.status === 400 && data.error?.includes('No active cart')) {
         // Cart not yet synced — retry after a short delay
         setTimeout(applyFestivalOffer, 2000);
@@ -644,6 +651,32 @@ export default function CartPage() {
                     </div>
                   )}
                   {couponError && <p className="text-xs text-error mt-2 ml-1">{couponError}</p>}
+
+                  {/* Available Offers / Promotions */}
+                  {festivalActive && !appliedCoupon && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className="mt-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl shadow-sm"
+                    >
+                      <div className="flex items-center gap-2 mb-2">
+                        <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
+                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Summer Offer Released</span>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-sm font-bold text-brand-800">10% OFF + Free Diamond</p>
+                          <p className="text-[10px] text-amber-700 font-medium">Akshaya Tritiya Special Offer</p>
+                        </div>
+                        <button
+                          onClick={() => handleApplyCoupon(null, FESTIVAL_OFFER.discountCode)}
+                          className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-md active:scale-95"
+                        >
+                          APPLY
+                        </button>
+                      </div>
+                    </motion.div>
+                  )}
                 </div>
 
                 {/* Promotion Messages */}
