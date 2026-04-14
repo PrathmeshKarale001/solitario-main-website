@@ -105,7 +105,7 @@ export default function Home() {
             <div className="flex items-center justify-center gap-2.5">
               <Gift className="text-amber-600 shrink-0 hidden sm:block" size={22} />
               <p className="text-gray-800 font-medium text-[15px] sm:text-base leading-snug">
-                Prefer to shop in-store? Visit any Solitario boutique to claim your <span className="font-bold text-amber-700">Free Premium Diamond</span> this Akshaya Tritiya.
+                Prefer to shop in-store? Visit any Solitario boutique to claim your <span className="font-bold text-amber-700">Free Premium Diamond</span> this Akshaya Tritiya (Limited from 17-19th April).
               </p>
             </div>
             <Link 
