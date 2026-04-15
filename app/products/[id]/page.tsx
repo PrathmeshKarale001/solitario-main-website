@@ -80,9 +80,6 @@ export default async function ProductPage({ params }: ProductPageProps) {
           { name: product.name, url: `https://thesolitario.com/products/${id}` },
         ]}
       />
-      <div className="container mx-auto px-4 py-4">
-        <Breadcrumbs items={breadcrumbs} />
-      </div>
       <ProductErrorBoundary>
         <LazyProductDetail product={product} />
       </ProductErrorBoundary>

@@ -13,7 +13,6 @@ const defaultOffers: Offer[] = [
   { id: '1', text: 'Insured & Secure Delivery on All Orders', icon: 'gift' },
   { id: '2', text: 'Get 20% Off on Your First Purchase', icon: 'tag' },
   { id: '5', text: 'Exclusive Designs - Limited Stock Available', icon: 'sparkles' },
-  { id: '6', text: 'Easy EMI Options Available', icon: 'tag' },
 ];
 
 const getIcon = (iconType?: string) => {

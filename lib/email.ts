@@ -436,3 +436,98 @@ export async function sendLeadNotification(data: LeadNotificationData) {
     return { success: false, error };
   }
 }
+
+// ─── Akshaya Tritiya Lead Notification ───────────────────────────────────────
+
+export interface FestivalLeadData {
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  campaignId: string;
+  submittedAt: string;
+}
+
+export async function sendFestivalLeadNotification(data: FestivalLeadData) {
+  try {
+    const emailHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Festival Lead - Solitario</title>
+</head>
+<body style="margin: 0; padding: 0; font-family: 'Arial', sans-serif; background-color: #f9fafb;">
+  <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f9fafb; padding: 40px 20px;">
+    <tr>
+      <td align="center">
+        <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);">
+          <!-- Header -->
+          <tr>
+            <td style="background: linear-gradient(135deg, #146552 0%, #1a8066 100%); padding: 30px; text-align: center;">
+              <h1 style="margin: 0; color: #ffffff; font-size: 24px; font-weight: 600;">💎 New Akshaya Tritiya Lead</h1>
+              <p style="margin: 8px 0 0; color: rgba(255,255,255,0.85); font-size: 14px;">Free Diamond Campaign — Stores Page</p>
+            </td>
+          </tr>
+
+          <!-- Lead Details -->
+          <tr>
+            <td style="padding: 30px;">
+              <table width="100%" cellpadding="0" cellspacing="0" style="border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280; font-weight: 600; width: 140px; border-bottom: 1px solid #e5e7eb;">Name</td>
+                  <td style="padding: 12px 16px; font-size: 15px; color: #1a1714; font-weight: 600; border-bottom: 1px solid #e5e7eb;">${data.name}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280; font-weight: 600; border-bottom: 1px solid #e5e7eb;">Phone</td>
+                  <td style="padding: 12px 16px; font-size: 15px; color: #1a1714; border-bottom: 1px solid #e5e7eb;">
+                    <a href="tel:${data.phone}" style="color: #146552; text-decoration: none;">${data.phone}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280; font-weight: 600; border-bottom: 1px solid #e5e7eb;">Email</td>
+                  <td style="padding: 12px 16px; font-size: 15px; color: #1a1714; border-bottom: 1px solid #e5e7eb;">
+                    <a href="mailto:${data.email}" style="color: #146552; text-decoration: none;">${data.email}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 12px 16px; background-color: #f9fafb; font-size: 13px; color: #6b7280; font-weight: 600; border-bottom: 1px solid #e5e7eb;">City</td>
+                  <td style="padding: 12px 16px; font-size: 15px; color: #1a1714; border-bottom: 1px solid #e5e7eb;">${data.city}</td>
+                </tr>
+              </table>
+
+              <!-- Timestamp -->
+              <p style="margin: 20px 0 0; font-size: 12px; color: #9ca3af; text-align: right;">
+                Submitted: ${new Date(data.submittedAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata', dateStyle: 'medium', timeStyle: 'short' })}
+              </p>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="background-color: #f9fafb; padding: 20px 30px; text-align: center; border-top: 1px solid #e5e7eb;">
+              <p style="margin: 0; font-size: 12px; color: #9ca3af;">This is an automated notification from The Solitario festival lead capture system.</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
+    `;
+
+    await resend.emails.send({
+      from: 'Solitario <orders@thesolitario.com>',
+      to: 'paymentdesk@thesolitario.com',
+      subject: `💎 New Akshaya Tritiya Lead: ${data.name} — ${data.city}`,
+      html: emailHtml,
+    });
+
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to send festival lead notification email:', error);
+    return { success: false, error };
+  }
+}

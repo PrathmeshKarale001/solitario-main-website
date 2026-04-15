@@ -91,10 +91,18 @@ export default function Home() {
       {/* AKSHAYA TRITIYA PROMO BANNER & OFFLINE CALLOUT */}
       <div className="w-full">
         <a href="/festival" className="block w-full">
+          {/* Desktop Banner */}
           <img
             src="/images/banners/akshay-tritiya.jpeg"
             alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 customers receive a diamond for free. Shop Now"
-            className="w-full h-auto"
+            className="hidden md:block w-full h-auto"
+            loading="eager"
+          />
+          {/* Mobile Banner */}
+          <img
+            src="/images/banners/akshay-tritiya-mobile.jpeg"
+            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 customers receive a diamond for free. Shop Now"
+            className="block md:hidden w-full h-auto"
             loading="eager"
           />
         </a>

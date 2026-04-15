@@ -80,3 +80,13 @@ export const DEFAULT_PROMO_CONFIG: PromotionConfig = {
   gift_product_name: '10-cent Diamond Gift',
   stacking_first_purchase: false,
 };
+
+export interface FestivalLead {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  city: string;
+  campaign_id: string;
+  created_at: string;
+}

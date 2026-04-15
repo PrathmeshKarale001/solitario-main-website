@@ -1,11 +1,12 @@
 import fs from 'fs';
 import path from 'path';
-import { User, Order, Coupon } from './schema';
+import { User, Order, Coupon, FestivalLead } from './schema';
 
 const DATA_DIR = path.join(process.cwd(), 'data');
 const USERS_FILE = path.join(DATA_DIR, 'users.json');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 const COUPONS_FILE = path.join(DATA_DIR, 'coupons.json');
+const FESTIVAL_LEADS_FILE = path.join(DATA_DIR, 'festival_leads.json');
 
 function ensureDataDir() {
   if (!fs.existsSync(DATA_DIR)) {
@@ -189,5 +190,28 @@ export class CouponRepository {
     if (filtered.length === coupons.length) return false;
     writeJSON(COUPONS_FILE, filtered);
     return true;
+  }
+}
+
+export class FestivalLeadRepository {
+  static create(lead: Omit<FestivalLead, 'id' | 'created_at'>): FestivalLead {
+    const leads = readJSON<FestivalLead[]>(FESTIVAL_LEADS_FILE, []);
+    const newLead: FestivalLead = {
+      ...lead,
+      id: `lead_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      created_at: new Date().toISOString(),
+    };
+    leads.push(newLead);
+    writeJSON(FESTIVAL_LEADS_FILE, leads);
+    return newLead;
+  }
+
+  static findAll(): FestivalLead[] {
+    return readJSON<FestivalLead[]>(FESTIVAL_LEADS_FILE, []);
+  }
+
+  static findByEmail(email: string): FestivalLead | null {
+    const leads = this.findAll();
+    return leads.find(l => l.email === email) || null;
   }
 }

@@ -85,9 +85,9 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
         </div>
 
-        {/* Slider Dots */}
+        {/* Slider Dots — bottom-right */}
         {hasSlider && (
-          <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+          <div className="absolute bottom-6 right-6 md:bottom-8 md:right-8 flex gap-2 z-20">
             {banners.map((_, idx) => (
               <button
                 key={idx}
@@ -100,35 +100,32 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
           </div>
         )}
 
-        {/* Dramatic top-left tagline */}
-        {festival.heroTagline && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="absolute top-8 left-8 md:top-12 md:left-12 z-10"
-          >
-            <p className="text-white/50 font-gotham text-xs md:text-sm uppercase tracking-[0.3em]">
-              {festival.heroTagline}
-            </p>
-          </motion.div>
-        )}
-
-        {/* Bottom-center text */}
-        <div className="absolute inset-0 z-10 flex items-end justify-center pb-12 md:pb-16">
-          <div className="text-center px-4">
+        {/* Left-bottom text overlay */}
+        <div className="absolute inset-0 z-10 flex items-end justify-start">
+          <div className="text-left px-6 pb-10 md:px-12 md:pb-14 lg:px-16 lg:pb-16 max-w-2xl">
             {/* Breadcrumb */}
-            <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4 font-montserrat">
+            <nav className="flex items-center gap-2 text-white/70 text-xs md:text-sm mb-3 font-montserrat">
               <Link href="/" className="hover:text-white transition-colors underline-offset-4 hover:underline">Home</Link>
               <span>/</span>
               <span className="text-white">{festival.tagline}</span>
             </nav>
 
+            {festival.heroTagline && (
+              <motion.p
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.8, delay: 0.1 }}
+                className="text-white/50 font-gotham text-[10px] md:text-xs uppercase tracking-[0.3em] mb-2"
+              >
+                {festival.heroTagline}
+              </motion.p>
+            )}
+
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="text-4xl md:text-5xl lg:text-5xl font-montserrat font-bold text-white mb-4 drop-shadow-lg"
+              transition={{ duration: 0.6, delay: 0.15 }}
+              className="text-xl md:text-3xl lg:text-4xl font-montserrat font-bold text-white mb-2 md:mb-3 drop-shadow-lg leading-tight"
             >
               {festival.heading}
             </motion.h1>
@@ -136,8 +133,8 @@ function FestivalHero({ festival }: { festival: FestivalConfig }) {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto drop-shadow-md"
+              transition={{ duration: 0.6, delay: 0.25 }}
+              className="text-white/80 font-montserrat text-xs md:text-sm max-w-md drop-shadow-md"
             >
               {festival.subtitle}
             </motion.p>
@@ -288,21 +285,8 @@ export function FestivalPageContent({ festivalOverride }: { festivalOverride?: F
       {/* Hero */}
       <FestivalHero festival={festival} />
 
-      {/* Breadcrumb */}
-      <Section variant="light" padding="sm">
-        <Container>
-          <nav className="flex items-center gap-2 text-sm font-montserrat text-gray-500">
-            <Link href="/" className="hover:text-classic-green transition-colors flex items-center gap-1">
-              <Home className="w-3.5 h-3.5" /> Home
-            </Link>
-            <ChevronRight className="w-4 h-4" />
-            <span className="text-classic-green font-medium">{festival.tagline}</span>
-          </nav>
-        </Container>
-      </Section>
-
       {/* Main content: sidebar + grid */}
-      <Section variant="light" padding="lg" className="pb-28 lg:pb-16">
+      <Section variant="light" padding="md" className="pb-28 lg:pb-16">
         <Container>
           <div className="flex gap-8">
             {/* Sidebar — desktop */}

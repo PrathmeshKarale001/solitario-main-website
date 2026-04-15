@@ -193,7 +193,7 @@ function CategoryPageContent() {
   const heroImage = isMobile ? categoryConfig.heroMobile : categoryConfig.heroDesktop;
 
   return (
-    <div className="pt-20">
+    <div>
       {/* Hero Section - matches home hero container sizing */}
       <section className="relative w-full overflow-hidden bg-[#1a1a1a]">
         <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px]">
@@ -210,12 +210,12 @@ function CategoryPageContent() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
           </div>
 
-          {/* Hero Content */}
-          <div className="absolute inset-0 z-10 flex items-end justify-center pb-12 md:pb-16">
-            <div className="text-center px-4">
+          {/* Left-bottom text overlay */}
+          <div className="absolute inset-0 z-10 flex items-end justify-start">
+            <div className="text-left px-6 pb-10 md:px-12 md:pb-14 lg:px-16 lg:pb-16 max-w-2xl">
               {/* Breadcrumb */}
-              <nav className="flex items-center justify-center gap-2 text-white/70 text-sm mb-4">
-                <Link href="/products" className="hover:text-white transition-colors">
+              <nav className="flex items-center gap-2 text-white/70 text-xs md:text-sm mb-3 font-montserrat">
+                <Link href="/products" className="hover:text-white transition-colors underline-offset-4 hover:underline">
                   Shop
                 </Link>
                 <span>/</span>
@@ -225,16 +225,17 @@ function CategoryPageContent() {
               <motion.h1
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white mb-4"
+                transition={{ duration: 0.6, delay: 0.15 }}
+                className="text-xl md:text-3xl lg:text-4xl font-montserrat font-bold text-white mb-2 md:mb-3 drop-shadow-lg leading-tight"
               >
                 {categoryConfig.title}
               </motion.h1>
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-white/80 font-montserrat text-sm md:text-base max-w-xl mx-auto"
+                transition={{ duration: 0.6, delay: 0.25 }}
+                className="text-white/80 font-montserrat text-xs md:text-sm max-w-md drop-shadow-md"
               >
                 {categoryConfig.description}
               </motion.p>
