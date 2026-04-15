@@ -16,7 +16,11 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'images.pexels.com',
+        hostname: 'api.dicebear.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.pravatar.cc',
       },
     ],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
@@ -60,7 +64,7 @@ const nextConfig = {
               "worker-src 'self' blob:",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://tagmanager.google.com https://www.googletagmanager.com https://cdn.razorpay.com",
               // img-src: Google tracking pixels, Ads, Meta Pixel, analytics, Cloudinary
-              "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://*.clerk.com https://*.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://www.google.com https://google.com https://*.google.com https://www.googleadservices.com https://googleadservices.com https://*.googleadservices.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://bid.g.doubleclick.net https://www.google.co.in https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.facebook.com https://facebook.com https://*.facebook.com https://*.facebook.net https://res.cloudinary.com",
+              "img-src 'self' data: blob: https://cdn.shopify.com https://images.unsplash.com https://images.pexels.com https://api.dicebear.com https://i.pravatar.cc https://*.clerk.com https://*.googleapis.com https://www.googletagmanager.com https://www.google-analytics.com https://ssl.gstatic.com https://www.gstatic.com https://www.google.com https://google.com https://*.google.com https://www.googleadservices.com https://googleadservices.com https://*.googleadservices.com https://googleads.g.doubleclick.net https://*.doubleclick.net https://bid.g.doubleclick.net https://www.google.co.in https://pagead2.googlesyndication.com https://tpc.googlesyndication.com https://www.facebook.com https://facebook.com https://*.facebook.com https://*.facebook.net https://res.cloudinary.com",
               "font-src 'self' https://fonts.gstatic.com",
               // media-src: Cloudinary video/audio
               "media-src 'self' https://res.cloudinary.com",
