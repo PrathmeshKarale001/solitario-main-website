@@ -224,9 +224,6 @@ export default function StoresPage() {
         </motion.div>
       </section>
 
-      {/* Nearest Store Section */}
-      <LazyNearestStore showTitle={true} maxStores={3} />
-
       {/* Akshaya Tritiya Campaign Section */}
       <section className="py-20 bg-brand-50 border-t border-gold/10">
         <Container>
@@ -238,9 +235,14 @@ export default function StoresPage() {
               Celebrate <span className="text-classic-green">Akshaya Tritiya</span>
             </h2>
           </div>
-          <FestivalLeadForm className="shadow-2xl hover:shadow-gold/10 transition-shadow duration-700" />
+          <FestivalLeadForm className="hover:shadow-gold/20 transition-all duration-700" />
         </Container>
       </section>
+
+      {/* Nearest Store Section */}
+      <LazyNearestStore showTitle={true} maxStores={3} />
+
+
 
       {/* Region Selector — 4 Cards */}
       <section className="py-12 md:py-16 bg-brand-100">

@@ -55,8 +55,8 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
   };
 
   return (
-    <div className={`w-full max-w-4xl mx-auto ${className}`}>
-      <div className="relative bg-[#fdf9f3] rounded-2xl overflow-hidden shadow-2xl border border-gold/40">
+    <div className={`w-full max-w-4xl mx-auto rounded-2xl shadow-2xl ${className}`}>
+      <div className="relative bg-[#fdf9f3] rounded-2xl overflow-hidden border border-gold/40">
         {/* Abstract Background Design */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gold/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
