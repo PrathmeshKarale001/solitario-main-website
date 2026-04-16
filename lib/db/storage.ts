@@ -28,8 +28,14 @@ function readJSON<T>(filePath: string, defaultValue: T): T {
 }
 
 function writeJSON<T>(filePath: string, data: T): void {
-  ensureDataDir();
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  try {
+    ensureDataDir();
+    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), 'utf-8');
+  } catch (error) {
+    console.error(`Error writing to ${filePath}:`, error);
+    // In serverless environments like Vercel, the filesystem is read-only
+    // We log the error but don't throw to avoid crashing the request
+  }
 }
 
 export class UserRepository {
