@@ -110,8 +110,8 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                         {[1, 2, 3].map(i => (
                           <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-brand-100 flex items-center justify-center overflow-hidden">
                             <img 
-                              src={`https://i.pravatar.cc/100?u=${i + 20}`} 
-                              alt="Customer" 
+                              src={`https://api.dicebear.com/7.x/avataaars/svg?seed=customer${i}`} 
+                              alt="" 
                               width={40}
                               height={40}
                             />
