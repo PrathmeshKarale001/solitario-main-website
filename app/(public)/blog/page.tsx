@@ -180,7 +180,7 @@ export default function BlogPage() {
 
           {/* Hero Content */}
           <div className="absolute inset-0 flex items-end">
-            <Container>
+            <div className="section-container">
               <div className="pb-8 md:pb-12 lg:pb-16 max-w-4xl">
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
@@ -228,7 +228,7 @@ export default function BlogPage() {
                   </div>
                 </motion.div>
               </div>
-            </Container>
+            </div>
           </div>
         </Link>
       </section>
@@ -275,7 +275,6 @@ export default function BlogPage() {
               <span className="font-semibold text-brand-700">{featuredPost.category}</span>.
             </p>
           )}
-        </section>
 
         {/* ── BLOG CARD GRID ─────────────────────────────────────────────── */}
         <section className="mb-16">
