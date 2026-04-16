@@ -9,9 +9,9 @@ interface FestivalLeadFormProps {
   className?: string;
 }
 
-const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({ 
+const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
   campaignId = 'akshaya-tritiya-2024',
-  className = '' 
+  className = ''
 }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -19,7 +19,7 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
     phone: '',
     city: ''
   });
-  
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -60,11 +60,11 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
         {/* Abstract Background Design */}
         <div className="absolute top-0 right-0 w-64 h-64 bg-gold/5 rounded-full -translate-y-1/2 translate-x-1/2 blur-3xl" />
         <div className="absolute bottom-0 left-0 w-80 h-80 bg-gold/5 rounded-full translate-y-1/2 -translate-x-1/2 blur-3xl" />
-        
+
         <div className="relative p-8 md:p-12 z-10">
           <AnimatePresence mode="wait">
             {status === 'success' ? (
-              <motion.div 
+              <motion.div
                 key="success"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -78,7 +78,7 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                 <p className="text-black/80 text-lg mb-8 max-w-md mx-auto">
                   Your entry has been registered successfully. Our team will contact you soon regarding your Free Diamond offer.
                 </p>
-                <button 
+                <button
                   onClick={() => setStatus('idle')}
                   className="px-8 py-3 bg-white hover:bg-brand-100 text-black border border-brand-200 font-semibold rounded-lg transition-colors shadow-sm"
                 >
@@ -86,7 +86,7 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                 </button>
               </motion.div>
             ) : (
-              <motion.div 
+              <motion.div
                 key="form"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -98,20 +98,21 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                       <Diamond className="w-4 h-4 text-classic-green" />
                       <span className="text-classic-green text-xs font-bold uppercase tracking-widest">Akshaya Tritiya Exclusive</span>
                     </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-black mb-6 leading-tight font-playfair">
-                      Get Your <span className="text-classic-green">Free Diamond</span> — First 101 Customers Only
+                    <h2 className="text-4xl md:text-4xl font-bold text-black mb-1 leading-tight font-playfair">
+                      Get Your <span className="text-classic-green">Free Diamond.</span>
                     </h2>
+                    <h3 className="text-2xl md:text-2xl font-bold text-black mb-6 leading-tight font-playfair">First <span className="text-classic-green">101 Customers</span> Only</h3>
                     <p className="text-black/80 text-lg mb-8 leading-relaxed max-w-lg">
                       Celebrate the auspicious occasion of Akshaya Tritiya with Solitario. Be among the first 101 customers to register and receive a certified loose diamond with your purchase.
                     </p>
-                    
+
                     <div className="flex items-center gap-4 py-4 px-6 bg-black/5 rounded-xl border border-black/10 backdrop-blur-sm">
                       <div className="flex -space-x-3">
                         {[1, 2, 3].map(i => (
                           <div key={i} className="w-10 h-10 rounded-full border-2 border-white bg-brand-100 flex items-center justify-center overflow-hidden">
-                            <img 
-                              src={`https://i.pravatar.cc/100?u=${i + 20}`} 
-                              alt="Customer" 
+                            <img
+                              src={`https://i.pravatar.cc/100?u=${i + 20}`}
+                              alt="Customer"
                               width={40}
                               height={40}
                             />
@@ -138,7 +139,7 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                           className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:border-gold focus:ring-2 focus:ring-gold/20 outline-none transition-all text-gray-900"
                         />
                       </div>
-                      
+
                       <div className="space-y-2">
                         <label className="text-sm font-semibold text-gray-700">Email Address</label>
                         <input
