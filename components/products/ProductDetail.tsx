@@ -312,7 +312,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   return (
     <div className="bg-white">
       {/* Hero Section - Compact with brand pattern */}
-      <section className="relative h-[20vh] min-h-[180px] flex items-end overflow-hidden bg-classic-green pt-20">
+      <section className="relative h-[15vh] min-h-[140px] flex items-end overflow-hidden bg-classic-green pt-28 md:pt-32">
         {/* Brand Pattern Background */}
         <div className="absolute inset-0 z-0">
           {/* Diamond pattern overlay */}
@@ -328,15 +328,15 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         </div>
 
         {/* Content */}
-        <Container className="relative z-10 w-full pb-6 md:pb-8">
+        <Container className="relative z-10 w-full pb-4 md:pb-6">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="max-w-4xl"
           >
             {/* Breadcrumb */}
-            <nav className="flex items-center gap-2 text-xs text-white/70 font-montserrat mb-3">
+            <nav className="flex items-center gap-2 text-xs text-white/70 font-montserrat">
               <Link href="/" className="hover:text-bronze-gold transition-colors">Home</Link>
               <span className="text-white/30">/</span>
               <Link href="/products" className="hover:text-bronze-gold transition-colors">Shop</Link>
@@ -347,11 +347,6 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <span className="text-white/30">/</span>
               <span className="text-white">{product.name}</span>
             </nav>
-
-            {/* Product Title - 10% smaller */}
-            <h1 className="font-montserrat font-bold text-xl md:text-2xl lg:text-3xl text-white leading-tight" style={{ letterSpacing: '-0.02em' }}>
-              {product.name.toUpperCase()}
-            </h1>
           </motion.div>
         </Container>
       </section>

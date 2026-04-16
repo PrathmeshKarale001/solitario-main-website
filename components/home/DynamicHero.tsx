@@ -45,8 +45,8 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
   const defaultFallbackMedia = [
     {
       type: 'image' as const,
-      src: '/images/home-hero/Akshay_Tritiya_Banner_1600x700.jpeg',
-      mobileSrc: '/images/home-hero/Akshay_Tritiya_All_Web.jpg.jpeg',
+      src: '/images/home-hero/Akshay_Tritiya_All_Web.jpg.jpeg',
+      mobileSrc: '/images/home-hero/Akshay_Tritiya_Banner_1080x1350.jpeg',
       pos: 'object-cover',
       alt: 'The Solitario lab grown diamond solitaire ring collection',
       ctaText: 'Shop Now',
