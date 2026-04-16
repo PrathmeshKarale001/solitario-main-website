@@ -276,7 +276,7 @@ export default function DynamicHero({ fallbackMedia }: DynamicHeroProps) {
     if (currentMedia.type === 'image') {
       const timer = setTimeout(() => {
         handleMediaEnded();
-      }, 6000); // Show image for 6 seconds
+      }, 3000); // Show image for 3 seconds
       return () => clearTimeout(timer);
     }
   }, [currentIndex, mediaToUse]);

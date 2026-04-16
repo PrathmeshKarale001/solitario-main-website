@@ -50,9 +50,9 @@ const commitments = [
 
 export default function SustainabilityPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white">
       {/* Hero */}
-      <section className="relative bg-gradient-to-br from-classic-green via-teal to-classic-green py-12 md:py-16 overflow-hidden">
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] bg-gradient-to-br from-classic-green via-teal to-classic-green flex items-center justify-center overflow-hidden pt-24 md:pt-32">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-[url('/images/patterns/leaves.svg')] opacity-5" />
         </div>

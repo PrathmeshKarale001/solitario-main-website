@@ -162,108 +162,78 @@ export default function BlogPage() {
 
   return (
     <div className="min-h-screen bg-[#F5F5F5] pb-20">
-      {/* Spacer — clears fixed navbar */}
-      <div className="h-20 md:h-[100px] w-full" />
+      {/* ── HERO FEATURED POST — fully clickable ──────────────────────── */}
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] overflow-hidden group pt-24 md:pt-32">
+        <Link href={featuredPost.href} className="absolute inset-0 block">
+          {/* Image */}
+          <ResponsiveImage
+            src={featuredPost.image}
+            mobileSrc={featuredPost.mobileImage}
+            alt={featuredPost.title}
+            fill
+            priority
+            className="object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
+          />
+
+          {/* Gradient overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
+
+          {/* Hero Content */}
+          <div className="absolute inset-0 flex items-end">
+            <Container>
+              <div className="pb-8 md:pb-12 lg:pb-16 max-w-4xl">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.7 }}
+                >
+                  {/* Category chip */}
+                  <div className="flex items-center gap-3 mb-4 md:mb-6">
+                    <span className="inline-block px-3 py-1 md:px-4 md:py-1.5 bg-white/20 backdrop-blur-md text-white text-[10px] md:text-[11px] font-gotham uppercase tracking-wider rounded-full border border-white/30">
+                      {featuredPost.category}
+                    </span>
+                    <span className="text-white/60 text-[10px] md:text-xs font-montserrat flex items-center gap-2">
+                       <Sparkles className="w-3 h-3 text-bronze-gold" />
+                       Featured Story
+                    </span>
+                  </div>
+
+                  <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-[3.5rem] font-montserrat font-bold text-white leading-[1.1] mb-4 md:mb-6">
+                    {featuredPost.title}
+                  </h1>
+                  
+                  <p className="hidden sm:block text-white/80 font-montserrat text-sm md:text-lg max-w-2xl mb-6 md:mb-8 line-clamp-2">
+                    {featuredPost.excerpt}
+                  </p>
+
+                  <div className="flex items-center gap-6">
+                    {/* Author meta */}
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                        <Sparkles className="w-3.5 h-3.5 text-bronze-gold" />
+                      </div>
+                      <div className="text-white">
+                        <p className="font-montserrat font-semibold text-xs md:text-sm leading-tight">
+                          {featuredPost.author.name}
+                        </p>
+                        <p className="text-white/60 text-[10px] md:text-xs font-montserrat mt-0.5">
+                          {featuredPost.date} &nbsp;·&nbsp; {featuredPost.readTime}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="hidden md:flex items-center gap-2 text-white text-xs font-gotham uppercase tracking-widest group-hover:gap-3 transition-all">
+                      Read Article <ArrowRight className="w-4 h-4" />
+                    </div>
+                  </div>
+                </motion.div>
+              </div>
+            </Container>
+          </div>
+        </Link>
+      </section>
 
       <div className="max-w-[1400px] mx-auto px-4 md:px-6 lg:px-8 w-full">
-
-        {/* ── HERO FEATURED POST — fully clickable ──────────────────────── */}
-        <Link href={featuredPost.href} className="block">
-          <motion.section
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="w-full relative aspect-[3/4] sm:aspect-[4/3] md:aspect-video rounded-[1.5rem] md:rounded-[2rem] overflow-hidden shadow-md cursor-pointer group"
-          >
-            {/* Single image, correct viewport loaded via JS */}
-            <ResponsiveImage
-              src={featuredPost.image}
-              mobileSrc={featuredPost.mobileImage}
-              alt={featuredPost.title}
-              fill
-              priority
-              className="object-cover group-hover:scale-[1.02] transition-transform duration-700 ease-out"
-            />
-
-            {/* Gradient overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/25 to-transparent" />
-
-            {/* Category chip + Read Article — top row */}
-            <div className="absolute top-4 left-4 right-4 md:top-5 md:left-6 md:right-6 flex items-center justify-between">
-              <span className="inline-block px-3 py-1 md:px-4 md:py-1.5 bg-white/20 backdrop-blur-md text-white text-[10px] md:text-[11px] font-gotham uppercase tracking-wider rounded-full border border-white/30">
-                {featuredPost.category}
-              </span>
-              <span className="inline-flex items-center gap-1.5 md:gap-2 px-3 py-2 md:px-5 md:py-2.5 bg-white/15 hover:bg-white/25 backdrop-blur-md text-white text-[10px] md:text-xs font-gotham uppercase tracking-wider rounded-full border border-white/30 transition-all">
-                Read <ArrowRight className="w-3 h-3 md:w-3.5 md:h-3.5" />
-              </span>
-            </div>
-
-            {/* Bottom — title + author */}
-            <div className="absolute bottom-0 w-full px-4 pb-5 md:px-10 md:pb-12 flex flex-col md:flex-row md:items-end justify-between gap-3">
-              <div className="max-w-2xl text-white">
-                <h1 className="text-base sm:text-xl md:text-4xl lg:text-[2.6rem] font-montserrat font-bold text-white leading-tight mb-1.5 md:mb-2.5 line-clamp-3 md:line-clamp-none">
-                  {featuredPost.title}
-                </h1>
-                {/* Hide excerpt on mobile — too cramped */}
-                <p className="hidden md:block text-white/75 font-montserrat text-sm md:text-base line-clamp-2">
-                  {featuredPost.excerpt}
-                </p>
-                {/* Dots */}
-                <div className="flex gap-1.5 md:gap-2 mt-2 md:mt-4">
-                  {[0, 1, 2].map((i) => (
-                    <div
-                      key={i}
-                      className={`h-1 md:h-1.5 rounded-full transition-all ${
-                        i === 0 ? 'w-4 md:w-5 bg-white' : 'w-1 md:w-1.5 bg-white/35'
-                      }`}
-                    />
-                  ))}
-                </div>
-              </div>
-
-              {/* Author meta — hidden on mobile to reduce clutter */}
-              <div className="hidden md:flex items-center gap-3 shrink-0">
-                <div className="w-9 h-9 md:w-11 md:h-11 rounded-full bg-classic-green/80 border-2 border-white/30 flex items-center justify-center">
-                  <Sparkles className="w-4 h-4 text-white" />
-                </div>
-                <div className="text-white">
-                  <p className="font-montserrat font-semibold text-sm leading-tight">
-                    {featuredPost.author.name}
-                  </p>
-                  <p className="text-white/65 text-xs font-montserrat">
-                    {featuredPost.date} &nbsp;·&nbsp; {featuredPost.readTime}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </motion.section>
-        </Link>
-
-        {/* Mobile-only: author strip + read CTA below the hero */}
-        <div className="md:hidden flex items-center justify-between mt-3 mb-2 px-1">
-          <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-classic-green/15 border border-classic-green/30 flex items-center justify-center shrink-0">
-              <Sparkles className="w-3.5 h-3.5 text-classic-green" />
-            </div>
-            <div>
-              <p className="font-montserrat font-semibold text-xs text-brand-800 leading-tight">
-                {featuredPost.author.name}
-              </p>
-              <p className="text-gray-400 text-[10px] font-montserrat">
-                {featuredPost.date} &nbsp;·&nbsp; {featuredPost.readTime}
-              </p>
-            </div>
-          </div>
-          <Link
-            href={featuredPost.href}
-            className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-800 text-white text-[11px] font-gotham uppercase tracking-wider rounded-full transition-all"
-          >
-            Read <ArrowRight className="w-3 h-3" />
-          </Link>
-        </div>
-
-        {/* ── BLOG HEADER + CATEGORY FILTERS ────────────────────────────── */}
-        <section className="mt-14 mb-8">
           <h2 className="text-3xl md:text-4xl font-montserrat font-bold text-brand-800 mb-2">
             Blog
           </h2>

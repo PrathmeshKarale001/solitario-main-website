@@ -258,7 +258,7 @@ function WarnerBrosPageContent() {
   return (
     <div className="bg-[#0a0a0a] min-h-screen overflow-x-hidden">
       {/* Hero Banner Section - Mobile Optimized */}
-      <section className="relative h-[70vh] md:h-[80vh] overflow-hidden">
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] overflow-hidden pt-24 md:pt-32">
         <div className="absolute inset-0">
           <AnimatePresence mode="wait" initial={false}>
             <motion.div

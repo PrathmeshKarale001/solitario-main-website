@@ -65,14 +65,14 @@ export default function RegulatoryDisclosuresPage() {
     const activePdfUrl = activePdf ? getPdfApiUrl(activePdf) : null;
 
     return (
-        <main className="min-h-screen bg-ivory-pearl pt-20">
+        <main className="min-h-screen bg-ivory-pearl">
             {/* Hero Section */}
-            <section className="bg-gradient-to-b from-brand-900 to-brand-800 text-white py-16 md:py-20">
+            <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] bg-classic-green flex items-center justify-center pt-24 md:pt-32">
                 <div className="container mx-auto px-4 text-center">
-                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-montserrat font-bold mb-4">
+                    <h1 className="text-3xl md:text-5xl font-montserrat font-bold text-white mb-4">
                         Regulatory Disclosures
                     </h1>
-                    <p className="text-ivory-pearl/80 text-base md:text-lg max-w-2xl mx-auto">
+                    <p className="text-white/80 text-base md:text-lg max-w-2xl mx-auto">
                         Transparency and compliance are at the core of our values. Access our corporate governance documents and statutory policies below.
                     </p>
                 </div>

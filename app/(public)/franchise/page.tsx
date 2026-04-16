@@ -94,42 +94,43 @@ export default function FranchisePage() {
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
-      <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden">
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{ y: backgroundY }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
-          <AnimatePresence mode="wait">
-            {heroImages.map((item, index) => (
-              index === currentImageIndex % heroImages.length && (
-                <motion.div
-                  key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
-                  initial={{ opacity: 0, scale: 1.05 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 1.2, ease: 'easeInOut' }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={item.src}
-                    alt={`Franchise Opportunities ${index + 1}`}
-                    fill
-                    className={`object-cover ${item.pos}`}
-                    priority={index === 0}
-                    quality={index === 0 ? 85 : 75}
-                    sizes="(max-width: 768px) 100vw, 1920px"
-                  />
-                </motion.div>
-              )
-            ))}
-          </AnimatePresence>
-        </motion.div>
+      <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#1a1a1a]">
+        <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] flex items-center justify-center">
+          <motion.div
+            className="absolute inset-0 z-0"
+            style={{ y: backgroundY }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
+            <AnimatePresence mode="wait">
+              {heroImages.map((item, index) => (
+                index === currentImageIndex % heroImages.length && (
+                  <motion.div
+                    key={`${isMobile ? 'mobile' : 'desktop'}-${index}`}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.05 }}
+                    transition={{ duration: 1.2, ease: 'easeInOut' }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={item.src}
+                      alt={`Franchise Opportunities ${index + 1}`}
+                      fill
+                      className={`object-cover ${item.pos}`}
+                      priority={index === 0}
+                      quality={index === 0 ? 85 : 75}
+                      sizes="(max-width: 768px) 100vw, 1920px"
+                    />
+                  </motion.div>
+                )
+              ))}
+            </AnimatePresence>
+          </motion.div>
 
-        <motion.div
-          className="relative z-10 text-center px-4 pt-24 md:pt-32"
-          style={{ y: textY }}
-        >
+          <motion.div
+            className="relative z-10 text-center px-4 pt-24 md:pt-32"
+            style={{ y: textY }}
+          >
           <div className="max-w-5xl mx-auto">
             <motion.span
               initial={{ opacity: 0, y: -20 }}
@@ -199,7 +200,8 @@ export default function FranchisePage() {
             </motion.div>
           </div>
         </motion.div>
-      </section>
+      </div>
+    </section>
 
       {/* Why Partner Section */}
       <section className="py-12 md:py-16 px-4 bg-white">

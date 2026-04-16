@@ -221,7 +221,7 @@ export default function GeresaPage() {
       {/* ── 1. HERO ─────────────────────────────────────────────────────── */}
       <section
         ref={heroRef}
-        className="relative h-screen min-h-[600px] overflow-hidden flex items-end"
+        className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] overflow-hidden flex items-end pt-24 md:pt-32"
       >
         <motion.div className="absolute inset-0" style={{ y: heroY }}>
           <Image

@@ -42,7 +42,7 @@ const MOBILE_MENU_SECTIONS = [
     links: [
       { href: '/stores', label: 'Our Stores', icon: MapPin },
       { href: '/about', label: 'Our Story', icon: BookOpen },
-      // { href: '/blog', label: 'Blog' }, // Hidden — launching tomorrow
+      { href: '/blog', label: 'Blog', icon: BookOpen },
     ],
   },
   {

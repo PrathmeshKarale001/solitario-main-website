@@ -10,25 +10,27 @@ export default function ContactPage() {
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section - Matching FAQ/Stores pattern */}
-      <section className="bg-classic-green pt-28 md:pt-32 pb-10 md:pb-14">
-        <Container>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-center max-w-3xl mx-auto"
-          >
-            <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4">
-              Get In Touch
-            </span>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl font-montserrat font-bold text-white mb-4">
-              We'd Love to <span className="text-bronze-gold">Hear From You</span>
-            </h1>
-            <p className="text-white/80 font-montserrat text-sm md:text-lg px-4">
-              Have questions about our lab-grown diamond jewellery?
-              Our team is here to help you find the perfect piece.
-            </p>
-          </motion.div>
-        </Container>
+      <section className="bg-classic-green overflow-hidden">
+        <div className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] flex items-center justify-center">
+          <Container>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center max-w-3xl mx-auto pt-24 md:pt-32"
+            >
+              <span className="inline-block text-bronze-gold text-xs md:text-sm uppercase tracking-[0.3em] font-gotham mb-4 font-bold">
+                Get In Touch
+              </span>
+              <h1 className="text-2xl sm:text-3xl md:text-5xl font-montserrat font-bold text-white mb-4">
+                We'd Love to <span className="text-bronze-gold">Hear From You</span>
+              </h1>
+              <p className="text-white/80 font-montserrat text-sm md:text-lg px-4">
+                Have questions about our lab-grown diamond jewellery?
+                Our team is here to help you find the perfect piece.
+              </p>
+            </motion.div>
+          </Container>
+        </div>
       </section>
 
       {/* Contact Info Cards */}

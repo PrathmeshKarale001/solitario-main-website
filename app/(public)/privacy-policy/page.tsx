@@ -101,9 +101,9 @@ We encourage regular review of this policy for any changes.`
 
 export default function PrivacyPolicyPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white">
       {/* Hero */}
-      <section className="bg-classic-green py-10 md:py-14">
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] bg-classic-green flex items-center justify-center pt-24 md:pt-32">
         <Container>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

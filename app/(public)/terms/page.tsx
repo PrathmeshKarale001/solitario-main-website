@@ -86,9 +86,9 @@ These terms apply to all visitors, users, and customers of our website.`
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white pt-20">
+    <div className="min-h-screen bg-gradient-to-b from-ivory-pearl to-white">
       {/* Hero */}
-      <section className="bg-classic-green py-10 md:py-14">
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] bg-classic-green flex items-center justify-center pt-24 md:pt-32">
         <Container>
           <div className="text-center max-w-3xl mx-auto">
             <FileText className="w-12 h-12 text-bronze-gold mx-auto mb-4" />

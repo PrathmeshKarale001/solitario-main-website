@@ -225,7 +225,7 @@ function ChristmasSalePageContent() {
       <Snowflakes />
       
       {/* Christmas Hero Section */}
-      <section className="relative min-h-[60vh] md:min-h-[70vh] flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-800 via-red-900 to-green-900">
+      <section className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] flex items-center justify-center overflow-hidden bg-gradient-to-br from-red-800 via-red-900 to-green-900 pt-24 md:pt-32">
         {/* Subtle animated background */}
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />

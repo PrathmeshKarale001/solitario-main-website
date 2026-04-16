@@ -167,27 +167,28 @@ export default function StoresPage() {
   return (
     <div className="min-h-screen bg-brand-50">
       {/* Hero Section */}
-      <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden">
-        <motion.div
-          className="absolute inset-0 z-0"
-          style={{ y: backgroundY }}
-        >
-          <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
-          <Image
-            src={heroImageSrc}
-            alt="Solitario Stores"
-            fill
-            className="object-cover object-center"
-            priority
-            quality={85}
-            sizes="100vw"
-          />
-        </motion.div>
+      <section ref={sectionRef} className="relative w-full overflow-hidden bg-[#1a1a1a]">
+        <div className="relative w-full aspect-[4/5] md:aspect-[16/5] max-h-[75vh] md:max-h-[550px] flex items-center justify-center">
+          <motion.div
+            className="absolute inset-0 z-0"
+            style={{ y: backgroundY }}
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-gray-900/60 to-black/80 z-10" />
+            <Image
+              src={heroImageSrc}
+              alt="Solitario Stores"
+              fill
+              className="object-cover object-center"
+              priority
+              quality={85}
+              sizes="100vw"
+            />
+          </motion.div>
 
-        <motion.div
-          className="relative z-10 text-center px-4 pt-24 md:pt-32"
-          style={{ y: textY }}
-        >
+          <motion.div
+            className="relative z-10 text-center px-4 pt-24 md:pt-32"
+            style={{ y: textY }}
+          >
           <div className="max-w-5xl mx-auto">
             <motion.span
               initial={{ opacity: 0, y: -20 }}
@@ -222,10 +223,11 @@ export default function StoresPage() {
             </motion.p>
           </div>
         </motion.div>
-      </section>
+      </div>
+    </section>
 
       {/* Akshaya Tritiya Campaign Section */}
-      <section className="py-20 bg-brand-50 border-t border-gold/10">
+      <section id="akshaya-tritiya-form" className="py-20 bg-brand-50 border-t border-gold/10">
         <Container>
           <div className="text-center mb-12">
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4 font-bold">

@@ -12,6 +12,7 @@ import { Promise } from '@/components/about';
 import OffersMarquee from '@/components/ui/OffersMarquee';
 
 const LoginPopup = dynamic(() => import('@/components/home/LoginPopup'));
+const AkshayaTritiyaPopup = dynamic(() => import('@/components/campaigns/AkshayaTritiyaPopup'));
 import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
 // Festival collection — auto-shows when a festival is active in festival-config.ts
@@ -64,6 +65,8 @@ export default function Home() {
     <div>
       {/* Marketing Login Popup for first-time visitors */}
       <LoginPopup />
+      {/* Akshaya Tritiya promotional popup */}
+      <AkshayaTritiyaPopup />
 
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />

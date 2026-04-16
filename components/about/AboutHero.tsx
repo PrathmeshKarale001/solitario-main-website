@@ -18,7 +18,7 @@ export default function AboutHero() {
   const textY = useTransform(scrollYProgress, [0, 1], ['0%', '30%']);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[80vh] md:min-h-[91vh] flex items-center justify-center overflow-hidden bg-gradient-to-b from-classic-green via-classic-green/90 to-classic-green">
+    <section ref={sectionRef} className="relative w-full aspect-[4/5] md:aspect-[16/7] max-h-[85vh] md:max-h-[700px] flex items-center justify-center overflow-hidden bg-gradient-to-b from-classic-green via-classic-green/90 to-classic-green pt-24 md:pt-32">
       {/* Video Background */}
       <motion.div
         className="absolute inset-0 z-0"
