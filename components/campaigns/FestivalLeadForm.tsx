@@ -99,10 +99,10 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                       <span className="text-classic-green text-xs font-bold uppercase tracking-widest">Akshaya Tritiya Exclusive</span>
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-black mb-6 leading-tight font-playfair">
-                      Claim Your <span className="text-classic-green">Free Diamond</span> This Festive Season
+                      Get Your <span className="text-classic-green">Free Diamond</span> — First 101 Customers Only
                     </h2>
                     <p className="text-black/80 text-lg mb-8 leading-relaxed max-w-lg">
-                      Celebrate the auspicious occasion of Akshaya Tritiya with Solitario. Fill the form below to receive a certified loose diamond with your purchase.
+                      Celebrate the auspicious occasion of Akshaya Tritiya with Solitario. Be among the first 101 customers to register and receive a certified loose diamond with your purchase.
                     </p>
                     
                     <div className="flex items-center gap-4 py-4 px-6 bg-black/5 rounded-xl border border-black/10 backdrop-blur-sm">
@@ -119,7 +119,7 @@ const FestivalLeadForm: React.FC<FestivalLeadFormProps> = ({
                         ))}
                       </div>
                       <p className="text-black/70 text-sm">
-                        <span className="text-black font-bold">500+</span> customers already claimed
+                        <span className="text-classic-green font-bold">Limited Slots</span> — Register now to qualify
                       </p>
                     </div>
                   </div>
