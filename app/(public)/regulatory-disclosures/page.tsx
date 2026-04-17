@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { FileText, ChevronDown, ChevronRight, ExternalLink, Download } from 'lucide-react';
+import { FileText, ChevronDown, ChevronRight, ExternalLink, Download, Sparkles } from 'lucide-react';
+import { CAMPAIGNS } from '@/lib/campaigns';
 
 // Corporate Governance data with actual PDFs
 const corporateGovernanceData = {
@@ -45,7 +46,7 @@ function getPdfApiUrl(filePath: string): string {
     return `/api/pdf?file=${encodeURIComponent(filePath)}`;
 }
 
-type TabType = 'corporate-governance' | 'statutory-policies';
+type TabType = 'corporate-governance' | 'statutory-policies' | 'marketing-campaigns';
 
 export default function RegulatoryDisclosuresPage() {
     const [activeTab, setActiveTab] = useState<TabType>('corporate-governance');
@@ -104,6 +105,18 @@ export default function RegulatoryDisclosuresPage() {
                             }`}
                     >
                         Statutory Policies
+                    </button>
+                    <button
+                        onClick={() => {
+                            setActiveTab('marketing-campaigns');
+                            setActivePdf(null);
+                        }}
+                        className={`px-6 py-3 rounded-lg font-montserrat font-semibold text-sm md:text-base transition-all duration-300 border-2 ${activeTab === 'marketing-campaigns'
+                            ? 'bg-classic-green text-white border-classic-green shadow-md'
+                            : 'bg-white text-brand-800 border-brand-200 hover:border-classic-green/50'
+                            }`}
+                    >
+                        Marketing & Campaigns
                     </button>
                 </div>
 
@@ -244,6 +257,61 @@ export default function RegulatoryDisclosuresPage() {
                                     </h3>
                                     <p className="text-brand-500 text-sm">
                                         Documents will be available shortly. Please check back later.
+                                    </p>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Marketing & Campaigns Content */}
+                {activeTab === 'marketing-campaigns' && (
+                    <div className="max-w-4xl mx-auto space-y-6">
+                        {CAMPAIGNS.length > 0 ? (
+                            CAMPAIGNS.map((campaign) => (
+                                <div key={campaign.id} className="bg-white rounded-2xl shadow-sm border border-brand-100 overflow-hidden">
+                                    <div className="bg-brand-50 px-6 py-4 border-b border-brand-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-1">
+                                                <Sparkles className="w-4 h-4 text-bronze-gold" />
+                                                <h3 className="font-montserrat font-bold text-brand-800 text-lg">
+                                                    {campaign.name}
+                                                </h3>
+                                            </div>
+                                            <div className="flex items-center gap-4 text-xs text-brand-500 font-medium">
+                                                <span>Effective: {campaign.effectiveDate}</span>
+                                                <span className="w-1 h-1 bg-brand-300 rounded-full"></span>
+                                                <span>Updated: {campaign.lastUpdated}</span>
+                                            </div>
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <span className={`px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${
+                                                campaign.status === 'active' 
+                                                ? 'bg-emerald-100 text-emerald-700' 
+                                                : 'bg-brand-100 text-brand-600'
+                                            }`}>
+                                                {campaign.status}
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div className="p-6">
+                                        <div className="bg-ivory-pearl/50 rounded-xl p-6 border border-brand-100 max-h-[500px] overflow-y-auto custom-scrollbar">
+                                            <pre className="whitespace-pre-wrap font-montserrat text-sm text-brand-700 leading-relaxed font-sans">
+                                                {campaign.terms}
+                                            </pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="bg-white rounded-xl shadow-sm border border-brand-100 flex items-center justify-center p-12" style={{ minHeight: '40vh' }}>
+                                <div className="text-center">
+                                    <Sparkles className="w-16 h-16 text-brand-200 mx-auto mb-4" />
+                                    <h3 className="font-montserrat font-semibold text-brand-800 mb-2">
+                                        Active Campaigns
+                                    </h3>
+                                    <p className="text-brand-500 text-sm">
+                                        No active marketing campaigns or offers at the moment.
                                     </p>
                                 </div>
                             </div>
