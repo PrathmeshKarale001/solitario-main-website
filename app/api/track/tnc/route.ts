@@ -6,6 +6,27 @@ import logger from '@/lib/logger';
 
 const TRACKING_FILE = path.join(process.cwd(), 'data', 'akshaya-tnc-logs.jsonl');
 
+export async function GET() {
+  try {
+    if (!(await fs.access(TRACKING_FILE).then(() => true).catch(() => false))) {
+      return NextResponse.json({ success: true, count: 0, unique: 0 });
+    }
+
+    const raw = await fs.readFile(TRACKING_FILE, 'utf-8');
+    const lines = raw.split('\n').filter(line => line.trim());
+    const data = lines.map(line => JSON.parse(line));
+
+    return NextResponse.json({
+      success: true,
+      count: data.length,
+      unique: new Set(data.map(log => log.identifier)).size,
+      lastUpdate: data[data.length - 1]?.timestamp
+    });
+  } catch (error) {
+    return NextResponse.json({ success: false, error: 'Failed to fetch stats' }, { status: 500 });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     const timestamp = new Date().toISOString();

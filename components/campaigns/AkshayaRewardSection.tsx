@@ -4,6 +4,7 @@ import { QrCode, UserPlus, Coins, Gift, ArrowRight, ShieldCheck, Info } from 'lu
 import Image from 'next/image';
 import { Container } from '@/components/ui';
 import Modal from '@/components/ui/Modal';
+import { trackCustomEvent } from '@/lib/unified-analytics';
 
 interface AkshayaRewardSectionProps {
   className?: string;
@@ -136,7 +137,14 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
           return res.json();
         })
         .then(data => {
-          if (data.success) setHasTracked(true);
+          if (data.success) {
+            setHasTracked(true);
+            // Also track in unified analytics (GA/PostHog) as backup
+            trackCustomEvent('AKSHAYA_TNC_ACCEPTED', {
+              category: 'Promotion',
+              label: 'Akshaya Tritiya 2026'
+            });
+          }
         })
         .catch(err => console.error('Tracking failed:', err));
     }
