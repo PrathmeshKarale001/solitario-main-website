@@ -4,7 +4,7 @@ import fs from 'fs/promises';
 import path from 'path';
 import logger from '@/lib/logger';
 
-const TRACKING_FILE = path.join(process.cwd(), 'data', 'akshaya-tnc-logs.json');
+const TRACKING_FILE = path.join(process.cwd(), 'data', 'akshaya-tnc-logs.jsonl');
 
 export async function POST(request: NextRequest) {
   try {
@@ -15,26 +15,19 @@ export async function POST(request: NextRequest) {
     const dir = path.dirname(TRACKING_FILE);
     await fs.mkdir(dir, { recursive: true });
 
-    let existing: any[] = [];
-    try {
-      const raw = await fs.readFile(TRACKING_FILE, 'utf-8');
-      existing = JSON.parse(raw);
-    } catch {
-      // Start fresh
-    }
-
-    // Add new entry (minimal info to avoid PII)
-    existing.push({
+    // Create entry as a single line (JSONL format)
+    const entry = JSON.stringify({
       timestamp,
-      identifier: identifier.substring(0, 12), // Masked identifier for counting unique users
+      identifier: identifier.substring(0, 12),
       event: 'AKSHAYA_TNC_ACCEPTED'
-    });
+    }) + '\n';
 
-    await fs.writeFile(TRACKING_FILE, JSON.stringify(existing, null, 2), 'utf-8');
+    // Append atomically to the end of the file
+    await fs.appendFile(TRACKING_FILE, entry, 'utf-8');
     
-    logger.info('T&C tick tracked');
+    logger.info('T&C tick tracked (append-only)');
 
-    return NextResponse.json({ success: true, count: existing.length });
+    return NextResponse.json({ success: true });
   } catch (error) {
     console.error('Tracking error:', error);
     return NextResponse.json({ success: false }, { status: 500 });
