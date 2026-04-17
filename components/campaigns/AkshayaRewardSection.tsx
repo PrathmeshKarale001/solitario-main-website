@@ -247,11 +247,11 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
                       onChange={(e) => setIsAccepted(e.target.checked)}
                       className="peer w-5 h-5 rounded border-2 border-bronze-gold/50 text-classic-green focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all appearance-none checked:bg-classic-green checked:border-classic-green"
                     />
-                    <svg 
-                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" 
-                      fill="none" 
-                      viewBox="0 0 24 24" 
-                      stroke="currentColor" 
+                    <svg
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
                       strokeWidth="4"
                     >
                       <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
@@ -275,7 +275,7 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
 
                   <div className="relative w-full aspect-square max-w-[200px]">
                     <Image
-                      src="/images/akshaya-tritiya/akshaya-qr.jpeg"
+                      src="/images/akshaya-tritiya/akshaya-qr.png"
                       alt="Scan to Join Solitario Rewards"
                       fill
                       className="object-contain"
