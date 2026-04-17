@@ -229,19 +229,30 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
             {/* Right Column: QR Code & T&C */}
             <div className="flex-shrink-0 w-full sm:w-[340px] space-y-4">
               {/* T&C Checkbox Placement */}
-              <div className="flex items-center gap-3 p-4 bg-white/60 backdrop-blur-md rounded-2xl border border-bronze-gold/20 shadow-sm animate-fade-in">
-                <div className="relative flex items-center cursor-pointer">
-                  <input
-                    type="checkbox"
-                    id="tnc-checkbox"
-                    checked={isAccepted}
-                    onChange={(e) => setIsAccepted(e.target.checked)}
-                    className="w-5 h-5 rounded border-bronze-gold text-classic-green focus:ring-classic-green cursor-pointer transition-all appearance-none border-2 checked:bg-classic-green checked:border-classic-green relative after:content-['✓'] after:absolute after:text-white after:text-[12px] after:font-bold after:left-1 after:top-0 after:hidden checked:after:block"
-                  />
-                  <label htmlFor="tnc-checkbox" className="text-xs font-montserrat text-brand-700 leading-tight cursor-pointer select-none">
+              <div className="p-4 bg-white/60 backdrop-blur-md rounded-2xl border border-bronze-gold/20 shadow-sm animate-fade-in">
+                <label className="flex items-start gap-3 cursor-pointer select-none group">
+                  <div className="relative flex-shrink-0 mt-0.5">
+                    <input
+                      type="checkbox"
+                      id="tnc-checkbox"
+                      checked={isAccepted}
+                      onChange={(e) => setIsAccepted(e.target.checked)}
+                      className="peer w-5 h-5 rounded border-2 border-bronze-gold/50 text-classic-green focus:ring-0 focus:ring-offset-0 cursor-pointer transition-all appearance-none checked:bg-classic-green checked:border-classic-green"
+                    />
+                    <svg 
+                      className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-3.5 h-3.5 text-white opacity-0 peer-checked:opacity-100 transition-opacity pointer-events-none" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor" 
+                      strokeWidth="4"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span className="text-[11px] md:text-xs font-montserrat text-brand-700 leading-normal">
                     I agree to the <button onClick={(e) => { e.stopPropagation(); setIsModalOpen(true); }} className="text-classic-green font-bold underline hover:text-teal transition-colors">Terms & Conditions</button> for the Free Diamond Offer.
-                  </label>
-                </div>
+                  </span>
+                </label>
               </div>
 
               {/* QR Card Container */}
