@@ -16,15 +16,21 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
   const [isAnimating, setIsAnimating] = useState(false);
 
   useEffect(() => {
+    const html = document.documentElement;
+    const body = document.body;
+
     if (isOpen) {
       setIsAnimating(true);
-      document.body.style.overflow = 'hidden';
+      html.style.overflow = 'hidden';
+      body.style.overflow = 'hidden';
     } else {
-      document.body.style.overflow = 'unset';
+      html.style.overflow = '';
+      body.style.overflow = '';
     }
 
     return () => {
-      document.body.style.overflow = 'unset';
+      html.style.overflow = '';
+      body.style.overflow = '';
     };
   }, [isOpen]);
 
@@ -71,7 +77,10 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' }:
         </div>
 
         {/* Content */}
-        <div className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto">
+        <div 
+          className="p-6 max-h-[calc(100vh-200px)] overflow-y-auto"
+          data-lenis-prevent
+        >
           {children}
         </div>
       </div>

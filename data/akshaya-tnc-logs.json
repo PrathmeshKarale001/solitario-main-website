@@ -1,0 +1,17 @@
+[
+  {
+    "timestamp": "2026-04-17T10:56:31.366Z",
+    "identifier": "::1",
+    "event": "AKSHAYA_TNC_ACCEPTED"
+  },
+  {
+    "timestamp": "2026-04-17T10:56:43.356Z",
+    "identifier": "::1",
+    "event": "AKSHAYA_TNC_ACCEPTED"
+  },
+  {
+    "timestamp": "2026-04-17T11:00:37.593Z",
+    "identifier": "::1",
+    "event": "AKSHAYA_TNC_ACCEPTED"
+  }
+]

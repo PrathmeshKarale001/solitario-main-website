@@ -6,9 +6,9 @@ import { ArrowRight, MapPin, Phone, Clock, Globe, ExternalLink, Mail, ChevronDow
 import Link from 'next/link';
 import Image from 'next/image';
 import BlurText from '@/components/ui/BlurText';
-import { LazyNearestStore } from '@/components/lazy';
 import { Container } from '@/components/ui';
-import FestivalLeadForm from '@/components/campaigns/FestivalLeadForm';
+import AkshayaRewardSection from '@/components/campaigns/AkshayaRewardSection';
+import { LazyNearestStore } from '@/components/lazy';
 import {
   INDIA_OWN_STORES,
   INDIA_SIS_SHOPPERS_STOP,
@@ -227,9 +227,9 @@ export default function StoresPage() {
     </section>
 
       {/* Akshaya Tritiya Campaign Section */}
-      <section id="akshaya-tritiya-form" className="py-20 bg-brand-50 border-t border-gold/10">
+      <section id="akshaya-tritiya-form" className="py-12 bg-brand-50 border-t border-gold/10">
         <Container>
-          <div className="text-center mb-12">
+          <div className="text-center mb-8">
             <span className="inline-block text-classic-green text-xs uppercase tracking-[0.3em] font-gotham mb-4 font-bold">
               Festive Celebration
             </span>
@@ -237,7 +237,7 @@ export default function StoresPage() {
               Celebrate <span className="text-classic-green">Akshaya Tritiya</span>
             </h2>
           </div>
-          <FestivalLeadForm className="hover:shadow-gold/20 transition-all duration-700" />
+          <AkshayaRewardSection className="hover:shadow-bronze-gold/20 transition-all duration-700" />
         </Container>
       </section>
 
