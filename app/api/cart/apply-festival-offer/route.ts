@@ -86,6 +86,22 @@ const CART_LINES_ADD_WITH_ATTRS = `
   }
 `;
 
+// ── GraphQL: Remove lines (Storefront API) ────────────────────────────────────
+const CART_LINES_REMOVE = `
+  mutation cartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
+    cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
+      cart {
+        id
+        estimatedCost {
+          subtotalAmount { amount currencyCode }
+          totalAmount    { amount currencyCode }
+        }
+      }
+      userErrors { field message }
+    }
+  }
+`;
+
 // ── Module-level variant ID cache (process lifetime) ─────────────────────────
 let cachedVariantGid: string | null = null;
 
@@ -147,11 +163,32 @@ export async function POST(request: NextRequest) {
     
     // ── Step 1.5: Verify Minimum Threshold ───────────────────────────────────
     if (subtotalAmount < FESTIVAL_OFFER.minThreshold) {
+      // Cleanup: Remove discount code if it was applied
+      await shopifyStorefrontFetch<any>(CART_DISCOUNT_CODES_UPDATE, {
+        cartId,
+        discountCodes: [], // Remove all codes for safety/cleanliness
+      });
+
+      // Cleanup: Remove gift item if it exists
+      const cartLinesRes = await shopifyStorefrontFetch<any>(GET_CART_LINES_WITH_ATTRS, { cartId });
+      const cartLines = cartLinesRes.data?.cart?.lines?.edges?.map((e: any) => e.node) ?? [];
+      const giftLineIds = cartLines
+        .filter((l: any) => l.attributes?.some((a: any) => a.key === FESTIVAL_OFFER.giftAttributeKey && a.value === 'true'))
+        .map((l: any) => l.id);
+
+      if (giftLineIds.length > 0) {
+        await shopifyStorefrontFetch<any>(CART_LINES_REMOVE, {
+          cartId,
+          lineIds: giftLineIds,
+        });
+      }
+
       return NextResponse.json(
         { 
           error: `Minimum purchase of ₹${FESTIVAL_OFFER.minThreshold.toLocaleString()} required for this offer.`,
           currentSubtotal: subtotalAmount,
-          threshold: FESTIVAL_OFFER.minThreshold
+          threshold: FESTIVAL_OFFER.minThreshold,
+          offerRemoved: true
         },
         { status: 422 }
       );

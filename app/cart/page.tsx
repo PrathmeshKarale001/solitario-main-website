@@ -82,7 +82,7 @@ export default function CartPage() {
   const [festivalError, setFestivalError] = useState<string | null>(null);
 
   const applyFestivalOffer = useCallback(async () => {
-    if (!festivalActive || festivalLoading || festivalOfferApplied) return;
+    if (!festivalActive || festivalLoading) return;
     setFestivalLoading(true);
     setFestivalError(null);
     try {
@@ -102,6 +102,17 @@ export default function CartPage() {
         if (data.shopifyTotal !== undefined) {
           setFestivalShopifyTotal(data.shopifyTotal);
         }
+      } else if (res.status === 422 && data.offerRemoved) {
+        // Offer was removed because threshold not met
+        setFestivalOfferApplied(false);
+        if (appliedCoupon === FESTIVAL_OFFER.discountCode) {
+          setAppliedCoupon('');
+          setShowApplied(false);
+          setCouponInput('');
+          localStorage.removeItem('applied_coupon');
+        }
+        setFestivalShopifyTotal(null);
+        setFestivalError(data.error);
       } else if (res.status === 400 && data.error?.includes('No active cart')) {
         // Cart not yet synced — retry after a short delay
         setTimeout(applyFestivalOffer, 2000);
@@ -109,18 +120,18 @@ export default function CartPage() {
         setFestivalError(data.error ?? 'Could not apply offer');
       }
     } catch {
-      setFestivalError('Network error applying offer');
+      setFestivalError('Network error syncing offer');
     } finally {
       setFestivalLoading(false);
     }
-  }, [festivalActive, festivalLoading, festivalOfferApplied]);
+  }, [festivalActive, festivalLoading, appliedCoupon]);
 
-  // Auto-apply festival offer when cart has items
+  // Re-verify festival offer whenever cart items change
   useEffect(() => {
-    if (festivalActive && items.length > 0 && !festivalOfferApplied) {
+    if (festivalActive && items.length > 0) {
       applyFestivalOffer();
     }
-  }, [items.length, festivalActive]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [itemsSignature, festivalActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     async function fetchGift() {
