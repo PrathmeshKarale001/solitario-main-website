@@ -143,7 +143,7 @@ export async function POST(request: NextRequest) {
     }
 
     const cartAfterDiscount = discountRes.data?.cartDiscountCodesUpdate?.cart;
-    const subtotalAmount = parseFloat(cartAfterDiscount?.estimatedCost?.subtotalAmount?.amount ?? '0');
+    let subtotalAmount = parseFloat(cartAfterDiscount?.estimatedCost?.subtotalAmount?.amount ?? '0');
     
     // ── Step 1.5: Verify Minimum Threshold ───────────────────────────────────
     if (subtotalAmount < FESTIVAL_OFFER.minThreshold) {
@@ -195,7 +195,7 @@ export async function POST(request: NextRequest) {
     }
 
     // ── Return current Shopify-authoritative totals ────────────────────────────
-    const subtotalAmount = parseFloat(finalCart?.estimatedCost?.subtotalAmount?.amount ?? '0');
+    subtotalAmount = parseFloat(finalCart?.estimatedCost?.subtotalAmount?.amount ?? '0');
     const totalAmount = parseFloat(finalCart?.estimatedCost?.totalAmount?.amount ?? '0');
 
     return NextResponse.json({
