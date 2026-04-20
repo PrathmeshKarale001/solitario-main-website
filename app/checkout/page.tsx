@@ -112,7 +112,8 @@ export default function CheckoutPage() {
   // discount directly from the cart total (10% off) rather than calling the
   // Shopify cart API (which requires a cart-id cookie we never set).
   const festivalActive = isFestivalOfferActive();
-  const festivalOfferApplied = festivalActive && items.length > 0;
+  const meetsThreshold = total >= FESTIVAL_OFFER.minThreshold;
+  const festivalOfferApplied = festivalActive && meetsThreshold && items.length > 0;
 
   // Auto-fill user info and load saved addresses
   useEffect(() => {
@@ -256,12 +257,12 @@ export default function CheckoutPage() {
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const discountedTotal = total - (promotionDiscount / 100);
 
-  // Festival discount: 10% off cart total during Akshaya Tritiya
-  const effectiveFestivalDiscount = festivalActive ? Math.round(total * 0.1) : 0;
+  // Festival discount: 10% off cart total during Akshaya Tritiya (only when threshold is met)
+  const effectiveFestivalDiscount = festivalOfferApplied ? Math.round(total * 0.1) : 0;
 
   const grandTotal = Math.max(
     0,
-    festivalActive
+    festivalOfferApplied
       ? discountedTotal - effectiveFestivalDiscount + shipping
       : discountedTotal + shipping
   );
@@ -1114,8 +1115,8 @@ export default function CheckoutPage() {
                       ) : null}
                     </div>
                   )}
-                  {/* Festival Gift Item — Premium Diamond (real Shopify product) */}
-                  {festivalActive && <FestivalGiftItem variant="checkout" />}
+                  {/* Festival Gift Item — Premium Diamond (only when threshold is met) */}
+                  {festivalOfferApplied && <FestivalGiftItem variant="checkout" />}
                 </div>
 
                 {/* Promotions */}
@@ -1140,11 +1141,13 @@ export default function CheckoutPage() {
                           </div>
                           <div className="flex-1">
                             <span className="font-gotham font-black block text-sm tracking-tight">AKSHAYA TRITIYA SPECIAL</span>
-                            <span className="text-[11px] font-medium text-amber-50">10% Instant Savings Applied</span>
+                            <span className="text-[11px] font-medium text-amber-50">
+                              {meetsThreshold ? '10% Instant Savings Applied' : `Shop ₹${(FESTIVAL_OFFER.minThreshold - total).toLocaleString('en-IN')} more to unlock 10% Off + Free Diamond`}
+                            </span>
                           </div>
                           <div className="flex flex-col items-end">
-                            <div className="bg-white/90 text-amber-700 text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm">
-                              Active
+                            <div className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm ${meetsThreshold ? 'bg-white/90 text-amber-700' : 'bg-white/50 text-amber-800'}`}>
+                              {meetsThreshold ? 'Active' : 'Locked'}
                             </div>
                           </div>
                         </div>

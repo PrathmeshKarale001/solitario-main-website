@@ -26,6 +26,7 @@ function CartSidebarContent() {
   const [showApplied, setShowApplied] = useState(false);
 
   const festivalActive = isFestivalOfferActive();
+  const meetsThreshold = total >= FESTIVAL_OFFER.minThreshold;
 
   // Load coupon from localStorage on mount
   useEffect(() => {
@@ -37,9 +38,9 @@ function CartSidebarContent() {
     }
   }, []);
 
-  // Auto-apply TRITIYA10 festival offer
+  // Auto-apply TRITIYA10 festival offer only when threshold is met
   useEffect(() => {
-    if (festivalActive && items.length > 0 && !appliedCoupon && !isValidating && !couponError) {
+    if (festivalActive && meetsThreshold && items.length > 0 && !appliedCoupon && !isValidating && !couponError) {
       // Small delay to ensure state and context are settled
       const timer = setTimeout(() => {
         if (!appliedCoupon) {
@@ -49,7 +50,7 @@ function CartSidebarContent() {
       }, 1000);
       return () => clearTimeout(timer);
     }
-  }, [festivalActive, items.length, appliedCoupon]);
+  }, [festivalActive, meetsThreshold, items.length, appliedCoupon]);
 
   // Helper to set coupon with localStorage persistence
   const setAppliedCoupon = (code: string) => {
@@ -411,8 +412,8 @@ function CartSidebarContent() {
                     </div>
                   )}
 
-                  {/* Festival Gift Item — Premium Diamond */}
-                  {festivalActive && <FestivalGiftItem variant="sidebar" />}
+                  {/* Festival Gift Item — Premium Diamond (only when threshold is met) */}
+                  {festivalActive && meetsThreshold && <FestivalGiftItem variant="sidebar" />}
                 </div>
               )}
             </div>
@@ -507,7 +508,7 @@ function CartSidebarContent() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="text-xs font-bold text-brand-800">10% OFF + Free Diamond</p>
-                          <p className="text-[10px] text-amber-700">Akshaya Tritiya Special</p>
+                          <p className="text-[10px] text-amber-700">On orders above ₹6,999</p>
                         </div>
                         <button
                           onClick={() => validateCoupon(FESTIVAL_OFFER.discountCode)}
