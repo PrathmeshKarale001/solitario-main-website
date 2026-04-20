@@ -78,11 +78,10 @@ export default function AkshayaTritiyaPopup() {
 
               {/* Title */}
               <h2 className="text-2xl font-montserrat font-bold text-white leading-tight">
-                Claim Your{' '}
-                <span className="text-amber-100">Free Diamond</span>
+                Get <span className="text-amber-100 italic">Flat 10% Off</span> + <span className="text-amber-100 italic">Free Diamond</span>
               </h2>
-              <p className="mt-2 text-white/80 font-montserrat text-sm leading-relaxed">
-                First 100 customers get a certified premium diamond — absolutely free!
+              <p className="mt-2 text-white/80 font-montserrat text-sm leading-relaxed px-4">
+                Shop for a minimum of <span className="font-bold text-white">₹6,999</span> and celebrate prosperity with us!
               </p>
             </div>
 

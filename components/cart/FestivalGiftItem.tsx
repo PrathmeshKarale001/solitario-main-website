@@ -117,7 +117,7 @@ export default function FestivalGiftItem({ variant = 'cart' }: FestivalGiftItemP
             {loading ? FESTIVAL_OFFER.giftProductName : (gift?.name ?? FESTIVAL_OFFER.giftProductName)}
           </h3>
         </div>
-        <p className="text-xs text-amber-700 mb-2">Free with your Akshaya Tritiya order</p>
+        <p className="text-xs text-amber-700 mb-2">Free with your Akshaya Tritiya order above ₹6,999</p>
         <div className="flex items-center gap-2">
           <span className="text-[10px] font-gotham font-bold text-amber-700 tracking-wider uppercase bg-amber-100 px-2.5 py-1 rounded-full border border-amber-300">
             🪷 FREE GIFT

@@ -143,6 +143,20 @@ export async function POST(request: NextRequest) {
     }
 
     const cartAfterDiscount = discountRes.data?.cartDiscountCodesUpdate?.cart;
+    const subtotalAmount = parseFloat(cartAfterDiscount?.estimatedCost?.subtotalAmount?.amount ?? '0');
+    
+    // ── Step 1.5: Verify Minimum Threshold ───────────────────────────────────
+    if (subtotalAmount < FESTIVAL_OFFER.minThreshold) {
+      return NextResponse.json(
+        { 
+          error: `Minimum purchase of ₹${FESTIVAL_OFFER.minThreshold.toLocaleString()} required for this offer.`,
+          currentSubtotal: subtotalAmount,
+          threshold: FESTIVAL_OFFER.minThreshold
+        },
+        { status: 422 }
+      );
+    }
+
     const discountApplied = isTritiyaCodeApplied(cartAfterDiscount?.discountCodes ?? []);
 
     // ── Step 2: Check whether gift is already in cart ─────────────────────────

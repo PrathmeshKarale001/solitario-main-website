@@ -29,11 +29,14 @@ export const FESTIVAL_OFFER = {
 
   /** Festival active window */
   startDate: new Date('2026-04-13T00:00:00+05:30'),
-  endDate: new Date('2026-04-30T23:59:59+05:30'),
+  endDate: new Date('2026-04-23T23:59:59+05:30'),
+
+  /** Minimum purchase requirement in INR */
+  minThreshold: 6999,
 
   /** Display label for UI banners */
   label: 'Akshaya Tritiya Offer',
-  tagline: '🪷 10% Off + Free Premium Diamond on every order',
+  tagline: '🪷 10% Off + Free Premium Diamond on orders above ₹6,999',
 } as const;
 
 // ---------- Helpers ----------

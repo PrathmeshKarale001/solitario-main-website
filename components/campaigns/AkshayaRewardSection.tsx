@@ -56,14 +56,14 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
     },
     {
       id: 3,
-      title: 'EARN',
-      description: 'Get reward points with every purchase you make.',
+      title: 'SHOP',
+      description: 'Choose from our exquisite collection and shop for minimum ₹6,999.',
       icon: <Coins className="w-6 h-6 text-bronze-gold" />,
     },
     {
       id: 4,
-      title: 'REDEEM',
-      description: 'Unlock a special diamond reward once you complete your milestones.',
+      title: 'WIN',
+      description: 'Get Flat 10% OFF and a CERTIFIED DIAMOND absolutely free!',
       icon: <Gift className="w-6 h-6 text-bronze-gold" />,
     },
   ];
