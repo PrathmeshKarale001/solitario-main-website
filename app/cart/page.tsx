@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import { ChevronLeft, Trash2, Heart, Minus, Plus, Tag, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket, Sparkles } from 'lucide-react';
+import { ChevronLeft, Trash2, Heart, Minus, Plus, Gift, Loader2, Bookmark, TruckIcon, Package, ShieldCheck, RefreshCw, Ticket, Sparkles, Tag } from 'lucide-react';
 import { useCart } from '@/lib/cart-context';
 import { useAdmin } from '@/lib/admin-context';
 import { formatPrice } from '@/lib/utils';
@@ -17,7 +17,7 @@ import { useRouter } from 'next/navigation';
 import { trackBeginCheckout } from '@/lib/gtm-conversions';
 import { trackMetaInitiateCheckout } from '@/components/analytics/MetaPixel';
 import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
-import FestivalGiftItem from '@/components/cart/FestivalGiftItem';
+// FestivalGiftItem import DELETED
 
 export default function CartPage() {
   const { items, updateQuantity, removeFromCart, total, itemCount, addToCart, refreshPrices, isRefreshing } = useCart();
@@ -25,12 +25,6 @@ export default function CartPage() {
   const [savedForLater, setSavedForLater] = useState<any[]>([]);
   const { userId } = useAuth();
   const router = useRouter();
-  const [appliedCoupon, setAppliedCouponState] = useState<string>('');
-  const [couponInput, setCouponInput] = useState('');
-  const [isValidating, setIsValidating] = useState(false);
-  const [couponError, setCouponError] = useState<string | null>(null);
-  const [couponDiscount, setCouponDiscount] = useState(0);
-  const [showApplied, setShowApplied] = useState(false);
 
   // Refresh prices on mount to ensure we have the latest from Shopify
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -38,28 +32,7 @@ export default function CartPage() {
     refreshPrices();
     // Only run once on mount, not when refreshPrices changes to avoid infinite loop
   }, []);
-
-  // Load coupon from localStorage on mount
-  useEffect(() => {
-    const savedCoupon = localStorage.getItem('applied_coupon');
-    if (savedCoupon) {
-      setAppliedCouponState(savedCoupon);
-      setShowApplied(true);
-      setCouponInput(savedCoupon);
-    }
-  }, []);
-
-  // Helper to set coupon with localStorage persistence
-  const setAppliedCoupon = (code: string) => {
-    setAppliedCouponState(code);
-    if (code) {
-      localStorage.setItem('applied_coupon', code);
-    } else {
-      localStorage.removeItem('applied_coupon');
-    }
-  };
-  const [giftProduct, setGiftProduct] = useState<{ name: string; image: string; price: number } | null>(null);
-  const [isGiftLoading, setIsGiftLoading] = useState(false);
+  // Gift product state DELETED (was part of old promotional system)
 
   // Promotion pricing state
   const [promotionPricing, setPromotionPricing] = useState<{
@@ -70,94 +43,10 @@ export default function CartPage() {
   } | null>(null);
   const [isPricingLoading, setIsPricingLoading] = useState(false);
 
-  // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
-  const hasGift = false;
+  // Festival offer logic DELETED
+  const b2g1Eligible = itemCount >= 3;
 
-  // ── Akshaya Tritiya Festival Offer ───────────────────────────────────────────
-  const festivalActive = isFestivalOfferActive();
-  const meetsThreshold = total >= FESTIVAL_OFFER.minThreshold;
-  const [festivalOfferApplied, setFestivalOfferApplied] = useState(false);
-  const [festivalDiscount, setFestivalDiscount] = useState(0); // in rupees
-  const [festivalShopifyTotal, setFestivalShopifyTotal] = useState<number | null>(null);
-  const [festivalLoading, setFestivalLoading] = useState(false);
-  const [festivalError, setFestivalError] = useState<string | null>(null);
-
-  const applyFestivalOffer = useCallback(async () => {
-    if (!festivalActive || festivalLoading || festivalOfferApplied) return;
-    setFestivalLoading(true);
-    setFestivalError(null);
-    try {
-      const res = await fetch('/api/cart/apply-festival-offer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const data = await res.json();
-      if (res.ok && data.success) {
-        setFestivalOfferApplied(true);
-        // Sync with standard coupon state
-        setAppliedCouponState(FESTIVAL_OFFER.discountCode);
-        setShowApplied(true);
-        setCouponInput(FESTIVAL_OFFER.discountCode);
-        localStorage.setItem('applied_coupon', FESTIVAL_OFFER.discountCode);
-
-        if (data.shopifyTotal !== undefined) {
-          setFestivalShopifyTotal(data.shopifyTotal);
-        }
-      } else if (res.status === 400 && data.error?.includes('No active cart')) {
-        // Cart not yet synced — retry after a short delay
-        setTimeout(applyFestivalOffer, 2000);
-      } else {
-        setFestivalError(data.error ?? 'Could not apply offer');
-      }
-    } catch {
-      setFestivalError('Network error applying offer');
-    } finally {
-      setFestivalLoading(false);
-    }
-  }, [festivalActive, festivalLoading, festivalOfferApplied]);
-
-  // Auto-apply festival offer only when cart meets the ₹6,999 threshold
-  useEffect(() => {
-    if (festivalActive && items.length > 0 && meetsThreshold && !festivalOfferApplied) {
-      applyFestivalOffer();
-    }
-  }, [items.length, festivalActive, meetsThreshold]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  useEffect(() => {
-    async function fetchGift() {
-      if (hasGift && !giftProduct) {
-        setIsGiftLoading(true);
-        try {
-          // Fetch the gift product from our dedicated API endpoint
-          const response = await fetch('/api/products/gift');
-          if (response.ok) {
-            const data = await response.json();
-            setGiftProduct({
-              name: data.name,
-              image: data.image,
-              price: 5000
-            });
-          } else {
-            // Fallback to a high-quality static image if API fetch fails
-            setGiftProduct({
-              name: '10 Cent Diamond Gift',
-              image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
-              price: 5000
-            });
-          }
-        } catch (err) {
-          setGiftProduct({
-            name: '10 Cent Diamond Gift',
-            image: 'https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop&q=80',
-            price: 5000
-          });
-        } finally {
-          setIsGiftLoading(false);
-        }
-      }
-    }
-    fetchGift();
-  }, [hasGift, giftProduct]);
+  // Gift product fetch DELETED
 
   // Fetch promotion pricing
   const fetchPromotionPricing = async () => {
@@ -186,7 +75,6 @@ export default function CartPage() {
             quantity: item.quantity
           })),
           clerkUserId: userId,
-          couponCode: appliedCoupon || undefined,
         }),
       });
 
@@ -221,65 +109,7 @@ export default function CartPage() {
     }, 300); // 300ms debounce
 
     return () => clearTimeout(timeoutId);
-  }, [itemsSignature, appliedCoupon, userId]);
-
-
-  const validateCoupon = async (code: string) => {
-    setIsValidating(true);
-    setCouponError(null);
-
-    try {
-      const response = await fetch('/api/coupons/validate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ couponCode: code, subtotal: total * 100 }),
-      });
-      const data = await response.json();
-
-      if (response.ok) {
-        const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-
-        // Block ALL coupons from stacking with cart discounts (BUY 2 or BUY 3+)
-        if (totalItems >= 3) {
-          setCouponError("Coupons cannot be combined with the Buy 2 Get 1 Free offer.");
-          setAppliedCoupon(null);
-          setCouponDiscount(0);
-          setIsValidating(false);
-          return;
-        }
-
-        // Set coupon as applied
-        setAppliedCoupon(code);
-        setShowApplied(true);
-        setCouponDiscount(Math.round((total * data.percentOff) / 100));
-      } else {
-        setCouponError(data.error || 'Invalid coupon');
-        setAppliedCoupon(null);
-        setCouponDiscount(0);
-      }
-    } catch (err) {
-      setCouponError('Failed to validate coupon');
-    } finally {
-      setIsValidating(false);
-    }
-  };
-
-  const handleApplyCoupon = (e: React.FormEvent | null, code?: string) => {
-    if (e) e.preventDefault();
-    const couponToApply = code || couponInput.trim();
-    if (couponToApply) {
-      validateCoupon(couponToApply.toUpperCase());
-    }
-  };
-
-  const removeCoupon = () => {
-    setAppliedCoupon('');
-    setShowApplied(false);
-    setCouponInput('');
-    setCouponDiscount(0);
-    setCouponError(null);
-    localStorage.removeItem('applied_coupon');
-  };
+  }, [itemsSignature, userId]);
 
   // Save for Later functionality
   const saveForLater = (item: any) => {
@@ -305,7 +135,7 @@ export default function CartPage() {
   };
 
   // No additional charges
-  const grandTotal = Math.max(0, total - couponDiscount);
+  const grandTotal = total;
 
   if (items.length === 0) {
     return (
@@ -494,40 +324,7 @@ export default function CartPage() {
                 </motion.div>
               ))}
 
-              {/* Gift Item Display - Clean, Minimal Design */}
-              {hasGift && (
-                <div className="flex gap-3 md:gap-6 p-4 md:p-6 bg-white border border-brand-200 rounded-xl md:rounded-brand-xl relative transition-all duration-300">
-                  {isGiftLoading ? (
-                    <div className="w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-brand-50 rounded-lg md:rounded-brand-lg border border-brand-200 animate-pulse" />
-                  ) : giftProduct ? (
-                    <>
-                      <div className="relative w-20 h-20 md:w-32 md:h-32 flex-shrink-0 bg-brand-50 rounded-lg md:rounded-brand-lg overflow-hidden border border-brand-200">
-                        <Image
-                          src={giftProduct.image}
-                          alt={giftProduct.name}
-                          fill
-                          className="object-contain p-3"
-                        />
-                        <div className="absolute top-0 right-0 bg-amber-500 text-white text-[10px] px-2 py-1 font-bold uppercase rounded-bl-xl">
-                          Gift
-                        </div>
-                      </div>
-                      <div className="flex-1 min-w-0 flex flex-col justify-center">
-                        <div className="flex items-center gap-2 mb-2">
-                          <Gift size={18} className="text-amber-500 shrink-0" />
-                          <h3 className="font-montserrat font-bold text-heading-md text-brand-800">{giftProduct.name}</h3>
-                        </div>
-                        <div className="flex items-center gap-3">
-                          <span className="text-body-sm font-gotham font-bold text-amber-600 tracking-wider uppercase bg-amber-50 px-3 py-1 rounded-full border border-amber-100">Free Gift</span>
-                        </div>
-                      </div>
-                    </>
-                  ) : null}
-                </div>
-              )}
-
-              {/* Festival Gift Item — Premium Diamond (only when threshold is met) */}
-              {festivalActive && meetsThreshold && <FestivalGiftItem variant="cart" />}
+              {/* Gift Item Display DELETED */}
 
 
               {savedForLater.length > 0 && (
@@ -582,32 +379,7 @@ export default function CartPage() {
                 <h2 className="font-montserrat font-bold text-heading-xl text-brand-800 mb-6">Order Summary</h2>
 
                 {/* Active Offers */}
-                {/* Akshaya Tritiya Festival Banner */}
-                {festivalActive && (
-                  <div className="mb-4">
-                    <div className="flex items-center gap-2 bg-gradient-to-r from-amber-600 via-yellow-500 to-amber-600 text-white px-3 py-2.5 rounded-lg text-xs">
-                      <Sparkles size={14} className="flex-shrink-0 shrink-0" />
-                      <div>
-                        <span className="font-gotham font-bold block">🪷 Akshaya Tritiya Offer</span>
-                        <span className="opacity-90">10% off + Free Premium Diamond on orders above ₹6,999</span>
-                      </div>
-                      {festivalLoading && <Loader2 size={12} className="ml-auto animate-spin" />}
-                    </div>
-                    {meetsThreshold && festivalOfferApplied && (
-                      <p className="text-[10px] text-green-600 font-medium mt-1 px-1">
-                        ✓ Offer applied to your order
-                      </p>
-                    )}
-                    {!meetsThreshold && (
-                      <p className="text-[10px] text-amber-700 font-medium mt-1 px-1">
-                        Add ₹{(FESTIVAL_OFFER.minThreshold - total).toLocaleString('en-IN')} more to unlock this offer!
-                      </p>
-                    )}
-                    {festivalError && (
-                      <p className="text-[10px] text-red-500 mt-1 px-1">{festivalError}</p>
-                    )}
-                  </div>
-                )}
+                {/* Akshaya Tritiya Festival Banner DELETED */}
 
                 {itemCount >= 3 && (
                   <div className="space-y-2 mb-6">
@@ -618,72 +390,12 @@ export default function CartPage() {
                   </div>
                 )}
 
-                {/* Coupon Code Section */}
+                {/* Coupon Code — apply at checkout */}
                 <div className="mb-6">
-                  <div className="flex items-center gap-2 mb-3">
-                    <Tag className="w-4 h-4 text-classic-green" />
-                    <span className="font-montserrat text-xs font-bold uppercase tracking-wider text-brand-800">Promo Code</span>
+                  <div className="flex items-center gap-2 bg-brand-50 border border-brand-200 rounded-lg px-4 py-3">
+                    <Tag className="w-4 h-4 text-classic-green flex-shrink-0" />
+                    <p className="text-xs text-brand-600 font-montserrat">Have a promo code? Apply it at checkout.</p>
                   </div>
-
-                  {!(showApplied && appliedCoupon) ? (
-                    <form onSubmit={handleApplyCoupon} className="flex gap-2">
-                      <input
-                        type="text"
-                        value={couponInput}
-                        onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
-                        placeholder="ENTER CODE"
-                        className="flex-1 px-4 py-2 text-xs border border-brand-200 rounded-lg focus:ring-2 focus:ring-classic-green/20 focus:border-classic-green font-montserrat uppercase"
-                        disabled={isValidating}
-                      />
-                      <button
-                        type="submit"
-                        disabled={isValidating || !couponInput.trim()}
-                        className="px-6 py-2 bg-classic-green text-white text-xs font-bold rounded-lg disabled:opacity-50 transition-colors"
-                      >
-                        {isValidating ? <Loader2 className="w-4 h-4 animate-spin" /> : 'APPLY'}
-                      </button>
-                    </form>
-                  ) : (
-                    <div className="flex items-center justify-between bg-classic-green/5 border border-classic-green/20 rounded-lg px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <Tag className="w-4 h-4 text-classic-green" />
-                        <span className="text-sm font-bold text-classic-green tracking-wide">{appliedCoupon}</span>
-                      </div>
-                      <button
-                        onClick={removeCoupon}
-                        className="text-xs font-bold text-error hover:underline uppercase"
-                      >
-                        Remove
-                      </button>
-                    </div>
-                  )}
-                  {couponError && <p className="text-xs text-error mt-2 ml-1">{couponError}</p>}
-
-                  {/* Available Offers / Promotions */}
-                  {festivalActive && !appliedCoupon && (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      className="mt-4 p-4 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl shadow-sm"
-                    >
-                      <div className="flex items-center gap-2 mb-2">
-                        <Sparkles className="w-4 h-4 text-amber-600 animate-pulse" />
-                        <span className="text-[10px] font-bold text-amber-800 uppercase tracking-wider">Offer For You</span>
-                      </div>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <p className="text-sm font-bold text-brand-800">10% OFF + Free Diamond</p>
-                          <p className="text-[10px] text-amber-700 font-medium">Akshaya Tritiya Special Offer</p>
-                        </div>
-                        <button
-                          onClick={() => validateCoupon(FESTIVAL_OFFER.discountCode)}
-                          className="bg-amber-600 hover:bg-amber-700 text-white text-xs font-bold px-4 py-2 rounded-lg transition-all shadow-md active:scale-95"
-                        >
-                          APPLY
-                        </button>
-                      </div>
-                    </motion.div>
-                  )}
                 </div>
 
                 {/* Promotion Messages */}
@@ -721,23 +433,7 @@ export default function CartPage() {
                         </div>
                       ))}
 
-                      {/* Festival offer discount line */}
-                      {festivalActive && meetsThreshold && festivalOfferApplied && festivalDiscount > 0 && (
-                        <div className="flex items-center justify-between text-amber-600">
-                          <span className="font-montserrat flex items-center gap-1">
-                            <Sparkles size={12} /> Akshaya Tritiya 10% Off
-                          </span>
-                          <span className="font-gotham font-bold">-{formatPrice(festivalDiscount)}</span>
-                        </div>
-                      )}
-                      {festivalActive && meetsThreshold && festivalOfferApplied && (
-                        <div className="flex items-center justify-between text-amber-600">
-                          <span className="font-montserrat flex items-center gap-1">
-                            <Gift size={12} /> Premium Diamond Gift
-                          </span>
-                          <span className="font-gotham font-bold">FREE</span>
-                        </div>
-                      )}
+                      {/* Festival discount lines DELETED */}
 
                       <div className="flex items-center justify-between">
                         <span className="text-brand-600 font-montserrat">Shipping</span>
@@ -753,32 +449,7 @@ export default function CartPage() {
                         </span>
                       </div>
 
-                      {couponDiscount > 0 && (
-                        <div className="flex items-center justify-between text-success">
-                          <span className="font-montserrat">Coupon Discount</span>
-                          <span className="font-gotham font-bold">
-                            -{formatPrice(couponDiscount)}
-                          </span>
-                        </div>
-                      )}
-
-                      {/* Festival offer discount line (fallback when promotionPricing not loaded) */}
-                      {festivalActive && meetsThreshold && festivalOfferApplied && festivalDiscount > 0 && (
-                        <div className="flex items-center justify-between text-amber-600">
-                          <span className="font-montserrat flex items-center gap-1">
-                            <Sparkles size={12} /> Akshaya Tritiya 10% Off
-                          </span>
-                          <span className="font-gotham font-bold">-{formatPrice(festivalDiscount)}</span>
-                        </div>
-                      )}
-                      {festivalActive && meetsThreshold && festivalOfferApplied && (
-                        <div className="flex items-center justify-between text-amber-600">
-                          <span className="font-montserrat flex items-center gap-1">
-                            <Gift size={12} /> Premium Diamond Gift
-                          </span>
-                          <span className="font-gotham font-bold">FREE</span>
-                        </div>
-                      )}
+                      {/* Coupon discount display DELETED — coupons applied at checkout */}
 
                       <div className="flex items-center justify-between">
                         <span className="text-brand-600 font-montserrat">Shipping</span>
@@ -792,11 +463,9 @@ export default function CartPage() {
                   <span className="font-montserrat font-bold text-heading-md text-brand-800">Total</span>
                   <span className="font-gotham text-heading-xl font-bold text-classic-green">
                     {formatPrice(
-                      festivalActive && festivalShopifyTotal != null
-                        ? festivalShopifyTotal
-                        : promotionPricing
-                          ? promotionPricing.total
-                          : grandTotal
+                      promotionPricing
+                        ? promotionPricing.total
+                        : grandTotal
                     )}
                   </span>
                 </div>

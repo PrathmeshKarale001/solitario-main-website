@@ -12,7 +12,6 @@ import { Promise } from '@/components/about';
 import OffersMarquee from '@/components/ui/OffersMarquee';
 
 const LoginPopup = dynamic(() => import('@/components/home/LoginPopup'));
-const AkshayaTritiyaPopup = dynamic(() => import('@/components/campaigns/AkshayaTritiyaPopup'));
 import UnifiedOfferBanner from '@/components/ui/UnifiedOfferBanner';
 
 // Festival collection — auto-shows when a festival is active in festival-config.ts
@@ -65,8 +64,6 @@ export default function Home() {
     <div>
       {/* Marketing Login Popup for first-time visitors */}
       <LoginPopup />
-      {/* Akshaya Tritiya promotional popup */}
-      <AkshayaTritiyaPopup />
 
       {/* 1. DYNAMIC HERO - First impression with CTA */}
       <DynamicHero />
@@ -90,45 +87,6 @@ export default function Home() {
         </p>
       </div>
       <OffersMarquee />
-
-      {/* AKSHAYA TRITIYA PROMO BANNER & OFFLINE CALLOUT */}
-      <div className="w-full">
-        <a href="/festival" className="block w-full">
-          {/* Desktop Banner */}
-          <img
-            src="/images/banners/akshay-tritiya.jpeg"
-            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 customers receive a diamond for free. Shop Now"
-            className="hidden md:block w-full h-auto"
-            loading="eager"
-          />
-          {/* Mobile Banner */}
-          <img
-            src="/images/banners/akshay-tritiya-mobile.jpeg"
-            alt="Akshaya Tritiya — Your Shagun is waiting inside. The first 100 customers receive a diamond for free. Shop Now"
-            className="block md:hidden w-full h-auto"
-            loading="eager"
-          />
-        </a>
-
-        {/* Offline Conversion Callout */}
-        <div className="bg-gradient-to-r from-amber-50 via-orange-50 to-amber-50 border-b border-amber-200 py-3.5 px-4 sm:px-6">
-          <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 text-center sm:text-left">
-            <div className="flex items-center justify-center gap-2.5">
-              <Gift className="text-amber-600 shrink-0 hidden sm:block" size={22} />
-              <p className="text-gray-800 font-medium text-xs sm:text-sm md:text-base leading-snug">
-                Visit Solitario boutiques this Akshaya Tritiya (17-19 Apr) & claim your <span className="font-bold text-amber-700">Free Premium Diamond</span>.
-              </p>
-            </div>
-            <Link
-              href="/stores"
-              className="inline-flex items-center justify-center gap-2 px-6 py-2.5 sm:py-2 border-2 border-classic-green text-sm font-bold rounded-full text-classic-green hover:bg-classic-green hover:text-white transition-all duration-300 w-full sm:w-auto whitespace-nowrap uppercase tracking-wider"
-            >
-              <MapPin size={16} />
-              Find a Store
-            </Link>
-          </div>
-        </div>
-      </div>
 
       {/* 2. SHOP BY CATEGORY - Immediate product access */}
       <ShopByCategoryOriginal />
@@ -185,4 +143,3 @@ export default function Home() {
     </div>
   );
 }
-

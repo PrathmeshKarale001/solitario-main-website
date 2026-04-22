@@ -46,16 +46,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if the TRITIYA10 festival coupon is being applied
-    const isTritiyaCoupon = couponCode && couponCode.toUpperCase() === FESTIVAL_OFFER.discountCode;
-    const festivalCurrentlyActive = isFestivalOfferActive();
+    const festivalCurrentlyActive = false; // DELETED
 
     // Run local promotions engine (handles BUY2 automatically)
     const promoResult = await calculatePromotions({
       clerkUserId: clerkUserId || userId || undefined,
-      // Don't pass TRITIYA10 to local engine — it's a Shopify-native coupon handled below
+      // Local engine handles automatic promotions
       cartLines: finalCartLines,
-      couponCode: isTritiyaCoupon ? undefined : couponCode || undefined,
+      couponCode: couponCode || undefined,
     });
 
     const subtotalRupees = Math.round(promoResult.subtotal / 100);
@@ -65,30 +63,9 @@ export async function POST(request: NextRequest) {
     }));
     let totalRupees = Math.round(promoResult.total / 100);
 
-    // Apply TRITIYA10 festival discount on top (non-stacking with BUY2)
-    if (isTritiyaCoupon && festivalCurrentlyActive) {
-      const hasBuy2 = promoResult.appliedFlags.cartRule === 'BUY2';
-      if (!hasBuy2) {
-        // 10% off the subtotal
-        const festivalDiscountAmt = Math.round(subtotalRupees * FESTIVAL_OFFER.discountPercent / 100);
-        discounts = [
-          ...discounts,
-          {
-            type: 'LOYALTY_COUPON' as const,
-            percent: FESTIVAL_OFFER.discountPercent,
-            amount: festivalDiscountAmt,
-            description: `${FESTIVAL_OFFER.label} – ${FESTIVAL_OFFER.discountPercent}% Off`,
-          },
-        ];
-        totalRupees = Math.max(0, totalRupees - festivalDiscountAmt);
-      }
-    }
+    // Festival discount logic DELETED
 
-    // messages: add festival message if active and TRITIYA10 used
-    const messages = [...promoResult.messages];
-    if (isTritiyaCoupon && festivalCurrentlyActive) {
-      messages.push(`🪷 ${FESTIVAL_OFFER.label}: ${FESTIVAL_OFFER.discountPercent}% off + Free Premium Diamond!`);
-    }
+    // Festival message logic DELETED
 
     // promoResult values are in cents (subtotal, amount, total)
     return NextResponse.json({
@@ -100,7 +77,7 @@ export async function POST(request: NextRequest) {
         currency: 'INR',
       },
       giftLines: promoResult.giftLines,
-      messages,
+      messages: promoResult.messages,
       errors: promoResult.errors,
       appliedFlags: promoResult.appliedFlags,
     });

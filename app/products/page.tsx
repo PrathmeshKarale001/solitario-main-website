@@ -14,7 +14,8 @@ import { DCBannerSlider } from '@/components/home';
 import DynamicShopHero from '@/components/products/DynamicShopHero';
 import dynamic from 'next/dynamic';
 
-const AkshayaTritiyaPopup = dynamic(() => import('@/components/campaigns/AkshayaTritiyaPopup'));
+// AkshayaTritiyaPopup DISABLED — campaign ended
+// const AkshayaTritiyaPopup = dynamic(() => import('@/components/campaigns/AkshayaTritiyaPopup'));
 import { useRouter } from 'next/navigation';
 const PRODUCTS_PER_PAGE = 12;
 const LOAD_MORE_THRESHOLD = 12;
@@ -273,8 +274,7 @@ function ProductsPageContent() {
 
   return (
     <div>
-      {/* Akshaya Tritiya promotional popup */}
-      <AkshayaTritiyaPopup />
+      {/* AkshayaTritiyaPopup DISABLED — campaign ended */}
 
       {/* Dynamic Shop Hero */}
       <DynamicShopHero />

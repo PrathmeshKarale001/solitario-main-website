@@ -18,7 +18,7 @@ import { trackPaymentInitiate } from '@/lib/gtm-conversions';
 import { trackMetaAddPaymentInfo } from '@/components/analytics/MetaPixel';
 import { usePincodeLookup } from '@/hooks/usePincodeLookup';
 import { isFestivalOfferActive, FESTIVAL_OFFER } from '@/lib/festival-offer';
-import FestivalGiftItem from '@/components/cart/FestivalGiftItem';
+// FestivalGiftItem import DELETED
 
 // Declare Razorpay on window
 declare global {
@@ -107,13 +107,7 @@ export default function CheckoutPage() {
   // Gift product disabled - Buy 2 Get 1 Free uses discount only, no separate gift item
   const hasGift = false;
 
-  // ── Akshaya Tritiya Festival Offer ─────────────────────────────────────────
-  // The local cart doesn't create a Shopify cart session, so we derive the
-  // discount directly from the cart total (10% off) rather than calling the
-  // Shopify cart API (which requires a cart-id cookie we never set).
-  const festivalActive = isFestivalOfferActive();
-  const meetsThreshold = total >= FESTIVAL_OFFER.minThreshold;
-  const festivalOfferApplied = festivalActive && meetsThreshold && items.length > 0;
+  // Festival Offer logic DELETED
 
   // Auto-fill user info and load saved addresses
   useEffect(() => {
@@ -257,15 +251,7 @@ export default function CheckoutPage() {
   const tax = Math.round(total * 0.03); // 3% GST (already included, shown for transparency)
   const discountedTotal = total - (promotionDiscount / 100);
 
-  // Festival discount: 10% off cart total during Akshaya Tritiya (only when threshold is met)
-  const effectiveFestivalDiscount = festivalOfferApplied ? Math.round(total * 0.1) : 0;
-
-  const grandTotal = Math.max(
-    0,
-    festivalOfferApplied
-      ? discountedTotal - effectiveFestivalDiscount + shipping
-      : discountedTotal + shipping
-  );
+  const grandTotal = Math.max(0, discountedTotal + shipping);
 
   // Validate form
   const validateForm = (): boolean => {
@@ -1115,8 +1101,7 @@ export default function CheckoutPage() {
                       ) : null}
                     </div>
                   )}
-                  {/* Festival Gift Item — Premium Diamond (only when threshold is met) */}
-                  {festivalOfferApplied && <FestivalGiftItem variant="checkout" />}
+                  {/* Akshaya Tritiya Gift Item DELETED */}
                 </div>
 
                 {/* Promotions */}
@@ -1130,36 +1115,7 @@ export default function CheckoutPage() {
                       setPromotionMessages(filteredMessages);
                     }}
                   />
-                  {/* Festival Offer Banner */}
-                  {festivalActive && (
-                    <div className="mb-4">
-                      <div className="flex flex-col gap-2 bg-gradient-to-br from-amber-600 via-yellow-500 to-amber-700 text-white p-4 rounded-xl shadow-md border border-amber-400/30 overflow-hidden relative">
-                        <div className="absolute -right-4 -top-4 w-16 h-16 bg-white/10 rounded-full blur-xl" />
-                        <div className="flex items-center gap-3 relative z-10">
-                          <div className="p-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                            <Sparkles size={18} className="text-amber-100 animate-pulse" />
-                          </div>
-                          <div className="flex-1">
-                            <span className="font-gotham font-black block text-sm tracking-tight">AKSHAYA TRITIYA SPECIAL</span>
-                            <span className="text-[11px] font-medium text-amber-50">
-                              {meetsThreshold ? '10% Instant Savings Applied' : `Shop ₹${(FESTIVAL_OFFER.minThreshold - total).toLocaleString('en-IN')} more to unlock 10% Off + Free Diamond`}
-                            </span>
-                          </div>
-                          <div className="flex flex-col items-end">
-                            <div className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase tracking-wider shadow-sm ${meetsThreshold ? 'bg-white/90 text-amber-700' : 'bg-white/50 text-amber-800'}`}>
-                              {meetsThreshold ? 'Active' : 'Locked'}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {festivalOfferApplied && (
-                        <div className="flex items-center gap-1.5 mt-2 ml-1 text-[11px] font-bold text-classic-green">
-                          <CheckCircle size={12} />
-                          <span>Festival Bonus: Free Premium Diamond Included</span>
-                        </div>
-                      )}
-                    </div>
-                  )}
+                  {/* Akshaya Tritiya Banner DELETED */}
 
                   {promotionMessages.length > 0 && (
                     <div className="mt-4 space-y-2">
@@ -1210,24 +1166,7 @@ export default function CheckoutPage() {
                       </span>
                     </div>
                   )}
-                  {/* Festival 10% discount line */}
-                  {festivalActive && effectiveFestivalDiscount > 0 && (
-                    <div className="flex items-center justify-between text-amber-600 bg-amber-50/50 p-2 rounded-lg border border-amber-100/50">
-                      <span className="font-bold text-xs flex items-center gap-1.5 uppercase tracking-wide">
-                        <Sparkles size={14} className="text-amber-500" /> Akshaya Saving
-                      </span>
-                      <span className="font-bold text-sm">-{formatPrice(effectiveFestivalDiscount, '₹')}</span>
-                    </div>
-                  )}
-                  {/* Festival free diamond line */}
-                  {festivalActive && festivalOfferApplied && (
-                    <div className="flex items-center justify-between text-amber-600 bg-amber-50/50 p-2 rounded-lg border border-amber-100/50">
-                      <span className="font-bold text-xs flex items-center gap-1.5 uppercase tracking-wide">
-                        <Gift size={14} className="text-amber-500" /> Bonus gift
-                      </span>
-                      <span className="font-bold text-[10px] bg-amber-500 text-white px-2 py-0.5 rounded">FREE</span>
-                    </div>
-                  )}
+                  {/* Festival Discount Rows DELETED */}
                   <div className="flex items-center justify-between">
                     <span className="text-gray-600">Shipping</span>
                     <span className="font-medium text-gray-900">

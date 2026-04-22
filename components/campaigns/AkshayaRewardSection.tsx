@@ -62,8 +62,8 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
     },
     {
       id: 4,
-      title: 'WIN',
-      description: 'Get Flat 10% OFF and a CERTIFIED DIAMOND absolutely free!',
+      title: 'STAY TUNED',
+      description: 'The Akshaya Tritiya offer period has ended. Stay tuned for our next exciting rewards!',
       icon: <Gift className="w-6 h-6 text-bronze-gold" />,
     },
   ];
@@ -174,15 +174,12 @@ const AkshayaRewardSection: React.FC<AkshayaRewardSectionProps> = ({ className =
                   </div>
 
                   <div className="w-full space-y-3">
-                    <a
-                      href="https://solitarioloyalty-member.erlpaas.com/Login"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full py-3 bg-brand-800 hover:bg-black text-white font-montserrat font-bold rounded-lg shadow-md hover:shadow-xl transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 uppercase tracking-wider text-sm"
+                    <div
+                      className="w-full py-3 bg-brand-200 text-brand-500 font-montserrat font-bold rounded-lg flex items-center justify-center gap-2 uppercase tracking-wider text-sm cursor-not-allowed"
                     >
-                      CLICK HERE
-                      <ArrowRight className="w-4 h-4 text-bronze-gold" />
-                    </a>
+                      OFFER CLOSED
+                      <ArrowRight className="w-4 h-4 text-brand-400" />
+                    </div>
                     <p className="text-[10px] text-brand-400 text-center uppercase tracking-[0.15em] font-medium">
                       Powered by Solitario Loyalty Program
                     </p>

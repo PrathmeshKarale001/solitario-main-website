@@ -61,13 +61,13 @@ export const FESTIVALS: FestivalConfig[] = [
     collectionHandle: 'akshaya-tritiya-2026',
     tagline: 'Akshaya Tritiya Special',
     heading: 'Celebrate Prosperity with Lab Grown Diamonds',
-    subtitle: 'Auspicious pieces handcrafted for new beginnings. Enjoy 10% Off + a Free Diamond on all orders above ₹6,999.',
+    subtitle: 'Auspicious pieces handcrafted for new beginnings.',
     ctaText: 'Shop Akshaya Tritiya',
     ctaLink: '/festival',
     emoji: '🪷',
     maxProducts: 6,
     startDate: '2026-04-10T00:00:00+05:30',
-    endDate: '2026-04-23T23:59:59+05:30',
+    endDate: '2026-04-30T23:59:59+05:30',
     heroImage: '/images/akshaya-tritiya/Akshay_Tritiya_All_Web.jpg.jpeg',
     mobileHeroImage: '/images/akshaya-tritiya/Akshay_Tritiya_All_Mobile.jpg.jpeg',
     heroImages: [
@@ -84,37 +84,38 @@ export const FESTIVALS: FestivalConfig[] = [
     ],
     heroTagline: 'AUSPICIOUS. ETERNAL. DIVINE.',
   },
-
-  // ── TEMPLATES — Uncomment & fill in for the next event ─────────
-  //  NOTE: ctaLink is ALWAYS '/festival' — the page auto-adapts to the
-  //  active festival config. No page changes needed!
-  //
-  // {
-  //   id: 'eid-2026',
-  //   active: false,
-  //   collectionHandle: 'eid-collection-2026',
-  //   tagline: 'Eid Mubarak',
-  //   heading: 'Sparkle This Eid',
-  //   subtitle: 'Elegant pieces for your celebrations.',
-  //   ctaText: 'Shop Eid Collection',
-  //   ctaLink: '/festival',       // ← always /festival
-  //   emoji: '🌙',
-  //   maxProducts: 4,
-  // },
-  //
-  // {
-  //   id: 'diwali-2026',
-  //   active: false,
-  //   collectionHandle: 'diwali-collection-2026',
-  //   tagline: 'Diwali Sparkle',
-  //   heading: 'Light Up Your Celebrations',
-  //   subtitle: 'Dazzling diamonds for the festival of lights.',
-  //   ctaText: 'Shop Diwali Collection',
-  //   ctaLink: '/festival',       // ← always /festival
-  //   emoji: '🪔',
-  //   maxProducts: 4,
-  // },
 ];
+
+// ── TEMPLATES — Uncomment & fill in for the next event ─────────
+//  NOTE: ctaLink is ALWAYS '/festival' — the page auto-adapts to the
+//  active festival config. No page changes needed!
+//
+// {
+//   id: 'eid-2026',
+//   active: false,
+//   collectionHandle: 'eid-collection-2026',
+//   tagline: 'Eid Mubarak',
+//   heading: 'Sparkle This Eid',
+//   subtitle: 'Elegant pieces for your celebrations.',
+//   ctaText: 'Shop Eid Collection',
+//   ctaLink: '/festival',       // ← always /festival
+//   emoji: '🌙',
+//   maxProducts: 4,
+// },
+//
+// {
+//   id: 'diwali-2026',
+//   active: false,
+//   collectionHandle: 'diwali-collection-2026',
+//   tagline: 'Diwali Sparkle',
+//   heading: 'Light Up Your Celebrations',
+//   subtitle: 'Dazzling diamonds for the festival of lights.',
+//   ctaText: 'Shop Diwali Collection',
+//   ctaLink: '/festival',       // ← always /festival
+//   emoji: '🪔',
+//   maxProducts: 4,
+// },
+// ];
 
 /**
  * Returns the currently active festival config.

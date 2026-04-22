@@ -8,35 +8,19 @@
  */
 
 // ---------- Config ----------
+/** Akshaya Tritiya 2026 Promotion - DELETED */
 export const FESTIVAL_OFFER = {
-  /** Shopify discount code for 10% off the akshaya-tritiya-2026 collection */
-  discountCode: 'TRITIYA10',
-
-  /** The 10% applies to all items in the akshaya-tritiya-2026 collection */
-  discountPercent: 10,
-
-  /** Product numeric ID in Shopify (from Admin URL) */
-  giftProductId: '10264124457235',
-
-  /** GID format — Shopify Storefront API expects this */
-  giftProductGid: 'gid://shopify/Product/10264124457235',
-
-  /** Cart line attribute key used to identify the gift item in UI */
-  giftAttributeKey: '_is_festival_gift',
-
-  /** Human-readable gift product name */
-  giftProductName: 'Premium Diamond',
-
-  /** Festival active window */
-  startDate: new Date('2026-04-13T00:00:00+05:30'),
-  endDate: new Date('2026-04-23T23:59:59+05:30'),
-
-  /** Minimum purchase requirement in INR */
-  minThreshold: 6999,
-
-  /** Display label for UI banners */
-  label: 'Akshaya Tritiya Offer',
-  tagline: '🪷 10% Off + Free Premium Diamond on orders above ₹6,999',
+  discountCode: '',
+  discountPercent: 0,
+  giftProductId: '',
+  giftProductGid: '',
+  giftAttributeKey: '',
+  giftProductName: '',
+  startDate: new Date('2000-01-01'),
+  endDate: new Date('2000-01-01'),
+  minThreshold: Infinity,
+  label: '',
+  tagline: '',
 } as const;
 
 // ---------- Helpers ----------
@@ -46,8 +30,7 @@ export const FESTIVAL_OFFER = {
  * Defaults to true during the festival window; you can override for testing.
  */
 export function isFestivalOfferActive(overrideNow?: Date): boolean {
-  const now = overrideNow ?? new Date();
-  return now >= FESTIVAL_OFFER.startDate && now <= FESTIVAL_OFFER.endDate;
+  return false; // DELETED
 }
 
 /**
